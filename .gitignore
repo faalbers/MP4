@@ -1,0 +1,5 @@
+/build
+*.json
+*.mp4
+MP4structure_*
+test_*
