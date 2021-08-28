@@ -1,5 +1,5 @@
-#ifndef MP4_HDLR_H
-#define MP4_HDLR_H
+#ifndef MP4_MDHD_H
+#define MP4_MDHD_H
 #include <string>
 #include <vector>
 #include <memory>
@@ -19,18 +19,17 @@ For example, a video handler would handle a video track.
 namespace MP4
 {
 
-class hdlr : public atom
+class mdhd : public atom
 {
 public:
-    hdlr(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    mdhd(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData();
     void printHierarchyData();
 
-    static std::string      key;
-    std::string             componentType;
-    std::string             componentSubType;
-    std::string             componentName;
+    static std::string  key;
+    uint32_t            timeScale;  // time units per second
+    uint32_t            duration;   // amount of timeScale units
 
 };
 

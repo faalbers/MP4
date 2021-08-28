@@ -32,16 +32,20 @@ MP4::hdlr::hdlr(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::hdlr::printData(int level)
+void MP4::hdlr::printData()
 {
-    if ( level == -1 ) level = 0;
     int levelCount = std::count(path_.begin(), path_.end(), '/');
-    std::string pathIndent = std::string(level*5, ' ');
-    std::string dataIndent = std::string(level*5+(levelCount-1)*5+1, ' ');
-    std::cout << pathIndent << path_ << " (Handler Reference Atom)" << std::endl;
+    std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
+    std::cout << path_ << " (Handler Reference Atom)" << std::endl;
     std::cout << dataIndent << "componentType   : " << componentType << std::endl;
     std::cout << dataIndent << "componentSubType: " << componentSubType << std::endl;
     std::cout << dataIndent << "componentName   : " << componentName << std::endl;
+}
+
+void MP4::hdlr::printHierarchyData()
+{
+    printData();
+    for ( auto child : children_ ) child->printHierarchyData();
 }
 
 std::string MP4::hdlr::key = "hdlr";

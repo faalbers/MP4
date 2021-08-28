@@ -24,6 +24,7 @@ public:
         return foundTypeAtoms;
     }
     void                                printHierarchy();   // Hierarchy print out of all atoms in file
+    void                                printHierarchyData();        // Data print out. Only data that is handled so far
 
     std::string                         filePath;
     int64_t                             fileSize;

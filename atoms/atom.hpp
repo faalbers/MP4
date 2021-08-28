@@ -16,8 +16,10 @@ public:
     atom(std::string filePath, uint64_t filePos, std::string pathParent = "/");
     
     void printHierarchy(int pathWith = 35, int valLevel = 10);
+    virtual void printData();
+    virtual void printHierarchyData();
 
-    std::string                         key_;
+    std::string                         key;
 
 protected:
     friend class MP4;

@@ -55,18 +55,22 @@ MP4::tkhd::tkhd(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::tkhd::printData(int level)
+void MP4::tkhd::printData()
 {
-    if ( level == -1 ) level = 0;
     int levelCount = std::count(path_.begin(), path_.end(), '/');
-    std::string pathIndent = std::string(level*5, ' ');
-    std::string dataIndent = std::string(level*5+(levelCount-1)*5+1, ' ');
-    std::cout << pathIndent << path_ << " (Track Header Atom)" << std::endl;
+    std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
+    std::cout << path_ << " (Track Header Atom)" << std::endl;
     std::cout << dataIndent << "trackID    : " << trackID << std::endl;
     std::cout << dataIndent << "duration   : " << duration << std::endl;
     std::cout << dataIndent << "volume     : " << volume << std::endl;
     std::cout << dataIndent << "trackWidth : " << trackWidth << std::endl;
     std::cout << dataIndent << "trackHeight: " << trackHeight << std::endl;
+}
+
+void MP4::tkhd::printHierarchyData()
+{
+    printData();
+    for ( auto child : children_ ) child->printHierarchyData();
 }
 
 std::string MP4::tkhd::key = "tkhd";

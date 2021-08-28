@@ -29,8 +29,8 @@ MP4::atom::atom(std::string filePath, uint64_t filePos, std::string pathParent)
     atomHeaderBlock dataBlock;
     fileStream.read((char *) &dataBlock, sizeof(dataBlock));
 
-    key_ = std::string(dataBlock.key).substr(0,4);
-    path_ = parentPath_ + key_;
+    key = std::string(dataBlock.key).substr(0,4);
+    path_ = parentPath_ + key;
     #ifdef MP4_PARSE_PATH
     std::cout << path_ << std::endl;
     #endif
@@ -98,6 +98,20 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
         child->printHierarchy(pathWith, valLevel);
 }
 
+void MP4::atom::printData()
+{
+    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
+    std::cout << path_ << " (Atom)" << std::endl;
+    std::cout << dataIndent << "No data defined ..." << std::endl;
+}
+
+void MP4::atom::printHierarchyData()
+{
+    printData();
+    for ( auto child : children_ ) child->printHierarchyData();
+}
+
 std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t nextFilePos, std::string pathParent)
 {
     std::shared_ptr<atom> newAtom;
@@ -113,9 +127,13 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
     fileStream.close();
     std::string key = std::string(charKey).substr(0,4);
 
-    if ( key == "trak" ) newAtom = std::make_shared<trak>(filePath_, nextFilePos, pathParent);
+    if ( key == "moov" ) newAtom = std::make_shared<moov>(filePath_, nextFilePos, pathParent);
+    else if ( key == "trak" ) newAtom = std::make_shared<trak>(filePath_, nextFilePos, pathParent);
     else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(filePath_, nextFilePos, pathParent);
+    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(filePath_, nextFilePos, pathParent);
     else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(filePath_, nextFilePos, pathParent);
+    else if ( key == "minf" ) newAtom = std::make_shared<minf>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(filePath_, nextFilePos, pathParent);
     else newAtom = std::make_shared<atom>(filePath_, nextFilePos, pathParent);
 
     return newAtom;
@@ -164,7 +182,7 @@ bool MP4::atom::isContainer_(std::ifstream &fileStream, int64_t dataSize)
 void MP4::atom::getAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found)
 {
     for ( auto child : children_ ) {
-        if ( child->key_ == findKey ) found.push_back(child);
+        if ( child->key == findKey ) found.push_back(child);
         child->getAtoms_(findKey, found);
     }
 }

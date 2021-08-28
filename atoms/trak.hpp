@@ -25,15 +25,11 @@ class trak : public atom
 public:
     trak(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
+    void printData();
+    void printHierarchyData();
+
     static std::string  key;
-    int                 index;
-    uint32_t            trackID;
-    uint32_t            duration;
-    float               volume;
-    float               trackWidth;
-    float               trackHeight;
-    float               matrix[3][3];
-    void printData(int level = -1);
+
 };
 
 }

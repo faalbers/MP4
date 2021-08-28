@@ -14,12 +14,28 @@ int main(int argc, char* argv[])
 
     //mp4.printHierarchy();
     
-    for ( auto hdlr : mp4.getTypeAtoms<MP4::hdlr>()) {
-        hdlr->printData();
+    if (false) 
+    {    
+        for ( auto hdlr : mp4.getTypeAtoms<MP4::hdlr>()) {
+            hdlr->printData();
+        }
+    }
+        
+    if (false) 
+    {    
+        for ( auto trak : mp4.getTypeAtoms<MP4::trak>()) {
+            trak->printData();
+        }
+    }
+
+    if (false) 
+    {
+        mp4.printHierarchy();
     }
     
-    for ( auto trak : mp4.getTypeAtoms<MP4::trak>()) {
-        trak->printData();
+    if (true) 
+    {
+        mp4.printHierarchyData();  
     }
    
     std::cout << "\n**** END ****\n\n";

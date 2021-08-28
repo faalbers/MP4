@@ -16,18 +16,19 @@ namespace MP4
 class tkhd : public atom
 {
 public:
-    static std::string  key;
-
     tkhd(std::string filePath, uint64_t filePos, std::string pathParent = "/");
     
-    void printData(int level = -1);
+    void printData();
+    void printHierarchyData();
 
+    static std::string  key;
     uint32_t            trackID;
     uint32_t            duration;
     float               volume;
     float               trackWidth;
     float               trackHeight;
     float               matrix[3][3];
+
 };
 
 }
