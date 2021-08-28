@@ -128,6 +128,7 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
     std::string key = std::string(charKey).substr(0,4);
 
     if ( key == "moov" ) newAtom = std::make_shared<moov>(filePath_, nextFilePos, pathParent);
+    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(filePath_, nextFilePos, pathParent);
     else if ( key == "trak" ) newAtom = std::make_shared<trak>(filePath_, nextFilePos, pathParent);
     else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(filePath_, nextFilePos, pathParent);
     else if ( key == "edts" ) newAtom = std::make_shared<edts>(filePath_, nextFilePos, pathParent);
