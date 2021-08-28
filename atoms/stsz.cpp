@@ -33,36 +33,34 @@ MP4::stsz::stsz(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::stsz::printData()
+void MP4::stsz::printData(bool fullLists)
 {
-    bool full = false;
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Track Atom)" << std::endl;
     std::cout << path_ << " (Sample Size Atom)" << std::endl;
-    std::cout << dataIndent << "  defaultSamplSize; " << defaultSampleSize << std::endl;
+    std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
     int index = 1;
-    std::cout << dataIndent << "  [#] (sample Size)\n";
-    if ( full || (!full && stszTable.size() <= 6) ) {
+    std::cout << dataIndent << "[#] (sample Size)\n";
+    if ( fullLists || (!fullLists && stszTable.size() <= 6) ) {
         for ( auto entry : stszTable ) {
-            std::cout << dataIndent << "  [" << index << "] ( " << entry << " )" << std::endl;
+            std::cout << dataIndent << "[" << index << "] ( " << entry << " )" << std::endl;
             index++;
         }
     } else {
         for ( index = 0 ; index < 3; index++ ) {
-            std::cout << dataIndent << "  [" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
+            std::cout << dataIndent << "[" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
         for ( index = stszTable.size()-3 ; index < stszTable.size(); index++ ) {
-            std::cout << dataIndent << "  [" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
+            std::cout << dataIndent << "[" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
         }
     }
 }
 
-void MP4::stsz::printHierarchyData()
+void MP4::stsz::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::stsz::key = "stsz";

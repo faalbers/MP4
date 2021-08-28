@@ -55,7 +55,7 @@ MP4::tkhd::tkhd(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::tkhd::printData()
+void MP4::tkhd::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -67,10 +67,10 @@ void MP4::tkhd::printData()
     std::cout << dataIndent << "trackHeight: " << trackHeight << std::endl;
 }
 
-void MP4::tkhd::printHierarchyData()
+void MP4::tkhd::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::tkhd::key = "tkhd";

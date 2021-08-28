@@ -65,29 +65,8 @@ void MP4::MP4::printHierarchy()
     std::cout << std::endl;
 }
 
-void MP4::MP4::printHierarchyData()
+void MP4::MP4::printHierarchyData(bool fullLists)
 {
     std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
-    for ( auto child : children ) child->printHierarchyData();
-    /*
-    for ( auto moov : getTypeAtoms<moov>() ) {
-        moov->printData();
-        std::cout << std::string(26, '-') << " TRACKS " << std::string(26, '-') << std::endl;
-        for ( auto trak : getTypeAtoms<trak>(moov) ) {
-            trak->printData();
-            for ( auto mdia : getTypeAtoms<mdia>(trak) ) {
-                mdia->printData();
-                for ( auto hdlr : getTypeAtoms<hdlr>(mdia) ) hdlr->printData();
-                for ( auto dref : getTypeAtoms<dref>(mdia) ) dref->printData();
-                for ( auto stsd : getTypeAtoms<stsd>(mdia) ) stsd->printData();
-                for ( auto stts : getTypeAtoms<stts>(mdia) ) stts->printData();
-                for ( auto stsc : getTypeAtoms<stsc>(mdia) ) stsc->printData();
-                for ( auto stsz : getTypeAtoms<stsz>(mdia) ) stsz->printData();
-                for ( auto stco : getTypeAtoms<stco>(mdia) ) stco->printData();
-                for ( auto co64 : getTypeAtoms<co64>(mdia) ) co64->printData();
-                std::cout << std::string(60, '-') << std::endl;
-            }
-        }
-    }
-    */
+    for ( auto child : children ) child->printHierarchyData(fullLists);
 }

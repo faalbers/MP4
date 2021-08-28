@@ -16,8 +16,8 @@ public:
     atom(std::string filePath, uint64_t filePos, std::string pathParent = "/");
     
     void printHierarchy(int pathWith = 35, int valLevel = 10);
-    virtual void printData();
-    virtual void printHierarchyData();
+    virtual void printData(bool fullLists = false);
+    virtual void printHierarchyData(bool fullLists = false);
 
     std::string                         key;
 

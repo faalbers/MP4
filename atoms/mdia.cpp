@@ -7,7 +7,7 @@ MP4::mdia::mdia(std::string filePath, uint64_t filePos, std::string pathParent)
 {
 }
 
-void MP4::mdia::printData()
+void MP4::mdia::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -15,10 +15,10 @@ void MP4::mdia::printData()
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::mdia::printHierarchyData()
+void MP4::mdia::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::mdia::key = "mdia";

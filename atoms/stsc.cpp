@@ -36,18 +36,17 @@ MP4::stsc::stsc(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::stsc::printData()
+void MP4::stsc::printData(bool fullLists)
 {
-    bool full = false;
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample-To-Chunk Atom)" << std::endl;
     int index = 1;
-    std::cout << dataIndent << "  [#] (first chunk , samples per chunk, sample description ID)\n";
-    if ( full || (!full && stscTable.size() <= 6) ) {
+    std::cout << dataIndent << "[#] (first chunk , samples per chunk, sample description ID)\n";
+    if ( fullLists || (!fullLists && stscTable.size() <= 6) ) {
         for ( auto entry : stscTable ) {
             std::cout << dataIndent
-            << "  [" << index << "] ( " << entry[0] << ", " << entry[1] << ", " << entry[2] << " )"
+            << "[" << index << "] ( " << entry[0] << ", " << entry[1] << ", " << entry[2] << " )"
             << std::endl;
             index++;
         }
@@ -70,10 +69,10 @@ void MP4::stsc::printData()
     }
 }
 
-void MP4::stsc::printHierarchyData()
+void MP4::stsc::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::stsc::key = "stsc";

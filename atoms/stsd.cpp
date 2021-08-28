@@ -52,26 +52,26 @@ MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::stsd::printData()
+void MP4::stsd::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Description Atom)" << std::endl;
     int index = 1;
     for ( auto entry : stsdTable ) {
-        std::cout << dataIndent << "  Entry [" << index << "]" << std::endl;
-        std::cout << dataIndent << "    dataFormat        : " << entry.dataFormat << std::endl;
-        std::cout << dataIndent << "    dataReferenceIndex: " << entry.dataReferenceIndex << std::endl;
+        std::cout << dataIndent << "Entry [" << index << "]" << std::endl;
+        std::cout << dataIndent << "  dataFormat        : " << entry.dataFormat << std::endl;
+        std::cout << dataIndent << "  dataReferenceIndex: " << entry.dataReferenceIndex << std::endl;
         if ( entry.tail != "" )
             std::cout << dataIndent << "  data ?            : " << entry.tail << std::endl;
         index++;
     }
 }
 
-void MP4::stsd::printHierarchyData()
+void MP4::stsd::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::stsd::key = "stsd";

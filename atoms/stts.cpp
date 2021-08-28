@@ -34,23 +34,23 @@ MP4::stts::stts(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::stts::printData()
+void MP4::stts::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Time-To-Sample Atom)" << std::endl;
     int index = 1;
-    std::cout << dataIndent << "  [#] (sampleCount , sampleDuration)\n";
+    std::cout << dataIndent << "[#] (sampleCount , sampleDuration)\n";
     for ( auto entry : sttsTable ) {
-        std::cout << dataIndent << "  [" << index << "] ( " << entry[0] << ", " << entry[1] << " )" << std::endl;
+        std::cout << dataIndent << "[" << index << "] ( " << entry[0] << ", " << entry[1] << " )" << std::endl;
         index++;
     }
 }
 
-void MP4::stts::printHierarchyData()
+void MP4::stts::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::stts::key = "stts";

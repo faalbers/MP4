@@ -7,7 +7,7 @@ MP4::minf::minf(std::string filePath, uint64_t filePos, std::string pathParent)
 {
 }
 
-void MP4::minf::printData()
+void MP4::minf::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -15,10 +15,10 @@ void MP4::minf::printData()
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::minf::printHierarchyData()
+void MP4::minf::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::minf::key = "minf";

@@ -98,7 +98,7 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
         child->printHierarchy(pathWith, valLevel);
 }
 
-void MP4::atom::printData()
+void MP4::atom::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -106,10 +106,10 @@ void MP4::atom::printData()
     std::cout << dataIndent << "No data defined ..." << std::endl;
 }
 
-void MP4::atom::printHierarchyData()
+void MP4::atom::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t nextFilePos, std::string pathParent)
@@ -139,6 +139,9 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
     else if ( key == "stts" ) newAtom = std::make_shared<stts>(filePath_, nextFilePos, pathParent);
     else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(filePath_, nextFilePos, pathParent);
     else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stco" ) newAtom = std::make_shared<stco>(filePath_, nextFilePos, pathParent);
+    else if ( key == "co64" ) newAtom = std::make_shared<co64>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stss" ) newAtom = std::make_shared<stss>(filePath_, nextFilePos, pathParent);
     else newAtom = std::make_shared<atom>(filePath_, nextFilePos, pathParent);
 
     return newAtom;

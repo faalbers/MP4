@@ -25,7 +25,7 @@ MP4::mdhd::mdhd(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::mdhd::printData()
+void MP4::mdhd::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -34,10 +34,10 @@ void MP4::mdhd::printData()
     std::cout << dataIndent << "duration   : " << duration << std::endl;
 }
 
-void MP4::mdhd::printHierarchyData()
+void MP4::mdhd::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::mdhd::key = "mdhd";

@@ -32,7 +32,7 @@ MP4::hdlr::hdlr(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.close();
 }
 
-void MP4::hdlr::printData()
+void MP4::hdlr::printData(bool fullLists)
 {
     int levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -42,10 +42,10 @@ void MP4::hdlr::printData()
     std::cout << dataIndent << "componentName   : " << componentName << std::endl;
 }
 
-void MP4::hdlr::printHierarchyData()
+void MP4::hdlr::printHierarchyData(bool fullLists)
 {
-    printData();
-    for ( auto child : children_ ) child->printHierarchyData();
+    printData(fullLists);
+    for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
 std::string MP4::hdlr::key = "hdlr";

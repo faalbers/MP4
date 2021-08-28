@@ -31,8 +31,8 @@ private:
 public:
     stsd(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
-    void printData();
-    void printHierarchyData();
+    void printData(bool fullLists = false);
+    void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
     std::vector<stsdEntryType_> stsdTable;

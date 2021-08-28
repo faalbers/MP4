@@ -5,7 +5,7 @@
 #include "atom.hpp"
 
 /*
-SAMPLE SIZE ATOM
+SAMPLE SIZE ATOM:
 You use sample size atoms to specify the size of each sample in the media.
 The sample size atom contains the sample count and a table giving the size of each sample.
 This allows the media data itself to be unframed.
@@ -21,8 +21,8 @@ class stsz : public atom
 public:
     stsz(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
-    void printData();
-    void printHierarchyData();
+    void printData(bool fullLists = false);
+    void printHierarchyData(bool fullLists = false);
 
     static std::string      key;
     uint32_t                defaultSampleSize;

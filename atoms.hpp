@@ -50,10 +50,10 @@
                     #include "atoms/stts.hpp"
                     #include "atoms/stsc.hpp"
                     #include "atoms/stsz.hpp"
-/*
                     #include "atoms/stco.hpp"
                     #include "atoms/co64.hpp"
                     #include "atoms/stss.hpp"
+/*
                     #include "atoms/ctts.hpp"
 */
 
