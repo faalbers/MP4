@@ -25,7 +25,7 @@ private:
         std::string dataFormat;             // format type FourCC
         uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
                                             // with samples that use this sample description. Data references are stored in data reference atoms
-        std::string tail;
+        std::string extendedData;
     } stsdEntryType_;
 
 public:

@@ -41,8 +41,10 @@
                     #include "atoms/gmin.hpp"
                 #include "atoms/vmhd.hpp"
                 #include "atoms/smhd.hpp"
+*/
                 #include "atoms/dinf.hpp"
                     #include "atoms/dref.hpp"
+/*
                     #include "atoms/drefEntry.hpp"
 */
                 #include "atoms/stbl.hpp"

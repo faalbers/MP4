@@ -148,6 +148,8 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
     else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(filePath_, nextFilePos, pathParent);
     else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(filePath_, nextFilePos, pathParent);
     else if ( key == "minf" ) newAtom = std::make_shared<minf>(filePath_, nextFilePos, pathParent);
+    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(filePath_, nextFilePos, pathParent);
+    else if ( key == "dref" ) newAtom = std::make_shared<dref>(filePath_, nextFilePos, pathParent);
     else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(filePath_, nextFilePos, pathParent);
     else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(filePath_, nextFilePos, pathParent);
     else if ( key == "stts" ) newAtom = std::make_shared<stts>(filePath_, nextFilePos, pathParent);

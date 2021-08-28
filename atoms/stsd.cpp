@@ -44,7 +44,7 @@ MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
         if ( tailSize > 0 ) {
             char tail[tailSize];
             fileStream.read((char *) tail, tailSize);
-            stsdEntry.tail = std::string(tail).substr(0,tailSize);
+            stsdEntry.extendedData = std::string(tail).substr(0,tailSize);
         }
     
         index--;
@@ -58,12 +58,11 @@ void MP4::stsd::printData(bool fullLists)
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Description Atom)" << std::endl;
     int index = 1;
+    std::cout << dataIndent << "[#] (data format, data reference index, extended data)\n";
     for ( auto entry : stsdTable ) {
-        std::cout << dataIndent << "Entry [" << index << "]" << std::endl;
-        std::cout << dataIndent << "  dataFormat        : " << entry.dataFormat << std::endl;
-        std::cout << dataIndent << "  dataReferenceIndex: " << entry.dataReferenceIndex << std::endl;
-        if ( entry.tail != "" )
-            std::cout << dataIndent << "  data ?            : " << entry.tail << std::endl;
+        std::cout << dataIndent << "[" << index << "] ( '" << entry.dataFormat
+        << "', " << entry.dataReferenceIndex
+        << ", '" << entry.extendedData << "' )" << std::endl;
         index++;
     }
 }

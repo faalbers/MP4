@@ -58,7 +58,7 @@ bool MP4::trak::isComponentSubType(std::string type)
     return false;
 }
 
-bool MP4::trak::hasDataFormat(std::string format)
+bool MP4::trak::hasSampleDataFormat(std::string format)
 {
     auto stsd = get_stsd();
     if ( stsd == nullptr ) return false;

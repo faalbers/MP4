@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     if (true)
     {
         for ( auto track : mp4.getTracks()) {
-            if ( track->hasDataFormat("gpmd") ) {
+            if ( track->hasSampleDataFormat("gpmd") ) {
                 std::cout << "GPMF track: " << track->getID() << std::endl;
                 track->printHierarchyData();
             }
