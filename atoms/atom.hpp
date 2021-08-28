@@ -15,6 +15,15 @@ class atom
 public:
     atom(std::string filePath, uint64_t filePos, std::string pathParent = "/");
     
+    std::vector<std::shared_ptr<atom>>  getAtoms(std::string findKey, atom *parent = nullptr);
+    template<typename T>
+    std::vector<T *>     getTypeAtoms(atom *parent = nullptr)
+    {
+        std::vector<T *> foundTypeAtoms;
+        for( auto foundAtom : getAtoms(T::key, parent) ) foundTypeAtoms.push_back((T *) foundAtom.get());
+        return foundTypeAtoms;
+    }
+
     void printHierarchy(int pathWith = 35, int valLevel = 10);
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);

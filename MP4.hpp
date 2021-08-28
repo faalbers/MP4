@@ -17,12 +17,13 @@ public:
 
     std::vector<std::shared_ptr<atom>>  getAtoms(std::string findKey, atom *parent = nullptr);
     template<typename T>
-    std::vector<T *>     getTypeAtoms(T *parent = nullptr)
+    std::vector<T *>     getTypeAtoms(atom *parent = nullptr)
     {
         std::vector<T *> foundTypeAtoms;
         for( auto foundAtom : getAtoms(T::key, parent) ) foundTypeAtoms.push_back((T *) foundAtom.get());
         return foundTypeAtoms;
     }
+    std::vector<trak *>  getTracks();
     void     printHierarchy();                           // Hierarchy print out of all atoms in file
     void     printHierarchyData(bool fullLists = false);  // Data print out. Only data that is handled so far
 

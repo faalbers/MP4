@@ -33,11 +33,21 @@ int main(int argc, char* argv[])
         mp4.printHierarchy();
     }
     
-    if (true) 
+    if (false) 
     {
         mp4.printHierarchyData();  
     }
    
+    if (true)
+    {
+        for ( auto track : mp4.getTracks()) {
+            if ( track->hasDataFormat("gpmd") ) {
+                std::cout << "GPMF track: " << track->getID() << std::endl;
+                track->printHierarchyData();
+            }
+        }
+    }
+
     std::cout << "\n**** END ****\n\n";
 
     return 0;

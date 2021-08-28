@@ -3,6 +3,10 @@
 #include <string>
 #include <memory>
 #include "atom.hpp"
+#include "mdhd.hpp"
+#include "tkhd.hpp"
+#include "hdlr.hpp"
+#include "stsd.hpp"
 
 /*
 TRACK ATOM:
@@ -24,6 +28,19 @@ class trak : public atom
 {
 public:
     trak(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+
+    // data retrieval
+    tkhd *get_tkhd();
+    mdhd *get_mdhd();
+    hdlr *get_hdlr();
+    stsd *get_stsd();
+
+    uint32_t getID();
+
+    // track checkers
+    bool isComponentType(std::string type);
+    bool isComponentSubType(std::string type);
+    bool hasDataFormat(std::string format);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

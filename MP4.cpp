@@ -36,6 +36,13 @@ std::vector<std::shared_ptr<MP4::atom>> MP4::MP4::getAtoms(std::string findKey, 
     return found;
 }
 
+std::vector<MP4::trak *>  MP4::MP4::getTracks()
+{
+    std::vector<trak *> foundTracks;
+    for ( auto moov : getTypeAtoms<moov>()) foundTracks = getTypeAtoms<trak>(moov);
+    return foundTracks;
+}
+
 int MP4::MP4::nestLevel()
 {
     int level, maxLevel = 0;

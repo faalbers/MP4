@@ -75,6 +75,17 @@ MP4::atom::atom(std::string filePath, uint64_t filePos, std::string pathParent)
     } while ( childFilePos < fileNextPos_ );
 }
 
+std::vector<std::shared_ptr<MP4::atom>> MP4::atom::getAtoms(std::string findKey, atom *parent)
+{
+    std::vector<std::shared_ptr<atom>> found;
+    if ( parent != nullptr ) parent->getAtoms_(findKey, found);
+    else for ( auto child : children_ ) {
+        if ( child->key == findKey ) found.push_back(child);
+        child->getAtoms_(findKey, found);
+    }
+    return found;
+}
+
 int MP4::atom::nestLevel_(int level)
 {
     level++;
