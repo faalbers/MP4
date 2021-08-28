@@ -65,6 +65,10 @@ void MP4::tkhd::printData(bool fullLists)
     std::cout << dataIndent << "volume     : " << volume << std::endl;
     std::cout << dataIndent << "trackWidth : " << trackWidth << std::endl;
     std::cout << dataIndent << "trackHeight: " << trackHeight << std::endl;
+    std::cout << dataIndent << "matrix     :" << std::endl;
+    std::cout << dataIndent << matrix[0][0] << " " << matrix[0][1] << " " << matrix[0][2] << " " << std::endl;
+    std::cout << dataIndent << matrix[1][0] << " " << matrix[1][1] << " " << matrix[1][2] << " " << std::endl;
+    std::cout << dataIndent << matrix[2][0] << " " << matrix[2][1] << " " << matrix[2][2] << " " << std::endl;
 }
 
 void MP4::tkhd::printHierarchyData(bool fullLists)

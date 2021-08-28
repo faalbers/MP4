@@ -27,6 +27,7 @@ public:
     uint32_t            duration;       // amount of timeScale units
     float               preferredRate;
     float               preferredVolume;
+    float               matrix[3][3];
     uint32_t            nextTrackID;
 };
 
