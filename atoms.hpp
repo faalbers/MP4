@@ -33,9 +33,7 @@
             #include "atoms/elst.hpp"
 */
         #include "atoms/mdia.hpp"
-/*
             #include "atoms/mdhd.hpp"
-*/
             #include "atoms/hdlr.hpp"
             #include "atoms/minf.hpp"
 /*
@@ -48,11 +46,11 @@
                     #include "atoms/drefEntry.hpp"
 */
                 #include "atoms/stbl.hpp"
-/*
                     #include "atoms/stsd.hpp"
                     #include "atoms/stts.hpp"
                     #include "atoms/stsc.hpp"
                     #include "atoms/stsz.hpp"
+/*
                     #include "atoms/stco.hpp"
                     #include "atoms/co64.hpp"
                     #include "atoms/stss.hpp"

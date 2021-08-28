@@ -131,9 +131,14 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
     else if ( key == "trak" ) newAtom = std::make_shared<trak>(filePath_, nextFilePos, pathParent);
     else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(filePath_, nextFilePos, pathParent);
     else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(filePath_, nextFilePos, pathParent);
+    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(filePath_, nextFilePos, pathParent);
     else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(filePath_, nextFilePos, pathParent);
     else if ( key == "minf" ) newAtom = std::make_shared<minf>(filePath_, nextFilePos, pathParent);
     else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stts" ) newAtom = std::make_shared<stts>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(filePath_, nextFilePos, pathParent);
+    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(filePath_, nextFilePos, pathParent);
     else newAtom = std::make_shared<atom>(filePath_, nextFilePos, pathParent);
 
     return newAtom;
