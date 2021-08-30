@@ -67,6 +67,14 @@ MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
     throw std::runtime_error("MP4: Sample Index not found or out of range !");
 }
 
+uint32_t MP4::trak::getSampleCount()
+{
+    for ( auto stsz : getTypeAtoms<stsz>() ) {
+        return stsz->stszTable.size();
+    }
+    return 0;
+}
+
 std::vector<MP4::sampleType>  MP4::trak::getSamples()
 {
     //(ID, duration, time, timeOffset)
@@ -90,17 +98,6 @@ std::vector<MP4::sampleType>  MP4::trak::getSamples()
         }
     }
     return samples;
-}
-
-uint32_t MP4::trak::getChunksSize()
-{
-    for ( auto stco : getTypeAtoms<stco>() ) {
-        return stco->stcoTable.size();
-    }
-    for ( auto co64 : getTypeAtoms<co64>() ) {
-        return co64->co64Table.size();
-    }
-    return 0;
 }
 
 MP4::chunkOffsetType MP4::trak::sampleToChunk(sampleType sample)
@@ -127,27 +124,25 @@ MP4::chunkOffsetType MP4::trak::sampleToChunk(sampleType sample)
     throw std::runtime_error("MP4: no Chunk found for Sample !");
 }
 
+uint32_t MP4::trak::getChunkCount()
+{
+    for ( auto stco : getTypeAtoms<stco>() ) {
+        return stco->stcoTable.size();
+    }
+    for ( auto co64 : getTypeAtoms<co64>() ) {
+        return co64->co64Table.size();
+    }
+    return 0;
+}
+
 std::vector<MP4::chunkType> MP4::trak::getChunks()
 {
     std::vector<chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {
         uint32_t sampleID = 1;
-        uint32_t chunksSize = getChunksSize();
+        auto chunkOffsets = getChunkOffsets();
         auto stscTable = stsc->stscTable;
         
-        // test setup
-        //sampleID[0] = 5;
-        /*
-        std::vector<std::vector<uint32_t>> stscTable;
-        std::vector<uint32_t> stscLine;
-        stscLine.push_back(1); stscLine.push_back(3); stscLine.push_back(23); 
-        stscTable.push_back(stscLine);
-        stscLine[0] = 3;stscLine[1] = 1;stscLine[2] = 23;
-        stscTable.push_back(stscLine);
-        stscLine[0] = 5;stscLine[1] = 1;stscLine[2] = 24;
-        stscTable.push_back(stscLine);
-        */
-
         // reverse vectors so we can pop first elements from back
         std::reverse(stscTable.begin(),stscTable.end());
         uint32_t currentChunkID = stscTable.back()[0];
@@ -169,7 +164,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             chunk.samples = stscTable.back()[1];
             chunk.firstSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back()[2];
-            chunk.dataOffset = 0;
+            chunk.dataOffset = chunkOffsets[currentChunkID-1];
             chunks.push_back(chunk);
             
             sampleID += stscTable.back()[1];
@@ -177,7 +172,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             // check next first chunk if available and pop if we get there
             if ( stscTable.size() >= 2 && stscTable[stscTable.size()-2][0] == currentChunkID )
                     stscTable.pop_back();
-        } while ( currentChunkID <= chunksSize );
+        } while ( currentChunkID <= chunkOffsets.size() );
     }
 
     return chunks;

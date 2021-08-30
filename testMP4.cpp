@@ -64,22 +64,24 @@ int main(int argc, char* argv[])
                     << ", " << sample.timeOffset << " )\n";
                     auto chunk = track->sampleToChunk(sample);
                     std::cout << "chunk for that sample: ["<< chunk.ID << "] ( " << chunk.sampleOffset << " )" << std::endl;
-                    auto samples = track->getSamples();
-                    std::cout << "samples in track: " << samples.size() << std::endl;
+                    std::cout << "samples in track: " << track->getSampleCount() << std::endl;
                     /*
-                    for ( auto sample : samples )
+                    for ( auto sample : track->getSamples() )
                         std::cout << "[" << sample.ID << "] ( " << sample.duration
                         << ", " << sample.time
                         << ", " << sample.timeOffset << " )\n";
                     */
-                    std::cout << "chunks in track: " << samples.size() << std::endl;
-                    auto chunks = track->getChunks();
-                    for ( auto chunk : chunks ) {
+                    std::cout << "chunks in track: " << track->getChunkCount() << std::endl;
+                    /*
+                    for ( auto offset : track->getChunkOffsets() )
+                        std::cout << offset << std::endl;
+                    for ( auto chunk : track->getChunks() ) {
                         std::cout << "[" << chunk.ID << "] ( " << chunk.samples
                         << ", " << chunk.firstSampleID
                         << ", " << chunk.sampleDescriptionID
                         << ", " << chunk.dataOffset << " )\n";
                     }
+                    */
                 } else {
                     std::cout << "gpmd data is in different file, not getting it ...\n";
                 }

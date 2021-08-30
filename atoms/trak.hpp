@@ -31,14 +31,12 @@ public:
 
     uint32_t                    getID();
     std::vector<std::string>    getSampleDataFormats();
-    std::string                         getSampleDataReference(std::string dataFormat);
-    // sample = (ID, duration, time, timeOffset) all time in track time units
+    std::string                 getSampleDataReference(std::string dataFormat);
+    uint32_t                    getSampleCount();
     std::vector<sampleType>     getSamples();
     sampleType                  getSampleAtTime(float sampleTime); // sampleTime in seconds float
-    uint32_t                    getChunksSize();
-    // chunk  = (ID, sampleOffset)
     MP4::chunkOffsetType        sampleToChunk(sampleType sample);
-    // chunk  = (ID, samples, firstSampleID, sampleDescriptionID)
+    uint32_t                    getChunkCount();
     std::vector<chunkType>      getChunks();
     std::vector<uint64_t>       getChunkOffsets();
 
