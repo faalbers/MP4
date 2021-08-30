@@ -18,16 +18,6 @@ namespace MP4
 
 class stsd : public atom
 {
-private:
-    typedef struct stsdEntryType_
-    {
-        uint32_t    size;
-        std::string dataFormat;             // format type FourCC
-        uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
-                                            // with samples that use this sample description. Data references are stored in data reference atoms
-        std::string extendedData;
-    } stsdEntryType_;
-
 public:
     stsd(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
@@ -35,7 +25,7 @@ public:
     void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
-    std::vector<stsdEntryType_> stsdTable;
+    std::vector<stsdEntryType> stsdTable;
 
 };
 

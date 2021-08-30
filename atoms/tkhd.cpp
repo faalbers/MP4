@@ -4,33 +4,10 @@
 MP4::tkhd::tkhd(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct tkhdDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    creationTime;
-        uint32_t    modificationTime;
-        uint32_t    trackID;
-        uint32_t    reservedA;
-        uint32_t    duration;           // the sum of the durations of all of the track’s edits.
-                                        // if there is no edit list, then the duration is
-                                        // the sum of the sample durations, converted into the
-                                        // movie timescale
-        uint8_t     reservedB[8];
-        uint16_t    layer;
-        uint16_t    alternateGroup;
-        uint16_t    volume;             // fixed point
-        uint16_t    reservedC;
-        uint32_t    matrix[3][3];
-        uint32_t    trackWidth;
-        uint32_t    trackHeight;
-    } tkhdDataBlock;
-
     // get data
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("tkhd atom can not parse file: "+filePath);
-    tkhdDataBlock tkhdData;
+    datablock::tkhdDataBlock tkhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &tkhdData, sizeof(tkhdData));
     

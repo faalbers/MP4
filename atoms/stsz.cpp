@@ -5,18 +5,9 @@
 MP4::stsz::stsz(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct stszDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    defaultSampleSize;             // if zero, all samples have different size.
-        uint32_t    numberOfEntries;        // number of sample descriptions that follow
-    } stszDataBlock;
-
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsz atom can not parse file: "+filePath);
-    stszDataBlock stszData;
+    datablock::stszTableBlock stszData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stszData, sizeof(stszData));
     defaultSampleSize = _byteswap_ulong(stszData.defaultSampleSize);

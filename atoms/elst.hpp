@@ -18,14 +18,6 @@ namespace MP4
 
 class elst : public atom
 {
-private:
-    typedef struct elstEntryType_
-    {
-        uint32_t    duration;
-        uint32_t    mediaTime;
-        float       mediaRate;
-    } elstEntryType_;
-
 public:
     elst(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
@@ -33,7 +25,7 @@ public:
     void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
-    std::vector<elstEntryType_> elstTable;
+    std::vector<elstEntryType> elstTable;
 
 };
 

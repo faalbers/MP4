@@ -2,9 +2,12 @@
 #define MP4_DATATYPES_H
 
 #include <stdint.h>
+#include <string>
 
 namespace MP4
 {
+
+// ********* DATA TYPES *********
 
 typedef struct sampleType
 {
@@ -29,6 +32,133 @@ typedef struct chunkOffsetType
     uint32_t    ID;
     uint32_t    sampleOffset;
 } chunkOffsetType;
+
+typedef struct stsdEntryType
+{
+    uint32_t    size;
+    std::string dataFormat;         // format type FourCC
+    uint16_t    dataReferenceIndex; // index of the data reference to use to retrieve data associated
+                                    // with samples that use this sample description.
+                                    // Data references are stored in data reference atoms
+    std::string extendedData;
+} stsdEntryType;
+
+typedef struct elstEntryType
+{
+    uint32_t    duration;
+    uint32_t    mediaTime;
+    float       mediaRate;
+} elstEntryType;
+
+namespace datablock
+
+{
+// ********* DATA RETRIEVAL BLOCKS *********
+// remember they are 32 bit aligned !
+
+typedef struct atomHeaderBlock
+{
+    uint32_t    size32; // (big endian) size of atom 32 bit
+    char        key[4]; // (4 char) FourCC key of atom
+    uint64_t    size64; // (big endian) size of atom 64 bit
+} atomHeaderBlock;
+
+typedef struct atomTableBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
+} atomTableBlock;
+
+typedef struct stszTableBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint32_t    defaultSampleSize;             // if zero, all samples have different size.
+    uint32_t    numberOfEntries;        // number of sample descriptions that follow
+} stszTableBlock;
+
+typedef struct mdhdDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint32_t    creationTime;
+    uint32_t    modificationTime;
+    uint32_t    timeScale;          // time units per second
+    uint32_t    duration;           // amount of timeScale units
+} mdhdDataBlock;
+
+typedef struct mvhdDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint32_t    creationTime;
+    uint32_t    modificationTime;
+    uint32_t    timeScale;          // time units per second
+    uint32_t    duration;           // amount of timeScale units
+    uint32_t    preferredRate;      // fixed point
+    uint16_t    preferredVolume;    // fixed point
+    uint8_t     reserved[10];
+    uint32_t    matrix[3][3];
+    uint32_t    previewTime;
+    uint32_t    previewDuration;
+    uint32_t    posterTime;
+    uint32_t    selectionTime;
+    uint32_t    selectionDuration;
+    uint32_t    currentTime;
+    uint32_t    nextTrackID;
+} mvhdDataBlock;
+
+typedef struct hdlrDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    char        componentType[4];
+    char        componentSubType[4];
+    uint32_t    componentManufacturer;
+    uint32_t    componentFlags;
+    uint32_t    componentFlagsMask;
+} hdlrDataBlock;
+
+typedef struct tkhdDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint32_t    creationTime;
+    uint32_t    modificationTime;
+    uint32_t    trackID;
+    uint32_t    reservedA;
+    uint32_t    duration;           // the sum of the durations of all of the track’s edits.
+                                    // if there is no edit list, then the duration is
+                                    // the sum of the sample durations, converted into the
+                                    // movie timescale
+    uint8_t     reservedB[8];
+    uint16_t    layer;
+    uint16_t    alternateGroup;
+    uint16_t    volume;             // fixed point
+    uint16_t    reservedC;
+    uint32_t    matrix[3][3];
+    uint32_t    trackWidth;
+    uint32_t    trackHeight;
+} tkhdDataBlock;
+
+typedef struct stsdEntryDataBlock
+{
+    uint32_t    size;
+    char        dataFormat[4];          // format type FourCC
+    uint8_t     reserved[6];            // reserved and set to zero
+    uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
+                                        // with samples that use this sample description. Data references are stored in data reference atoms
+} stsdEntryDataBlock;
+
+typedef struct elstEntryDataBlock
+{
+    uint32_t    duration;
+    uint32_t    mediaTime;
+    uint32_t    mediaRate;
+} elstEntryDataBlock;
+
+}
 
 }
 

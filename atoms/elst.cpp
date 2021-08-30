@@ -5,31 +5,17 @@
 MP4::elst::elst(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct elstDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
-    } elstDataBlock;
-    typedef struct elstEntryDataBlock
-    {
-        uint32_t    duration;
-        uint32_t    mediaTime;
-        uint32_t    mediaRate;
-    } elstEntryDataBlock;
-
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("elst atom can not parse file: "+filePath);
-    elstDataBlock elstData;
+    datablock::atomTableBlock elstData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &elstData, sizeof(elstData));
     elstData.numberOfEntries = _byteswap_ulong(elstData.numberOfEntries);
     auto index = elstData.numberOfEntries;
-    elstEntryDataBlock elstEntryBlock;
+    datablock::elstEntryDataBlock elstEntryBlock;
     do {
-        elstEntryType_ elstEntry;
+        elstEntryType elstEntry;
         fileStream.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
         elstEntry.duration = _byteswap_ulong(elstEntryBlock.duration);
         elstEntry.mediaTime = _byteswap_ulong(elstEntryBlock.mediaTime);

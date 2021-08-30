@@ -5,18 +5,10 @@
 MP4::stsc::stsc(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct stscDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
-    } stscDataBlock;
-
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsc atom can not parse file: "+filePath);
-    stscDataBlock stscData;
+    datablock::atomTableBlock stscData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stscData, sizeof(stscData));
     stscData.numberOfEntries = _byteswap_ulong(stscData.numberOfEntries);

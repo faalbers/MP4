@@ -17,3 +17,5 @@ gmhd/gpmd (gopro) just has an apparently 32 bit value that is not used yet but n
 
 * transfer all structs to datatypes.hpp
 
+* rethink dref and drefEntry ?
+

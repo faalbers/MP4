@@ -5,33 +5,17 @@
 MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct stsdDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
-    } stsdDataBlock;
-    typedef struct stsdEntryDataBlock
-    {
-        uint32_t    size;
-        char        dataFormat[4];          // format type FourCC
-        uint8_t     reserved[6];            // reserved and set to zero
-        uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
-                                            // with samples that use this sample description. Data references are stored in data reference atoms
-    } stsdEntryDataBlock;
-
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsd atom can not parse file: "+filePath);
-    stsdDataBlock stsdData;
+    datablock::atomTableBlock stsdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = _byteswap_ulong(stsdData.numberOfEntries);
     auto index = stsdData.numberOfEntries;
-    stsdEntryDataBlock sampleDescriptionBlock;
+    datablock::stsdEntryDataBlock sampleDescriptionBlock;
     do {
-        stsdEntryType_ stsdEntry;
+        stsdEntryType stsdEntry;
         fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
         stsdEntry.size = _byteswap_ulong(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);

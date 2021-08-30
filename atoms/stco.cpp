@@ -5,18 +5,10 @@
 MP4::stco::stco(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct stcoDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
-    } stcoDataBlock;
-
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stco atom can not parse file: "+filePath);
-    stcoDataBlock stcoData;
+    datablock::atomTableBlock stcoData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stcoData, sizeof(stcoData));
     stcoData.numberOfEntries = _byteswap_ulong(stcoData.numberOfEntries);

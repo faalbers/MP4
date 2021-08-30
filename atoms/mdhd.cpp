@@ -4,20 +4,9 @@
 MP4::mdhd::mdhd(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct mdhdDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    creationTime;
-        uint32_t    modificationTime;
-        uint32_t    timeScale;          // time units per second
-        uint32_t    duration;           // amount of timeScale units
-    } mdhdDataBlock;
-
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath);
-    mdhdDataBlock mdhdData;
+    datablock::mdhdDataBlock mdhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mdhdData, sizeof(mdhdData));
     timeScale = _byteswap_ulong(mdhdData.timeScale);

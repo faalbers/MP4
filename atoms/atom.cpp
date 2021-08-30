@@ -10,12 +10,6 @@ MP4::atom::atom(std::string filePath, uint64_t filePos, std::string pathParent)
 {
     uint64_t fileSize, childFilePos;
     bool container;
-    typedef struct atomHeaderBlock
-    {
-        uint32_t    size32; // (big endian) size of atom 32 bit
-        char        key[4]; // (4 char) FourCC key of atom
-        uint64_t    size64; // (big endian) size of atom 64 bit
-    } atomHeaderBlock;
 
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("Atom can not parse file: "+filePath_);
@@ -26,7 +20,7 @@ MP4::atom::atom(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.seekg(filePos, fileStream.beg);
 
     // read the header
-    atomHeaderBlock dataBlock;
+    datablock::atomHeaderBlock dataBlock;
     fileStream.read((char *) &dataBlock, sizeof(dataBlock));
 
     key = std::string(dataBlock.key).substr(0,4);
@@ -165,19 +159,12 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t
 
 bool MP4::atom::isContainer_(std::ifstream &fileStream, int64_t dataSize)
 {
-    typedef struct atomHeaderBlock
-    {
-        uint32_t    size32; // (big endian) size of atom 32 bit
-        char        key[4]; // (4 char) FourCC key of atom
-        uint64_t    size64; // (big endian) size of atom 64 bit
-    } atomHeaderBlock;
-
     int64_t startPos = fileStream.tellg(), nextPos = startPos;
     fileStream.seekg(0, fileStream.end);
     int64_t fileSize = fileStream.tellg();
     fileStream.seekg(startPos, fileStream.beg);
 
-    atomHeaderBlock dataBlock;
+    datablock::atomHeaderBlock dataBlock;
     int64_t size, totalSize = 0;
     bool result = false;
     do {

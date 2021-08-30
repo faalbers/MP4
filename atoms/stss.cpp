@@ -5,17 +5,9 @@
 MP4::stss::stss(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct stssDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // number of sample descriptions that follow
-    } stssDataBlock;
-
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stss atom can not parse file: "+filePath);
-    stssDataBlock stssData;
+    datablock::atomTableBlock stssData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stssData, sizeof(stssData));
     stssData.numberOfEntries = _byteswap_ulong(stssData.numberOfEntries);

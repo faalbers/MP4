@@ -7,12 +7,6 @@ MP4::dref::dref(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
     // data blocks for file reading
-    typedef struct drefDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        uint32_t    numberOfEntries;        // (32-bit integer) number of sample descriptions that follow
-    } drefDataBlock;
     typedef struct drefEntryDataBlock
     {
         uint32_t    size;
@@ -25,7 +19,7 @@ MP4::dref::dref(std::string filePath, uint64_t filePos, std::string pathParent)
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("dref atom can not parse file: "+filePath);
-    drefDataBlock drefData;
+    datablock::atomTableBlock drefData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefData, sizeof(drefData));
     drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);

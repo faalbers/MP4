@@ -4,22 +4,10 @@
 MP4::hdlr::hdlr(std::string filePath, uint64_t filePos, std::string pathParent)
     : atom(filePath, filePos, pathParent)
 {
-    // data blocks for file reading
-    typedef struct hdlrDataBlock
-    {
-        uint8_t     version;
-        uint8_t     flag[3];
-        char        componentType[4];
-        char        componentSubType[4];
-        uint32_t    componentManufacturer;
-        uint32_t    componentFlags;
-        uint32_t    componentFlagsMask;
-    } hdlrDataBlock;
-
     // get data
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("hdlr atom can not parse file: "+filePath_);
-    hdlrDataBlock hdlrData;
+    datablock::hdlrDataBlock hdlrData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &hdlrData, sizeof(hdlrData));
     componentType = std::string(hdlrData.componentType).substr(0,4);
