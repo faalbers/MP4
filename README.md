@@ -13,3 +13,6 @@
 * handle vmhd, smhd and gmhd atoms.\
 gmhd/gpmd (gopro) just has an apparently 32 bit value that is not used yet but needs to be included.
 
+* change atomnameTable to just table.
+
+

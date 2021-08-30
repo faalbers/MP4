@@ -2,11 +2,9 @@
 #define MP4_TRAK_H
 #include <string>
 #include <memory>
+#include <vector>
+#include <tuple>
 #include "atom.hpp"
-#include "mdhd.hpp"
-#include "tkhd.hpp"
-#include "hdlr.hpp"
-#include "stsd.hpp"
 
 /*
 TRACK ATOM:
@@ -30,14 +28,22 @@ public:
     trak(std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     // data retrieval
-    tkhd *get_tkhd();
-    mdhd *get_mdhd();
-    hdlr *get_hdlr();
-    stsd *get_stsd();
 
-    uint32_t getID();
+    uint32_t                            getID();
+    std::vector<std::string>            getSampleDataFormats();
+    std::string                         getSampleDataReference(std::string dataFormat);
+    // sample = (ID, duration, time, timeOffset) all time in track time units
+    std::vector<uint32_t>               getSampleAtTime(float sampleTime); // sampleTime in seconds float
+    std::vector<std::vector<uint32_t>>  getSamples();
+    uint32_t                            getChunkOffsetsSize();
+    // chunk  = (ID, samples, sampleOffset, sampleDescriptionID)
+    std::vector<uint32_t>               getSampleToChunk(std::vector<uint32_t> sample);
+    // chunk  = (ID, samples, firstSampleID, sampleDescriptionID)
+    std::vector<std::vector<uint32_t>>  getChunks();
+
 
     // track checkers
+
     bool isComponentType(std::string type);
     bool isComponentSubType(std::string type);
     bool hasSampleDataFormat(std::string format);

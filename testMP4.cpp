@@ -33,17 +33,51 @@ int main(int argc, char* argv[])
         mp4.printHierarchy();
     }
     
-    if (false) 
+    if (true)
     {
         mp4.printHierarchyData();  
     }
    
-    if (true)
+    if (false)
     {
         for ( auto track : mp4.getTracks()) {
-            if ( track->hasSampleDataFormat("gpmd") ) {
-                std::cout << "GPMF track: " << track->getID() << std::endl;
-                track->printHierarchyData();
+            std::cout << "Track: " << track->getID() << std::endl;
+            for ( auto format : track->getSampleDataFormats() )
+                std::cout << format << std::endl;
+        }
+    }
+
+    if (true)
+    {
+        std::string dataFormat = "gpmd";
+        float seconds = 10;
+        for ( auto track : mp4.getTracks()) {
+            //if ( track->hasSampleDataFormat("gpmd") ) {
+            if ( track->hasSampleDataFormat(dataFormat) ) {
+                std::cout << "gpmd track: " << track->getID() << std::endl;
+                if ( track->getSampleDataReference(dataFormat) == "" ) {
+                    std::cout << "gpmd data is embedded in same file\n";
+                    auto sample = track->getSampleAtTime(seconds);
+                    std::cout << "sample at " << seconds << " sec:\n";
+                    std::cout << "[" << sample[0] << "] ( " << sample[1]
+                    << ", " << sample[2]
+                    << ", " << sample[3] << " )\n";
+                    auto chunk = track->getSampleToChunk(sample);
+                    std::cout << "chunk for that sample: " << chunk[0] << " " << chunk[1] << " " << chunk[2] << " " << chunk[3] << std::endl;
+                    auto samples = track->getSamples();
+                    std::cout << "samples in track: " << samples.size() << std::endl;
+                    /*
+                    for ( auto sample : samples )
+                        std::cout << "[" << sample[0] << "] ( " << sample[1]
+                        << ", " << sample[2]
+                        << ", " << sample[3] << " )\n";
+                    */
+                    std::cout << "chunks in track: " << samples.size() << std::endl;
+                    auto chunks = track->getChunks();
+
+                } else {
+                    std::cout << "gpmd data is in different file, not getting it ...\n";
+                }
             }
         }
     }
