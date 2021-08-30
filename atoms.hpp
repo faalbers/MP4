@@ -1,5 +1,5 @@
-#ifndef MP4LIB_ATOMS_H
-#define MP4LIB_ATOMS_H
+#ifndef MP4_ATOMS_H
+#define MP4_ATOMS_H
 
 #include "atoms/atom.hpp"
 

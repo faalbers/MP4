@@ -1,6 +1,7 @@
 #ifndef MP4_MP4_H
 #define MP4_MP4_H
 
+#include "datatypes.hpp"
 #include "atoms.hpp"
 #include <string>
 #include <vector>
