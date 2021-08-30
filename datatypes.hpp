@@ -8,13 +8,14 @@ namespace MP4
 {
 
 // ********* DATA TYPES *********
+// ID's in MP4 always start with 1 , not 0
 
 typedef struct sampleType
 {
     uint32_t    ID;
     uint32_t    duration;
     uint32_t    time;
-    uint32_t    timeOffset;
+    uint32_t    currentTime;
     uint32_t    dataSize;
 } sampleType;
 
