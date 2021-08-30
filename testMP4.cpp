@@ -50,38 +50,41 @@ int main(int argc, char* argv[])
     if (true)
     {
         std::string dataFormat = "gpmd";
-        float seconds = 20;
+        float seconds = 60;
         for ( auto track : mp4.getTracks()) {
             //if ( track->hasSampleDataFormat("gpmd") ) {
             if ( track->hasSampleDataFormat(dataFormat) ) {
                 std::cout << "gpmd track: " << track->getID() << std::endl;
                 if ( track->getSampleDataReference(dataFormat) == "" ) {
                     std::cout << "gpmd data is embedded in same file\n";
-                    auto sample = track->getSampleAtTime(seconds);
+                    auto sampleAt = track->getSampleAtTime(seconds);
                     std::cout << "sample at " << seconds << " sec:\n";
-                    std::cout << "[" << sample.ID << "] ( " << sample.duration
-                    << ", " << sample.time
-                    << ", " << sample.timeOffset << " )\n";
-                    auto chunk = track->sampleToChunk(sample);
+                    std::cout << "[" << sampleAt.ID << "] ( " << sampleAt.duration
+                    << ", " << sampleAt.time
+                    << ", " << sampleAt.timeOffset
+                    << ", " << sampleAt.dataSize << " )\n";
+                    auto chunk = track->sampleToChunk(sampleAt);
                     std::cout << "chunk for that sample: ["<< chunk.ID << "] ( " << chunk.sampleOffset << " )" << std::endl;
                     std::cout << "samples in track: " << track->getSampleCount() << std::endl;
                     /*
                     for ( auto sample : track->getSamples() )
                         std::cout << "[" << sample.ID << "] ( " << sample.duration
                         << ", " << sample.time
-                        << ", " << sample.timeOffset << " )\n";
+                        << ", " << sample.timeOffset
+                        << ", " << sample.dataSize << " )\n";
                     */
                     std::cout << "chunks in track: " << track->getChunkCount() << std::endl;
                     /*
                     for ( auto offset : track->getChunkOffsets() )
                         std::cout << offset << std::endl;
+                    */
                     for ( auto chunk : track->getChunks() ) {
                         std::cout << "[" << chunk.ID << "] ( " << chunk.samples
                         << ", " << chunk.firstSampleID
+                        << ", " << chunk.currentSampleID
                         << ", " << chunk.sampleDescriptionID
                         << ", " << chunk.dataOffset << " )\n";
                     }
-                    */
                 } else {
                     std::cout << "gpmd data is in different file, not getting it ...\n";
                 }

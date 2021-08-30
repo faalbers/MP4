@@ -42,29 +42,14 @@ MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         auto timeScale = mdhd->timeScale;
         uint32_t time = timeScale * sampleTime;
-        for ( auto stts : getTypeAtoms<stts>() ) {
-            uint32_t nextStart = 0;
-            uint32_t currentStart = 0;
-            uint32_t sampleID = 1;
-            for ( auto entry : stts->sttsTable ) {
-                for ( uint32_t sttsSampleID = 1; sttsSampleID <= entry[0]; sttsSampleID++) {
-                    nextStart += entry[1];
-                    if ( nextStart > time ) {
-                        sampleType sample;
-                        sample.ID = sampleID;
-                        sample.duration = entry[1];
-                        sample.time = currentStart;
-                        sample.timeOffset = time - currentStart;
-                        return sample;
-                    }
-                    currentStart = nextStart;
-                    sampleID++;
-                }
+        for ( auto sample : getSamples()) {
+            if ( time < (sample.time + sample.duration) ) {
+                sample.timeOffset = time - sample.time;
+                return sample;
             }
-            throw std::runtime_error("MP4: Sample Index not found or out of range !");
         }
     }
-    throw std::runtime_error("MP4: Sample Index not found or out of range !");
+    throw std::runtime_error("MP4: No sample found at sampleTime !");
 }
 
 uint32_t MP4::trak::getSampleCount()
@@ -83,6 +68,8 @@ std::vector<MP4::sampleType>  MP4::trak::getSamples()
     for ( auto stts : getTypeAtoms<stts>() ) {
         uint32_t sampleID = 1;
         uint32_t currentStart = 0;
+        std::vector<uint32_t> sampleSizes;
+        for ( auto stsz : getTypeAtoms<stsz>() ) sampleSizes = stsz->stszTable;
         for ( auto entry : stts->sttsTable ) {
             for ( uint32_t sttsSampleID = 1; sttsSampleID <= entry[0]; sttsSampleID++) {
                 // add a sample
@@ -91,6 +78,7 @@ std::vector<MP4::sampleType>  MP4::trak::getSamples()
                 sample.duration = entry[1];
                 sample.time = currentStart;
                 sample.timeOffset = 0;
+                sample.dataSize = sampleSizes[sampleID - 1];
                 samples.push_back(sample);
                 currentStart += entry[1];
                 sampleID++;
@@ -111,16 +99,6 @@ MP4::chunkOffsetType MP4::trak::sampleToChunk(sampleType sample)
             return sampleToChunk;
         }
     }
-    /*
-    for ( auto chunk : getChunks() ) {
-        if ( sample.ID < chunk[2]+chunk[1] ) {
-            uint32_t sampleOffset = sample.ID-chunk[2]+1;
-            sampleToChunk.push_back(chunk[0]);
-            sampleToChunk.push_back(sampleOffset);
-            return sampleToChunk;
-        }
-    }
-    */
     throw std::runtime_error("MP4: no Chunk found for Sample !");
 }
 
@@ -153,6 +131,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             chunk.ID = startChunk;
             chunk.samples = 0;
             chunk.firstSampleID = 0;
+            chunk.currentSampleID = 0;
             chunk.sampleDescriptionID = 0;
             chunk.dataOffset = 0;
             chunks.push_back(chunk);
@@ -163,6 +142,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             chunk.ID = currentChunkID;
             chunk.samples = stscTable.back()[1];
             chunk.firstSampleID = sampleID;
+            chunk.currentSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back()[2];
             chunk.dataOffset = chunkOffsets[currentChunkID-1];
             chunks.push_back(chunk);

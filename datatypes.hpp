@@ -15,6 +15,7 @@ typedef struct sampleType
     uint32_t    duration;
     uint32_t    time;
     uint32_t    timeOffset;
+    uint32_t    dataSize;
 } sampleType;
 
 typedef struct chunkType
@@ -22,6 +23,7 @@ typedef struct chunkType
     uint32_t    ID;
     uint32_t    samples;
     uint32_t    firstSampleID;
+    uint32_t    currentSampleID;
     uint32_t    sampleDescriptionID;
     uint64_t    dataOffset;
 } chunkType;

@@ -16,3 +16,5 @@ gmhd/gpmd (gopro) just has an apparently 32 bit value that is not used yet but n
 * change atomnameTable to just table.
 
 * rethink dref and drefEntry ?
+
+* add funtion name to throw message
