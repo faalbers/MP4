@@ -18,3 +18,7 @@ gmhd/gpmd (gopro) just has an apparently 32 bit value that is not used yet but n
 * rethink dref and drefEntry ?
 
 * add funtion name to throw message
+
+* dref needs entries with ID's
+
+* should all table entries have ID's ?

@@ -5,6 +5,9 @@
 #include "atom.hpp"
 
 /*
+DATA REFERENCE ATOM
+Data reference atoms contain tabular data that instructs the data handler component how to
+access the media’s data.
 */
 
 namespace MP4
@@ -17,9 +20,10 @@ public:
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
-    std::vector<std::string>    drefTable;
+    
+    static std::string          key;
+    std::vector<drefEntryType>  drefTable;
 
-    static std::string  key;
 };
 
 }

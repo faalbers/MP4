@@ -12,27 +12,28 @@ MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = _byteswap_ulong(stsdData.numberOfEntries);
-    auto index = stsdData.numberOfEntries;
+    uint32_t index = 1;
     datablock::stsdEntryDataBlock sampleDescriptionBlock;
     do {
         stsdEntryType stsdEntry;
         fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
-        stsdEntry.size = _byteswap_ulong(sampleDescriptionBlock.size);
+        stsdEntry.ID = index;
+        auto size = _byteswap_ulong(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);
         stsdEntry.dataReferenceIndex = _byteswap_ushort(sampleDescriptionBlock.dataReferenceIndex);
         stsdTable.push_back(stsdEntry);
         
         // not sure what is in the tail of the stsd entry
         // visualize it with a string
-        auto tailSize = stsdEntry.size - sizeof(sampleDescriptionBlock);
+        auto tailSize = size - sizeof(sampleDescriptionBlock);
         if ( tailSize > 0 ) {
             char tail[tailSize];
             fileStream.read((char *) tail, tailSize);
             stsdEntry.extendedData = std::string(tail).substr(0,tailSize);
         }
     
-        index--;
-    } while ( index > 0);
+        index++;
+    } while ( index <= stsdData.numberOfEntries );
     fileStream.close();
 }
 
@@ -44,7 +45,7 @@ void MP4::stsd::printData(bool fullLists)
     int index = 1;
     std::cout << dataIndent << "[#] (data format, data reference index, extended data)\n";
     for ( auto entry : stsdTable ) {
-        std::cout << dataIndent << "[" << index << "] ( '" << entry.dataFormat
+        std::cout << dataIndent << "[" <<  entry.ID << "] ( '" << entry.dataFormat
         << "', " << entry.dataReferenceIndex
         << ", '" << entry.extendedData << "' )" << std::endl;
         index++;

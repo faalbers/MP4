@@ -23,14 +23,17 @@ MP4::dref::dref(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefData, sizeof(drefData));
     drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);
-    auto index = drefData.numberOfEntries;
+    uint32_t index = 1;
     drefEntryDataBlock dataReferenceBlock;
     do {
         auto drefEntryAtom = std::make_shared<drefEntry>(filePath, fileStream.tellg());
-        drefTable.push_back(drefEntryAtom->reference);
+        drefEntryType drefEntry;
+        drefEntry.ID = index;
+        drefEntry.reference = drefEntryAtom->reference;
+        drefTable.push_back(drefEntry);
         fileStream.seekg(drefEntryAtom->fileNextPos_, fileStream.beg);
-        index--;
-    } while ( index > 0);
+        index++;
+    } while ( index <= drefData.numberOfEntries );
     fileStream.close();
 }
 
@@ -42,10 +45,10 @@ void MP4::dref::printData(bool fullLists)
     int index = 1;
     std::cout << dataIndent << "[#] (data reference file)\n";
     for ( auto entry : drefTable ) {
-        if ( entry == "" )
-            std::cout << dataIndent << "[" << index << "] ( this file )" << std::endl;
+        if ( entry.reference == "" )
+            std::cout << dataIndent << "[" << entry.ID << "] ( this file )" << std::endl;
         else
-            std::cout << dataIndent << "[" << index << "] ( " << entry << " )" <<std::endl;
+            std::cout << dataIndent << "[" << entry.ID << "] ( " << entry.reference << " )" <<std::endl;
         index++;
     }
 }

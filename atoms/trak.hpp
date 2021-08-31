@@ -30,15 +30,20 @@ public:
     // data retrieval
 
     uint32_t                    getID();
-    std::vector<std::string>    getSampleDataFormats();
-    std::string                 getSampleDataReference(std::string dataFormat);
-    uint32_t                    getSampleCount();
+
     std::vector<sampleType>     getSamples();
+    uint32_t                    getSampleCount();
+    std::vector<stsdEntryType>  getSampleDescriptions();
     sampleType                  getSampleAtTime(float sampleTime); // sampleTime in seconds float
-    MP4::chunkType              sampleToChunk(sampleType sample);
-    uint32_t                    getChunkCount();
+
     std::vector<chunkType>      getChunks();
+    uint32_t                    getChunkCount();
     std::vector<uint64_t>       getChunkOffsets();
+    MP4::chunkType              sampleToChunk(sampleType sample);
+
+    std::vector<drefEntryType>  getDataReferences();
+    drefEntryType               getDataReference(std::string dataFormat);
+
 
     // sample = (ID, duration, time, timeOffset) all time in track time units
 

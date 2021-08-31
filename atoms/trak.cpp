@@ -17,24 +17,24 @@ uint32_t MP4::trak::getID()
     throw std::runtime_error("MP4: Track has no tkhd !");
 }
 
-std::vector<std::string> MP4::trak::getSampleDataFormats()
+std::vector<MP4::drefEntryType> MP4::trak::getDataReferences()
 {
-    std::vector<std::string> dataFormats;
-    for ( auto stsd : getTypeAtoms<stsd>() )
-        for ( auto entry : stsd->stsdTable ) dataFormats.push_back(entry.dataFormat);
-    return dataFormats;
+    for ( auto dref : getTypeAtoms<dref>() )
+        return dref->drefTable;
+    throw std::runtime_error("MP4: SampleData has no data references !");
 }
 
-std::string MP4::trak::getSampleDataReference(std::string dataFormat)
+MP4::drefEntryType MP4::trak::getDataReference(std::string dataFormat)
 {
-    for ( auto stsd : getTypeAtoms<stsd>() ) {
-        for ( auto entry : stsd->stsdTable ) {
-            if ( entry.dataFormat == dataFormat )
-                for ( auto dref : getTypeAtoms<dref>() )
-                    return dref->drefTable[entry.dataReferenceIndex - 1];
+    for ( auto sampleDesc : getSampleDescriptions() ) {
+        if ( sampleDesc.dataFormat == dataFormat ) {
+            for ( auto dref : getTypeAtoms<dref>() )
+                for ( auto drefEntry : dref->drefTable )
+                    if ( drefEntry.ID == sampleDesc.dataReferenceIndex )
+                        return drefEntry;
         }
     }
-    throw std::runtime_error("MP4: SampleData has no reference !");
+    throw std::runtime_error("MP4: Samples have no data reference of that format !");
 }
 
 MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
@@ -84,6 +84,13 @@ std::vector<MP4::sampleType>  MP4::trak::getSamples()
         }
     }
     return samples;
+}
+
+std::vector<MP4::stsdEntryType> MP4::trak::getSampleDescriptions()
+{
+    for ( auto stsd : getTypeAtoms<stsd>() )
+        return stsd->stsdTable;
+    throw std::runtime_error("MP4: no sample descriptions found !");
 }
 
 MP4::chunkType MP4::trak::sampleToChunk(sampleType sample)
@@ -200,10 +207,8 @@ bool MP4::trak::isComponentSubType(std::string type)
 
 bool MP4::trak::hasSampleDataFormat(std::string format)
 {
-    for ( auto stsd : getTypeAtoms<stsd>() ) {
-        for ( auto entry : stsd->stsdTable )
-            if ( entry.dataFormat == format) return true;
-    }
+    for ( auto entry : getSampleDescriptions() )
+        if ( entry.dataFormat == format) return true;
     return false;
 }
 

@@ -37,66 +37,52 @@ int main(int argc, char* argv[])
     {
         mp4.printHierarchyData();  
     }
-   
-    if (false)
-    {
-        for ( auto track : mp4.getTracks()) {
-            std::cout << "Track: " << track->getID() << std::endl;
-            for ( auto format : track->getSampleDataFormats() )
-                std::cout << format << std::endl;
-        }
-    }
 
     if (true)
     {
-        std::string dataFormat = "gpmd";
-        float seconds = 5;
+        bool showLists = true;
+        int count;
         for ( auto track : mp4.getTracks()) {
-            //if ( track->hasSampleDataFormat("gpmd") ) {
-            if ( track->hasSampleDataFormat(dataFormat) ) {
-                std::cout << "gpmd track: " << track->getID() << std::endl;
-                if ( track->getSampleDataReference(dataFormat) == "" ) {
-                    std::cout << "gpmd data is embedded in same file\n";
-                    auto sampleAt = track->getSampleAtTime(seconds);
-                    std::cout << "sample at " << seconds << " sec:\n";
-                    std::cout << "[" << sampleAt.ID << "] ( " << sampleAt.duration
-                    << ", " << sampleAt.time
-                    << ", " << sampleAt.currentTime
-                    << ", " << sampleAt.dataSize << " )\n";
-                    auto sampleChunk = track->sampleToChunk(sampleAt);
-                    std::cout << "chunk for that sample:\n";
-                    std::cout << "[" << sampleChunk.ID << "] ( " << sampleChunk.samples
-                    << ", " << sampleChunk.firstSampleID
-                    << ", " << sampleChunk.currentSampleID
-                    << ", " << sampleChunk.sampleDescriptionID
-                    << ", " << sampleChunk.dataOffset << " )\n";
-                    /*
-                    for ( auto sample : track->getSamples() )
-                        std::cout << "[" << sample.ID << "] ( " << sample.duration
-                        << ", " << sample.time
-                        << ", " << sample.currentTime
-                        << ", " << sample.dataSize << " )\n";
-                    */
-                    std::cout << "chunks in track: " << track->getChunkCount() << std::endl;
-                    /*
-                    for ( auto offset : track->getChunkOffsets() )
-                        std::cout << offset << std::endl;
-                    */
-                    /*
-                    for ( auto chunk : track->getChunks() ) {
-                        std::cout << "[" << chunk.ID << "] ( " << chunk.samples
-                        << ", " << chunk.firstSampleID
-                        << ", " << chunk.currentSampleID
-                        << ", " << chunk.sampleDescriptionID
-                        << ", " << chunk.dataOffset << " )\n";
+            std::cout << "\nTrack: " << track->getID() << std::endl;
+            std::cout << "Sample descreptions:\n";
+            for ( auto sampleD : track->getSampleDescriptions())
+                std::cout << "[" << sampleD.ID << "] ( '" << sampleD.dataFormat
+                << "', " << sampleD.dataReferenceIndex
+                << ", " << sampleD.dataReferenceIndex << " )\n";
+            std::cout << "Data References:\n";
+            for ( auto dataReference : track->getDataReferences())
+                std::cout << "[" << dataReference.ID << "] ( '" << dataReference.reference << "' )\n";
+            std::cout << "Sample count: " << track->getSampleCount() << std::endl;
+            count = 10;
+            if ( showLists )
+                for ( auto sample : track->getSamples() ) {
+                    std::cout << "[" << sample.ID << "] ( " << sample.duration
+                    << ", " << sample.time
+                    << ", " << sample.currentTime
+                    << ", " << sample.dataSize << " )\n";
+                    count--;
+                    if ( count == 0 ) {
+                        std::cout << "...\n";
+                        break;
                     }
-                    */
-                } else {
-                    std::cout << "gpmd data is in different file, not getting it ...\n";
                 }
-            }
+            std::cout << "Chunk count: " << track->getChunkCount() << std::endl;
+            count = 10;
+            if ( showLists )
+                for ( auto chunk : track->getChunks() ) {
+                    std::cout << "[" << chunk.ID << "] ( " << chunk.samples
+                    << ", " << chunk.firstSampleID
+                    << ", " << chunk.currentSampleID
+                    << ", " << chunk.sampleDescriptionID
+                    << ", " << chunk.dataOffset << " )\n";
+                    count--;
+                    if ( count == 0 ) {
+                        std::cout << "...\n";
+                        break;
+                    }
+                }
         }
-    }
+}
 
     std::cout << "\n**** END ****\n\n";
 
