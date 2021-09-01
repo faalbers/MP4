@@ -31,6 +31,8 @@ public:
 
     uint32_t                    getID();
 
+    uint32_t                    getMediaTimeScale(); // float in seconds
+
     std::vector<sampleType>     getSamples();
     uint32_t                    getSampleCount();
     std::vector<stsdEntryType>  getSampleDescriptions();

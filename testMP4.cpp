@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
         int count;
         for ( auto track : mp4.getTracks()) {
             std::cout << "\nTrack: " << track->getID() << std::endl;
+            std::cout << "\nTime Scale: " << track->getMediaTimeScale() << std::endl;
             std::cout << "Sample descreptions:\n";
             for ( auto sampleD : track->getSampleDescriptions())
                 std::cout << "[" << sampleD.ID << "] ( '" << sampleD.dataFormat

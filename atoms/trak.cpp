@@ -17,6 +17,14 @@ uint32_t MP4::trak::getID()
     throw std::runtime_error("MP4: Track has no tkhd !");
 }
 
+uint32_t MP4::trak::getMediaTimeScale()
+{
+    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
+        return mdhd->timeScale;
+    }
+    throw std::runtime_error("MP4: Track has no time scale !");
+}
+
 std::vector<MP4::drefEntryType> MP4::trak::getDataReferences()
 {
     for ( auto dref : getTypeAtoms<dref>() )

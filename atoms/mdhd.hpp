@@ -6,14 +6,8 @@
 #include "atom.hpp"
 
 /*
-HANDLER REFERENCE ATOM:
-The handler reference atom specifies the media handler component that is to be used to
-interpret the media’s data.
-Historically, the handler reference atom was also used for data references.
-However, this use is no longer current and may now be safely ignored.
-The handler atom within a media atom declares the process by which the media data in
-the stream may be presented, and thus, the nature of the media in a stream.
-For example, a video handler would handle a video track.
+MEDIA HEADER ATOM
+The media header atom specifies the characteristics of a media, including time scale and duration
 */
 
 namespace MP4
