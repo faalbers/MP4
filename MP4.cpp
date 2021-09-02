@@ -1,9 +1,17 @@
 #include "MP4.hpp"
 #include <fstream>
 #include <filesystem>
+#include <iostream>
+#ifdef MP4_PARSE_TIME
+#include <chrono>
+#endif
 
 MP4::MP4::MP4(std::string fileName)
 {
+    #ifdef MP4_PARSE_TIME
+    auto start = std::chrono::high_resolution_clock::now();
+    #endif
+    
     filePath = std::filesystem::absolute(std::filesystem::path(fileName)).string();
 
     std::ifstream fileStream(filePath, std::ios::binary);
@@ -23,6 +31,12 @@ MP4::MP4::MP4(std::string fileName)
             children.push_back(child);
         }
     } while ( nextFilePos < fileSize );
+    
+    #ifdef MP4_PARSE_TIME
+    auto end = std::chrono::high_resolution_clock::now();
+    auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "\nMP4 Time : " << ms_int.count() << "ms\n";
+    #endif
 }
 
 std::vector<std::shared_ptr<MP4::atom>> MP4::MP4::getAtoms(std::string findKey, atom *parent)
