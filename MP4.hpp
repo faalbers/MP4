@@ -15,12 +15,13 @@ class MP4
 public:
     MP4(std::string fileName);
 
-    std::vector<std::shared_ptr<atom>>  getAtoms(std::string findKey, atom *parent = nullptr);
     template<typename T>
-    std::vector<T *>     getTypeAtoms(atom *parent = nullptr)
+    std::vector<T *>     getTypeAtoms()
     {
         std::vector<T *> foundTypeAtoms;
-        for( auto foundAtom : getAtoms(T::key, parent) ) foundTypeAtoms.push_back((T *) foundAtom.get());
+        for ( auto child : children )
+            for ( auto typeAtom : child->getTypeAtoms<T>() )
+                 foundTypeAtoms.push_back(typeAtom);
         return foundTypeAtoms;
     }
     std::vector<trak *>  getTracks();

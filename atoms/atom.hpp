@@ -16,12 +16,14 @@ class atom
 public:
     atom(std::string filePath, uint64_t filePos, std::string pathParent = "/");
     
-    std::vector<std::shared_ptr<atom>>  getAtoms(std::string findKey, atom *parent = nullptr);
     template<typename T>
-    std::vector<T *>     getTypeAtoms(atom *parent = nullptr)
+    std::vector<T *>     getTypeAtoms()
     {
         std::vector<T *> foundTypeAtoms;
-        for( auto foundAtom : getAtoms(T::key, parent) ) foundTypeAtoms.push_back((T *) foundAtom.get());
+        std::vector<std::shared_ptr<atom>> found;
+        if ( T::key == key ) foundTypeAtoms.push_back((T *) this);
+        getChildAtoms_(T::key, found);
+        for( auto foundAtom : found ) foundTypeAtoms.push_back((T *) foundAtom.get());
         return foundTypeAtoms;
     }
 
@@ -29,7 +31,7 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
-    std::string                         key;
+    std::string     key;
 
 protected:
     friend class MP4;
@@ -38,7 +40,7 @@ protected:
 
     static std::shared_ptr<atom>    makeAtom_(std::string filePath, int64_t nextFilePos, std::string pathParent = "/");
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
-    void                            getAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
+    void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
 
     int64_t                             size_;

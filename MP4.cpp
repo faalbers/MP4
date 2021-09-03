@@ -39,21 +39,10 @@ MP4::MP4::MP4(std::string fileName)
     #endif
 }
 
-std::vector<std::shared_ptr<MP4::atom>> MP4::MP4::getAtoms(std::string findKey, atom *parent)
-{
-    std::vector<std::shared_ptr<atom>> found;
-    if ( parent != nullptr ) parent->getAtoms_(findKey, found);
-    else for ( auto child : children ) {
-        if ( child->key == findKey ) found.push_back(child);
-        child->getAtoms_(findKey, found);
-    }
-    return found;
-}
-
 std::vector<MP4::trak *>  MP4::MP4::getTracks()
 {
+    for ( auto moov : getTypeAtoms<moov>()) return moov->getTypeAtoms<trak>();
     std::vector<trak *> foundTracks;
-    for ( auto moov : getTypeAtoms<moov>()) foundTracks = getTypeAtoms<trak>(moov);
     return foundTracks;
 }
 
