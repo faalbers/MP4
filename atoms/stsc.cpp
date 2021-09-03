@@ -30,10 +30,10 @@ MP4::stsc::stsc(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::stsc::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample-To-Chunk Atom)" << std::endl;
-    int index = 1;
+    size_t index = 1;
     std::cout << dataIndent << "[#] (first chunk , samples per chunk, sample description ID)\n";
     if ( fullLists || (!fullLists && stscTable.size() <= 6) ) {
         for ( auto entry : stscTable ) {

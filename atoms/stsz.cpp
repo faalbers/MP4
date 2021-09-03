@@ -26,11 +26,11 @@ MP4::stsz::stsz(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::stsz::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Size Atom)" << std::endl;
     std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
-    int index = 1;
+    size_t index = 1;
     std::cout << dataIndent << "[#] (sample Size)\n";
     if ( fullLists || (!fullLists && stszTable.size() <= 6) ) {
         for ( auto entry : stszTable ) {

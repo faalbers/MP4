@@ -11,7 +11,7 @@ MP4::mdat::mdat(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::mdat::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Media Data Atom)" << std::endl;
     std::cout << dataIndent << "filePosition of sample data : " << sampleDataPos << std::endl;

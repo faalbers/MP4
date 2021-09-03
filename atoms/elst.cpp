@@ -29,7 +29,7 @@ MP4::elst::elst(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::elst::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Edit List Atom)" << std::endl;
     int index = 1;

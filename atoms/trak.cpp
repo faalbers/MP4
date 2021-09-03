@@ -112,13 +112,13 @@ MP4::chunkType MP4::trak::sampleToChunk(sampleType sample)
     throw std::runtime_error("MP4: no Chunk found for Sample !");
 }
 
-uint32_t MP4::trak::getChunkCount()
+size_t MP4::trak::getChunkCount()
 {
     for ( auto stco : getTypeAtoms<stco>() ) {
-        return stco->stcoTable.size();
+        return (size_t) stco->stcoTable.size();
     }
     for ( auto co64 : getTypeAtoms<co64>() ) {
-        return co64->co64Table.size();
+        return (size_t) co64->co64Table.size();
     }
     return 0;
 }
@@ -222,7 +222,7 @@ bool MP4::trak::hasSampleDataFormat(std::string format)
 
 void MP4::trak::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Track Atom)" << std::endl;
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;

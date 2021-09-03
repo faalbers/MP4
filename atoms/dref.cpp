@@ -24,7 +24,6 @@ MP4::dref::dref(std::string filePath, uint64_t filePos, std::string pathParent)
     fileStream.read((char *) &drefData, sizeof(drefData));
     drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);
     uint32_t index = 1;
-    drefEntryDataBlock dataReferenceBlock;
     do {
         auto drefEntryAtom = std::make_shared<drefEntry>(filePath, fileStream.tellg());
         drefEntryType drefEntry;
@@ -39,7 +38,7 @@ MP4::dref::dref(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::dref::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Data Reference Atom)" << std::endl;
     int index = 1;

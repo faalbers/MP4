@@ -25,10 +25,10 @@ MP4::stco::stco(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::stco::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Chunk Offset Atom (32-bit))" << std::endl;
-    int index = 1;
+    size_t index = 1;
     std::cout << dataIndent << "[#] ( chunk offset )\n";
     if ( fullLists || (!fullLists && stcoTable.size() <= 6) ) {
         for ( auto entry : stcoTable ) {

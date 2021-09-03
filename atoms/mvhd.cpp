@@ -33,7 +33,7 @@ MP4::mvhd::mvhd(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::mvhd::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Movie Header Atom)" << std::endl;
     std::cout << dataIndent << "timeScale      : " << timeScale << std::endl;

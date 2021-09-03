@@ -22,8 +22,8 @@ MP4::drefEntry::drefEntry(std::string filePath, uint64_t filePos, std::string pa
     // not sure what data goes into reference
     // visualize it with a string for now
     auto referenceSize = fileNextPos_ - fileStream.tellg();
-    if ( referenceSize > 0 ) {
-        char referenceChar[referenceSize];
+    char referenceChar[200];
+    if ( referenceSize > 0 && referenceSize <= 200) {
         fileStream.read((char *) referenceChar, referenceSize);
         reference = std::string(referenceChar).substr(0,referenceSize);
     }

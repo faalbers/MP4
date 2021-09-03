@@ -8,7 +8,7 @@ MP4::atom::atom(std::string filePath, uint64_t filePos, std::string pathParent)
     , filePos_(filePos)
     , parentPath_(pathParent)
 {
-    uint64_t fileSize, childFilePos;
+    int64_t fileSize, childFilePos;
     bool container;
 
     std::ifstream fileStream(filePath_, std::ios::binary);
@@ -94,7 +94,7 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
 
 void MP4::atom::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Atom)" << std::endl;
     std::cout << dataIndent << "No data defined ..." << std::endl;

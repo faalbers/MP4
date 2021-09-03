@@ -23,7 +23,7 @@ MP4::MP4::MP4(std::string fileName)
     fileStream.seekg(0, fileStream.beg);
     fileStream.close();
 
-    uint64_t nextFilePos = 0;
+    int64_t nextFilePos = 0;
     do {
         auto child = atom::makeAtom_(filePath, nextFilePos);
         if ( child != nullptr ) {

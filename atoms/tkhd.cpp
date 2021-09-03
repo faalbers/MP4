@@ -34,7 +34,7 @@ MP4::tkhd::tkhd(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::tkhd::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Track Header Atom)" << std::endl;
     std::cout << dataIndent << "trackID    : " << trackID << std::endl;

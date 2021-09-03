@@ -26,8 +26,8 @@ MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
         // not sure what is in the tail of the stsd entry
         // visualize it with a string
         auto tailSize = size - sizeof(sampleDescriptionBlock);
-        if ( tailSize > 0 ) {
-            char tail[tailSize];
+        char tail[200];
+        if ( tailSize > 0 && tailSize <= 200 ) {
             fileStream.read((char *) tail, tailSize);
             stsdEntry.extendedData = std::string(tail).substr(0,tailSize);
         }
@@ -39,7 +39,7 @@ MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::stsd::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Description Atom)" << std::endl;
     int index = 1;

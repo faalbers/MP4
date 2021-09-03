@@ -39,9 +39,9 @@ public:
     sampleType                  getSampleAtTime(float sampleTime); // sampleTime in seconds float
 
     std::vector<chunkType>      getChunks();
-    uint32_t                    getChunkCount();
+    size_t                      getChunkCount();
     std::vector<uint64_t>       getChunkOffsets();
-    MP4::chunkType              sampleToChunk(sampleType sample);
+    chunkType                   sampleToChunk(sampleType sample);
 
     std::vector<drefEntryType>  getDataReferences();
     drefEntryType               getDataReference(std::string dataFormat);

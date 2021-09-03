@@ -14,7 +14,7 @@ MP4::hdlr::hdlr(std::string filePath, uint64_t filePos, std::string pathParent)
     componentSubType = std::string(hdlrData.componentSubType).substr(0,4);
     uint8_t stringCount;
     fileStream.read((char *) &stringCount, sizeof(stringCount));
-    char name[stringCount];
+    char name[200];
     fileStream.read((char *) name, stringCount);
     componentName = std::string(name).substr(0, stringCount);
     fileStream.close();
@@ -22,7 +22,7 @@ MP4::hdlr::hdlr(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::hdlr::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Handler Reference Atom)" << std::endl;
     std::cout << dataIndent << "componentType   : " << componentType << std::endl;

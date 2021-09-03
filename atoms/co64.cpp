@@ -25,10 +25,10 @@ MP4::co64::co64(std::string filePath, uint64_t filePos, std::string pathParent)
 
 void MP4::co64::printData(bool fullLists)
 {
-    int levelCount = std::count(path_.begin(), path_.end(), '/');
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Chunk Offset Atom (64 bit))" << std::endl;
-    int index = 1;
+    size_t index = 1;
     std::cout << dataIndent << "[#] ( chunk offset )\n";
     if ( fullLists || (!fullLists && co64Table.size() <= 6) ) {
         for ( auto entry : co64Table ) {
