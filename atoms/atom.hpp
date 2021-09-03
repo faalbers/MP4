@@ -34,6 +34,7 @@ public:
 protected:
     friend class MP4;
     friend class dref;
+    friend class uuid;
 
     static std::shared_ptr<atom>    makeAtom_(std::string filePath, int64_t nextFilePos, std::string pathParent = "/");
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);

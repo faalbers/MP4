@@ -80,6 +80,17 @@ typedef struct stszTableBlock
     uint32_t    numberOfEntries;        // number of sample descriptions that follow
 } stszTableBlock;
 
+typedef struct ftypDataBlock
+{
+    char        majorBrand[4];
+    uint32_t    version;
+} ftypDataBlock;
+
+typedef struct uuidDataBlock
+{
+    char        name[4];
+} uuidDataBlock;
+
 typedef struct mdhdDataBlock
 {
     uint8_t     version;

@@ -4,10 +4,9 @@
 #include "atoms/atom.hpp"
 
 // indents show hierarchy
-/*
 #include "atoms/ftyp.hpp"
+#include "atoms/uuid.hpp"
 #include "atoms/mdat.hpp"
-*/
 #include "atoms/moov.hpp"
     #include "atoms/mvhd.hpp"
 /*
