@@ -49,7 +49,7 @@ MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
 {
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         auto timeScale = mdhd->timeScale;
-        uint32_t time = timeScale * sampleTime;
+        uint32_t time = (uint32_t) ((float) timeScale * sampleTime);
         for ( auto sample : getSamples()) {
             if ( time < (sample.time + sample.duration) ) {
                 sample.currentTime = time;
@@ -60,7 +60,7 @@ MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
     throw std::runtime_error("MP4: No sample found at sampleTime !");
 }
 
-uint32_t MP4::trak::getSampleCount()
+size_t MP4::trak::getSampleCount()
 {
     for ( auto stsz : getTypeAtoms<stsz>() ) {
         return stsz->stszTable.size();

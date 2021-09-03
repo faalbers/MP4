@@ -34,7 +34,7 @@ public:
     uint32_t                    getMediaTimeScale(); // float in seconds
 
     std::vector<sampleType>     getSamples();
-    uint32_t                    getSampleCount();
+    size_t                      getSampleCount();
     std::vector<stsdEntryType>  getSampleDescriptions();
     sampleType                  getSampleAtTime(float sampleTime); // sampleTime in seconds float
 
