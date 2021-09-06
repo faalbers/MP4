@@ -16,12 +16,14 @@ typedef struct sampleType
     uint32_t    duration;
     uint32_t    time;
     uint32_t    currentTime;
+    uint32_t    timeScale;
     uint32_t    dataSize;
 } sampleType;
 
 typedef struct chunkType
 {
     uint32_t    ID;
+    uint32_t    trackID;
     uint32_t    samples;
     uint32_t    firstSampleID;
     uint32_t    currentSampleID;

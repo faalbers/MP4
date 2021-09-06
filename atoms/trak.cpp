@@ -71,11 +71,18 @@ size_t MP4::trak::getSampleCount()
 std::vector<MP4::sampleType>  MP4::trak::getSamples()
 {
     std::vector<sampleType> samples;
+    uint32_t                timeScale;
+    for ( auto mdhd : getTypeAtoms<mdhd>() )
+        timeScale = mdhd->timeScale;
     for ( auto stts : getTypeAtoms<stts>() ) {
         uint32_t sampleID = 1;
         uint32_t currentStart = 0;
-        std::vector<uint32_t> sampleSizes;
-        for ( auto stsz : getTypeAtoms<stsz>() ) sampleSizes = stsz->stszTable;
+        uint32_t defaultSampleSize;               
+        std::vector<uint32_t>   sampleSizes;
+        for ( auto stsz : getTypeAtoms<stsz>() ) {
+            defaultSampleSize = stsz->defaultSampleSize;
+            sampleSizes = stsz->stszTable;
+        }
         for ( auto entry : stts->sttsTable ) {
             for ( uint32_t sttsSampleID = 1; sttsSampleID <= entry[0]; sttsSampleID++) {
                 // add a sample
@@ -84,7 +91,11 @@ std::vector<MP4::sampleType>  MP4::trak::getSamples()
                 sample.duration = entry[1];
                 sample.time = currentStart;
                 sample.currentTime = currentStart;
-                sample.dataSize = sampleSizes[sampleID - 1];
+                sample.timeScale = timeScale;
+                if ( defaultSampleSize != 0 )
+                    sample.dataSize = defaultSampleSize;
+                else
+                    sample.dataSize = sampleSizes[sampleID - 1];
                 samples.push_back(sample);
                 currentStart += entry[1];
                 sampleID++;
@@ -136,7 +147,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             chunkOffsets = co64->co64Table;
         }
         if ( chunkOffsets.size() == 0 )
-            throw std::runtime_error("MP4: No chunk offsets found !");
+            throw std::runtime_error("MP4::trak: No chunk offsets found !");
         auto stscTable = stsc->stscTable;
 
         // test setup
@@ -159,6 +170,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
         for ( uint32_t startChunk = 1; startChunk < currentChunkID; startChunk++ ) {
             chunkType chunk;
             chunk.ID = startChunk;
+            chunk.trackID = getID();
             chunk.samples = 0;
             chunk.firstSampleID = 0;
             chunk.currentSampleID = 0;
@@ -170,13 +182,13 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
         do {
             chunkType chunk;
             chunk.ID = currentChunkID;
+            chunk.trackID = getID();
             chunk.samples = stscTable.back()[1];
             chunk.firstSampleID = sampleID;
             chunk.currentSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back()[2];
             chunk.dataOffset = chunkOffsets[currentChunkID-1];
             chunks.push_back(chunk);
-            
             sampleID += stscTable.back()[1];
             currentChunkID++;
             // check next first chunk if available and pop if we get there
