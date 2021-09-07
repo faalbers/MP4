@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 
     //mp4.printHierarchy();
     
-    if (true) 
+    if (false) 
     {    
         for ( auto hdlr : mp4.getTypeAtoms<MP4::hdlr>()) {
             hdlr->printData();
@@ -43,7 +43,19 @@ int main(int argc, char* argv[])
         for ( auto track : mp4.getTracks())
             track->printHierarchyData();
     }
+    
+    if (false)
+    {
+        for ( auto mdia : mp4.getTypeAtoms<MP4::stsz>() )
+            mdia->printHierarchyData();
+    }
 
+    //mp4.printHierarchyData();
+
+    mp4.mdatMap();
+    //mp4.mdatRemap();
+
+    
     std::cout << "\n**** END ****\n\n";
 
     return 0;

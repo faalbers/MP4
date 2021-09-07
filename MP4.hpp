@@ -24,9 +24,12 @@ public:
                  foundTypeAtoms.push_back(typeAtom);
         return foundTypeAtoms;
     }
-    std::vector<trak *>  getTracks();
-    void     printHierarchy();                           // Hierarchy print out of all atoms in file
-    void     printHierarchyData(bool fullLists = false);  // Data print out. Only data that is handled so far
+    std::vector<trak *> getTracks();
+    trak                *getTrackFromID(uint32_t ID);
+    void    printHierarchy();                           // Hierarchy print out of all atoms in file
+    void    printHierarchyData(bool fullLists = false);  // Data print out. Only data that is handled so far
+    void    mdatMap();
+    void    mdatRemap();
 
     std::string                         filePath;
     int64_t                             fileSize;
