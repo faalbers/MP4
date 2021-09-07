@@ -13,3 +13,6 @@ target_include_directories(MP4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(testMP4 testMP4.cpp)
 target_link_libraries(testMP4 PRIVATE MP4)
+
+add_executable(concat concat.cpp)
+target_link_libraries(concat PRIVATE MP4)

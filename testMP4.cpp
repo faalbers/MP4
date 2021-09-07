@@ -52,8 +52,25 @@ int main(int argc, char* argv[])
 
     //mp4.printHierarchyData();
 
-    mp4.mdatMap();
+    //mp4.mdatMap();
     //mp4.mdatRemap();
+
+    if (true)
+    {
+        auto videoTrack = mp4.getTrackFromID(1);
+        auto videoSamples = videoTrack->getSamples();
+        auto gpmfTrack = mp4.getTrackFromID(4);
+        auto gpmfSamples = gpmfTrack->getSamples();
+        auto videoDuration = (float) (videoSamples.back().currentTime+videoSamples.back().duration)
+            / videoSamples.back().timeScale;
+        auto gpmfDuration = (float) (gpmfSamples.back().currentTime+gpmfSamples.back().duration)
+            / gpmfSamples.back().timeScale;
+
+        std::cout << videoSamples.size() << std::endl;
+        std::cout << gpmfSamples.size() << std::endl;
+        std::cout << videoDuration << std::endl;
+        std::cout << gpmfDuration << std::endl;
+    }
 
     
     std::cout << "\n**** END ****\n\n";
