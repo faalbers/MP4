@@ -193,3 +193,13 @@ void MP4::MP4::mdatMap(){
 
     }
 }
+
+void MP4::MP4::createFile(std::string filePath_)
+{
+    std::ofstream fileWrite(filePath_, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not create MP4 file: "+filePath_);
+
+    for ( auto child : children ) child->writeToFile(fileWrite);
+
+    fileWrite.close();
+}

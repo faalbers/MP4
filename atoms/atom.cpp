@@ -106,6 +106,58 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::atom::writeToFile(std::ofstream &fileWrite, char *data)
+{
+    writeToFile_(fileWrite, data);
+}
+
+void MP4::atom::writeChildrenToFile_(std::ofstream &fileWrite, char *data)
+{
+    for ( auto child : children_ )
+        child->writeToFile(fileWrite, data);
+}
+
+void MP4::atom::writeToFile_(std::ofstream &fileWrite, char *data)
+{
+    char    *buffer;
+    size_t  bufferSize;
+    
+    if ( filePath_ == "" ) return;
+
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
+    fileRead.seekg(filePos_, fileRead.beg);
+
+    auto writeSizePos = fileWrite.tellp();
+    bufferSize = (size_t) (fileDataPos_ - filePos_);
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    fileWrite.write(buffer, bufferSize);
+    delete[] buffer;
+
+    if ( children_.size() == 0 ) {
+        bufferSize = (size_t) dataSize_;
+        buffer = new char[bufferSize];
+        fileRead.seekg(fileDataPos_, fileRead.beg);
+        fileRead.read(buffer, (size_t) bufferSize);
+        fileWrite.write(buffer, (size_t) bufferSize);
+        fileRead.close();
+        delete[] buffer;
+        return;
+    }
+    fileRead.close();
+
+    writeChildrenToFile_(fileWrite, data);
+
+    // set resulting atom size
+    auto writeNextPos = fileWrite.tellp();
+    auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
+    writeSize = _byteswap_ulong(writeSize);
+    fileWrite.seekp(writeSizePos, fileWrite.beg);
+    fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    fileWrite.seekp(writeNextPos, fileWrite.beg);
+}
+
 std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(std::string filePath_, int64_t nextFilePos, std::string pathParent)
 {
     std::shared_ptr<atom> newAtom;

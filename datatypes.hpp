@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <string>
+#include <vector>
+#include <set>
 
 namespace MP4
 {
@@ -30,6 +32,13 @@ typedef struct chunkType
     uint32_t    sampleDescriptionID;
     uint64_t    dataOffset;
 } chunkType;
+
+typedef struct writeInfoType
+{
+    std::vector<chunkType>  chunkList;
+    std::set<uint32_t>      includeTrackIDs;
+    uint32_t                currentTrackID;
+} writeInfoType;
 
 typedef struct stsdEntryType
 {

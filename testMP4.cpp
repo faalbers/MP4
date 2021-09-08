@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
 
     //mp4.printHierarchyData();
 
-    //mp4.mdatMap();
+    mp4.mdatMap();
     //mp4.mdatRemap();
 
-    if (true)
+    if (false)
     {
         auto videoTrack = mp4.getTrackFromID(1);
         auto videoSamples = videoTrack->getSamples();

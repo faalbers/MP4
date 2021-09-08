@@ -247,4 +247,3 @@ void MP4::trak::printHierarchyData(bool fullLists)
 }
 
 std::string MP4::trak::key = "trak";
-

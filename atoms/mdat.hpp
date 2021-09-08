@@ -20,6 +20,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
+
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;

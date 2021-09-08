@@ -31,6 +31,8 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
+    virtual void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
+
     std::string     key;
 
 protected:
@@ -42,6 +44,8 @@ protected:
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
+    virtual void                    writeChildrenToFile_(std::ofstream &fileWrite, char *data);
+    void                            writeToFile_(std::ofstream &fileWrite, char *data = nullptr);
 
     int64_t                             size_;
     std::string                         filePath_;

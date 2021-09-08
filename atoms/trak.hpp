@@ -46,11 +46,7 @@ public:
     std::vector<drefEntryType>  getDataReferences();
     drefEntryType               getDataReference(std::string dataFormat);
 
-
-    // sample = (ID, duration, time, timeOffset) all time in track time units
-
     // track checkers
-
     bool isComponentType(std::string type);
     bool isComponentSubType(std::string type);
     bool hasSampleDataFormat(std::string format);

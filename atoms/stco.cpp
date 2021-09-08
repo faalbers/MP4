@@ -52,5 +52,22 @@ void MP4::stco::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::stco::writeChildrenToFile_(std::ofstream &fileWrite, char *data)
+{
+    if ( data == nullptr) {
+        writeToFile_(fileWrite, data);
+        return;
+    }
+    auto writeInfo = (writeInfoType *) data;
+    std::cout <<" BLAH\n";
+    for ( auto chunk : writeInfo->chunkList ) {
+        if ( chunk.trackID == writeInfo->currentTrackID ) {
+            uint32_t chunkOffset = chunk.dataOffset;
+            chunkOffset = _byteswap_ulong(chunkOffset);
+            fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
+        }
+    }
+}
+
 std::string MP4::stco::key = "stco";
 
