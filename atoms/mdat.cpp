@@ -26,7 +26,6 @@ void MP4::mdat::printHierarchyData(bool fullLists)
 
 void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
-    return;
     writeAtomDataToFile_(fileWrite, data);
 }
 

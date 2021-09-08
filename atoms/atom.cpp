@@ -168,13 +168,19 @@ void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
     // write atom header to new file
     // adjust size later when data is handled
     auto writeSizePos = fileWrite.tellp();
+    bool posVal64bit = false;
     bufferSize = (size_t) (fileDataPos_ - filePos_);
+    if ( bufferSize == 16 ) posVal64bit = true;
     buffer = new char[bufferSize];
     fileRead.read(buffer, bufferSize);
     fileWrite.write(buffer, bufferSize);
     delete[] buffer;
     fileRead.close();
 
+    if ( key == "mdat" ) {
+        std::cout << "Write atom data: " << key << std::endl;
+        std::cout << "gap: " << bufferSize << std::endl;
+    }
     // decide how to handle data depending on children
     if ( children_.size() == 0 )
         writeAtomDataToFile(fileWrite, data);
@@ -183,10 +189,18 @@ void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
 
     // after writing the atom's data we need to fix the atom size
     auto writeNextPos = fileWrite.tellp();
-    auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
-    writeSize = _byteswap_ulong(writeSize);
-    fileWrite.seekp(writeSizePos, fileWrite.beg);
-    fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    if ( posVal64bit ) {
+        auto writeSize = (uint64_t) (writeNextPos - writeSizePos);
+        writeSize = _byteswap_uint64(writeSize);
+        fileWrite.seekp(writeSizePos, fileWrite.beg);
+        fileWrite.seekp(8, fileWrite.cur);
+        fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    } else {
+        auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
+        writeSize = _byteswap_ulong(writeSize);
+        fileWrite.seekp(writeSizePos, fileWrite.beg);
+        fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    }
     fileWrite.seekp(writeNextPos, fileWrite.beg);
 }
 

@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 
     std::cout << "\n**** TEST MP4 ****\n\n";
 
-    //mp4B.printHierarchyData();
+    //mp4A.printHierarchy();
 
     mp4A.createFile("out.mp4");
 
