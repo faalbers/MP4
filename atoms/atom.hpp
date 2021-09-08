@@ -32,6 +32,8 @@ public:
     virtual void printHierarchyData(bool fullLists = false);
 
     virtual void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
+    virtual void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
+    virtual void writeAtomChildrenToFile(std::ofstream &fileWrite, char *data);
 
     std::string     key;
 
@@ -44,8 +46,9 @@ protected:
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
-    virtual void                    writeChildrenToFile_(std::ofstream &fileWrite, char *data);
-    void                            writeToFile_(std::ofstream &fileWrite, char *data = nullptr);
+    void                            writeAtomToFile_(std::ofstream &fileWrite, char *data);
+    void                            writeAtomDataToFile_(std::ofstream &fileWrite, char *data);
+    void                            writeAtomChildrenToFile_(std::ofstream &fileWrite, char *data);
 
     int64_t                             size_;
     std::string                         filePath_;

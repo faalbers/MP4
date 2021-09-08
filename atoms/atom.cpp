@@ -108,48 +108,66 @@ void MP4::atom::printHierarchyData(bool fullLists)
 
 void MP4::atom::writeToFile(std::ofstream &fileWrite, char *data)
 {
-    writeToFile_(fileWrite, data);
+    writeAtomToFile_(fileWrite, data);
 }
 
-void MP4::atom::writeChildrenToFile_(std::ofstream &fileWrite, char *data)
+void MP4::atom::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
+{
+    writeAtomDataToFile_(fileWrite, data);
+}
+
+void MP4::atom::writeAtomDataToFile_(std::ofstream &fileWrite, char *data)
+{
+    if ( filePath_ == "" ) return;
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
+    auto bufferSize = (size_t) dataSize_;
+    auto buffer = new char[bufferSize];
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    fileRead.read(buffer, (size_t) bufferSize);
+    fileWrite.write(buffer, (size_t) bufferSize);
+    fileRead.close();
+    delete[] buffer;
+}
+
+void MP4::atom::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
+{
+    writeAtomChildrenToFile_(fileWrite, data);
+}
+
+void MP4::atom::writeAtomChildrenToFile_(std::ofstream &fileWrite, char *data)
 {
     for ( auto child : children_ )
         child->writeToFile(fileWrite, data);
 }
 
-void MP4::atom::writeToFile_(std::ofstream &fileWrite, char *data)
+void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
 {
     char    *buffer;
     size_t  bufferSize;
     
     if ( filePath_ == "" ) return;
-
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
     fileRead.seekg(filePos_, fileRead.beg);
 
+    // write atom header to new file
+    // adjust size later when data is handled
     auto writeSizePos = fileWrite.tellp();
     bufferSize = (size_t) (fileDataPos_ - filePos_);
     buffer = new char[bufferSize];
     fileRead.read(buffer, bufferSize);
     fileWrite.write(buffer, bufferSize);
     delete[] buffer;
-
-    if ( children_.size() == 0 ) {
-        bufferSize = (size_t) dataSize_;
-        buffer = new char[bufferSize];
-        fileRead.seekg(fileDataPos_, fileRead.beg);
-        fileRead.read(buffer, (size_t) bufferSize);
-        fileWrite.write(buffer, (size_t) bufferSize);
-        fileRead.close();
-        delete[] buffer;
-        return;
-    }
     fileRead.close();
 
-    writeChildrenToFile_(fileWrite, data);
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        writeAtomDataToFile(fileWrite, data);
+    else
+        writeAtomChildrenToFile(fileWrite, data);
 
-    // set resulting atom size
+    // after writing the atom's data we need to fix the atom size
     auto writeNextPos = fileWrite.tellp();
     auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
     writeSize = _byteswap_ulong(writeSize);

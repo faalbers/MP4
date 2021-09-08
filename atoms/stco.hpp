@@ -28,7 +28,7 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void writeChildrenToFile_(std::ofstream &fileWrite, char *data);
+    void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
 
     static std::string      key;
     uint32_t                defaultSampleSize;

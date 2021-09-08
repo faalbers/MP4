@@ -20,7 +20,7 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
+    void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
 
     static std::string  key;
     int64_t             sampleDataPos;

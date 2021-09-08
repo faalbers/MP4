@@ -24,9 +24,21 @@ void MP4::mdat::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::mdat::writeToFile(std::ofstream &fileWrite, char *data)
+void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
+    std::cout << dataSize_ << std::endl;
+    return;
     
+    if ( filePath_ == "" ) return;
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
+    auto bufferSize = (size_t) dataSize_;
+    auto buffer = new char[bufferSize];
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    fileRead.read(buffer, (size_t) bufferSize);
+    fileWrite.write(buffer, (size_t) bufferSize);
+    fileRead.close();
+    delete[] buffer;
 }
 
 std::string MP4::mdat::key = "mdat";

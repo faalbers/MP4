@@ -24,13 +24,13 @@ void MP4::moov::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::moov::writeChildrenToFile_(std::ofstream &fileWrite, char *data)
+void MP4::moov::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
 {
-    if ( data == nullptr)
-        for ( auto child : children_ ) {
-            child->writeToFile(fileWrite, data);
-            return;
-        }
+    if ( data == nullptr ) {
+        writeAtomChildrenToFile_(fileWrite, data);
+        return;
+    }
+
     auto writeInfo = (writeInfoType *) data;
 
     for ( auto child : children_ ) {
@@ -49,10 +49,15 @@ void MP4::moov::writeChildrenToFile_(std::ofstream &fileWrite, char *data)
     }
 }
 
+
 void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
 {
+    writeAtomToFile_(fileWrite, data);
+    return;
+
+    // creating our own time sorted mdat
     if ( filePath_ == "") {
-        writeToFile_(fileWrite, data);
+        writeAtomToFile_(fileWrite, data);
         return;
     }
     std::ifstream fileRead(filePath_, std::ios::binary);
@@ -71,6 +76,9 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
     std::vector<std::vector<chunkType>> trackChunks;
     std::vector<std::vector<sampleType>> samples;
     uint32_t largestTimeScale = 0;
+    // a vector of each track's chunks and reverse them for pop action
+    // get samples for each track for timing search
+    // get timescales of all tracks and use the largest one
     for ( auto track : getTypeAtoms<trak>() ) {
         auto chunks = track->getChunks();
         std::reverse(chunks.begin(),chunks.end());
@@ -84,6 +92,9 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
     do {
         std::map<uint64_t, chunkType> chunkMap;
         int trackIndex = 0;
+        // map of all current top chunks of each track
+        // find their timing by checking samples
+        // create map based on timing the earliest ones will be first
         for ( auto chunks : trackChunks ) {
             if ( chunks.size() > 0 ) {
                 auto trackSamples = samples[trackIndex];
@@ -91,6 +102,9 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
                 auto endSampleID = startSampleID + chunks.back().samples - 1;
                 auto startTime = trackSamples[startSampleID-1].time;
                 auto endTime = trackSamples[endSampleID-1].time + trackSamples[endSampleID-1].duration;
+                // for now we don't handle tracks with zero duration samples
+                // not sure on the sorting scheme for those yet
+                // they are used by GoPro to fix corrupted files
                 if ( startTime == endTime ) {
                     trackIndex++;
                     continue;
@@ -102,6 +116,10 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
             }
             trackIndex++;
         }
+
+        // handle the earliest chunk and add it to the sorte chunk list
+        // pop the chunk that was handled
+        // keep on doing this till all chunk lists of all track are depleted
         if ( chunkMap.size() > 0 ) {
             auto time = (*(chunkMap. begin())).first;
             auto chunk = (*(chunkMap. begin())).second;
@@ -111,7 +129,6 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
             uint32_t chunkSize = 0;
             for ( uint32_t sampleID = startSampleID; sampleID <= endSampleID; sampleID++ )
                 chunkSize += trackSamples[sampleID-1].dataSize;
-            //std::cout << chunk.dataOffset << " " << chunk.dataOffset+(uint64_t) chunkSize << std::endl;
             auto bufferSize = (size_t) chunkSize;
             char *buffer = new char[bufferSize];
             fileRead.seekg((int64_t) chunk.dataOffset, fileRead.beg);
@@ -140,9 +157,7 @@ void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
     fileWrite.write((char *) &writeSize, sizeof(writeSize));
     fileWrite.seekp(writeNextPos, fileWrite.beg);
 
-    std::cout << "Chunks written: " << writeInfo.chunkList.size() << std::endl;
-
-    writeToFile_(fileWrite, (char *) &writeInfo);
+    writeAtomToFile_(fileWrite, (char *) &writeInfo);
 }
 
 std::string MP4::moov::key = "moov";
