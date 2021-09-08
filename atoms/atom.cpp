@@ -121,13 +121,27 @@ void MP4::atom::writeAtomDataToFile_(std::ofstream &fileWrite, char *data)
     if ( filePath_ == "" ) return;
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
-    auto bufferSize = (size_t) dataSize_;
-    auto buffer = new char[bufferSize];
     fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read(buffer, (size_t) bufferSize);
-    fileWrite.write(buffer, (size_t) bufferSize);
-    fileRead.close();
+    
+    // write buffer blocks
+    size_t bufferSize = 1024*1024;
+    auto buffer = new char[bufferSize];
+    auto bufferCount = (size_t) dataSize_ / bufferSize;
+
+    for ( size_t count = 0; count < bufferCount; count++ ) {
+        fileRead.read(buffer, bufferSize);
+        fileWrite.write(buffer, bufferSize);
+    }
     delete[] buffer;
+
+    // write tail
+    bufferSize = (size_t) dataSize_ % bufferSize;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    fileWrite.write(buffer, bufferSize);
+    delete[] buffer;
+
+    fileRead.close();
 }
 
 void MP4::atom::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
