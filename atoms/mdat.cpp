@@ -37,6 +37,11 @@ void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
     //writeAtomDataToFile_(fileWrite, data);
 }
 
+void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    appendData_(appendAtom, fileWrite, data);
+}
+
 void MP4::mdat::extract_(std::ofstream &fileWrite, char *data)
 {
     std::ifstream fileRead(filePath_, std::ios::binary);

@@ -303,6 +303,11 @@ void MP4::atom::append(atom *appendAtom, std::ofstream &fileWrite, char *data)
     append_(appendAtom, fileWrite, data);
 }
 
+void MP4::atom::appendData(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    appendData_(appendAtom, fileWrite, data);
+}
+
 void MP4::atom::appendData_(atom *appendAtom, std::ofstream &fileWrite, char *data)
 {
     if ( filePath_ == "" ) return;
@@ -332,6 +337,11 @@ void MP4::atom::appendData_(atom *appendAtom, std::ofstream &fileWrite, char *da
     fileRead.close();
 }
 
+void MP4::atom::appendChildren(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    appendChildren_(appendAtom, fileWrite, data);
+}
+
 void MP4::atom::appendChildren_(atom *appendAtom, std::ofstream &fileWrite, char *data)
 {
     for ( auto child : children_ )
@@ -346,9 +356,9 @@ void MP4::atom::append_(atom *appendAtom, std::ofstream &fileWrite, char *data)
 
     // decide how to handle data depending on children
     if ( children_.size() == 0 )
-        appendData_(appendAtom, fileWrite, data);
+        appendData(appendAtom, fileWrite, data);
     else
-        appendChildren_(appendAtom, fileWrite, data);
+        appendChildren(appendAtom, fileWrite, data);
 
     writeAtomTailToFile_(fileWrite, writeSizePos, posVal64bit);
 }
