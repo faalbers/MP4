@@ -194,12 +194,20 @@ void MP4::MP4::mdatMap(){
     }
 }
 
-void MP4::MP4::createFile(std::string filePath_)
+void MP4::MP4::writeFile(std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
     if ( fileWrite.fail() ) throw std::runtime_error("Can not create MP4 file: "+filePath_);
 
-    for ( auto child : children ) child->writeToFile(fileWrite);
+    // data to pass through write process
+    internal::writeInfoType writeInfo;
+    // passing moov as data to atoms t0 reconstruct stuff if needed
+    for ( auto moov : getTypeAtoms<moov>() )
+        writeInfo.moovAtom = moov;
+    writeInfo.excludeTrackIDs = writeSettings.excludeTrackIDs;
+    
+    for ( auto child : children )
+        child->writeToFile(fileWrite, (char *) &writeInfo);
 
     fileWrite.close();
 }

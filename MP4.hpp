@@ -31,7 +31,7 @@ public:
     void    mdatMap();
     void    mdatRemap();
 
-    void    createFile(std::string filePath_);
+    void    writeFile(std::string filePath_, writeSettingsType &writeSettings);
 
     std::string                         filePath;
     int64_t                             fileSize;

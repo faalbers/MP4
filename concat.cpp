@@ -15,12 +15,19 @@ int main(int argc, char* argv[])
     std::cout << "\n**** TEST MP4 ****\n\n";
 
     //mp4A.printHierarchy();
+    //mp4A.printHierarchyData();
 
-    mp4A.createFile("out.mp4");
+    if (true) {
+        MP4::writeSettingsType settings;
+        //settings.excludeTrackIDs.insert(2);
+        //settings.excludeTrackIDs.insert(3);
 
-    MP4::MP4 mp4New("out.mp4");
+        mp4A.writeFile("out.mp4", settings);
 
-    mp4New.printHierarchyData();
+        MP4::MP4 mp4New("out.mp4");
+
+        mp4New.printHierarchyData();
+    }
 
     std::cout << "\n**** END ****\n\n";
 

@@ -177,10 +177,6 @@ void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
     delete[] buffer;
     fileRead.close();
 
-    if ( key == "mdat" ) {
-        std::cout << "Write atom data: " << key << std::endl;
-        std::cout << "gap: " << bufferSize << std::endl;
-    }
     // decide how to handle data depending on children
     if ( children_.size() == 0 )
         writeAtomDataToFile(fileWrite, data);

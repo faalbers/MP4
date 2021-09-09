@@ -54,25 +54,30 @@ void MP4::co64::printHierarchyData(bool fullLists)
 
 void MP4::co64::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
-    writeAtomDataToFile_(fileWrite, data);
-    return;
-    if ( data == nullptr) {
+    if ( data == nullptr || filePath_ == "" ) {
         writeAtomDataToFile_(fileWrite, data);
         return;
     }
-    auto writeInfo = (writeInfoType *) data;
+    auto writeInfo = (internal::writeInfoType *) data;
+
+    if ( writeInfo->chunkList.size() == 0 ) {
+        writeAtomDataToFile_(fileWrite, data);
+        return;
+    }
 
     // Handle atomTableBlock first
-    if ( filePath_ == "" ) return;
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeChildrenToFile_ can not parse file: "+filePath_);
+    
     datablock::atomTableBlock stcoData;
     fileRead.seekg(fileDataPos_, fileRead.beg);
     fileRead.read((char *) &stcoData, sizeof(stcoData));
+    
     uint32_t numberOfEntries = 0;
     for ( auto chunk : writeInfo->chunkList )
-        if ( chunk.trackID == writeInfo->currentTrackID )
+        if ( chunk->trackID == writeInfo->currentTrackID )
             numberOfEntries++;
+
     std::cout << numberOfEntries << std::endl;
     stcoData.numberOfEntries = _byteswap_ulong(numberOfEntries);
     fileRead.close();
@@ -80,8 +85,8 @@ void MP4::co64::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 
     // now add all chunk offset values in uint64_t
     for ( auto chunk : writeInfo->chunkList ) {
-        if ( chunk.trackID == writeInfo->currentTrackID ) {
-            auto chunkOffset = chunk.dataOffset;
+        if ( chunk->trackID == writeInfo->currentTrackID ) {
+            auto chunkOffset = chunk->dataOffset;
             chunkOffset = _byteswap_uint64(chunkOffset);
             fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
         }

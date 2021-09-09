@@ -31,133 +31,21 @@ void MP4::moov::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
         return;
     }
 
-    auto writeInfo = (writeInfoType *) data;
+    auto writeInfo = (internal::writeInfoType *) data;
 
     for ( auto child : children_ ) {
         if ( child->key == "trak" ) {
             // only write track if included in info
             auto track = (trak *) child.get();
             auto trackID = track->getID();
-            std::set<uint32_t>::iterator it = writeInfo->includeTrackIDs.find(trackID);
-            if( it != writeInfo->includeTrackIDs.end() ) {
-                writeInfo->currentTrackID = trackID;
-                child->writeToFile(fileWrite, data);
-            }
+            std::set<uint32_t>::iterator it = writeInfo->excludeTrackIDs.find(trackID);
+            if( it != writeInfo->excludeTrackIDs.end() ) continue;
+            writeInfo->currentTrackID = trackID;
+            child->writeToFile(fileWrite, data);
             continue;
         }
         child->writeToFile(fileWrite, data);
     }
-}
-
-
-void MP4::moov::writeToFile(std::ofstream &fileWrite, char *data)
-{
-    writeAtomToFile_(fileWrite, data);
-    return;
-
-    // creating our own time sorted mdat
-    if ( filePath_ == "") {
-        writeAtomToFile_(fileWrite, data);
-        return;
-    }
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
-    fileRead.seekg(filePos_, fileRead.beg);
-
-    // write mdat header
-    int64_t writeSizePos = fileWrite.tellp();
-    uint32_t mdatSize = 8;
-    mdatSize = _byteswap_ulong(mdatSize);
-    char atomKey[] = {'m', 'd', 'a', 't'};
-    fileWrite.write((char *) &mdatSize, 4);
-    fileWrite.write(atomKey, 4);
-
-    writeInfoType writeInfo;
-    std::vector<std::vector<chunkType>> trackChunks;
-    std::vector<std::vector<sampleType>> samples;
-    uint32_t largestTimeScale = 0;
-    // a vector of each track's chunks and reverse them for pop action
-    // get samples for each track for timing search
-    // get timescales of all tracks and use the largest one
-    for ( auto track : getTypeAtoms<trak>() ) {
-        auto chunks = track->getChunks();
-        std::reverse(chunks.begin(),chunks.end());
-        trackChunks.push_back(chunks);
-        samples.push_back(track->getSamples());
-        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
-            if ( mdhd->timeScale > largestTimeScale ) largestTimeScale = mdhd->timeScale;
-    }
-
-    bool chunksDepleted = false;
-    do {
-        std::map<uint64_t, chunkType> chunkMap;
-        int trackIndex = 0;
-        // map of all current top chunks of each track
-        // find their timing by checking samples
-        // create map based on timing the earliest ones will be first
-        for ( auto chunks : trackChunks ) {
-            if ( chunks.size() > 0 ) {
-                auto trackSamples = samples[trackIndex];
-                auto startSampleID = chunks.back().firstSampleID;
-                auto endSampleID = startSampleID + chunks.back().samples - 1;
-                auto startTime = trackSamples[startSampleID-1].time;
-                auto endTime = trackSamples[endSampleID-1].time + trackSamples[endSampleID-1].duration;
-                // for now we don't handle tracks with zero duration samples
-                // not sure on the sorting scheme for those yet
-                // they are used by GoPro to fix corrupted files
-                if ( startTime == endTime ) {
-                    trackIndex++;
-                    continue;
-                }
-                auto timeScaleMult = (double) largestTimeScale / trackSamples[startSampleID-1].timeScale;
-                auto timeScaled = (uint32_t) (timeScaleMult * startTime);
-                chunkMap[timeScaled] = chunks.back();
-                writeInfo.includeTrackIDs.insert(chunks.back().trackID);
-            }
-            trackIndex++;
-        }
-
-        // handle the earliest chunk and add it to the sorte chunk list
-        // pop the chunk that was handled
-        // keep on doing this till all chunk lists of all track are depleted
-        if ( chunkMap.size() > 0 ) {
-            auto time = (*(chunkMap. begin())).first;
-            auto chunk = (*(chunkMap. begin())).second;
-            auto trackSamples = samples[chunk.trackID-1];
-            auto startSampleID = chunk.firstSampleID;
-            auto endSampleID = startSampleID + chunk.samples - 1;
-            uint32_t chunkSize = 0;
-            for ( uint32_t sampleID = startSampleID; sampleID <= endSampleID; sampleID++ )
-                chunkSize += trackSamples[sampleID-1].dataSize;
-            auto bufferSize = (size_t) chunkSize;
-            char *buffer = new char[bufferSize];
-            fileRead.seekg((int64_t) chunk.dataOffset, fileRead.beg);
-
-            // set new dataOffset
-            chunk.dataOffset = (uint64_t) fileWrite.tellp();
-
-            fileRead.read(buffer, bufferSize);
-            fileWrite.write(buffer, bufferSize);
-            delete[] buffer;
-
-            // add chunk to list for stco or co64
-            writeInfo.chunkList.push_back(chunk);
-
-            if ( trackChunks[chunk.trackID-1].size() != 0 )
-                trackChunks[chunk.trackID-1].pop_back();
-        }  else chunksDepleted = true;
-    } while ( !chunksDepleted );
-    fileRead.close();
-
-    // set mdat size
-    auto writeNextPos = fileWrite.tellp();
-    auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
-    writeSize = _byteswap_ulong(writeSize);
-    fileWrite.seekp(writeSizePos, fileWrite.beg);
-    fileWrite.write((char *) &writeSize, sizeof(writeSize));
-    fileWrite.seekp(writeNextPos, fileWrite.beg);
-
-    writeAtomToFile_(fileWrite, (char *) &writeInfo);
 }
 
 std::string MP4::moov::key = "moov";

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <memory>
 #include <vector>
 #include <set>
 
@@ -11,6 +12,7 @@ namespace MP4
 
 // ********* DATA TYPES *********
 // ID's in MP4 always start with 1 , not 0
+class moov;
 
 typedef struct sampleType
 {
@@ -33,12 +35,10 @@ typedef struct chunkType
     uint64_t    dataOffset;
 } chunkType;
 
-typedef struct writeInfoType
+typedef struct writeSettingsType
 {
-    std::vector<chunkType>  chunkList;
-    std::set<uint32_t>      includeTrackIDs;
-    uint32_t                currentTrackID;
-} writeInfoType;
+    std::set<uint32_t>                      excludeTrackIDs;
+} writeSettingsType;
 
 typedef struct stsdEntryType
 {
@@ -63,8 +63,20 @@ typedef struct elstEntryType
     float       mediaRate;
 } elstEntryType;
 
-namespace datablock
+namespace internal
+{
+// ********* INTERNAL DATA *********
+// remember they are 32 bit aligned !
 
+typedef struct writeInfoType
+{
+    std::vector<std::shared_ptr<chunkType>> chunkList;
+    std::set<uint32_t>                      excludeTrackIDs;
+    uint32_t                                currentTrackID;
+    moov                                    *moovAtom;
+} writeInfoType;
+}
+namespace datablock
 {
 // ********* DATA RETRIEVAL BLOCKS *********
 // remember they are 32 bit aligned !
