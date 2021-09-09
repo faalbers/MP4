@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     //mp4A.printHierarchy();
     //mp4A.printHierarchyData();
 
-    if (true) {
+    if (false) {
         MP4::writeSettingsType settings;
         //settings.excludeTrackIDs.insert(1);
         //settings.excludeTrackIDs.insert(2);
@@ -26,6 +26,14 @@ int main(int argc, char* argv[])
         mp4A.writeFile("out.mp4", settings);
 
         MP4::MP4 mp4New("out.mp4");
+
+        mp4New.printHierarchyData();
+    }
+
+    if (true) {
+        mp4A.append(mp4B, "outappend.mp4");
+
+        MP4::MP4 mp4New("outappend.mp4");
 
         mp4New.printHierarchyData();
     }

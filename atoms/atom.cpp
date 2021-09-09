@@ -158,10 +158,24 @@ void MP4::atom::writeAtomChildrenToFile_(std::ofstream &fileWrite, char *data)
 
 void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
 {
+    int64_t writeSizePos;
+    bool    posVal64bit;
+    std::tie(writeSizePos, posVal64bit) = writeAtomHeaderToFile_(fileWrite);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        writeAtomDataToFile(fileWrite, data);
+    else
+        writeAtomChildrenToFile(fileWrite, data);
+
+    writeAtomTailToFile_(fileWrite, writeSizePos, posVal64bit);
+}
+
+std::tuple<int64_t, bool> MP4::atom::writeAtomHeaderToFile_(std::ofstream &fileWrite)
+{
     char    *buffer;
     size_t  bufferSize;
     
-    if ( filePath_ == "" ) return;
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
     fileRead.seekg(filePos_, fileRead.beg);
@@ -178,12 +192,11 @@ void MP4::atom::writeAtomToFile_(std::ofstream &fileWrite, char *data)
     delete[] buffer;
     fileRead.close();
 
-    // decide how to handle data depending on children
-    if ( children_.size() == 0 )
-        writeAtomDataToFile(fileWrite, data);
-    else
-        writeAtomChildrenToFile(fileWrite, data);
+    return make_tuple(writeSizePos, posVal64bit);
+}
 
+void MP4::atom::writeAtomTailToFile_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit)
+{
     // after writing the atom's data we need to fix the atom size
     auto writeNextPos = fileWrite.tellp();
     if ( posVal64bit ) {
@@ -284,3 +297,60 @@ void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<
         child->getChildAtoms_(findKey, found);
     }
 }
+
+void MP4::atom::append(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    append_(appendAtom, fileWrite, data);
+}
+
+void MP4::atom::appendData_(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    if ( filePath_ == "" ) return;
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    
+    // write buffer blocks
+    // this seems to be the most optimal block size
+    size_t bufferSize = 1024*512;
+    auto buffer = new char[bufferSize];
+    auto bufferCount = (size_t) dataSize_ / bufferSize;
+
+    for ( size_t count = 0; count < bufferCount; count++ ) {
+        fileRead.read(buffer, bufferSize);
+        fileWrite.write(buffer, bufferSize);
+    }
+    delete[] buffer;
+
+    // write tail
+    bufferSize = (size_t) dataSize_ % bufferSize;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    fileWrite.write(buffer, bufferSize);
+    delete[] buffer;
+
+    fileRead.close();
+}
+
+void MP4::atom::appendChildren_(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    for ( auto child : children_ )
+        child->append(appendAtom, fileWrite, data);
+}
+
+void MP4::atom::append_(atom *appendAtom, std::ofstream &fileWrite, char *data)
+{
+    int64_t writeSizePos;
+    bool    posVal64bit;
+    std::tie(writeSizePos, posVal64bit) = writeAtomHeaderToFile_(fileWrite);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        appendData_(appendAtom, fileWrite, data);
+    else
+        appendChildren_(appendAtom, fileWrite, data);
+
+    writeAtomTailToFile_(fileWrite, writeSizePos, posVal64bit);
+}
+
+
