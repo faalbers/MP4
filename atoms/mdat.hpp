@@ -25,6 +25,10 @@ public:
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;
+
+private:
+    void timeReshuffle_(std::ofstream &fileWrite, char *data);
+    void extract_(std::ofstream &fileWrite, char *data);
 };
 
 }

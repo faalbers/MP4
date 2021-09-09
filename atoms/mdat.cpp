@@ -32,6 +32,57 @@ void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
         return;
     }
 
+    //timeReshuffle_(fileWrite, data);
+    extract_(fileWrite, data); // this is most efficient
+    //writeAtomDataToFile_(fileWrite, data);
+}
+
+void MP4::mdat::extract_(std::ofstream &fileWrite, char *data)
+{
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
+
+    auto writeInfo = (internal::writeInfoType *) data;
+
+    std::map<uint64_t, chunkType> chunkMap;
+    std::map<uint32_t, std::vector<sampleType>> trackSsamples;
+    for ( auto track : writeInfo->moovAtom->getTypeAtoms<trak>() ) {
+        std::set<uint32_t>::iterator it = writeInfo->excludeTrackIDs.find(track->getID());
+        if( it != writeInfo->excludeTrackIDs.end() ) continue;
+        for ( auto chunk : track->getChunks() )
+            chunkMap[chunk.dataOffset] = chunk;
+        trackSsamples[track->getID()] = track->getSamples();
+    }
+    
+    uint32_t dataSize;
+    size_t bufferSize;
+    char *buffer;
+    for ( auto chunk : chunkMap ) {
+        dataSize = 0;
+        for ( uint32_t index = 0; index < chunk.second.samples; index++ ) {
+            auto sampleIndex = chunk.second.firstSampleID-1+index;
+            dataSize += trackSsamples[chunk.second.trackID][sampleIndex].dataSize;
+        }
+        bufferSize = (size_t) dataSize;
+        buffer = new char[bufferSize];
+        fileRead.seekg((int64_t) chunk.first, fileRead.beg);
+
+        // set new dataOffset
+        chunk.second.dataOffset = (uint64_t) fileWrite.tellp();
+
+        fileRead.read(buffer, bufferSize);
+        fileWrite.write(buffer, bufferSize);
+        delete[] buffer;
+
+        // add chunk to list for stco or co64
+        auto sharedCHunk = std::make_shared<chunkType>();
+        *sharedCHunk = chunk.second;
+        writeInfo->chunkList.push_back(sharedCHunk);
+    }
+}
+
+void MP4::mdat::timeReshuffle_(std::ofstream &fileWrite, char *data)
+{
     auto writeInfo = (internal::writeInfoType *) data;
 
     // creating our own time sorted mdat
@@ -120,7 +171,6 @@ void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
         }  else chunksDepleted = true;
     } while ( !chunksDepleted );
     fileRead.close();
-
 }
 
 std::string MP4::mdat::key = "mdat";

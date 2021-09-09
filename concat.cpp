@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
 
     if (true) {
         MP4::writeSettingsType settings;
+        //settings.excludeTrackIDs.insert(1);
         //settings.excludeTrackIDs.insert(2);
         //settings.excludeTrackIDs.insert(3);
 

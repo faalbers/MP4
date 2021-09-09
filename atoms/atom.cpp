@@ -124,7 +124,8 @@ void MP4::atom::writeAtomDataToFile_(std::ofstream &fileWrite, char *data)
     fileRead.seekg(fileDataPos_, fileRead.beg);
     
     // write buffer blocks
-    size_t bufferSize = 1024*1024;
+    // this seems to be the most optimal block size
+    size_t bufferSize = 1024*512;
     auto buffer = new char[bufferSize];
     auto bufferCount = (size_t) dataSize_ / bufferSize;
 
