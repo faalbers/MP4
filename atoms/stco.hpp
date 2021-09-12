@@ -28,8 +28,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    //void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
-
     static std::string      key;
     uint32_t                defaultSampleSize;
     std::vector<uint64_t>   stcoTable;

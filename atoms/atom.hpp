@@ -32,15 +32,6 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
-/*
-    virtual void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
-    virtual void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
-    virtual void writeAtomChildrenToFile(std::ofstream &fileWrite, char *data);
-
-    virtual void append(atom *appendAtom, std::ofstream &fileWrite, char *data = nullptr);
-    virtual void appendData(atom *appendAtom, std::ofstream &fileWrite, char *data);
-    virtual void appendChildren(atom *appendAtom, std::ofstream &fileWrite, char *data);
-*/
     std::string     key;
 
 protected:
@@ -52,14 +43,6 @@ protected:
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
-    void                            writeAtomToFile_(std::ofstream &fileWrite, char *data);
-    std::tuple<int64_t, bool>       writeAtomHeaderToFile_(std::ofstream &fileWrite);
-    void                            writeAtomTailToFile_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit);
-    void                            writeAtomDataToFile_(std::ofstream &fileWrite, char *data);
-    void                            writeAtomChildrenToFile_(std::ofstream &fileWrite, char *data);
-    void                            append_(atom *appendAtom, std::ofstream &fileWrite, char *data);
-    void                            appendData_(atom *appendAtom, std::ofstream &fileWrite, char *data);
-    void                            appendChildren_(atom *appendAtom, std::ofstream &fileWrite, char *data);
     
     int64_t                             size_;
     std::string                         filePath_;

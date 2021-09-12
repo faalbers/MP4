@@ -39,8 +39,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
     
-    //void writeAtomChildrenToFile(std::ofstream &fileWrite, char *data);
-
     static std::string  key;
 };
 

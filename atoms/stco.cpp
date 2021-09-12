@@ -51,46 +51,5 @@ void MP4::stco::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
-/*
-void MP4::stco::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
-{
-    if ( data == nullptr || filePath_ == "" ) {
-        writeAtomDataToFile_(fileWrite, data);
-        return;
-    }
-    auto writeInfo = (internal::writeInfoType *) data;
 
-    if ( writeInfo->chunkList.size() == 0 ) {
-        writeAtomDataToFile_(fileWrite, data);
-        return;
-    }
-
-    // Handle atomTableBlock first
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeChildrenToFile_ can not parse file: "+filePath_);
-    
-    datablock::atomTableBlock stcoData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &stcoData, sizeof(stcoData));
-    
-    uint32_t numberOfEntries = 0;
-    for ( auto chunk : writeInfo->chunkList )
-        if ( chunk->trackID == writeInfo->currentTrackID )
-            numberOfEntries++;
-            
-    stcoData.numberOfEntries = _byteswap_ulong(numberOfEntries);
-    fileRead.close();
-    fileWrite.write((char *) &stcoData, sizeof(stcoData));
-
-    // now add all chunk offset values in uint64_t
-    for ( auto chunk : writeInfo->chunkList ) {
-        if ( chunk->trackID == writeInfo->currentTrackID ) {
-            auto chunkOffset = (uint32_t )chunk->dataOffset;
-            chunkOffset = _byteswap_ulong(chunkOffset);
-            fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
-        }
-    }
-}
-*/
 std::string MP4::stco::key = "stco";
-
