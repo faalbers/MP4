@@ -2,7 +2,7 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::drefEntry::drefEntry(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::drefEntry::drefEntry(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : atom(atomBuild, filePath, filePos)
 {
     // data blocks for file reading

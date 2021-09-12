@@ -3,7 +3,7 @@
 #include <iostream>
 #include "drefEntry.hpp"
 
-MP4::dref::dref(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::dref::dref(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : atom(atomBuild, filePath, filePos)
 {
     // data blocks for file reading

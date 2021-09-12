@@ -2,7 +2,7 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::edts::edts(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::edts::edts(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : atom(atomBuild, filePath, filePos)
 {
 }

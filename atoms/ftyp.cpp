@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::ftyp::ftyp(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : atom(atomBuild, filePath, filePos)
 {
     std::ifstream fileStream(filePath, std::ios::binary);

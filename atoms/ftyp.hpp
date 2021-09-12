@@ -32,7 +32,7 @@ namespace MP4
 class ftyp : public atom
 {
 public:
-    ftyp(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    ftyp(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -25,7 +25,7 @@ namespace MP4
 class trak : public atom
 {
 public:
-    trak(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    trak(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
 
     // data retrieval
 

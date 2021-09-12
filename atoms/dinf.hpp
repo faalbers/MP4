@@ -17,7 +17,7 @@ namespace MP4
 class dinf : public atom
 {
 public:
-    dinf(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    dinf(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

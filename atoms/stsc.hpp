@@ -20,7 +20,7 @@ namespace MP4
 class stsc : public atom
 {
 public:
-    stsc(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    stsc(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

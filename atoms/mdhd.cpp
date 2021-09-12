@@ -1,7 +1,7 @@
 #include "mdhd.hpp"
 #include <iostream>
 
-MP4::mdhd::mdhd(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::mdhd::mdhd(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : atom(atomBuild, filePath, filePos)
 {
     std::ifstream fileStream(filePath, std::ios::binary);
