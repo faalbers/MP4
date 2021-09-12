@@ -24,7 +24,7 @@ void MP4::mdat::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
-
+/*
 void MP4::mdat::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
     if ( data == nullptr || filePath_ == "" ) {
@@ -177,6 +177,6 @@ void MP4::mdat::timeReshuffle_(std::ofstream &fileWrite, char *data)
     } while ( !chunksDepleted );
     fileRead.close();
 }
-
+*/
 std::string MP4::mdat::key = "mdat";
 

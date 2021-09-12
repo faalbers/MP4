@@ -23,7 +23,7 @@ void MP4::moov::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
-
+/*
 void MP4::moov::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
 {
     if ( data == nullptr ) {
@@ -47,6 +47,6 @@ void MP4::moov::writeAtomChildrenToFile(std::ofstream &fileWrite, char *data)
         child->writeToFile(fileWrite, data);
     }
 }
-
+*/
 std::string MP4::moov::key = "moov";
 

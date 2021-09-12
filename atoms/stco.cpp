@@ -51,7 +51,7 @@ void MP4::stco::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
-
+/*
 void MP4::stco::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
     if ( data == nullptr || filePath_ == "" ) {
@@ -91,6 +91,6 @@ void MP4::stco::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
         }
     }
 }
-
+*/
 std::string MP4::stco::key = "stco";
 

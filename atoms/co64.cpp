@@ -51,7 +51,7 @@ void MP4::co64::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
-
+/*
 void MP4::co64::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
 {
     if ( data == nullptr || filePath_ == "" ) {
@@ -92,6 +92,6 @@ void MP4::co64::writeAtomDataToFile(std::ofstream &fileWrite, char *data)
         }
     }
 }
-
+*/
 std::string MP4::co64::key = "co64";
 

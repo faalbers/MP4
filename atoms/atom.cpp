@@ -4,12 +4,10 @@
 #include <iomanip>
 
 MP4::atom::atom(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
-    : filePath_(filePath)
+    : filePath_(atomBuild.filePath)
     , filePos_(filePos)
-    , parentPath_(pathParent)
+    , parentPath_(atomBuild.parentPath)
 {
-    std::cout << &atomBuild << std::endl;
-
     int64_t fileSize, childFilePos;
     bool container;
 
@@ -63,11 +61,10 @@ MP4::atom::atom(internal::atomBuildType &atomBuild, std::string filePath, uint64
     if ( !container ) return;
     childFilePos = fileDataPos_;
     do {
+        atomBuild.parentPath = path_+"/";
         auto child = makeAtom_(atomBuild, filePath_, childFilePos, path_+"/");
-        if ( child != nullptr ) {
-            childFilePos = child->fileNextPos_;
-            children_.push_back(child);
-        }
+        childFilePos = child->fileNextPos_;
+        children_.push_back(child);
     } while ( childFilePos < fileNextPos_ );
 }
 
@@ -108,6 +105,7 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+/*
 void MP4::atom::writeToFile(std::ofstream &fileWrite, char *data)
 {
     writeAtomToFile_(fileWrite, data);
@@ -215,6 +213,7 @@ void MP4::atom::writeAtomTailToFile_(std::ofstream &fileWrite, int64_t writeSize
     }
     fileWrite.seekp(writeNextPos, fileWrite.beg);
 }
+*/
 
 std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomBuild, std::string filePath_, int64_t nextFilePos, std::string pathParent)
 {
@@ -300,6 +299,7 @@ void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<
     }
 }
 
+/*
 void MP4::atom::append(atom *appendAtom, std::ofstream &fileWrite, char *data)
 {
     append_(appendAtom, fileWrite, data);
@@ -365,4 +365,4 @@ void MP4::atom::append_(atom *appendAtom, std::ofstream &fileWrite, char *data)
     writeAtomTailToFile_(fileWrite, writeSizePos, posVal64bit);
 }
 
-
+*/

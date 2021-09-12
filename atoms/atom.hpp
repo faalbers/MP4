@@ -32,6 +32,7 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
+/*
     virtual void writeToFile(std::ofstream &fileWrite, char *data = nullptr);
     virtual void writeAtomDataToFile(std::ofstream &fileWrite, char *data);
     virtual void writeAtomChildrenToFile(std::ofstream &fileWrite, char *data);
@@ -39,7 +40,7 @@ public:
     virtual void append(atom *appendAtom, std::ofstream &fileWrite, char *data = nullptr);
     virtual void appendData(atom *appendAtom, std::ofstream &fileWrite, char *data);
     virtual void appendChildren(atom *appendAtom, std::ofstream &fileWrite, char *data);
-
+*/
     std::string     key;
 
 protected:

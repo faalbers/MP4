@@ -29,8 +29,8 @@ public:
     void    printHierarchy();                           // Hierarchy print out of all atoms in file
     void    printHierarchyData(bool fullLists = false);  // Data print out. Only data that is handled so far
 
-    void    writeFile(std::string filePath_, writeSettingsType &writeSettings);
-    void    append(MP4 &appendMP4, std::string filePath_);
+    //void    writeFile(std::string filePath_, writeSettingsType &writeSettings);
+    //void    append(MP4 &appendMP4, std::string filePath_);
 
     std::string                         filePath;
     int64_t                             fileSize;

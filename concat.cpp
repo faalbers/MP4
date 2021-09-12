@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
         //settings.excludeTrackIDs.insert(2);
         //settings.excludeTrackIDs.insert(3);
 
-        mp4A.writeFile("out.mp4", settings);
+        //mp4A.writeFile("out.mp4", settings);
 
         MP4::MP4 mp4New("out.mp4");
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     }
 
     if (true) {
-        mp4A.append(mp4B, "outappend.mp4");
+        //mp4A.append(mp4B, "outappend.mp4");
 
         MP4::MP4 mp4New("outappend.mp4");
 

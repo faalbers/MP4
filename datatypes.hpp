@@ -73,7 +73,7 @@ typedef struct atomBuildType
     atomBuildType *me;
     std::string filePath;
     uint64_t    filePos;
-    std::string pathParent;
+    std::string parentPath;
 } atomBuildType;
 
 

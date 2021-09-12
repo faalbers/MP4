@@ -28,13 +28,12 @@ MP4::MP4::MP4(std::string fileName)
     int64_t nextFilePos = 0;
     internal::atomBuildType atomBuild;
     atomBuild.me = &atomBuild;
+    atomBuild.filePath = filePath;
     do {
-        atomBuild.filePath = filePath;
+        atomBuild.parentPath = "/";
         auto child = atom::makeAtom_(atomBuild, filePath, nextFilePos);
-        if ( child != nullptr ) {
-            nextFilePos = child->fileNextPos_;
-            children.push_back(child);
-        }
+        nextFilePos = child->fileNextPos_;
+        children.push_back(child);
     } while ( nextFilePos < fileSize );
     
     #ifdef MP4_PARSE_TIME
@@ -92,7 +91,7 @@ void MP4::MP4::printHierarchyData(bool fullLists)
     std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
     for ( auto child : children ) child->printHierarchyData(fullLists);
 }
-
+/*
 void MP4::MP4::writeFile(std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
@@ -123,3 +122,4 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_)
 
     fileWrite.close();
 }
+*/
