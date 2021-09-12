@@ -1,8 +1,8 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
-    : atom(atomBuild, filePath, filePos)
+MP4::hdlr::hdlr(internal::atomBuildType &atomBuild, uint64_t filePos)
+    : atom(atomBuild, filePos)
 {
     // get data
     std::ifstream fileStream(filePath_, std::ios::binary);

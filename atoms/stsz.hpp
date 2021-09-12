@@ -19,7 +19,7 @@ namespace MP4
 class stsz : public atom
 {
 public:
-    stsz(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
+    stsz(internal::atomBuildType &atomBuild, uint64_t filePos);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

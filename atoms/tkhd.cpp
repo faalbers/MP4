@@ -1,12 +1,12 @@
 #include "tkhd.hpp"
 #include <iostream>
 
-MP4::tkhd::tkhd(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
-    : atom(atomBuild, filePath, filePos)
+MP4::tkhd::tkhd(internal::atomBuildType &atomBuild, uint64_t filePos)
+    : atom(atomBuild, filePos)
 {
     // get data
-    std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("tkhd atom can not parse file: "+filePath);
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("tkhd atom can not parse file: "+filePath_);
     datablock::tkhdDataBlock tkhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &tkhdData, sizeof(tkhdData));

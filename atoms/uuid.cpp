@@ -2,11 +2,11 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::uuid::uuid(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
-    : atom(atomBuild, filePath, filePos)
+MP4::uuid::uuid(internal::atomBuildType &atomBuild, uint64_t filePos)
+    : atom(atomBuild, filePos)
 {
-    std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath);
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath_);
     fileStream.seekg(fileDataPos_, fileStream.beg);
     datablock::uuidDataBlock uuidData;
     fileStream.read((char *) &uuidData, sizeof(uuidData));

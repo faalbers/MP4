@@ -31,7 +31,7 @@ MP4::MP4::MP4(std::string fileName)
     atomBuild.filePath = filePath;
     do {
         atomBuild.parentPath = "/";
-        auto child = atom::makeAtom_(atomBuild, filePath, nextFilePos);
+        auto child = atom::makeAtom_(atomBuild, nextFilePos);
         nextFilePos = child->fileNextPos_;
         children.push_back(child);
     } while ( nextFilePos < fileSize );

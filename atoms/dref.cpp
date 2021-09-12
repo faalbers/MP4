@@ -3,8 +3,8 @@
 #include <iostream>
 #include "drefEntry.hpp"
 
-MP4::dref::dref(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
-    : atom(atomBuild, filePath, filePos)
+MP4::dref::dref(internal::atomBuildType &atomBuild, uint64_t filePos)
+    : atom(atomBuild, filePos)
 {
     // data blocks for file reading
     typedef struct drefEntryDataBlock
@@ -17,15 +17,15 @@ MP4::dref::dref(internal::atomBuildType &atomBuild, std::string filePath, uint64
     } drefEntryDataBlock;
 
     // handle data 
-    std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("dref atom can not parse file: "+filePath);
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("dref atom can not parse file: "+filePath_);
     datablock::atomTableBlock drefData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefData, sizeof(drefData));
     drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);
     uint32_t index = 1;
     do {
-        auto drefEntryAtom = std::make_shared<drefEntry>(atomBuild, filePath, fileStream.tellg());
+        auto drefEntryAtom = std::make_shared<drefEntry>(atomBuild, fileStream.tellg());
         drefEntryType drefEntry;
         drefEntry.ID = index;
         drefEntry.reference = drefEntryAtom->reference;

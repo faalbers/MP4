@@ -27,7 +27,7 @@ namespace MP4
 class mdia : public atom
 {
 public:
-    mdia(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
+    mdia(internal::atomBuildType &atomBuild, uint64_t filePos);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

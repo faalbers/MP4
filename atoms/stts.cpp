@@ -2,12 +2,12 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::stts::stts(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
-    : atom(atomBuild, filePath, filePos)
+MP4::stts::stts(internal::atomBuildType &atomBuild, uint64_t filePos)
+    : atom(atomBuild, filePos)
 {
     // handle data 
-    std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stts atom can not parse file: "+filePath);
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("stts atom can not parse file: "+filePath_);
     datablock::atomTableBlock sttsData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &sttsData, sizeof(sttsData));
