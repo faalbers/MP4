@@ -3,9 +3,9 @@
 #include <iostream>
 #include <iomanip>
 
-MP4::atom::atom(internal::atomBuildType &atomBuild, uint64_t filePos)
+MP4::atom::atom(internal::atomBuildType &atomBuild)
     : filePath_(atomBuild.filePath)
-    , filePos_(filePos)
+    , filePos_(atomBuild.filePos)
     , parentPath_(atomBuild.parentPath)
 {
     int64_t fileSize, childFilePos;
@@ -17,7 +17,7 @@ MP4::atom::atom(internal::atomBuildType &atomBuild, uint64_t filePos)
     // get file size anset file position to start of atom
     fileStream.seekg(0, fileStream.end);
     fileSize = fileStream.tellg();
-    fileStream.seekg(filePos, fileStream.beg);
+    fileStream.seekg(filePos_, fileStream.beg);
 
     // read the header
     datablock::atomHeaderBlock dataBlock;
@@ -34,17 +34,17 @@ MP4::atom::atom(internal::atomBuildType &atomBuild, uint64_t filePos)
     dataBlock.size64 = _byteswap_uint64(dataBlock.size64);    // big to little endian
     if ( dataBlock.size32 == 1 ) {
         size_ = (int64_t) dataBlock.size64;
-        fileDataPos_ = filePos + 16;
+        fileDataPos_ = filePos_ + 16;
     } else {
         size_ = (int64_t) dataBlock.size32;
-        fileDataPos_ = filePos + 8;
+        fileDataPos_ = filePos_ + 8;
     }
 
     // set filestream to data position
     fileStream.seekg(fileDataPos_, fileStream.beg);
 
     // get other data
-    fileNextPos_ = filePos + size_;
+    fileNextPos_ = filePos_ + size_;
     dataSize_ = fileNextPos_ - fileDataPos_;
     container = isContainer_(fileStream, dataSize_);
     fileStream.close();
@@ -59,13 +59,13 @@ MP4::atom::atom(internal::atomBuildType &atomBuild, uint64_t filePos)
 
     // find child atoms
     if ( !container ) return;
-    childFilePos = fileDataPos_;
+    atomBuild.filePos = fileDataPos_;
     do {
         atomBuild.parentPath = path_+"/";
-        auto child = makeAtom_(atomBuild, childFilePos);
-        childFilePos = child->fileNextPos_;
+        auto child = makeAtom_(atomBuild);
+        atomBuild.filePos = child->fileNextPos_;
         children_.push_back(child);
-    } while ( childFilePos < fileNextPos_ );
+    } while ( atomBuild.filePos < fileNextPos_ );
 }
 
 int MP4::atom::nestLevel_(int level)
@@ -215,7 +215,7 @@ void MP4::atom::writeAtomTailToFile_(std::ofstream &fileWrite, int64_t writeSize
 }
 */
 
-std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomBuild, int64_t nextFilePos)
+std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;
 
@@ -223,37 +223,37 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomB
     if ( fileStream.fail() ) throw std::runtime_error("Atom can not open file: "+atomBuild.filePath);
 
     // get file size anset file position to start of atom
-    fileStream.seekg(nextFilePos, fileStream.beg);
+    fileStream.seekg(atomBuild.filePos, fileStream.beg);
     char    charKey[4];;
     fileStream.read((char *) &charKey, sizeof(charKey));
     fileStream.read((char *) &charKey, sizeof(charKey));
     fileStream.close();
     std::string key = std::string(charKey).substr(0,4);
 
-    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild, nextFilePos);
-    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild, nextFilePos);
-    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(atomBuild, nextFilePos);
-    else if ( key == "moov" ) newAtom = std::make_shared<moov>(atomBuild, nextFilePos);
-    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(atomBuild, nextFilePos);
-    else if ( key == "trak" ) newAtom = std::make_shared<trak>(atomBuild, nextFilePos);
-    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(atomBuild, nextFilePos);
-    else if ( key == "edts" ) newAtom = std::make_shared<edts>(atomBuild, nextFilePos);
-    else if ( key == "elst" ) newAtom = std::make_shared<elst>(atomBuild, nextFilePos);
-    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(atomBuild, nextFilePos);
-    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(atomBuild, nextFilePos);
-    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(atomBuild, nextFilePos);
-    else if ( key == "minf" ) newAtom = std::make_shared<minf>(atomBuild, nextFilePos);
-    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild, nextFilePos);
-    else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild, nextFilePos);
-    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(atomBuild, nextFilePos);
-    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(atomBuild, nextFilePos);
-    else if ( key == "stts" ) newAtom = std::make_shared<stts>(atomBuild, nextFilePos);
-    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(atomBuild, nextFilePos);
-    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(atomBuild, nextFilePos);
-    else if ( key == "stco" ) newAtom = std::make_shared<stco>(atomBuild, nextFilePos);
-    else if ( key == "co64" ) newAtom = std::make_shared<co64>(atomBuild, nextFilePos);
-    else if ( key == "stss" ) newAtom = std::make_shared<stss>(atomBuild, nextFilePos);
-    else newAtom = std::make_shared<atom>(atomBuild, nextFilePos);
+    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild);
+    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild);
+    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(atomBuild);
+    else if ( key == "moov" ) newAtom = std::make_shared<moov>(atomBuild);
+    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(atomBuild);
+    else if ( key == "trak" ) newAtom = std::make_shared<trak>(atomBuild);
+    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(atomBuild);
+    else if ( key == "edts" ) newAtom = std::make_shared<edts>(atomBuild);
+    else if ( key == "elst" ) newAtom = std::make_shared<elst>(atomBuild);
+    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(atomBuild);
+    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(atomBuild);
+    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(atomBuild);
+    else if ( key == "minf" ) newAtom = std::make_shared<minf>(atomBuild);
+    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild);
+    else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild);
+    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(atomBuild);
+    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(atomBuild);
+    else if ( key == "stts" ) newAtom = std::make_shared<stts>(atomBuild);
+    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(atomBuild);
+    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(atomBuild);
+    else if ( key == "stco" ) newAtom = std::make_shared<stco>(atomBuild);
+    else if ( key == "co64" ) newAtom = std::make_shared<co64>(atomBuild);
+    else if ( key == "stss" ) newAtom = std::make_shared<stss>(atomBuild);
+    else newAtom = std::make_shared<atom>(atomBuild);
 
     return newAtom;
 }

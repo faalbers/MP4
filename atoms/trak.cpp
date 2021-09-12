@@ -3,8 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
-MP4::trak::trak(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::trak::trak(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
 }
 

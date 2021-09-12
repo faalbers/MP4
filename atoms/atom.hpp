@@ -15,7 +15,7 @@ namespace MP4
 class atom
 {
 public:
-    atom(internal::atomBuildType &atomBuild, uint64_t filePos);
+    atom(internal::atomBuildType &atomBuild);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -48,7 +48,7 @@ protected:
     friend class dref;
     friend class uuid;
 
-    static std::shared_ptr<atom>    makeAtom_(internal::atomBuildType &atomBuild, int64_t nextFilePos);
+    static std::shared_ptr<atom>    makeAtom_(internal::atomBuildType &atomBuild);
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);

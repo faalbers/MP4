@@ -19,7 +19,7 @@ namespace MP4
 class elst : public atom
 {
 public:
-    elst(internal::atomBuildType &atomBuild, uint64_t filePos);
+    elst(internal::atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

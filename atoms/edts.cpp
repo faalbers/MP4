@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::edts::edts(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::edts::edts(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
 }
 

@@ -25,16 +25,16 @@ MP4::MP4::MP4(std::string fileName)
     fileStream.seekg(0, fileStream.beg);
     fileStream.close();
 
-    int64_t nextFilePos = 0;
     internal::atomBuildType atomBuild;
     atomBuild.me = &atomBuild;
     atomBuild.filePath = filePath;
+    atomBuild.filePos = 0;
     do {
         atomBuild.parentPath = "/";
-        auto child = atom::makeAtom_(atomBuild, nextFilePos);
-        nextFilePos = child->fileNextPos_;
+        auto child = atom::makeAtom_(atomBuild);
+        atomBuild.filePos = child->fileNextPos_;
         children.push_back(child);
-    } while ( nextFilePos < fileSize );
+    } while ( atomBuild.filePos < fileSize );
     
     #ifdef MP4_PARSE_TIME
     auto end = std::chrono::high_resolution_clock::now();

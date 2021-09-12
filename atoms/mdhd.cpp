@@ -1,8 +1,8 @@
 #include "mdhd.hpp"
 #include <iostream>
 
-MP4::mdhd::mdhd(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath_);

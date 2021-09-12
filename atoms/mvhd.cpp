@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::mvhd::mvhd(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mvhd atom can not parse file: "+filePath_);

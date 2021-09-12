@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::stco::stco(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::stco::stco(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     // handle data 
     std::ifstream fileStream(filePath_, std::ios::binary);

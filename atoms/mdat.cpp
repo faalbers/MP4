@@ -3,8 +3,8 @@
 #include <iostream>
 #include <map>
 
-MP4::mdat::mdat(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::mdat::mdat(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     sampleDataPos = fileDataPos_;
     sampleDataSize = dataSize_;

@@ -23,7 +23,7 @@ namespace MP4
 class co64 : public atom
 {
 public:
-    co64(internal::atomBuildType &atomBuild, uint64_t filePos);
+    co64(internal::atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

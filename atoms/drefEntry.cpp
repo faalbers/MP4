@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::drefEntry::drefEntry(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::drefEntry::drefEntry(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     // data blocks for file reading
     typedef struct drefEntryDataBlock

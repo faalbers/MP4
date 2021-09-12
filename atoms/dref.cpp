@@ -3,8 +3,8 @@
 #include <iostream>
 #include "drefEntry.hpp"
 
-MP4::dref::dref(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::dref::dref(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
     // data blocks for file reading
     typedef struct drefEntryDataBlock
@@ -25,7 +25,8 @@ MP4::dref::dref(internal::atomBuildType &atomBuild, uint64_t filePos)
     drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);
     uint32_t index = 1;
     do {
-        auto drefEntryAtom = std::make_shared<drefEntry>(atomBuild, fileStream.tellg());
+        atomBuild.filePos = fileStream.tellg();
+        auto drefEntryAtom = std::make_shared<drefEntry>(atomBuild);
         drefEntryType drefEntry;
         drefEntry.ID = index;
         drefEntry.reference = drefEntryAtom->reference;

@@ -15,7 +15,7 @@ namespace MP4
 class mdat : public atom
 {
 public:
-    mdat(internal::atomBuildType &atomBuild, uint64_t filePos);
+    mdat(internal::atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

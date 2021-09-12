@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::mdia::mdia(internal::atomBuildType &atomBuild, uint64_t filePos)
-    : atom(atomBuild, filePos)
+MP4::mdia::mdia(internal::atomBuildType &atomBuild)
+    : atom(atomBuild)
 {
 }
 

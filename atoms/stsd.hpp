@@ -19,7 +19,7 @@ namespace MP4
 class stsd : public atom
 {
 public:
-    stsd(internal::atomBuildType &atomBuild, uint64_t filePos);
+    stsd(internal::atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

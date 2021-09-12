@@ -13,7 +13,7 @@ namespace MP4
 class drefEntry : public atom
 {
 public:
-    drefEntry(internal::atomBuildType &atomBuild, uint64_t filePos);
+    drefEntry(internal::atomBuildType &atomBuild);
 
     static std::string  key;
     std::string                 reference;
