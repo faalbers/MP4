@@ -4,7 +4,7 @@
 #include <map>
 
 MP4::mdat::mdat(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(atomBuild, filePath, filePos, pathParent)
+    : atom(atomBuild, filePath, filePos)
 {
     sampleDataPos = fileDataPos_;
     sampleDataSize = dataSize_;

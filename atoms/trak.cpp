@@ -4,7 +4,7 @@
 #include <algorithm>
 
 MP4::trak::trak(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(atomBuild, filePath, filePos, pathParent)
+    : atom(atomBuild, filePath, filePos)
 {
 }
 

@@ -15,7 +15,7 @@ namespace MP4
 class atom
 {
 public:
-    atom(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    atom(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()

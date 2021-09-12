@@ -3,7 +3,7 @@
 #include <iostream>
 
 MP4::co64::co64(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(atomBuild, filePath, filePos, pathParent)
+    : atom(atomBuild, filePath, filePos)
 {
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);

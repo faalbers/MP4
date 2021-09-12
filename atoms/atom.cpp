@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iomanip>
 
-MP4::atom::atom(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+MP4::atom::atom(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos)
     : filePath_(atomBuild.filePath)
     , filePos_(filePos)
     , parentPath_(atomBuild.parentPath)
@@ -230,30 +230,30 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomB
     fileStream.close();
     std::string key = std::string(charKey).substr(0,4);
 
-    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "moov" ) newAtom = std::make_shared<moov>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "trak" ) newAtom = std::make_shared<trak>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "edts" ) newAtom = std::make_shared<edts>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "elst" ) newAtom = std::make_shared<elst>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "minf" ) newAtom = std::make_shared<minf>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stts" ) newAtom = std::make_shared<stts>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stco" ) newAtom = std::make_shared<stco>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "co64" ) newAtom = std::make_shared<co64>(atomBuild, filePath_, nextFilePos, pathParent);
-    else if ( key == "stss" ) newAtom = std::make_shared<stss>(atomBuild, filePath_, nextFilePos, pathParent);
-    else newAtom = std::make_shared<atom>(atomBuild, filePath_, nextFilePos, pathParent);
+    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "moov" ) newAtom = std::make_shared<moov>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "trak" ) newAtom = std::make_shared<trak>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "edts" ) newAtom = std::make_shared<edts>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "elst" ) newAtom = std::make_shared<elst>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "minf" ) newAtom = std::make_shared<minf>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stts" ) newAtom = std::make_shared<stts>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stco" ) newAtom = std::make_shared<stco>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "co64" ) newAtom = std::make_shared<co64>(atomBuild, filePath_, nextFilePos);
+    else if ( key == "stss" ) newAtom = std::make_shared<stss>(atomBuild, filePath_, nextFilePos);
+    else newAtom = std::make_shared<atom>(atomBuild, filePath_, nextFilePos);
 
     return newAtom;
 }

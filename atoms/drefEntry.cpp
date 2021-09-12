@@ -3,7 +3,7 @@
 #include <iostream>
 
 MP4::drefEntry::drefEntry(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(atomBuild, filePath, filePos, pathParent)
+    : atom(atomBuild, filePath, filePos)
 {
     // data blocks for file reading
     typedef struct drefEntryDataBlock
