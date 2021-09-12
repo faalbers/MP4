@@ -16,7 +16,7 @@ namespace MP4
 class mdhd : public atom
 {
 public:
-    mdhd(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    mdhd(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(filePath, filePos, pathParent)
+MP4::stsd::stsd(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+    : atom(atomBuild, filePath, filePos, pathParent)
 {
     // handle data 
     std::ifstream fileStream(filePath, std::ios::binary);

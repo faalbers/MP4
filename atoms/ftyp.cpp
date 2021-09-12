@@ -4,8 +4,8 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(filePath, filePos, pathParent)
+MP4::ftyp::ftyp(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+    : atom(atomBuild, filePath, filePos, pathParent)
 {
     std::ifstream fileStream(filePath, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath);

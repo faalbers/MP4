@@ -13,7 +13,7 @@ namespace MP4
 class drefEntry : public atom
 {
 public:
-    drefEntry(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    drefEntry(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     static std::string  key;
     std::string                 reference;

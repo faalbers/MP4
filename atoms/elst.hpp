@@ -19,7 +19,7 @@ namespace MP4
 class elst : public atom
 {
 public:
-    elst(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    elst(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

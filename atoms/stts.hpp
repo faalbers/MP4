@@ -31,7 +31,7 @@ namespace MP4
 class stts : public atom
 {
 public:
-    stts(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    stts(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

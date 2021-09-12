@@ -13,7 +13,7 @@ namespace MP4
 class uuid : public atom
 {
 public:
-    uuid(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    uuid(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

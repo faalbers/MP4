@@ -2,8 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 
-MP4::minf::minf(std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(filePath, filePos, pathParent)
+MP4::minf::minf(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+    : atom(atomBuild, filePath, filePos, pathParent)
 {
 }
 

@@ -26,8 +26,11 @@ MP4::MP4::MP4(std::string fileName)
     fileStream.close();
 
     int64_t nextFilePos = 0;
+    internal::atomBuildType atomBuild;
+    atomBuild.me = &atomBuild;
     do {
-        auto child = atom::makeAtom_(filePath, nextFilePos);
+        atomBuild.filePath = filePath;
+        auto child = atom::makeAtom_(atomBuild, filePath, nextFilePos);
         if ( child != nullptr ) {
             nextFilePos = child->fileNextPos_;
             children.push_back(child);

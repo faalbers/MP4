@@ -34,7 +34,7 @@ namespace MP4
 class moov : public atom
 {
 public:
-    moov(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    moov(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

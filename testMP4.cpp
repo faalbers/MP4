@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
             mdia->printHierarchyData();
     }
 
-    //mp4.printHierarchyData();
+    mp4.printHierarchyData();
 
     if (false)
     {

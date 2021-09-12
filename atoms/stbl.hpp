@@ -47,7 +47,7 @@ namespace MP4
 class stbl : public atom
 {
 public:
-    stbl(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    stbl(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

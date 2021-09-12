@@ -23,7 +23,7 @@ namespace MP4
 class stco : public atom
 {
 public:
-    stco(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    stco(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

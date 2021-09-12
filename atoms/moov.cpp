@@ -5,8 +5,8 @@
 #include <set>
 #include <map>
 
-MP4::moov::moov(std::string filePath, uint64_t filePos, std::string pathParent)
-    : atom(filePath, filePos, pathParent)
+MP4::moov::moov(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent)
+    : atom(atomBuild, filePath, filePos, pathParent)
 {
 }
 

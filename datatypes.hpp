@@ -68,6 +68,15 @@ namespace internal
 // ********* INTERNAL DATA *********
 // remember they are 32 bit aligned !
 
+typedef struct atomBuildType
+{
+    atomBuildType *me;
+    std::string filePath;
+    uint64_t    filePos;
+    std::string pathParent;
+} atomBuildType;
+
+
 typedef struct writeInfoType
 {
     std::vector<std::shared_ptr<chunkType>> chunkList;

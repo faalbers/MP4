@@ -24,7 +24,7 @@ namespace MP4
 class minf : public atom
 {
 public:
-    minf(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    minf(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -16,7 +16,7 @@ namespace MP4
 class dref : public atom
 {
 public:
-    dref(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    dref(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -17,7 +17,7 @@ namespace MP4
 class edts : public atom
 {
 public:
-    edts(std::string filePath, uint64_t filePos, std::string pathParent = "/");
+    edts(internal::atomBuildType &atomBuild, std::string filePath, uint64_t filePos, std::string pathParent = "/");
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
