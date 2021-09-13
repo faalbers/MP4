@@ -159,6 +159,11 @@ std::tuple<int64_t, bool> MP4::atom::writeHeader(std::ofstream &fileWrite)
     return writeHeader_(fileWrite);
 }
 
+std::tuple<int64_t, bool> MP4::atom::appendHeader(std::ofstream &fileWrite)
+{
+    return writeHeader_(fileWrite);
+}
+
 std::tuple<int64_t, bool> MP4::atom::writeHeader_(std::ofstream &fileWrite)
 {
     char    *buffer;
@@ -256,7 +261,7 @@ void MP4::atom::append_(atom *appendAtom, std::ofstream &fileWrite, internal::wr
 {
     int64_t writeSizePos;
     bool    posVal64bit;
-    std::tie(writeSizePos, posVal64bit) = writeHeader(fileWrite);
+    std::tie(writeSizePos, posVal64bit) = appendHeader(fileWrite);
 
     // decide how to handle data depending on children
     if ( children_.size() == 0 )

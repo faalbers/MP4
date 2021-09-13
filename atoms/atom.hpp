@@ -38,6 +38,7 @@ public:
     virtual void                        writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        append(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    virtual std::tuple<int64_t, bool>   appendHeader(std::ofstream &fileWrite);
     virtual void                        appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     

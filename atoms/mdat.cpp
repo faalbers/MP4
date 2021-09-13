@@ -24,6 +24,12 @@ void MP4::mdat::printHierarchyData(bool fullLists)
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
+
+std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
+{
+    return writeHeader_(fileWrite);
+}
+
 /*
 std::tuple<int64_t, bool> MP4::mdat::writeHeader(std::ofstream &fileWrite)
 {
@@ -53,8 +59,9 @@ void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
-    ((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
+    writeData_(fileWrite, writeInfo);
+    //extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
+    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
 }
 
 void MP4::mdat::extract_(std::ofstream &fileWrite,

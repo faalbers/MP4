@@ -152,10 +152,16 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
     // first write ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
 
-    // combine mdat
+    // append mdat
     for ( auto mdatMaster : getTypeAtoms<mdat>() ) {
         for ( auto mdatAppend : appendMP4.getTypeAtoms<mdat>() )
             mdatMaster->append(mdatAppend, fileWrite, writeInfo);
+    }
+
+    // append moov
+    for ( auto moovMaster : getTypeAtoms<moov>() ) {
+        for ( auto moovAppend : appendMP4.getTypeAtoms<moov>() )
+            moovMaster->append(moovAppend, fileWrite, writeInfo);
     }
 
     fileWrite.close();
