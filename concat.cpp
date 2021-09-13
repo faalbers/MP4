@@ -10,20 +10,20 @@ int main(int argc, char* argv[])
     std::cout << "**** CREATE MP4's ****\n\n";
 
     MP4::MP4 mp4A(argv[1]);
-    MP4::MP4 mp4B(argv[1]);
+    MP4::MP4 mp4B(argv[2]);
 
     std::cout << "\n**** TEST MP4 ****\n\n";
 
     //mp4A.printHierarchy();
     //mp4A.printHierarchyData();
 
-    if (false) {
+    if (true) {
         MP4::writeSettingsType settings;
         //settings.excludeTrackIDs.insert(1);
         //settings.excludeTrackIDs.insert(2);
         //settings.excludeTrackIDs.insert(3);
 
-        //mp4A.writeFile("out.mp4", settings);
+        mp4A.write("out.mp4", settings);
 
         MP4::MP4 mp4New("out.mp4");
 
@@ -31,7 +31,9 @@ int main(int argc, char* argv[])
     }
 
     if (true) {
-        //mp4A.append(mp4B, "outappend.mp4");
+        MP4::writeSettingsType settings;
+
+        mp4A.append(mp4B, "outappend.mp4", settings);
 
         MP4::MP4 mp4New("outappend.mp4");
 

@@ -25,6 +25,8 @@ MP4::MP4::MP4(std::string fileName)
     fileStream.seekg(0, fileStream.beg);
     fileStream.close();
 
+    if ( fileSize < 8 ) throw std::runtime_error("MP4 can not open file: " + filePath);
+
     internal::atomBuildType atomBuild;
     atomBuild.me = &atomBuild;
     atomBuild.filePath = filePath;
@@ -91,35 +93,19 @@ void MP4::MP4::printHierarchyData(bool fullLists)
     std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
     for ( auto child : children ) child->printHierarchyData(fullLists);
 }
-/*
-void MP4::MP4::writeFile(std::string filePath_, writeSettingsType &writeSettings)
+
+void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
-    if ( fileWrite.fail() ) throw std::runtime_error("Can not create MP4 file: "+filePath_);
-
-    // data to pass through write process
-    internal::writeInfoType writeInfo;
-    // passing moov as data to atoms t0 reconstruct stuff if needed
-    for ( auto moov : getTypeAtoms<moov>() )
-        writeInfo.moovAtom = moov;
-    writeInfo.excludeTrackIDs = writeSettings.excludeTrackIDs;
-    
-    for ( auto child : children )
-        child->writeToFile(fileWrite, (char *) &writeInfo);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+filePath_);
 
     fileWrite.close();
 }
 
-void MP4::MP4::append(MP4 &appendMP4, std::string filePath_)
+void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
-    if ( fileWrite.fail() ) throw std::runtime_error("Can not create MP4 file: "+filePath_);
-
-    for ( auto child : children )
-        for ( auto appendChild : appendMP4.children )
-            if ( appendChild->key == child->key )
-                child->append(appendChild.get(), fileWrite);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+filePath_);
 
     fileWrite.close();
 }
-*/

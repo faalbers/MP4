@@ -37,8 +37,13 @@ typedef struct chunkType
 
 typedef struct writeSettingsType
 {
-    std::set<uint32_t>                      excludeTrackIDs;
+    std::set<uint32_t>  excludeTrackIDs;
 } writeSettingsType;
+
+typedef struct appendSettingsType
+{
+    std::set<uint32_t>  excludeTrackIDs;
+} appendSettingsType;
 
 typedef struct stsdEntryType
 {
