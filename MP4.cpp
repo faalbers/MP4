@@ -114,7 +114,6 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 
     // data to pass through write process
     internal::writeInfoType writeInfo;
-/*
 
     // exclude tracks with incorrect timing
     for ( auto track : getTracks() )
@@ -125,7 +124,7 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
                     totalDuration = entry[0] * entry[1];
                 if ( mdhd->duration != totalDuration )
                     writeSettings.excludeTrackIDs.insert(track->getID());
-                }
+            }
 
     // make final track include map
     for ( auto track : getTracks() ) {
@@ -133,15 +132,15 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
         if( it != writeSettings.excludeTrackIDs.end() ) continue;
         writeInfo.includeTrackIDs[track->getID()] = track->getID();
     }
-    // first write ftyp, we used the main mp4 ftyp
+
+    // first write ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
 
     // combine mdat
-    for ( auto child : getTypeAtoms<mdat>() ) {
-        for ( auto appendChild : appendMP4.children )
-            if ( appendChild->key == child->key )
-                child->append(appendChild.get(), fileWrite, writeInfo);
+    for ( auto mdatMaster : getTypeAtoms<mdat>() ) {
+        for ( auto mdatAppend : appendMP4.getTypeAtoms<mdat>() )
+            mdatMaster->append(mdatAppend, fileWrite, writeInfo);
     }
-*/
+
     fileWrite.close();
 }

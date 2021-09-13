@@ -53,8 +53,9 @@ void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    //extract_(fileWrite, writeInfo);
-    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo);
+    extract_(fileWrite, writeInfo);
+    ((mdat *) appendAtom)->extract_(fileWrite, writeInfo);
+    std::cout << "mdat append chunk list size: " << writeInfo.chunkList.size() << std::endl;
 }
 
 void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
