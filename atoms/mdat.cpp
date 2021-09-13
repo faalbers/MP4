@@ -47,8 +47,8 @@ std::tuple<int64_t, bool> MP4::mdat::writeHeader(std::ofstream &fileWrite)
 
 void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    //extract_(fileWrite, writeInfo); // this is most efficient
-
+    extract_(fileWrite, writeInfo); // this is most efficient
+    std::cout << "mdat write chunk list size: " << writeInfo.chunkList.size() << std::endl;
 }
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
@@ -59,13 +59,12 @@ void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
 void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    /*
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
 
     std::map<uint64_t, chunkType> chunkMap;
     std::map<uint32_t, std::vector<sampleType>> trackSsamples;
-    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() ) {
+    for ( auto track : moovAtom_->getTypeAtoms<trak>() ) {
         auto it = writeInfo.includeTrackIDs.find(track->getID());
         if( it == writeInfo.includeTrackIDs.end() ) continue;
         for ( auto chunk : track->getChunks() )
@@ -103,7 +102,6 @@ void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writ
             sharedCHunk->ID = writeInfo.chunkList.back()->ID + 1;
         writeInfo.chunkList.push_back(sharedCHunk);
     }
-    */
 }
 
 std::string MP4::mdat::key = "mdat";
