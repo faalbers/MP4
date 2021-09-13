@@ -29,8 +29,9 @@ public:
     int64_t             sampleDataSize;
 
 private:
-    //void timeReshuffle_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    void extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    void extract_(std::ofstream &fileWrite,
+        std::vector<std::shared_ptr<chunkType>> &chunkList,
+        std::set<uint32_t> &includeTrackIDs);
 };
 
 }

@@ -95,7 +95,7 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     for ( auto track : getTracks() ) {
         std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
         if( it != writeSettings.excludeTrackIDs.end() ) continue;
-        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+        writeInfo.includeTrackIDsA.insert(track->getID());
     }
 
     // first write ftyp
@@ -127,10 +127,23 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
             }
 
     // make final track include map
-    for ( auto track : getTracks() ) {
-        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+    for ( auto mainTrack : getTracks() ) {
+        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(mainTrack->getID());
         if( it != writeSettings.excludeTrackIDs.end() ) continue;
-        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+        for ( auto mainStsd : mainTrack->getTypeAtoms<stsd>() ) {
+            for ( auto appendTrack : appendMP4.getTracks() ) {
+                for ( auto appendStsd : appendTrack->getTypeAtoms<stsd>() ) {
+                    for ( auto mainEntry : mainStsd->stsdTable ) {
+                        for ( auto appendEntry : appendStsd->stsdTable ) {
+                            if ( mainEntry.dataFormat == appendEntry.dataFormat ) {
+                                writeInfo.includeTrackIDsA.insert(mainTrack->getID());
+                                writeInfo.includeTrackIDsB.insert(appendTrack->getID());
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // first write ftyp

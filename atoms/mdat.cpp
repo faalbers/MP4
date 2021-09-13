@@ -47,18 +47,18 @@ std::tuple<int64_t, bool> MP4::mdat::writeHeader(std::ofstream &fileWrite)
 
 void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    extract_(fileWrite, writeInfo); // this is most efficient
-    std::cout << "mdat write chunk list size: " << writeInfo.chunkList.size() << std::endl;
+    extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
 }
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    extract_(fileWrite, writeInfo);
-    ((mdat *) appendAtom)->extract_(fileWrite, writeInfo);
-    std::cout << "mdat append chunk list size: " << writeInfo.chunkList.size() << std::endl;
+    extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
+    ((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
 }
 
-void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+void MP4::mdat::extract_(std::ofstream &fileWrite,
+    std::vector<std::shared_ptr<chunkType>> &chunkList,
+    std::set<uint32_t> &includeTrackIDs)
 {
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
@@ -66,8 +66,8 @@ void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writ
     std::map<uint64_t, chunkType> chunkMap;
     std::map<uint32_t, std::vector<sampleType>> trackSsamples;
     for ( auto track : moovAtom_->getTypeAtoms<trak>() ) {
-        auto it = writeInfo.includeTrackIDs.find(track->getID());
-        if( it == writeInfo.includeTrackIDs.end() ) continue;
+        auto it = includeTrackIDs.find(track->getID());
+        if( it == includeTrackIDs.end() ) continue;
         for ( auto chunk : track->getChunks() )
             chunkMap[chunk.dataOffset] = chunk;
         trackSsamples[track->getID()] = track->getSamples();
@@ -97,11 +97,11 @@ void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writ
         auto sharedCHunk = std::make_shared<chunkType>();
         *sharedCHunk = chunk.second;
         // update chunk ID if write is appended
-        if ( writeInfo.chunkList.size() == 0)
+        if ( chunkList.size() == 0)
             sharedCHunk->ID = 1;
         else
-            sharedCHunk->ID = writeInfo.chunkList.back()->ID + 1;
-        writeInfo.chunkList.push_back(sharedCHunk);
+            sharedCHunk->ID = chunkList.back()->ID + 1;
+        chunkList.push_back(sharedCHunk);
     }
 }
 
