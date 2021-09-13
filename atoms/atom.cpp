@@ -3,6 +3,19 @@
 #include <iostream>
 #include <iomanip>
 
+MP4::atom::atom()
+    : key("atom")
+    , filePath_("")
+    , path_("")
+    , parentPath_("")
+    , filePos_(0)
+    , fileDataPos_(0)
+    , fileNextPos_(0)
+    , dataSize_(0)
+{
+
+}
+
 MP4::atom::atom(internal::atomBuildType &atomBuild)
     : filePath_(atomBuild.filePath)
     , filePos_(atomBuild.filePos)
@@ -296,7 +309,8 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBui
     fileStream.close();
     std::string key = std::string(charKey).substr(0,4);
 
-    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild);
+    if ( key == "root" ) newAtom = std::make_shared<root>(atomBuild);
+    else if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild);
     else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild);
     else if ( key == "udta" ) newAtom = std::make_shared<udta>(atomBuild);
     else if ( key == "free" ) newAtom = std::make_shared<free>(atomBuild);

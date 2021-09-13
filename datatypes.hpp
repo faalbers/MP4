@@ -77,7 +77,6 @@ namespace internal
 
 typedef struct atomBuildType
 {
-    atomBuildType *me;
     std::string filePath;
     uint64_t    filePos;
     std::string parentPath;

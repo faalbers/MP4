@@ -15,6 +15,7 @@ namespace MP4
 class atom
 {
 public:
+    atom();
     atom(internal::atomBuildType &atomBuild);
     
     template<typename T>
@@ -44,6 +45,7 @@ public:
 
 protected:
     friend class MP4;
+    friend class root;
     friend class dref;
     friend class uuid;
 

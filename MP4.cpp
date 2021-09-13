@@ -16,27 +16,17 @@ MP4::MP4::MP4(std::string fileName)
     
     filePath = std::filesystem::absolute(std::filesystem::path(fileName)).string();
 
-    std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("MP4::MP4 can not open file: " + filePath);
-
-    // get file length
-    fileStream.seekg(0, fileStream.end);
-    fileSize = fileStream.tellg();
-    fileStream.seekg(0, fileStream.beg);
-    fileStream.close();
-
-    if ( fileSize < 8 ) throw std::runtime_error("MP4::MP4 can not open file: " + filePath);
-
     internal::atomBuildType atomBuild;
-    atomBuild.me = &atomBuild;
     atomBuild.filePath = filePath;
-    atomBuild.filePos = 0;
+    rootAtom = std::make_shared<root>(atomBuild);
+    /*
     do {
         atomBuild.parentPath = "/";
         auto child = atom::makeAtom_(atomBuild);
         atomBuild.filePos = child->fileNextPos_;
         children.push_back(child);
     } while ( atomBuild.filePos < fileSize );
+    */
     
     #ifdef MP4_PARSE_TIME
     auto end = std::chrono::high_resolution_clock::now();
@@ -90,8 +80,9 @@ void MP4::MP4::printHierarchy()
 
 void MP4::MP4::printHierarchyData(bool fullLists)
 {
-    std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
-    for ( auto child : children ) child->printHierarchyData(fullLists);
+    //std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
+    std::cout << std::endl;
+    rootAtom->printHierarchyData(fullLists);
 }
 
 void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)

@@ -1,7 +1,8 @@
 #ifndef MP4_ATOMS_H
 #define MP4_ATOMS_H
 
-#include "atoms/atom.hpp"
+#include "atoms/atom.hpp" // base atom of all atoms
+#include "atoms/root.hpp" // root of atoms tree
 
 // indents show hierarchy
 #include "atoms/ftyp.hpp"
