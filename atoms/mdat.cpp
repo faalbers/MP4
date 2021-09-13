@@ -47,13 +47,14 @@ std::tuple<int64_t, bool> MP4::mdat::writeHeader(std::ofstream &fileWrite)
 
 void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    extract_(fileWrite, writeInfo); // this is most efficient
+    //extract_(fileWrite, writeInfo); // this is most efficient
+
 }
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    extract_(fileWrite, writeInfo); // this is most efficient
-    //((mdat *) appendAtom)->extract_(fileWrite, data);
+    //extract_(fileWrite, writeInfo);
+    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo);
 }
 
 void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)

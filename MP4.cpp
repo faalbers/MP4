@@ -103,26 +103,29 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     internal::writeInfoType writeInfo;
 
     // passing moov as data to atoms to reconstruct stuff if needed
-    for ( auto moov : getTypeAtoms<moov>() )
-        writeInfo.moovAtom = moov;
+    //for ( auto moov : getTypeAtoms<moov>() )
+    //    writeInfo.moovAtom = moov;
+    writeInfo.mp4List.push_back(this);
 
     // exclude tracks with incorrect timing
-    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() )
-        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
-            for ( auto stts : track->getTypeAtoms<stts>() ) {
-                uint32_t totalDuration = 0;
-                for ( auto entry : stts->sttsTable )
-                    totalDuration = entry[0] * entry[1];
-                if ( mdhd->duration != totalDuration )
-                    writeSettings.excludeTrackIDs.insert(track->getID());
-            }
+    for ( auto moov : getTypeAtoms<moov>() )
+        for ( auto track : moov->getTypeAtoms<trak>() )
+            for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+                for ( auto stts : track->getTypeAtoms<stts>() ) {
+                    uint32_t totalDuration = 0;
+                    for ( auto entry : stts->sttsTable )
+                        totalDuration = entry[0] * entry[1];
+                    if ( mdhd->duration != totalDuration )
+                        writeSettings.excludeTrackIDs.insert(track->getID());
+                }
     
     // make final track include map
-    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() ) {
-        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
-        if( it != writeSettings.excludeTrackIDs.end() ) continue;
-        writeInfo.includeTrackIDs[track->getID()] = track->getID();
-    }
+    for ( auto moov : getTypeAtoms<moov>() )
+        for ( auto track : moov->getTypeAtoms<trak>() ) {
+            std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+            if( it != writeSettings.excludeTrackIDs.end() ) continue;
+            writeInfo.includeTrackIDs[track->getID()] = track->getID();
+        }
 
     // first write ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
@@ -142,26 +145,30 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
     internal::writeInfoType writeInfo;
 
     // passing moov as data to atoms to reconstruct stuff if needed
-    for ( auto moov : getTypeAtoms<moov>() )
-        writeInfo.moovAtom = moov;
+    //for ( auto moov : getTypeAtoms<moov>() )
+    //    writeInfo.moovAtom = moov;
+    writeInfo.mp4List.push_back(this);
+    writeInfo.mp4List.push_back(&appendMP4);
 
     // exclude tracks with incorrect timing
-    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() )
-        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
-            for ( auto stts : track->getTypeAtoms<stts>() ) {
-                uint32_t totalDuration = 0;
-                for ( auto entry : stts->sttsTable )
-                    totalDuration = entry[0] * entry[1];
-                if ( mdhd->duration != totalDuration )
-                    writeSettings.excludeTrackIDs.insert(track->getID());
-            }
+    for ( auto moov : getTypeAtoms<moov>() )
+        for ( auto track : moov->getTypeAtoms<trak>() )
+            for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+                for ( auto stts : track->getTypeAtoms<stts>() ) {
+                    uint32_t totalDuration = 0;
+                    for ( auto entry : stts->sttsTable )
+                        totalDuration = entry[0] * entry[1];
+                    if ( mdhd->duration != totalDuration )
+                        writeSettings.excludeTrackIDs.insert(track->getID());
+                }
 
     // make final track include map
-    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() ) {
-        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
-        if( it != writeSettings.excludeTrackIDs.end() ) continue;
-        writeInfo.includeTrackIDs[track->getID()] = track->getID();
-    }
+    for ( auto moov : getTypeAtoms<moov>() )
+        for ( auto track : moov->getTypeAtoms<trak>() ) {
+            std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+            if( it != writeSettings.excludeTrackIDs.end() ) continue;
+            writeInfo.includeTrackIDs[track->getID()] = track->getID();
+        }
 
     // first write ftyp, we used the main mp4 ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
