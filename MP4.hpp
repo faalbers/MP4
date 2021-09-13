@@ -37,7 +37,6 @@ public:
 private:
     int                                 nestLevel();
 
-    std::vector<std::shared_ptr<atom>>  children;
     std::shared_ptr<root>               rootAtom_;
 
 };

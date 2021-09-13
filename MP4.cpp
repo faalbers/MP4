@@ -19,14 +19,6 @@ MP4::MP4::MP4(std::string fileName)
     internal::atomBuildType atomBuild;
     atomBuild.filePath = filePath;
     rootAtom_ = std::make_shared<root>(atomBuild);
-    /*
-    do {
-        atomBuild.parentPath = "/";
-        auto child = atom::makeAtom_(atomBuild);
-        atomBuild.filePos = child->fileNextPos_;
-        children.push_back(child);
-    } while ( atomBuild.filePos < fileSize );
-    */
     
     #ifdef MP4_PARSE_TIME
     auto end = std::chrono::high_resolution_clock::now();
