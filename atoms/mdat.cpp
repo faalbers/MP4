@@ -59,6 +59,7 @@ void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
 void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
+    /*
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeFile can not parse file: "+filePath_);
 
@@ -102,6 +103,7 @@ void MP4::mdat::extract_(std::ofstream &fileWrite, internal::writeInfoType &writ
             sharedCHunk->ID = writeInfo.chunkList.back()->ID + 1;
         writeInfo.chunkList.push_back(sharedCHunk);
     }
+    */
 }
 
 std::string MP4::mdat::key = "mdat";

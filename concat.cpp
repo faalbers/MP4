@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
         mp4New.printHierarchyData();
     }
 
-    if (true) {
+    if (false) {
         MP4::writeSettingsType settings;
 
         mp4A.append(mp4B, "outappend.mp4", settings);

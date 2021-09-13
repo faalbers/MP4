@@ -18,7 +18,7 @@ MP4::MP4::MP4(std::string fileName)
 
     internal::atomBuildType atomBuild;
     atomBuild.filePath = filePath;
-    rootAtom = std::make_shared<root>(atomBuild);
+    rootAtom_ = std::make_shared<root>(atomBuild);
     /*
     do {
         atomBuild.parentPath = "/";
@@ -37,7 +37,7 @@ MP4::MP4::MP4(std::string fileName)
 
 std::vector<MP4::trak *>  MP4::MP4::getTracks()
 {
-    for ( auto moov : getTypeAtoms<moov>()) return moov->getTypeAtoms<trak>();
+    for ( auto moov : rootAtom_->getTypeAtoms<moov>()) return moov->getTypeAtoms<trak>();
     std::vector<trak *> foundTracks;
     return foundTracks;
 }
@@ -51,12 +51,7 @@ MP4::trak *MP4::MP4::getTrackFromID(uint32_t ID)
 
 int MP4::MP4::nestLevel()
 {
-    int level, maxLevel = 0;
-    for ( auto child : children ) {
-        level = child->nestLevel_(0);
-        if ( level > maxLevel ) maxLevel = level;
-    }
-    return maxLevel;
+    return rootAtom_->nestLevel_(0);
 }
 
 void MP4::MP4::printHierarchy()
@@ -73,7 +68,7 @@ void MP4::MP4::printHierarchy()
         << " )";
     std::cout << std::endl << std::string(pathWith, '-') << std::string(valWith*5 + 28, '-') << std::endl;
 
-    for ( auto child : children ) child->printHierarchy(pathWith, valWith);
+    rootAtom_->printHierarchy(pathWith, valWith);
     
     std::cout << std::endl;
 }
@@ -82,7 +77,7 @@ void MP4::MP4::printHierarchyData(bool fullLists)
 {
     //std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
     std::cout << std::endl;
-    rootAtom->printHierarchyData(fullLists);
+    rootAtom_->printHierarchyData(fullLists);
 }
 
 void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
@@ -93,30 +88,23 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     // data to pass through write process
     internal::writeInfoType writeInfo;
 
-    // passing moov as data to atoms to reconstruct stuff if needed
-    //for ( auto moov : getTypeAtoms<moov>() )
-    //    writeInfo.moovAtom = moov;
-    writeInfo.mp4List.push_back(this);
-
     // exclude tracks with incorrect timing
-    for ( auto moov : getTypeAtoms<moov>() )
-        for ( auto track : moov->getTypeAtoms<trak>() )
-            for ( auto mdhd : track->getTypeAtoms<mdhd>() )
-                for ( auto stts : track->getTypeAtoms<stts>() ) {
-                    uint32_t totalDuration = 0;
-                    for ( auto entry : stts->sttsTable )
-                        totalDuration = entry[0] * entry[1];
-                    if ( mdhd->duration != totalDuration )
-                        writeSettings.excludeTrackIDs.insert(track->getID());
-                }
-    
+    for ( auto track : getTracks() )
+        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+            for ( auto stts : track->getTypeAtoms<stts>() ) {
+                uint32_t totalDuration = 0;
+                for ( auto entry : stts->sttsTable )
+                    totalDuration = entry[0] * entry[1];
+                if ( mdhd->duration != totalDuration )
+                    writeSettings.excludeTrackIDs.insert(track->getID());
+            }
+
     // make final track include map
-    for ( auto moov : getTypeAtoms<moov>() )
-        for ( auto track : moov->getTypeAtoms<trak>() ) {
-            std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
-            if( it != writeSettings.excludeTrackIDs.end() ) continue;
-            writeInfo.includeTrackIDs[track->getID()] = track->getID();
-        }
+    for ( auto track : getTracks() ) {
+        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+        if( it != writeSettings.excludeTrackIDs.end() ) continue;
+        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+    }
 
     // first write ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
@@ -134,33 +122,25 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 
     // data to pass through write process
     internal::writeInfoType writeInfo;
-
-    // passing moov as data to atoms to reconstruct stuff if needed
-    //for ( auto moov : getTypeAtoms<moov>() )
-    //    writeInfo.moovAtom = moov;
-    writeInfo.mp4List.push_back(this);
-    writeInfo.mp4List.push_back(&appendMP4);
+/*
 
     // exclude tracks with incorrect timing
-    for ( auto moov : getTypeAtoms<moov>() )
-        for ( auto track : moov->getTypeAtoms<trak>() )
-            for ( auto mdhd : track->getTypeAtoms<mdhd>() )
-                for ( auto stts : track->getTypeAtoms<stts>() ) {
-                    uint32_t totalDuration = 0;
-                    for ( auto entry : stts->sttsTable )
-                        totalDuration = entry[0] * entry[1];
-                    if ( mdhd->duration != totalDuration )
-                        writeSettings.excludeTrackIDs.insert(track->getID());
+    for ( auto track : getTracks() )
+        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+            for ( auto stts : track->getTypeAtoms<stts>() ) {
+                uint32_t totalDuration = 0;
+                for ( auto entry : stts->sttsTable )
+                    totalDuration = entry[0] * entry[1];
+                if ( mdhd->duration != totalDuration )
+                    writeSettings.excludeTrackIDs.insert(track->getID());
                 }
 
     // make final track include map
-    for ( auto moov : getTypeAtoms<moov>() )
-        for ( auto track : moov->getTypeAtoms<trak>() ) {
-            std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
-            if( it != writeSettings.excludeTrackIDs.end() ) continue;
-            writeInfo.includeTrackIDs[track->getID()] = track->getID();
-        }
-
+    for ( auto track : getTracks() ) {
+        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+        if( it != writeSettings.excludeTrackIDs.end() ) continue;
+        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+    }
     // first write ftyp, we used the main mp4 ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
 
@@ -170,6 +150,6 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
             if ( appendChild->key == child->key )
                 child->append(appendChild.get(), fileWrite, writeInfo);
     }
-
+*/
     fileWrite.close();
 }

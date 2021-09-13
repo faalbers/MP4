@@ -34,8 +34,6 @@ public:
 
     static std::string  key;
 
-private:
-    int64_t fileSize_;
 };
 
 }

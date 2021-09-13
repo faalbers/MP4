@@ -50,6 +50,7 @@ protected:
     friend class uuid;
 
     static std::shared_ptr<atom>    makeAtom_(internal::atomBuildType &atomBuild);
+    void                            setMoov_(moov *moveAtom);
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
@@ -70,6 +71,7 @@ protected:
     int64_t                             filePos_, fileDataPos_, fileNextPos_;
     int64_t                             dataSize_;
     std::vector<std::shared_ptr<atom>>  children_;
+    moov                                *moovAtom_;
 };
 
 }

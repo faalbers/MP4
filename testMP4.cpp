@@ -28,16 +28,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (false) 
-    {
-        mp4.printHierarchy();
-    }
-    
-    if (false)
-    {
-        mp4.printHierarchyData();  
-    }
-
     if (false)
     {
         for ( auto track : mp4.getTracks())
@@ -49,8 +39,6 @@ int main(int argc, char* argv[])
         for ( auto mdia : mp4.getTypeAtoms<MP4::stsz>() )
             mdia->printHierarchyData();
     }
-
-    mp4.printHierarchyData();
 
     if (false)
     {
@@ -69,6 +57,8 @@ int main(int argc, char* argv[])
         std::cout << gpmfDuration << std::endl;
     }
 
+    //mp4.printHierarchy();
+    mp4.printHierarchyData();
     
     std::cout << "\n**** END ****\n\n";
 

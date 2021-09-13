@@ -19,9 +19,8 @@ public:
     std::vector<T *>     getTypeAtoms()
     {
         std::vector<T *> foundTypeAtoms;
-        for ( auto child : children )
-            for ( auto typeAtom : child->getTypeAtoms<T>() )
-                 foundTypeAtoms.push_back(typeAtom);
+        for ( auto typeAtom : rootAtom_->getTypeAtoms<T>() )
+            foundTypeAtoms.push_back(typeAtom);
         return foundTypeAtoms;
     }
     std::vector<trak *> getTracks();
@@ -39,7 +38,7 @@ private:
     int                                 nestLevel();
 
     std::vector<std::shared_ptr<atom>>  children;
-    std::shared_ptr<root>               rootAtom;
+    std::shared_ptr<root>               rootAtom_;
 
 };
 

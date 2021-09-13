@@ -81,6 +81,12 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     } while ( atomBuild.filePos < fileNextPos_ );
 }
 
+void MP4::atom::setMoov_(moov *moovAtom)
+{
+    moovAtom_ = moovAtom;
+    for (auto child : children_ ) child->setMoov_(moovAtom);
+}
+
 int MP4::atom::nestLevel_(int level)
 {
     level++;
