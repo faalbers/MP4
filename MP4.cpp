@@ -103,6 +103,9 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
 
     // write mdat 
     for ( auto child : getTypeAtoms<mdat>() ) child->write(fileWrite, writeInfo);
+    
+    // write moov 
+    for ( auto moov : getTypeAtoms<moov>() ) moov->write(fileWrite, writeInfo);
 
     fileWrite.close();
 }

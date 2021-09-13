@@ -12,6 +12,8 @@ MP4::atom::atom()
     , fileDataPos_(0)
     , fileNextPos_(0)
     , dataSize_(0)
+    , moovAtom_(nullptr)
+    , trakAtom_(nullptr)
 {
 
 }
@@ -20,6 +22,8 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     : filePath_(atomBuild.filePath)
     , filePos_(atomBuild.filePos)
     , parentPath_(atomBuild.parentPath)
+    , moovAtom_(nullptr)
+    , trakAtom_(nullptr)
 {
     int64_t fileSize, childFilePos;
     bool container;
@@ -85,6 +89,12 @@ void MP4::atom::setMoov_(moov *moovAtom)
 {
     moovAtom_ = moovAtom;
     for (auto child : children_ ) child->setMoov_(moovAtom);
+}
+
+void MP4::atom::setTrak_(trak *trakAtom)
+{
+    trakAtom_ = trakAtom;
+    for (auto child : children_ ) child->setTrak_(trakAtom);
 }
 
 int MP4::atom::nestLevel_(int level)

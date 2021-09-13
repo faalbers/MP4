@@ -13,6 +13,7 @@ namespace MP4
 // ********* DATA TYPES *********
 // ID's in MP4 always start with 1 , not 0
 class moov;
+class trak;
 class MP4;
 
 typedef struct sampleType
