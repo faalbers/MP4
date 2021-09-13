@@ -127,6 +127,9 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     // first write ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
 
+    // write mdat 
+    for ( auto child : getTypeAtoms<mdat>() ) child->write(fileWrite, writeInfo);
+
     fileWrite.close();
 }
 
@@ -162,6 +165,13 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 
     // first write ftyp, we used the main mp4 ftyp
     for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
+
+    // combine mdat
+    for ( auto child : getTypeAtoms<mdat>() ) {
+        for ( auto appendChild : appendMP4.children )
+            if ( appendChild->key == child->key )
+                child->append(appendChild.get(), fileWrite, writeInfo);
+    }
 
     fileWrite.close();
 }

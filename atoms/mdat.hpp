@@ -20,13 +20,17 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::tuple<int64_t, bool>   writeHeader(std::ofstream &fileWrite);
+    void writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;
 
 private:
-    void timeReshuffle_(std::ofstream &fileWrite, char *data);
-    void extract_(std::ofstream &fileWrite, char *data);
+    //void timeReshuffle_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    void extract_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
 };
 
 }

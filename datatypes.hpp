@@ -85,9 +85,11 @@ typedef struct atomBuildType
 
 typedef struct writeInfoType
 {
-    moov                            *moovAtom;
-    std::map<uint32_t, uint32_t>    includeTrackIDs;
+    moov                                    *moovAtom;
+    std::map<uint32_t, uint32_t>            includeTrackIDs;
+    std::vector<std::shared_ptr<chunkType>> chunkList;
 } writeInfoType;
+
 }
 namespace datablock
 {
