@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <map>
 
 namespace MP4
 {
@@ -84,10 +85,8 @@ typedef struct atomBuildType
 
 typedef struct writeInfoType
 {
-    std::vector<std::shared_ptr<chunkType>> chunkList;
-    std::set<uint32_t>                      excludeTrackIDs;
-    uint32_t                                currentTrackID;
-    moov                                    *moovAtom;
+    moov                            *moovAtom;
+    std::map<uint32_t, uint32_t>    includeTrackIDs;
 } writeInfoType;
 }
 namespace datablock

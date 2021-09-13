@@ -105,6 +105,119 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::atom::write(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    write_(fileWrite, writeInfo);
+}
+
+void MP4::atom::write_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    int64_t writeSizePos;
+    bool    posVal64bit;
+    std::tie(writeSizePos, posVal64bit) = writeHeader(fileWrite);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        writeData(fileWrite, writeInfo);
+    else
+        writeChildren(fileWrite, writeInfo);
+
+    writeTail_(fileWrite, writeSizePos, posVal64bit);
+}
+
+std::tuple<int64_t, bool> MP4::atom::writeHeader(std::ofstream &fileWrite)
+{
+    return writeHeader_(fileWrite);
+}
+
+std::tuple<int64_t, bool> MP4::atom::writeHeader_(std::ofstream &fileWrite)
+{
+    char    *buffer;
+    size_t  bufferSize;
+    
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::Atom::writeFile can not parse file: "+filePath_);
+    fileRead.seekg(filePos_, fileRead.beg);
+
+    // write atom header to new file
+    // adjust size later when data is handled
+    auto writeSizePos = fileWrite.tellp();
+    bool posVal64bit = false;
+    bufferSize = (size_t) (fileDataPos_ - filePos_);
+    if ( bufferSize == 16 ) posVal64bit = true;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    fileWrite.write(buffer, bufferSize);
+    delete[] buffer;
+    fileRead.close();
+
+    return make_tuple(writeSizePos, posVal64bit);
+}
+
+void MP4::atom::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    writeData_(fileWrite, writeInfo);
+}
+
+void MP4::atom::writeData_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    if ( filePath_ == "" ) return;
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeData_ can not parse file: "+filePath_);
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    
+    // write buffer blocks
+    // this seems to be the most optimal block size
+    size_t bufferSize = 1024*512;
+    auto buffer = new char[bufferSize];
+    auto bufferCount = (size_t) dataSize_ / bufferSize;
+
+    for ( size_t count = 0; count < bufferCount; count++ ) {
+        fileRead.read(buffer, bufferSize);
+        fileWrite.write(buffer, bufferSize);
+    }
+    delete[] buffer;
+
+    // write buffer rest
+    bufferSize = (size_t) dataSize_ % bufferSize;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    fileWrite.write(buffer, bufferSize);
+    delete[] buffer;
+
+    fileRead.close();
+}
+
+void MP4::atom::writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    writeChildren_(fileWrite, writeInfo);
+}
+
+void MP4::atom::writeChildren_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    for ( auto child : children_ )
+        child->write(fileWrite, writeInfo);
+}
+
+void MP4::atom::writeTail_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit)
+{
+    // after writing the atom's data we need to fix the atom size
+    auto writeNextPos = fileWrite.tellp();
+    if ( posVal64bit ) {
+        auto writeSize = (uint64_t) (writeNextPos - writeSizePos);
+        writeSize = _byteswap_uint64(writeSize);
+        fileWrite.seekp(writeSizePos, fileWrite.beg);
+        fileWrite.seekp(8, fileWrite.cur);
+        fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    } else {
+        auto writeSize = (uint32_t) (writeNextPos - writeSizePos);
+        writeSize = _byteswap_ulong(writeSize);
+        fileWrite.seekp(writeSizePos, fileWrite.beg);
+        fileWrite.write((char *) &writeSize, sizeof(writeSize));
+    }
+    fileWrite.seekp(writeNextPos, fileWrite.beg);
+}
+
 std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;

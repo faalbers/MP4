@@ -17,7 +17,7 @@ MP4::MP4::MP4(std::string fileName)
     filePath = std::filesystem::absolute(std::filesystem::path(fileName)).string();
 
     std::ifstream fileStream(filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("MP4 can not open file: " + filePath);
+    if ( fileStream.fail() ) throw std::runtime_error("MP4::MP4 can not open file: " + filePath);
 
     // get file length
     fileStream.seekg(0, fileStream.end);
@@ -25,7 +25,7 @@ MP4::MP4::MP4(std::string fileName)
     fileStream.seekg(0, fileStream.beg);
     fileStream.close();
 
-    if ( fileSize < 8 ) throw std::runtime_error("MP4 can not open file: " + filePath);
+    if ( fileSize < 8 ) throw std::runtime_error("MP4::MP4 can not open file: " + filePath);
 
     internal::atomBuildType atomBuild;
     atomBuild.me = &atomBuild;
@@ -99,6 +99,34 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     std::ofstream fileWrite(filePath_, std::ios::binary);
     if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+filePath_);
 
+    // data to pass through write process
+    internal::writeInfoType writeInfo;
+
+    // passing moov as data to atoms to reconstruct stuff if needed
+    for ( auto moov : getTypeAtoms<moov>() )
+        writeInfo.moovAtom = moov;
+
+    // exclude tracks with incorrect timing
+    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() )
+        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+            for ( auto stts : track->getTypeAtoms<stts>() ) {
+                uint32_t totalDuration = 0;
+                for ( auto entry : stts->sttsTable )
+                    totalDuration = entry[0] * entry[1];
+                if ( mdhd->duration != totalDuration )
+                    writeSettings.excludeTrackIDs.insert(track->getID());
+            }
+    
+    // make final track include map
+    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() ) {
+        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+        if( it != writeSettings.excludeTrackIDs.end() ) continue;
+        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+    }
+
+    // first write ftyp
+    for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
+
     fileWrite.close();
 }
 
@@ -106,6 +134,34 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
     if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+filePath_);
+
+    // data to pass through write process
+    internal::writeInfoType writeInfo;
+
+    // passing moov as data to atoms to reconstruct stuff if needed
+    for ( auto moov : getTypeAtoms<moov>() )
+        writeInfo.moovAtom = moov;
+
+    // exclude tracks with incorrect timing
+    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() )
+        for ( auto mdhd : track->getTypeAtoms<mdhd>() )
+            for ( auto stts : track->getTypeAtoms<stts>() ) {
+                uint32_t totalDuration = 0;
+                for ( auto entry : stts->sttsTable )
+                    totalDuration = entry[0] * entry[1];
+                if ( mdhd->duration != totalDuration )
+                    writeSettings.excludeTrackIDs.insert(track->getID());
+            }
+
+    // make final track include map
+    for ( auto track : writeInfo.moovAtom->getTypeAtoms<trak>() ) {
+        std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
+        if( it != writeSettings.excludeTrackIDs.end() ) continue;
+        writeInfo.includeTrackIDs[track->getID()] = track->getID();
+    }
+
+    // first write ftyp, we used the main mp4 ftyp
+    for ( auto child : getTypeAtoms<ftyp>() ) child->write(fileWrite, writeInfo);
 
     fileWrite.close();
 }
