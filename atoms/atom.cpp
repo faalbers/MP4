@@ -218,7 +218,70 @@ void MP4::atom::writeTail_(std::ofstream &fileWrite, int64_t writeSizePos, bool 
     fileWrite.seekp(writeNextPos, fileWrite.beg);
 }
 
-std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
+void MP4::atom::append(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    append_(appendAtom, fileWrite, writeInfo);
+}
+
+void MP4::atom::append_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    int64_t writeSizePos;
+    bool    posVal64bit;
+    std::tie(writeSizePos, posVal64bit) = writeHeader(fileWrite);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        appendData(appendAtom, fileWrite, writeInfo);
+    else
+        appendChildren(appendAtom, fileWrite, writeInfo);
+
+    writeTail_(fileWrite, writeSizePos, posVal64bit);
+}
+
+void MP4::atom::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    writeData_(fileWrite, writeInfo);
+}
+
+void MP4::atom::appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    appendChildren_(appendAtom, fileWrite, writeInfo);
+}
+
+void MP4::atom::appendChildren_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    for ( auto child : children_ )
+        child->append( childMatch_(child.get(), appendAtom), fileWrite, writeInfo);
+}
+
+MP4::atom *MP4::atom::childMatch_(atom *childAtom, atom *parentSearchAtom)
+{
+    if ( parentSearchAtom == nullptr ) return nullptr;
+    if (childAtom->key == "trak") {
+        for ( auto childStsd : childAtom->getTypeAtoms<stsd>() )
+            for ( auto parentTrack : parentSearchAtom->getTypeAtoms<trak>() )
+                for ( auto parentStsd : parentTrack->getTypeAtoms<stsd>() )
+                    for ( auto childEntry : childStsd->stsdTable )
+                        for ( auto parentEntry : parentStsd->stsdTable )
+                            if ( childEntry.dataFormat == parentEntry.dataFormat ) return parentTrack;
+    } else if (childAtom->key == "free") {
+        auto freeChild = (free *) childAtom;
+        for ( auto freeParent : parentSearchAtom->getTypeAtoms<free>() )
+            if ( freeParent->freeSize == freeChild->freeSize ) return freeParent;
+    } else {
+        size_t sameKeys = 0;
+        for ( auto child : parentSearchAtom->children_ )
+            if ( childAtom->key == child->key ) sameKeys++;
+        if ( sameKeys > 1 )
+            std::cout << "childMatch not handeling multiple keys of: " << childAtom->key << std::endl;
+
+        for ( auto child : parentSearchAtom->children_ )
+            if ( childAtom->key == child->key ) return child.get();
+    }
+    return nullptr;
+}
+
+std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;
 
@@ -235,6 +298,8 @@ std::shared_ptr<MP4::atom>   MP4::atom::makeAtom_(internal::atomBuildType &atomB
 
     if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(atomBuild);
     else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(atomBuild);
+    else if ( key == "udta" ) newAtom = std::make_shared<udta>(atomBuild);
+    else if ( key == "free" ) newAtom = std::make_shared<free>(atomBuild);
     else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(atomBuild);
     else if ( key == "moov" ) newAtom = std::make_shared<moov>(atomBuild);
     else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(atomBuild);

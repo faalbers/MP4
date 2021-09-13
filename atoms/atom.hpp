@@ -36,7 +36,10 @@ public:
     virtual std::tuple<int64_t, bool>   writeHeader(std::ofstream &fileWrite);
     virtual void                        writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-
+    virtual void                        append(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    virtual void                        appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    virtual void                        appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    
     std::string     key;
 
 protected:
@@ -53,6 +56,10 @@ protected:
     void                            writeData_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     void                            writeChildren_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     void                            writeTail_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit);
+    void                            append_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    //void                            appendData_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    void                            appendChildren_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    static atom                     *childMatch_(atom *childAtom, atom *parentSearchAtom);
     
     int64_t                             size_;
     std::string                         filePath_;
