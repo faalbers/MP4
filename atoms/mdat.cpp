@@ -25,10 +25,38 @@ void MP4::mdat::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    //writeData_(fileWrite, writeInfo);
+    std::set<uint32_t> includeTrackIDs;
+    std::vector<std::shared_ptr<chunkType>> chunkList;
+
+    // write mdat data
+    for ( auto entry : writeInfo.includeTrackIDs ) includeTrackIDs.insert(entry.first);
+    extract_(fileWrite, chunkList, includeTrackIDs);
+    writeInfo.chunkLists.push_back(chunkList);
+}
+
+void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    //writeData_(fileWrite, writeInfo);
+    //return;
+    std::set<uint32_t> includeTrackIDs;
+    std::vector<std::shared_ptr<chunkType>> chunkList;
+
+    // write main mdat data
+    for ( auto entry : writeInfo.includeTrackIDs ) includeTrackIDs.insert(entry.first);
+    extract_(fileWrite, chunkList, includeTrackIDs);
+    writeInfo.chunkLists.push_back(chunkList);
+
+
+    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
+}
+
 std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
 {
     return writeHeader_(fileWrite);
-
+    // making mdat size 64 bit
     char    *buffer;
     size_t  bufferSize;
     
@@ -45,23 +73,6 @@ std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
     fileWrite.write((char *) &atomHeader, sizeof(atomHeader));
 
     return make_tuple(writeSizePos, true);
-}
-
-void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    //writeData_(fileWrite, writeInfo);
-    std::set<uint32_t> includeTrackIDs;
-    std::vector<std::shared_ptr<chunkType>> chunkList;
-    for ( auto entry : writeInfo.includeTrackIDs ) includeTrackIDs.insert(entry.first);
-    extract_(fileWrite, chunkList, includeTrackIDs);
-    writeInfo.chunkLists.push_back(chunkList);
-}
-
-void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    writeData_(fileWrite, writeInfo);
-    //extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
-    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
 }
 
 void MP4::mdat::extract_(std::ofstream &fileWrite,

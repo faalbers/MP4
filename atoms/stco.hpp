@@ -29,7 +29,8 @@ public:
     void printHierarchyData(bool fullLists = false);
     
     void writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-
+    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    
     static std::string      key;
     uint32_t                defaultSampleSize;
     std::vector<uint64_t>   stcoTable;

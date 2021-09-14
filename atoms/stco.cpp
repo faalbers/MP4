@@ -86,4 +86,9 @@ void MP4::stco::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
     }
 }
 
+void MP4::stco::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    writeData(fileWrite, writeInfo);
+}
+
 std::string MP4::stco::key = "stco";

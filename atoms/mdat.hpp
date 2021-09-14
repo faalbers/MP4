@@ -22,8 +22,8 @@ public:
 
     void writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
 
-    std::tuple<int64_t, bool>   appendHeader(std::ofstream &fileWrite);
     void                        appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    std::tuple<int64_t, bool>   appendHeader(std::ofstream &fileWrite);
 
     static std::string  key;
     int64_t             sampleDataPos;

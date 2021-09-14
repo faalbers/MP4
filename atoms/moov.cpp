@@ -26,8 +26,6 @@ void MP4::moov::printHierarchyData(bool fullLists)
 
 void MP4::moov::writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    //writeChildren_(fileWrite, writeInfo);
-    //return;
     for ( auto child : children_ ) {
         if ( child->key == "trak" ) {
             // only write track if included in info
@@ -36,6 +34,22 @@ void MP4::moov::writeChildren(std::ofstream &fileWrite, internal::writeInfoType 
             std::map<uint32_t, uint32_t>::iterator it = writeInfo.includeTrackIDs.find(trackID);
             if( it == writeInfo.includeTrackIDs.end() ) continue;
             child->write(fileWrite, writeInfo);
+            continue;
+        }
+        child->write(fileWrite, writeInfo);
+    }
+}
+
+void MP4::moov::appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    for ( auto child : children_ ) {
+        if ( child->key == "trak" ) {
+            // only append track if included in info
+            auto track = (trak *) child.get();
+            auto trackID = track->getID();
+            std::map<uint32_t, uint32_t>::iterator it = writeInfo.includeTrackIDs.find(trackID);
+            if( it == writeInfo.includeTrackIDs.end() ) continue;
+            child->append( childMatch_(child.get(), appendAtom), fileWrite, writeInfo);
             continue;
         }
         child->write(fileWrite, writeInfo);

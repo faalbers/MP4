@@ -86,5 +86,10 @@ void MP4::co64::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
     }
 }
 
+void MP4::co64::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    writeData(fileWrite, writeInfo);
+}
+
 std::string MP4::co64::key = "co64";
 

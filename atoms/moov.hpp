@@ -40,6 +40,7 @@ public:
     void printHierarchyData(bool fullLists = false);
     
     void writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    void appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     
     static std::string  key;
 };
