@@ -50,7 +50,11 @@ std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
 void MP4::mdat::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
     //writeData_(fileWrite, writeInfo);
-    extract_(fileWrite, writeInfo.chunkListA, writeInfo.includeTrackIDsA);
+    std::set<uint32_t> includeTrackIDs;
+    std::vector<std::shared_ptr<chunkType>> chunkList;
+    for ( auto entry : writeInfo.includeTrackIDs ) includeTrackIDs.insert(entry.first);
+    extract_(fileWrite, chunkList, includeTrackIDs);
+    writeInfo.chunkLists.push_back(chunkList);
 }
 
 void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)

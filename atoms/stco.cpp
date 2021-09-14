@@ -54,6 +54,11 @@ void MP4::stco::printHierarchyData(bool fullLists)
 
 void MP4::stco::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
+    if ( writeInfo.chunkLists.size() == 0 ) {
+        writeData_(fileWrite, writeInfo);
+        return;
+    }
+
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("Atom::writeData can not parse file: "+filePath_);
     
@@ -64,7 +69,7 @@ void MP4::stco::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
 
     // recreate chunlist for this track
     std::vector<std::shared_ptr<chunkType>> chunkList;
-    for ( auto chunk : writeInfo.chunkListA )
+    for ( auto chunk : writeInfo.chunkLists[0] )
         if ( chunk->trackID == trakAtom_->getID() )
             chunkList.push_back(chunk);
 

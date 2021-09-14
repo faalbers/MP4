@@ -95,7 +95,7 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     for ( auto track : getTracks() ) {
         std::set<uint32_t>::iterator it = writeSettings.excludeTrackIDs.find(track->getID());
         if( it != writeSettings.excludeTrackIDs.end() ) continue;
-        writeInfo.includeTrackIDsA.insert(track->getID());
+        writeInfo.includeTrackIDs[track->getID()] = track->getID();
     }
 
     // first write ftyp
@@ -124,7 +124,7 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
             for ( auto stts : track->getTypeAtoms<stts>() ) {
                 uint32_t totalDuration = 0;
                 for ( auto entry : stts->sttsTable )
-                    totalDuration = entry[0] * entry[1];
+                    totalDuration += entry[0] * entry[1];
                 if ( mdhd->duration != totalDuration )
                     writeSettings.excludeTrackIDs.insert(track->getID());
             }
@@ -139,8 +139,7 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
                     for ( auto mainEntry : mainStsd->stsdTable ) {
                         for ( auto appendEntry : appendStsd->stsdTable ) {
                             if ( mainEntry.dataFormat == appendEntry.dataFormat ) {
-                                writeInfo.includeTrackIDsA.insert(mainTrack->getID());
-                                writeInfo.includeTrackIDsB.insert(appendTrack->getID());
+                                writeInfo.includeTrackIDs[mainTrack->getID()] = appendTrack->getID();
                             }
                         }
                     }

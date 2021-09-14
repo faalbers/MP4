@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <map>
 
 namespace MP4
 {
@@ -85,10 +86,8 @@ typedef struct atomBuildType
 
 typedef struct writeInfoType
 {
-    std::set<uint32_t>                      includeTrackIDsA;
-    std::set<uint32_t>                      includeTrackIDsB;
-    std::vector<std::shared_ptr<chunkType>> chunkListA;
-    std::vector<std::shared_ptr<chunkType>> chunkListB;
+    std::map<uint32_t, uint32_t>                            includeTrackIDs;
+    std::vector<std::vector<std::shared_ptr<chunkType>>>    chunkLists;
 } writeInfoType;
 
 }

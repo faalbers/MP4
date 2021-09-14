@@ -28,14 +28,13 @@ void MP4::moov::writeChildren(std::ofstream &fileWrite, internal::writeInfoType 
 {
     //writeChildren_(fileWrite, writeInfo);
     //return;
-
     for ( auto child : children_ ) {
         if ( child->key == "trak" ) {
             // only write track if included in info
             auto track = (trak *) child.get();
             auto trackID = track->getID();
-            std::set<uint32_t>::iterator it = writeInfo.includeTrackIDsA.find(trackID);
-            if( it == writeInfo.includeTrackIDsA.end() ) continue;
+            std::map<uint32_t, uint32_t>::iterator it = writeInfo.includeTrackIDs.find(trackID);
+            if( it == writeInfo.includeTrackIDs.end() ) continue;
             child->write(fileWrite, writeInfo);
             continue;
         }
