@@ -86,7 +86,7 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
             for ( auto stts : track->getTypeAtoms<stts>() ) {
                 uint32_t totalDuration = 0;
                 for ( auto entry : stts->sttsTable )
-                    totalDuration = entry[0] * entry[1];
+                    totalDuration += entry[0] * entry[1];
                 if ( mdhd->duration != totalDuration )
                     writeSettings.excludeTrackIDs.insert(track->getID());
             }

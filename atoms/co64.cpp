@@ -52,5 +52,34 @@ void MP4::co64::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::co64::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeData can not parse file: "+filePath_);
+    
+    // Handle atomTableBlock first
+    datablock::atomTableBlock stcoData;
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    fileRead.read((char *) &stcoData, sizeof(stcoData));
+
+    // recreate chunlist for this track
+    std::vector<std::shared_ptr<chunkType>> chunkList;
+    for ( auto chunk : writeInfo.chunkListA )
+        if ( chunk->trackID == trakAtom_->getID() )
+            chunkList.push_back(chunk);
+
+    // write data table block
+    stcoData.numberOfEntries = _byteswap_ulong( (uint32_t) chunkList.size());
+    fileRead.close();
+    fileWrite.write((char *) &stcoData, sizeof(stcoData));
+
+    // now add all chunk offset values in uint32_t
+    for ( auto chunk : chunkList ) {
+        auto chunkOffset = chunk->dataOffset;
+        chunkOffset = _byteswap_uint64(chunkOffset);
+        fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
+    }
+}
+
 std::string MP4::co64::key = "co64";
 

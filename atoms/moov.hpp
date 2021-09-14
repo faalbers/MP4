@@ -39,6 +39,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
     
+    void writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    
     static std::string  key;
 };
 

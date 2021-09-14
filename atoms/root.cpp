@@ -31,8 +31,7 @@ MP4::root::root(internal::atomBuildType &atomBuild)
     for ( auto moov : getTypeAtoms<moov>() )
         for ( auto child : children_ ) child->setMoov_(moov);
     
-    for ( auto trak : getTypeAtoms<trak>() )
-        for ( auto child : children_ ) child->setTrak_(trak);
+    for ( auto trak : getTypeAtoms<trak>() ) trak->setTrak_(trak);
 }
 
 void MP4::root::printData(bool fullLists)
