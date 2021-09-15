@@ -1,4 +1,5 @@
 #include "mdhd.hpp"
+#include "../atoms.hpp"
 #include <iostream>
 
 MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
@@ -27,6 +28,39 @@ void MP4::mdhd::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
+}
+
+void MP4::mdhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
+{
+    //writeData_(fileWrite, writeInfo);
+
+    uint32_t movieTimeScale;
+    uint32_t movieDuration;
+    uint32_t trackTimeScale;
+    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>()) {
+        movieTimeScale = mvhd->timeScale;
+        movieDuration = mvhd->duration;
+    }
+
+    // convert video time to track time
+    auto timeScaleMultA = (double) movieTimeScale / timeScale;
+    auto timeScaled = (uint32_t) (movieDuration / timeScaleMultA);
+
+    // add append duration
+    auto timeScaleMultB = (double) ((mdhd *)appendAtom)->timeScale / timeScale;
+    timeScaled += (uint32_t) (((mdhd *)appendAtom)->duration / timeScaleMultB);
+
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    datablock::mdhdDataBlock mdhdData;
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    fileRead.read((char *) &mdhdData, sizeof(mdhdData));
+    fileRead.close();
+
+    mdhdData.duration = _byteswap_ulong(timeScaled);
+
+    fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
 }
 
 std::string MP4::mdhd::key = "mdhd";

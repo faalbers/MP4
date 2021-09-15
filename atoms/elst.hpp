@@ -5,12 +5,9 @@
 #include "atom.hpp"
 
 /*
-SAMPLE DESCRIPTION ATOM:
-The sample description atom contains a table of sample descriptions.
-A media may have one or more sample descriptions, depending upon the number of different
-encoding schemes used in the media and on the number of files used to store the data.
-The sample-to-chunk atom identifies the sample description for each sample in the media
-by specifying the index into this table for the appropriate description.
+EDIT LIST ATOM
+You use the edit list atom to map from a time in a movie to a time in a media, and ultimately to media data.
+This information is in the form of entries in an edit list table
 */
 
 namespace MP4
@@ -23,6 +20,8 @@ public:
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
+
+    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
 
     static std::string  key;
     std::vector<elstEntryType> elstTable;

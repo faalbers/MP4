@@ -21,6 +21,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+
     static std::string  key;
     uint32_t            trackID;
     uint32_t            duration;

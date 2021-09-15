@@ -88,7 +88,7 @@ void MP4::stco::writeData(std::ofstream &fileWrite, internal::writeInfoType &wri
 
 void MP4::stco::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
 {
-    if ( writeInfo.chunkLists.size() == 0 ) {
+    if ( writeInfo.chunkLists.size() < 2 ) {
         writeData_(fileWrite, writeInfo);
         return;
     }
@@ -108,19 +108,28 @@ void MP4::stco::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     fileRead.seekg(fileDataPos_, fileRead.beg);
     fileRead.read((char *) &stcoData, sizeof(stcoData));
 
-    // recreate chunlist for this track
-    std::vector<std::shared_ptr<chunkType>> chunkList;
+    // recreate chunlist for this track and apended track
+    std::vector<std::shared_ptr<chunkType>> chunkListMain;
+    std::vector<std::shared_ptr<chunkType>> chunkListAppend;
     for ( auto chunk : writeInfo.chunkLists[0] )
         if ( chunk->trackID == trakAtom_->getID() )
-            chunkList.push_back(chunk);
+            chunkListMain.push_back(chunk);
+    for ( auto chunk : writeInfo.chunkLists[1] )
+        if ( chunk->trackID == writeInfo.includeTrackIDs[trakAtom_->getID()] )
+            chunkListAppend.push_back(chunk);
 
     // write data table block
-    stcoData.numberOfEntries = _byteswap_ulong( (uint32_t) chunkList.size());
+    stcoData.numberOfEntries = _byteswap_ulong( (uint32_t) (chunkListMain.size() + chunkListAppend.size()) );
     fileRead.close();
     fileWrite.write((char *) &stcoData, sizeof(stcoData));
 
-    // now add all chunk offset values in uint32_t
-    for ( auto chunk : chunkList ) {
+    // now add all chunk offset values in uint64_t
+    for ( auto chunk : chunkListMain ) {
+        auto chunkOffset = chunk->dataOffset;
+        chunkOffset = _byteswap_uint64(chunkOffset);
+        fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
+    }
+    for ( auto chunk : chunkListAppend ) {
         auto chunkOffset = chunk->dataOffset;
         chunkOffset = _byteswap_uint64(chunkOffset);
         fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));

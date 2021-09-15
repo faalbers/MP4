@@ -49,6 +49,7 @@ protected:
     friend class root;
     friend class dref;
     friend class uuid;
+    friend class tkhd;
 
     static std::shared_ptr<atom>    makeAtom_(internal::atomBuildType &atomBuild);
     void                            setMoov_(moov *moveAtom);

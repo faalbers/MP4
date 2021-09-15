@@ -46,7 +46,11 @@ void MP4::mdat::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     extract_(fileWrite, chunkList, includeTrackIDs);
     writeInfo.chunkLists.push_back(chunkList);
 
-    //((mdat *) appendAtom)->extract_(fileWrite, writeInfo.chunkListB, writeInfo.includeTrackIDsB);
+    includeTrackIDs.clear();
+    chunkList.clear();
+    for ( auto entry : writeInfo.includeTrackIDs ) includeTrackIDs.insert(entry.second);
+    ((mdat *) appendAtom)->extract_(fileWrite, chunkList, includeTrackIDs);
+    writeInfo.chunkLists.push_back(chunkList);
 }
 
 std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
@@ -62,6 +66,8 @@ std::tuple<int64_t, bool> MP4::mdat::appendHeader(std::ofstream &fileWrite)
     // creating a 64 bit header for mdat
     datablock::atomHeaderBlock atomHeader;
     fileRead.read((char *) &atomHeader, sizeof(atomHeader));
+    fileRead.close();
+    
     atomHeader.size32 = _byteswap_ulong((uint32_t) 1);
     atomHeader.size64 = _byteswap_uint64((uint64_t) 16);
     auto writeSizePos = fileWrite.tellp();

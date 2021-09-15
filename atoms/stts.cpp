@@ -126,11 +126,19 @@ void MP4::stts::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     datablock::atomTableBlock sttsData;
     fileRead.seekg(fileDataPos_, fileRead.beg);
     fileRead.read((char *) &sttsData, sizeof(sttsData));
+    fileRead.close();
     
-    sttsData.numberOfEntries = _byteswap_ulong((uint32_t) sttsTableNew.size());
+    auto sttsTableSize = sttsTableNew.size() + ((stts *) appendAtom)->sttsTable.size();
+    sttsData.numberOfEntries = _byteswap_ulong((uint32_t) sttsTableSize);
+
     fileWrite.write((char *) &sttsData, sizeof(sttsData));
 
     for ( auto entry : sttsTableNew )
+        for ( auto val : entry ) {
+            val = _byteswap_ulong(val);
+            fileWrite.write((char *) &val, sizeof(val));
+        }
+    for ( auto entry : ((stts *) appendAtom)->sttsTable )
         for ( auto val : entry ) {
             val = _byteswap_ulong(val);
             fileWrite.write((char *) &val, sizeof(val));

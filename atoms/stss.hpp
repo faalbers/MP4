@@ -30,6 +30,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+
     static std::string      key;
     std::vector<uint32_t>   stssTable;
 };

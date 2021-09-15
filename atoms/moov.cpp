@@ -52,7 +52,7 @@ void MP4::moov::appendChildren(atom *appendAtom, std::ofstream &fileWrite, inter
             child->append( childMatch_(child.get(), appendAtom), fileWrite, writeInfo);
             continue;
         }
-        child->write(fileWrite, writeInfo);
+        child->append( childMatch_(child.get(), appendAtom), fileWrite, writeInfo);
     }
 }
 
