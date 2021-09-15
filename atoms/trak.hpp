@@ -43,8 +43,8 @@ public:
     std::vector<uint64_t>       getChunkOffsets();
     chunkType                   sampleToChunk(sampleType sample);
 
-    std::vector<drefEntryType>  getDataReferences();
-    drefEntryType               getDataReference(std::string dataFormat);
+    std::vector<std::shared_ptr<atom>>  getDataReferences();
+    std::shared_ptr<atom>       getDataReference(std::string dataFormat);
 
     // track checkers
     bool isComponentType(std::string type);

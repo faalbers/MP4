@@ -58,12 +58,6 @@ typedef struct stsdEntryType
     std::string extendedData;
 } stsdEntryType;
 
-typedef struct drefEntryType
-{
-    uint32_t    ID;
-    std::string reference;         // format type FourCC
-} drefEntryType;
-
 typedef struct elstEntryType
 {
     uint32_t    duration;
@@ -159,6 +153,16 @@ typedef struct mvhdDataBlock
     uint32_t    currentTime;
     uint32_t    nextTrackID;
 } mvhdDataBlock;
+
+typedef struct vmhdDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint16_t    graphicsMode;
+    uint16_t    opColorR;
+    uint16_t    opColorG;
+    uint16_t    opColorB;
+} vmhdDataBlock;
 
 typedef struct hdlrDataBlock
 {

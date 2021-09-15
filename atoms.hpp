@@ -26,10 +26,8 @@
 */    
     #include "atoms/trak.hpp"
         #include "atoms/tkhd.hpp"
-/*
         #include "atoms/tref.hpp"
             #include "atoms/tmcd.hpp"
-*/
         #include "atoms/edts.hpp"
             #include "atoms/elst.hpp"
         #include "atoms/mdia.hpp"
@@ -39,13 +37,17 @@
 /*
                 #include "atoms/gmhd.hpp"
                     #include "atoms/gmin.hpp"
+*/
                 #include "atoms/vmhd.hpp"
+/*
                 #include "atoms/smhd.hpp"
 */
                 #include "atoms/dinf.hpp"
                     #include "atoms/dref.hpp"
 /*
-                    #include "atoms/drefEntry.hpp"
+                        #include "atoms/alis.hpp"
+                        #include "atoms/rsrc.hpp"
+                        #include "atoms/url_.hpp"
 */
                 #include "atoms/stbl.hpp"
                     #include "atoms/stsd.hpp"

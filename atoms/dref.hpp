@@ -21,9 +21,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
     
-    static std::string          key;
-    std::vector<drefEntryType>  drefTable;
-
+    static std::string                  key;
+    std::vector<std::shared_ptr<atom>>  dataReferences;
 };
 
 }

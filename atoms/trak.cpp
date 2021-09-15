@@ -25,21 +25,21 @@ uint32_t MP4::trak::getMediaTimeScale()
     throw std::runtime_error("MP4: Track has no time scale !");
 }
 
-std::vector<MP4::drefEntryType> MP4::trak::getDataReferences()
+std::vector<std::shared_ptr<MP4::atom>> MP4::trak::getDataReferences()
 {
     for ( auto dref : getTypeAtoms<dref>() )
-        return dref->drefTable;
+        return dref->dataReferences;
     throw std::runtime_error("MP4: SampleData has no data references !");
 }
 
-MP4::drefEntryType MP4::trak::getDataReference(std::string dataFormat)
+std::shared_ptr<MP4::atom> MP4::trak::getDataReference(std::string dataFormat)
 {
     for ( auto sampleDesc : getSampleDescriptions() ) {
         if ( sampleDesc.dataFormat == dataFormat ) {
             for ( auto dref : getTypeAtoms<dref>() )
-                for ( auto drefEntry : dref->drefTable )
-                    if ( drefEntry.ID == sampleDesc.dataReferenceIndex )
-                        return drefEntry;
+                if ( dref->dataReferences.size() <= sampleDesc.dataReferenceIndex ) {
+                    return dref->dataReferences[sampleDesc.dataReferenceIndex-1];
+                }
         }
     }
     throw std::runtime_error("MP4: Samples have no data reference of that format !");
