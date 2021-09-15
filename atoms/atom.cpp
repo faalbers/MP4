@@ -351,6 +351,7 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBui
     else if ( key == "vmhd" ) newAtom = std::make_shared<vmhd>(atomBuild);
     else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild);
     else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild);
+    else if ( key == "alis" ) newAtom = std::make_shared<alis>(atomBuild);
     else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(atomBuild);
     else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(atomBuild);
     else if ( key == "stts" ) newAtom = std::make_shared<stts>(atomBuild);

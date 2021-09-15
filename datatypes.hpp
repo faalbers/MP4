@@ -213,6 +213,12 @@ typedef struct elstEntryDataBlock
     uint32_t    mediaRate;
 } elstEntryDataBlock;
 
+typedef struct drefTypeBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+} drefTypeBlock;
+
 }
 
 }

@@ -29,7 +29,12 @@ void MP4::dref::printData(bool fullLists)
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Data Reference Atom)" << std::endl;
     std::cout << dataIndent << "This is an atom table ..." << std::endl;
-    for ( auto entry : dataReferences ) entry->printData();
+    int index = 1;
+    for ( auto entry : dataReferences ) {
+        std::cout << dataIndent << "reference index: " << index << std::endl;
+        entry->printData();
+        index++;
+    }
 }
 
 void MP4::dref::printHierarchyData(bool fullLists)
