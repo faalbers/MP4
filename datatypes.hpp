@@ -164,6 +164,18 @@ typedef struct vmhdDataBlock
     uint16_t    opColorB;
 } vmhdDataBlock;
 
+typedef struct gminDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint16_t    graphicsMode;
+    uint16_t    opColorR;
+    uint16_t    opColorG;
+    uint16_t    opColorB;
+    uint16_t    balance;
+    uint16_t    reserved;
+} gminDataBlock;
+
 typedef struct hdlrDataBlock
 {
     uint8_t     version;
@@ -196,6 +208,22 @@ typedef struct tkhdDataBlock
     uint32_t    trackWidth;
     uint32_t    trackHeight;
 } tkhdDataBlock;
+
+typedef struct tcmiDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint16_t    textFont;
+    uint16_t    textFace;
+    uint16_t    textSize;
+    uint16_t    reserved;
+    uint16_t    textColorR;
+    uint16_t    textColorG;
+    uint16_t    textColorB;
+    uint16_t    backgroundColorR;
+    uint16_t    backgroundColorG;
+    uint16_t    backgroundColorB;
+} tcmiDataBlock;
 
 typedef struct stsdEntryDataBlock
 {

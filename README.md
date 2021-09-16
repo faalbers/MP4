@@ -26,3 +26,5 @@ gmhd/gpmd (gopro) just has an apparently 32 bit value that is not used yet but n
 * should all table entries have ID's ?
 
 * getting pinters should make it's data non mutable
+
+* char name[200] should be new/delete

@@ -28,10 +28,10 @@ void MP4::dref::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Data Reference Atom)" << std::endl;
-    std::cout << dataIndent << "This is an atom table ..." << std::endl;
     int index = 1;
+    std::cout << dataIndent << "[#] ( Data Reference Type Atom )\n";
     for ( auto entry : dataReferences ) {
-        std::cout << dataIndent << "reference index: " << index << std::endl;
+        std::cout << dataIndent << "[" << index << "] ( ";
         entry->printData();
         index++;
     }

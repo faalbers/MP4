@@ -34,10 +34,9 @@
             #include "atoms/mdhd.hpp"
             #include "atoms/hdlr.hpp"
             #include "atoms/minf.hpp"
-/*
                 #include "atoms/gmhd.hpp"
                     #include "atoms/gmin.hpp"
-*/
+                    #include "atoms/tcmi.hpp"
                 #include "atoms/vmhd.hpp"
 /*
                 #include "atoms/smhd.hpp"
@@ -45,6 +44,7 @@
                 #include "atoms/dinf.hpp"
                     #include "atoms/dref.hpp"
                         #include "atoms/alis.hpp"
+                        #include "atoms/url_.hpp"
 /*
                         #include "atoms/rsrc.hpp"
                         #include "atoms/url_.hpp"
