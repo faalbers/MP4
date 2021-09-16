@@ -165,3 +165,81 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 
     fileWrite.close();
 }
+
+MP4::mdatCreateType MP4::MP4::getMdatCreate()
+{
+    mdatCreateType mdatCreate;
+/*
+    for ( auto track : getTracks() ) {
+        auto samples = track->getSamplesNew();
+        if ( samples.mediaDuration != samples.samplesDuration ) continue;
+        if ( samples.trackID == 2 ) {
+            for ( auto sample : samples.samples ) {
+                std::cout
+                    << "[" << sample.trackID << "]"
+                    << "[" << sample.ID << "] "
+                    << sample.time
+                    << " " << sample.duration 
+                    << " " << sample.filePos 
+                    << " " << sample.size << " " << std::endl;
+            }
+            break;
+        }
+    }
+    return mdatCreate;
+*/
+    // get video time scale and duration
+    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
+        mdatCreate.timeScale = mdhd->timeScale;
+        mdatCreate.duration = mdhd->duration;
+    }
+
+    std::vector<std::vector<sampleNewType>> tracksSamples;
+    for ( auto track : getTracks() ) {
+        auto samples = track->getSamplesNew();
+        if ( samples.mediaDuration != samples.samplesDuration ) continue;
+
+        /*
+        std::cout << "Track ID          : " << samples.trackID << std::endl;
+        std::cout << "Sample Count      : " << samples.sampleCount << std::endl;
+        std::cout << "File Path         : " << samples.filePath << std::endl;
+        std::cout << "Data Format       : " << samples.dataFormat << std::endl;
+        std::cout << "Media Time Scale  : " << samples.mediaTimeScale << std::endl;
+        std::cout << "Media Time Scale  : " << samples.mediaDuration << std::endl;
+        std::cout << "Samples Time Scale: " << samples.samplesDuration << std::endl << std::endl;
+        */
+
+        // get the track samples and reverse the vector so we can pop
+        auto trackSamples = samples.samples;
+        std::reverse(trackSamples.begin(),trackSamples.end());
+
+        // convert time and durations to video time scale
+        auto timeScaleMult = (double) mdatCreate.timeScale / samples.mediaTimeScale;
+        for ( size_t index = 0; index < trackSamples.size(); index++ ) {
+            trackSamples[index].time = (uint32_t) (timeScaleMult * trackSamples[index].time);
+            trackSamples[index].duration = (uint32_t) (timeScaleMult * trackSamples[index].duration);
+        }
+
+        tracksSamples.push_back(trackSamples);
+    }
+
+    uint32_t time = 0;
+    bool samplesDepleted = false;
+    do {
+        std::map<uint32_t, std::vector<sampleNewType> *> timeMap;
+        for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
+            if ( tracksSamples[trackIndex].size() != 0 )
+                timeMap[tracksSamples[trackIndex].back().time] = &tracksSamples[trackIndex];
+        }
+        if ( timeMap.size() != 0 ) {
+            for ( auto samples : timeMap ) {
+                mdatCreate.samples.push_back(samples.second->back());
+                time = samples.first;
+                samples.second->pop_back();
+                break;
+            }
+        } else samplesDepleted = true;
+    } while ( !samplesDepleted );
+
+    return mdatCreate;
+}

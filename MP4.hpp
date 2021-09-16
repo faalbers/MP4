@@ -31,6 +31,8 @@ public:
     void    write(std::string filePath_, writeSettingsType &writeSettings);
     void    append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings);
 
+    mdatCreateType getMdatCreate();
+
     std::string                         filePath;
     int64_t                             fileSize;
 

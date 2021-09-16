@@ -6,13 +6,11 @@ MP4::url_::url_(internal::atomBuildType &atomBuild)
     : atom(atomBuild)
     , dataInSameFile(false)
 {
-    std::cout << "url_ atom size: " << size_ << std::endl;
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("url_ atom can not parse file: "+filePath_);
     datablock::drefTypeBlock drefType;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefType, sizeof(drefType));
-    std::cout << "url_ atom size left: " << fileNextPos_ - fileStream.tellg() << std::endl;
     fileStream.close();
     if ( drefType.flag[2] == 1) dataInSameFile = true;
     if ( !dataInSameFile )
@@ -33,5 +31,5 @@ void MP4::url_::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::string MP4::url_::key = "url_";
+std::string MP4::url_::key = "url ";
 

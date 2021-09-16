@@ -2,6 +2,8 @@
 #include "../atoms.hpp"
 #include <iostream>
 #include <algorithm>
+#include <map>
+#include <vector>
 
 MP4::trak::trak(internal::atomBuildType &atomBuild)
     : atom(atomBuild)
@@ -66,6 +68,97 @@ size_t MP4::trak::getSampleCount()
         return stsz->stszTable.size();
     }
     return 0;
+}
+
+MP4::samplesType MP4::trak::getSamplesNew()
+{
+    samplesType samples;
+
+    // get data references
+    samples.filePath = "";
+    for ( auto dref : getTypeAtoms<dref>() ) {
+        if ( dref->dataReferences.size() > 1 )
+            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple data references");
+        if ( dref->dataReferences[0]->key =="url " && ((url_ *) dref->dataReferences[0].get())->dataInSameFile )
+            samples.filePath = filePath_;
+        if ( dref->dataReferences[0]->key =="alis" && ((alis *) dref->dataReferences[0].get())->dataInSameFile )
+            samples.filePath = filePath_;
+    }
+
+    // get sample description
+    std::map<uint32_t, std::vector<std::string>> sampleDescriptions;
+    for ( auto stsd : getTypeAtoms<stsd>() ) {
+        if ( stsd->stsdTable.size() > 1 )
+            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple sample descriptions");
+        samples.dataFormat = stsd->stsdTable[0].dataFormat;
+    }    
+
+    // get trackID
+    samples.trackID = getID();
+
+    // get track time scale and duration
+    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
+        samples.mediaTimeScale = mdhd->timeScale;
+        samples.mediaDuration = mdhd->duration;
+    }
+    
+    // greate samples from time-to-sample and set time and durations
+    uint32_t sampleID = 0;
+    sampleNewType sample;
+    uint32_t time = 0;
+    for ( auto stts : getTypeAtoms<stts>() ) {
+        for ( auto entry : stts->sttsTable ) {
+            uint32_t index = 0;
+            do {
+                sampleID++;
+                sample.ID = sampleID;
+                sample.filePath =  samples.filePath;
+                sample.trackID = samples.trackID;
+                sample.time = time;
+                sample.duration = entry[1];
+                samples.samples.push_back(sample);
+                time += sample.duration;
+                index++;
+            } while ( index < entry[0] );
+        }
+    }
+    samples.samplesDuration =  time;
+    samples.sampleCount = samples.samples.size();
+
+
+    // set sample data sizes
+    for ( auto stsz : getTypeAtoms<stsz>()) {
+        if ( stsz->defaultSampleSize == 0 ) {
+            uint32_t sampleID = 1;
+            for ( auto entry : stsz->stszTable ) {
+                samples.samples[sampleID-1].size = entry;
+                sampleID++;
+            }
+            sampleID--;
+            if ( sampleID != samples.sampleCount )
+                throw std::runtime_error("MP4::getSamplesNew: wrong sample count: "+std::to_string(sampleID));
+        } else {
+            for ( auto sample : samples.samples )
+                sample.size = stsz->defaultSampleSize;
+        }
+    }
+
+    // get chunks and set file path and file positions for samples
+    int64_t filePos = 0;
+    for ( auto chunk : getChunks() ) {
+        if ( chunk.sampleDescriptionID > 1 )
+            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple sample descriptions");
+        if (filePos > chunk.dataOffset )
+            throw std::runtime_error("MP4::getSamplesNew: wrong file position on samples");
+        auto lastChunkSampleID = chunk.firstSampleID + chunk.samples - 1;
+        filePos = chunk.dataOffset;
+        for ( auto sampleID = chunk.firstSampleID; sampleID <= lastChunkSampleID; sampleID++ ) {
+            samples.samples[sampleID-1].filePos = filePos;
+            filePos +=samples.samples[sampleID-1].size;
+        }
+    }
+
+    return samples;
 }
 
 std::vector<MP4::sampleType>  MP4::trak::getSamples()
@@ -150,34 +243,9 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             throw std::runtime_error("MP4::trak: No chunk offsets found !");
         auto stscTable = stsc->stscTable;
 
-        // test setup
-        /*
-        std::vector<std::vector<uint32_t>> stscTable;
-        std::vector<uint32_t> stscLine;
-        stscLine.push_back(1); stscLine.push_back(3); stscLine.push_back(23); 
-        stscTable.push_back(stscLine);
-        stscLine[0] = 3;stscLine[1] = 1;stscLine[2] = 23;
-        stscTable.push_back(stscLine);
-        stscLine[0] = 5;stscLine[1] = 1;stscLine[2] = 24;
-        stscTable.push_back(stscLine);
-        */
-
         // reverse vectors so we can pop first elements from back
         std::reverse(stscTable.begin(),stscTable.end());
         uint32_t currentChunkID = stscTable.back()[0];
-
-        // enter starting chunks if first entry of stsc does not start with 1
-        for ( uint32_t startChunk = 1; startChunk < currentChunkID; startChunk++ ) {
-            chunkType chunk;
-            chunk.ID = startChunk;
-            chunk.trackID = getID();
-            chunk.samples = 0;
-            chunk.firstSampleID = 0;
-            chunk.currentSampleID = 0;
-            chunk.sampleDescriptionID = 0;
-            chunk.dataOffset = 0;
-            chunks.push_back(chunk);
-        }
 
         do {
             chunkType chunk;

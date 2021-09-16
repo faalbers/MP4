@@ -58,8 +58,38 @@ int main(int argc, char* argv[])
     }
 
     //mp4.printHierarchy();
-    mp4.printHierarchyData();
+    //mp4.printHierarchyData();
+
+    if (false)
+    {
+        for ( auto track : mp4.getTracks() ) {
+            auto samples = track->getSamplesNew();
+            std::cout << "Track ID          : " << samples.trackID << std::endl;
+            std::cout << "Sample Count      : " << samples.sampleCount << std::endl;
+            std::cout << "File Path         : " << samples.filePath << std::endl;
+            std::cout << "Data Format       : " << samples.dataFormat << std::endl;
+            std::cout << "Media Time Scale  : " << samples.mediaTimeScale << std::endl;
+            std::cout << "Media Time Scale  : " << samples.mediaDuration << std::endl;
+            std::cout << "Samples Time Scale: " << samples.samplesDuration << std::endl;
+            /*
+            for ( auto sample : samples.samples )
+                std::cout
+                    << "[" << sample.trackID << "]"
+                    << "[" << sample.ID << "] "
+                    << sample.time
+                    << " " << sample.duration 
+                    << " " << sample.filePos 
+                    << " " << sample.size << " " << std::endl;
+            */
+            std::cout << std::endl;
+        }
+    }
     
+    if (true)
+    {
+        mp4.getMdatCreate();
+    }
+
     std::cout << "\n**** END ****\n\n";
 
     return 0;

@@ -27,6 +27,40 @@ typedef struct sampleType
     uint32_t    dataSize;
 } sampleType;
 
+typedef struct sampleNewType
+{
+    uint32_t    ID;
+    uint32_t    trackID;
+    std::string filePath;
+    int64_t     filePos;
+    size_t      size;
+    uint32_t    time;
+    uint32_t    duration;
+} sampleNewType;
+
+typedef struct samplesType
+{
+    std::vector<sampleNewType>  samples;
+    size_t                      sampleCount;
+    uint32_t                    trackID;
+    std::string                 filePath;
+    std::string                 dataFormat;
+    uint32_t                    mediaTimeScale;
+    uint32_t                    mediaDuration;
+    uint32_t                    samplesDuration;
+} samplesType;
+
+typedef struct mdatCreateType
+{
+    std::vector<sampleNewType>  samples;
+    uint32_t                    timeScale;
+    uint32_t                    duration;
+
+    //size_t                      sampleCount;
+    //std::vector<samplesType>    trackSamples;
+    //size_t                      trackCount;
+} mdatCreateType;
+
 typedef struct chunkType
 {
     uint32_t    ID;
