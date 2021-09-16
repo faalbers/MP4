@@ -125,7 +125,10 @@ void MP4::atom::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Atom)" << std::endl;
-    std::cout << dataIndent << "No data defined ..." << std::endl;
+    if ( dataSize_ == 0 )
+        std::cout << dataIndent << "This Atom is empty ..." << std::endl;
+    else
+        std::cout << dataIndent << "No data defined ..." << std::endl;
 }
 
 void MP4::atom::printHierarchyData(bool fullLists)
@@ -352,6 +355,8 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBui
     else if ( key == "gmin" ) newAtom = std::make_shared<gmin>(atomBuild);
     else if ( key == "tcmi" ) newAtom = std::make_shared<tcmi>(atomBuild);
     else if ( key == "vmhd" ) newAtom = std::make_shared<vmhd>(atomBuild);
+    else if ( key == "smhd" ) newAtom = std::make_shared<smhd>(atomBuild);
+    else if ( key == "gpmd" ) newAtom = std::make_shared<gpmd>(atomBuild);
     else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(atomBuild);
     else if ( key == "dref" ) newAtom = std::make_shared<dref>(atomBuild);
     else if ( key == "alis" ) newAtom = std::make_shared<alis>(atomBuild);

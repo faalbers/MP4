@@ -164,6 +164,14 @@ typedef struct vmhdDataBlock
     uint16_t    opColorB;
 } vmhdDataBlock;
 
+typedef struct smhdDataBlock
+{
+    uint8_t     version;
+    uint8_t     flag[3];
+    uint16_t    balance;
+    uint16_t    reserved;
+} smhdDataBlock;
+
 typedef struct gminDataBlock
 {
     uint8_t     version;

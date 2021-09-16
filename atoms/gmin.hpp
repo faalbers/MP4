@@ -26,7 +26,7 @@ public:
     uint16_t            opColorR;
     uint16_t            opColorG;
     uint16_t            opColorB;
-    uint16_t            balance;
+    float               balance;
 };
 
 }

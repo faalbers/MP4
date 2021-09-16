@@ -14,7 +14,7 @@ MP4::gmin::gmin(internal::atomBuildType &atomBuild)
     opColorR = _byteswap_ushort(gminData.opColorR);
     opColorG = _byteswap_ushort(gminData.opColorG);
     opColorB = _byteswap_ushort(gminData.opColorB);
-    balance = _byteswap_ushort(gminData.balance);
+    balance = (float)_byteswap_ushort(gminData.balance) / (float)(1 << 8);
     fileStream.close();
 }
 
