@@ -69,11 +69,9 @@ int main(int argc, char* argv[])
     if (true)
     {
         auto mdat = mp4.getMdatCreate();
-        /*
         for ( auto sample : mdat.samples ) {
             std::cout << sample.trackID << " " << sample.ID << std::endl;
         }
-        */
     }
 
     std::cout << "\n**** END ****\n\n";

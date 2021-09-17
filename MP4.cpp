@@ -169,27 +169,21 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 MP4::mdatCreateType MP4::MP4::getMdatCreate()
 {
     mdatCreateType mdatCreate;
+
     // get video time scale and duration
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         mdatCreate.timeScale = mdhd->timeScale;
         mdatCreate.duration = mdhd->duration;
     }
 
-    std::vector<std::vector<sampleType>> tracksSamples;
+    std::vector<samplesType> tracksSamples;
     for ( auto track : getTracks() ) {
         auto samples = track->getSamples();
         if ( samples.mediaDuration != samples.samplesDuration ) continue;
 
         // get the track samples and reverse the vector so we can pop
-        auto trackSamples = samples.samples;
-        std::reverse(trackSamples.begin(),trackSamples.end());
-
-        // convert time and durations to video time scale
-        auto timeScaleMult = (double) mdatCreate.timeScale / samples.mediaTimeScale;
-        for ( size_t index = 0; index < trackSamples.size(); index++ ) {
-            trackSamples[index].time = (uint32_t) (timeScaleMult * trackSamples[index].time);
-            trackSamples[index].duration = (uint32_t) (timeScaleMult * trackSamples[index].duration);
-        }
+        auto trackSamples = samples;
+        std::reverse(trackSamples.samples.begin(),trackSamples.samples.end());
 
         tracksSamples.push_back(trackSamples);
     }
@@ -197,16 +191,19 @@ MP4::mdatCreateType MP4::MP4::getMdatCreate()
     uint32_t time = 0;
     bool samplesDepleted = false;
     do {
-        std::map<uint32_t, std::vector<sampleType> *> timeMap;
+        std::map<uint32_t, samplesType *> timeMap;
         for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
-            if ( tracksSamples[trackIndex].size() != 0 )
-                timeMap[tracksSamples[trackIndex].back().time] = &tracksSamples[trackIndex];
+            if ( tracksSamples[trackIndex].samples.size() != 0 ) {
+                auto timeScaleMult = (double) mdatCreate.timeScale / tracksSamples[trackIndex].mediaTimeScale;
+                auto toVideoTimeScale = (uint32_t) (timeScaleMult * tracksSamples[trackIndex].samples.back().time);
+                timeMap[toVideoTimeScale] = &tracksSamples[trackIndex];
+            }
         }
         if ( timeMap.size() != 0 ) {
             for ( auto samples : timeMap ) {
-                mdatCreate.samples.push_back(samples.second->back());
+                mdatCreate.samples.push_back(samples.second->samples.back());
                 time = samples.first;
-                samples.second->pop_back();
+                samples.second->samples.pop_back();
                 break;
             }
         } else samplesDepleted = true;
