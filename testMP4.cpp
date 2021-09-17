@@ -70,7 +70,13 @@ int main(int argc, char* argv[])
     {
         auto mdat = mp4.getMdatCreate();
         for ( auto sample : mdat.samples ) {
-            std::cout << sample.trackID << " " << sample.ID << std::endl;
+            std::cout
+                << "[" << sample.trackID << "]"
+                << "[" << sample.ID << "] "
+                << sample.time
+                << " " << sample.duration 
+                << " " << sample.filePos 
+                << " " << sample.size << " " << std::endl;
         }
     }
 

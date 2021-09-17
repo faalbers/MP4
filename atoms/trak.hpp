@@ -36,7 +36,6 @@ public:
     samplesType                 getSamples();
     size_t                      getSampleCount();
     std::vector<stsdEntryType>  getSampleDescriptions();
-    sampleType               getSampleAtTime(float sampleTime); // sampleTime in seconds float
 
     std::vector<chunkType>      getChunks();
     size_t                      getChunkCount();

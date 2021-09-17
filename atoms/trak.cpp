@@ -47,21 +47,6 @@ std::shared_ptr<MP4::atom> MP4::trak::getDataReference(std::string dataFormat)
     throw std::runtime_error("MP4: Samples have no data reference of that format !");
 }
 
-MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
-{
-    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
-        auto timeScale = mdhd->timeScale;
-        uint32_t time = (uint32_t) ((float) timeScale * sampleTime);
-        for ( auto sample : getSamples().samples) {
-            if ( time < (sample.time + sample.duration) ) {
-                sample.currentTime = time;
-                return sample;
-            }
-        }
-    }
-    throw std::runtime_error("MP4: No sample found at sampleTime !");
-}
-
 size_t MP4::trak::getSampleCount()
 {
     for ( auto stsz : getTypeAtoms<stsz>() ) {

@@ -25,8 +25,8 @@ typedef struct sampleType
     int64_t     filePos;
     size_t      size;
     uint32_t    time;
-    uint32_t    currentTime;
     uint32_t    duration;
+    uint32_t    timeScale;
 } sampleType;
 
 typedef struct samplesType
