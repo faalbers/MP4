@@ -90,7 +90,7 @@ void MP4::mdat::extract_(std::ofstream &fileWrite,
         if( it == includeTrackIDs.end() ) continue;
         for ( auto chunk : track->getChunks() )
             chunkMap[chunk.dataOffset] = chunk;
-        trackSsamples[track->getID()] = track->getSamples();
+        trackSsamples[track->getID()] = track->getSamples().samples;
     }
     
     uint32_t dataSize;
@@ -100,7 +100,7 @@ void MP4::mdat::extract_(std::ofstream &fileWrite,
         dataSize = 0;
         for ( uint32_t index = 0; index < chunk.second.samples; index++ ) {
             auto sampleIndex = chunk.second.firstSampleID-1+index;
-            dataSize += trackSsamples[chunk.second.trackID][sampleIndex].dataSize;
+            dataSize += trackSsamples[chunk.second.trackID][sampleIndex].size;
         }
         bufferSize = (size_t) dataSize;
         buffer = new char[bufferSize];

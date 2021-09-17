@@ -52,7 +52,7 @@ MP4::sampleType MP4::trak::getSampleAtTime(float sampleTime)
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         auto timeScale = mdhd->timeScale;
         uint32_t time = (uint32_t) ((float) timeScale * sampleTime);
-        for ( auto sample : getSamples()) {
+        for ( auto sample : getSamples().samples) {
             if ( time < (sample.time + sample.duration) ) {
                 sample.currentTime = time;
                 return sample;
@@ -70,7 +70,7 @@ size_t MP4::trak::getSampleCount()
     return 0;
 }
 
-MP4::samplesType MP4::trak::getSamplesNew()
+MP4::samplesType MP4::trak::getSamples()
 {
     samplesType samples;
 
@@ -78,7 +78,7 @@ MP4::samplesType MP4::trak::getSamplesNew()
     samples.filePath = "";
     for ( auto dref : getTypeAtoms<dref>() ) {
         if ( dref->dataReferences.size() > 1 )
-            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple data references");
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple data references");
         if ( dref->dataReferences[0]->key =="url " && ((url_ *) dref->dataReferences[0].get())->dataInSameFile )
             samples.filePath = filePath_;
         if ( dref->dataReferences[0]->key =="alis" && ((alis *) dref->dataReferences[0].get())->dataInSameFile )
@@ -89,7 +89,7 @@ MP4::samplesType MP4::trak::getSamplesNew()
     std::map<uint32_t, std::vector<std::string>> sampleDescriptions;
     for ( auto stsd : getTypeAtoms<stsd>() ) {
         if ( stsd->stsdTable.size() > 1 )
-            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple sample descriptions");
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
         samples.dataFormat = stsd->stsdTable[0].dataFormat;
     }    
 
@@ -104,7 +104,7 @@ MP4::samplesType MP4::trak::getSamplesNew()
     
     // greate samples from time-to-sample and set time and durations
     uint32_t sampleID = 0;
-    sampleNewType sample;
+    sampleType sample;
     uint32_t time = 0;
     for ( auto stts : getTypeAtoms<stts>() ) {
         for ( auto entry : stts->sttsTable ) {
@@ -136,7 +136,7 @@ MP4::samplesType MP4::trak::getSamplesNew()
             }
             sampleID--;
             if ( sampleID != samples.sampleCount )
-                throw std::runtime_error("MP4::getSamplesNew: wrong sample count: "+std::to_string(sampleID));
+                throw std::runtime_error("MP4::getSamples: wrong sample count: "+std::to_string(sampleID));
         } else {
             for ( auto sample : samples.samples )
                 sample.size = stsz->defaultSampleSize;
@@ -147,9 +147,9 @@ MP4::samplesType MP4::trak::getSamplesNew()
     int64_t filePos = 0;
     for ( auto chunk : getChunks() ) {
         if ( chunk.sampleDescriptionID > 1 )
-            throw std::runtime_error("MP4::getSamplesNew: don't know how to handle multiple sample descriptions");
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
         if (filePos > chunk.dataOffset )
-            throw std::runtime_error("MP4::getSamplesNew: wrong file position on samples");
+            throw std::runtime_error("MP4::getSamples: wrong file position on samples");
         auto lastChunkSampleID = chunk.firstSampleID + chunk.samples - 1;
         filePos = chunk.dataOffset;
         for ( auto sampleID = chunk.firstSampleID; sampleID <= lastChunkSampleID; sampleID++ ) {
@@ -158,43 +158,6 @@ MP4::samplesType MP4::trak::getSamplesNew()
         }
     }
 
-    return samples;
-}
-
-std::vector<MP4::sampleType>  MP4::trak::getSamples()
-{
-    std::vector<sampleType> samples;
-    uint32_t                timeScale;
-    for ( auto mdhd : getTypeAtoms<mdhd>() )
-        timeScale = mdhd->timeScale;
-    for ( auto stts : getTypeAtoms<stts>() ) {
-        uint32_t sampleID = 1;
-        uint32_t currentStart = 0;
-        uint32_t defaultSampleSize;               
-        std::vector<uint32_t>   sampleSizes;
-        for ( auto stsz : getTypeAtoms<stsz>() ) {
-            defaultSampleSize = stsz->defaultSampleSize;
-            sampleSizes = stsz->stszTable;
-        }
-        for ( auto entry : stts->sttsTable ) {
-            for ( uint32_t sttsSampleID = 1; sttsSampleID <= entry[0]; sttsSampleID++) {
-                // add a sample
-                sampleType sample;
-                sample.ID = sampleID;
-                sample.duration = entry[1];
-                sample.time = currentStart;
-                sample.currentTime = currentStart;
-                sample.timeScale = timeScale;
-                if ( defaultSampleSize != 0 )
-                    sample.dataSize = defaultSampleSize;
-                else
-                    sample.dataSize = sampleSizes[sampleID - 1];
-                samples.push_back(sample);
-                currentStart += entry[1];
-                sampleID++;
-            }
-        }
-    }
     return samples;
 }
 

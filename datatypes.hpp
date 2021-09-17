@@ -20,27 +20,18 @@ class MP4;
 typedef struct sampleType
 {
     uint32_t    ID;
-    uint32_t    duration;
-    uint32_t    time;
-    uint32_t    currentTime;
-    uint32_t    timeScale;
-    uint32_t    dataSize;
-} sampleType;
-
-typedef struct sampleNewType
-{
-    uint32_t    ID;
     uint32_t    trackID;
     std::string filePath;
     int64_t     filePos;
     size_t      size;
     uint32_t    time;
+    uint32_t    currentTime;
     uint32_t    duration;
-} sampleNewType;
+} sampleType;
 
 typedef struct samplesType
 {
-    std::vector<sampleNewType>  samples;
+    std::vector<sampleType>  samples;
     size_t                      sampleCount;
     uint32_t                    trackID;
     std::string                 filePath;
@@ -52,7 +43,7 @@ typedef struct samplesType
 
 typedef struct mdatCreateType
 {
-    std::vector<sampleNewType>  samples;
+    std::vector<sampleType>  samples;
     uint32_t                    timeScale;
     uint32_t                    duration;
 
