@@ -101,6 +101,7 @@ MP4::samplesType MP4::trak::getSamples()
                 sample.trackID = samples.trackID;
                 sample.time = time;
                 sample.duration = entry[1];
+                sample.timeScale = samples.mediaTimeScale;
                 samples.samples.push_back(sample);
                 time += sample.duration;
                 index++;
