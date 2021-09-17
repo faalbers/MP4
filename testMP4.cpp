@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
     
     if (true)
     {
-        auto mdat = mp4.getMdatCreate();
+        auto mdat = mp4.getSplunk();
         for ( auto sample : mdat.samples ) {
             std::cout
                 << "[" << sample.trackID << "]"

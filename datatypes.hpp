@@ -41,7 +41,7 @@ typedef struct samplesType
     uint32_t                    samplesDuration;
 } samplesType;
 
-typedef struct mdatCreateType
+typedef struct splunkType
 {
     std::vector<sampleType>  samples;
     uint32_t                    timeScale;
@@ -50,7 +50,7 @@ typedef struct mdatCreateType
     //size_t                      sampleCount;
     //std::vector<samplesType>    trackSamples;
     //size_t                      trackCount;
-} mdatCreateType;
+} splunkType;
 
 typedef struct chunkType
 {
