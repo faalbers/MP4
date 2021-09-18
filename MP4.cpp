@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <map>
+#include "atoms_create/root_create.hpp"
 #ifdef MP4_PARSE_TIME
 #include <chrono>
 #endif
@@ -169,11 +170,16 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 MP4::splunkType MP4::MP4::getSplunk()
 {
     splunkType splunk;
+    
+    // initializing unused data
+    splunk.fileWrite = nullptr;
+    splunk.filePath = "";
+    splunk.rootAtom = rootAtom_;
 
     // get video time scale and duration
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
-        splunk.timeScale = mdhd->timeScale;
-        splunk.duration = mdhd->duration;
+        splunk.videoTimeScale = mdhd->timeScale;
+        splunk.videoDuration = mdhd->duration;
     }
 
     std::vector<samplesType> tracksSamples;
@@ -194,7 +200,7 @@ MP4::splunkType MP4::MP4::getSplunk()
         std::map<uint32_t, samplesType *> timeMap;
         for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
             if ( tracksSamples[trackIndex].samples.size() != 0 ) {
-                auto timeScaleMult = (double) splunk.timeScale / tracksSamples[trackIndex].mediaTimeScale;
+                auto timeScaleMult = (double) splunk.videoTimeScale / tracksSamples[trackIndex].mediaTimeScale;
                 auto toVideoTimeScale = (uint32_t) (timeScaleMult * tracksSamples[trackIndex].samples.back().time);
                 timeMap[toVideoTimeScale] = &tracksSamples[trackIndex];
             }
@@ -210,4 +216,18 @@ MP4::splunkType MP4::MP4::getSplunk()
     } while ( !samplesDepleted );
 
     return splunk;
+}
+
+void MP4::MP4::createFromSplunk(splunkType &splunk)
+{
+    splunk.filePath = std::filesystem::absolute(std::filesystem::path(splunk.filePath)).string();
+
+    std::ofstream fileWrite(splunk.filePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.filePath);
+    splunk.fileWrite = &fileWrite;
+
+    root_create create(splunk);
+
+    fileWrite.close();
+    splunk.fileWrite = nullptr;
 }

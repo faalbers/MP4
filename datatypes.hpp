@@ -7,12 +7,14 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <fstream>
 
 namespace MP4
 {
 
 // ********* DATA TYPES *********
 // ID's in MP4 always start with 1 , not 0
+class root;
 class moov;
 class trak;
 class MP4;
@@ -31,25 +33,24 @@ typedef struct sampleType
 
 typedef struct samplesType
 {
-    std::vector<sampleType>  samples;
-    size_t                      sampleCount;
-    uint32_t                    trackID;
-    std::string                 filePath;
-    std::string                 dataFormat;
-    uint32_t                    mediaTimeScale;
-    uint32_t                    mediaDuration;
-    uint32_t                    samplesDuration;
+    std::vector<sampleType> samples;
+    size_t                  sampleCount;
+    uint32_t                trackID;
+    std::string             filePath;
+    std::string             dataFormat;
+    uint32_t                mediaTimeScale;
+    uint32_t                mediaDuration;
+    uint32_t                samplesDuration;
 } samplesType;
 
 typedef struct splunkType
 {
-    std::vector<sampleType>  samples;
-    uint32_t                    timeScale;
-    uint32_t                    duration;
-
-    //size_t                      sampleCount;
-    //std::vector<samplesType>    trackSamples;
-    //size_t                      trackCount;
+    std::vector<sampleType> samples;
+    uint32_t                videoTimeScale;
+    uint32_t                videoDuration;
+    std::shared_ptr<root>   rootAtom;
+    std::string             filePath;
+    std::ofstream           *fileWrite;
 } splunkType;
 
 typedef struct chunkType

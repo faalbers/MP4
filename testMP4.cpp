@@ -68,8 +68,9 @@ int main(int argc, char* argv[])
     
     if (true)
     {
-        auto mdat = mp4.getSplunk();
-        for ( auto sample : mdat.samples ) {
+        auto splunk = mp4.getSplunk();
+        /*
+        for ( auto sample : splunk.samples ) {
             std::cout
                 << "[" << sample.trackID << "]"
                 << "[" << sample.ID << "] "
@@ -78,6 +79,14 @@ int main(int argc, char* argv[])
                 << " " << sample.filePos 
                 << " " << sample.size << " " << std::endl;
         }
+        */
+        splunk.filePath = "splunk_out.MP4";
+        mp4.createFromSplunk(splunk);
+
+        MP4::MP4 mp4Out(splunk.filePath);
+
+        mp4Out.printHierarchy();
+        mp4Out.printHierarchyData();
     }
 
     std::cout << "\n**** END ****\n\n";
