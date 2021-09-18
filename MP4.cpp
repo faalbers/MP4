@@ -111,6 +111,19 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
     fileWrite.close();
 }
 
+void MP4::MP4::createFromSplunk(splunkType &splunk)
+{
+    splunk.filePath = std::filesystem::absolute(std::filesystem::path(splunk.filePath)).string();
+
+    std::ofstream fileWrite(splunk.filePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.filePath);
+    splunk.fileWrite = &fileWrite;
+
+
+    fileWrite.close();
+    splunk.fileWrite = nullptr;
+}
+
 void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
@@ -183,9 +196,16 @@ MP4::splunkType MP4::MP4::getSplunk()
     }
 
     std::vector<samplesType> tracksSamples;
+    std::map<uint32_t, std::string> trackInfo;
     for ( auto track : getTracks() ) {
         auto samples = track->getSamples();
+
+        // exclude tracks where sample duration does not match like fdsc
         if ( samples.mediaDuration != samples.samplesDuration ) continue;
+
+        // add to include tracks map
+        trackInfo[samples.trackID] = samples.dataFormat;
+        //trackInfo.filePath = samples.filePath;
 
         // get the track samples and reverse the vector so we can pop
         auto trackSamples = samples;
@@ -193,6 +213,8 @@ MP4::splunkType MP4::MP4::getSplunk()
 
         tracksSamples.push_back(trackSamples);
     }
+    splunk.includeTracks[filePath] = trackInfo;
+
 
     uint32_t time = 0;
     bool samplesDepleted = false;
@@ -216,10 +238,6 @@ MP4::splunkType MP4::MP4::getSplunk()
     } while ( !samplesDepleted );
 
     return splunk;
-}
-
-void MP4::MP4::createFromSplunk(splunkType &splunk)
-{
 }
 
 void MP4::MP4::createFromSplunkOld(splunkType &splunk)

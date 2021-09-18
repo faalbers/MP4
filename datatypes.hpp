@@ -45,12 +45,13 @@ typedef struct samplesType
 
 typedef struct splunkType
 {
-    std::vector<sampleType> samples;
-    uint32_t                videoTimeScale;
-    uint32_t                videoDuration;
-    root                    *rootAtom;
-    std::string             filePath;
-    std::ofstream           *fileWrite;
+    std::vector<sampleType>         samples;
+    std::map<std::string, std::map<uint32_t, std::string>> includeTracks;
+    uint32_t                        videoTimeScale;
+    uint32_t                        videoDuration;
+    root                            *rootAtom;
+    std::string                     filePath;
+    std::ofstream                   *fileWrite;
 } splunkType;
 
 typedef struct chunkType

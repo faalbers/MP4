@@ -40,9 +40,6 @@ int main(int argc, char* argv[])
             mdia->printHierarchyData();
     }
 
-    //mp4.printHierarchy();
-    //mp4.printHierarchyData();
-
     if (false)
     {
         for ( auto track : mp4.getTracks() ) {
@@ -110,7 +107,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true)
+    if (false)
     {
         auto splunk = mp4.getSplunk();
         /*
@@ -145,6 +142,38 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (true)
+    {
+        auto splunk = mp4.getSplunk();
+        /*
+        for ( auto sample : splunk.samples ) {
+            std::cout
+                << "[" << sample.trackID << "]"
+                << "[" << sample.ID << "] "
+                << sample.time
+                << " " << sample.duration 
+                << " " << sample.filePos 
+                << " " << sample.size
+                << " " << sample.filePath << std::endl;
+        }
+        */
+        for ( auto entry : splunk.includeTracks ) {
+            for ( auto data : entry.second ) {
+                std::cout << "[" << data.first << "] "
+                    << data.second << " " << entry.first << std::endl;
+            }
+        }
+        splunk.filePath = "splunk_out.MP4";
+        mp4.createFromSplunk(splunk);
+
+        //MP4::MP4 mp4Out(splunk.filePath);
+
+        //mp4Out.printHierarchy();
+        //mp4Out.printHierarchyData();
+    }
+
+    //mp4.printHierarchy();
+    //mp4.printHierarchyData();
 
     std::cout << "\n**** END ****\n\n";
 
