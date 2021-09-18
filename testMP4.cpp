@@ -121,7 +121,8 @@ int main(int argc, char* argv[])
                 << sample.time
                 << " " << sample.duration 
                 << " " << sample.filePos 
-                << " " << sample.size << " " << std::endl;
+                << " " << sample.size
+                << " " << sample.filePath << std::endl;
         }
         */
         splunk.filePath = "splunk_out.MP4";
