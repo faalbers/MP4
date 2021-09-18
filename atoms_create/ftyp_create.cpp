@@ -6,7 +6,7 @@
 MP4::ftyp_create::ftyp_create(splunkType &splunk)
     : atom_create("ftyp", splunk.fileWrite)
 {
-    createHeader_(true);
+    createHeader_();
     
     // major brand
     splunk.fileWrite->write(std::string("mp41").c_str(), 4);

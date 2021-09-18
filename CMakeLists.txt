@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD 20)
 #add_compile_definitions(MP4_PARSE_TIME)
 
 file(GLOB ATOMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} atoms/*.cpp )
-add_library(MP4 MP4.cpp ${ATOMS})
+file(GLOB ATOMS_CREATE RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} atoms_create/*.cpp )
+add_library(MP4 MP4.cpp ${ATOMS} ${ATOMS_CREATE})
 target_include_directories(MP4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(testMP4 testMP4.cpp)

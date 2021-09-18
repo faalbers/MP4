@@ -66,6 +66,50 @@ int main(int argc, char* argv[])
         }
     }
     
+        if (false)
+    {
+        auto splunk = mp4.getSplunk();
+        std::map<uint32_t, uint32_t> trackSizeMap;
+        for ( auto sample : splunk.samples ) {
+            if ( trackSizeMap.count(sample.trackID) == 0)
+                trackSizeMap[sample.trackID] = sample.size;
+            else
+                trackSizeMap[sample.trackID] += sample.size;
+        }
+        for ( auto trackSize : trackSizeMap )
+            std::cout << trackSize.first << " " << trackSize.second << std::endl;
+        for ( auto track : mp4.getTracks() ) {
+            /*
+            std::cout << "Track: " << track->getID() << std::endl;
+            uint32_t stszTotal = 0;
+            for ( auto stsz : track->getTypeAtoms<MP4::stsz>() ) {
+                int index = 1;
+                for ( auto size : stsz->stszTable ) {
+                    //std::cout << track->getID() << " " << index << " " << size << std::endl;
+                    stszTotal += size;
+                    index++;
+                }
+            }
+            auto samples = track->getSamples();
+            uint32_t getSamplesTotal = 0;
+            for ( auto sample : samples.samples ) {
+                //std::cout << sample.trackID << " " << sample.ID << " " << sample.size << std::endl;
+                getSamplesTotal += sample.size;
+            }
+            uint32_t splunkTotal = 0;
+            for ( auto sample : splunk.samples ) {
+                if ( sample.trackID == track->getID() ) {
+                    //std::cout << sample.trackID << " " << sample.ID << " " << sample.size << std::endl;
+                    splunkTotal += sample.size;
+                }
+            }
+            */
+            //std::cout << stszTotal << std::endl;
+            //std::cout << getSamplesTotal << std::endl;
+            //std::cout << splunkTotal << std::endl;
+        }
+    }
+
     if (true)
     {
         auto splunk = mp4.getSplunk();
@@ -88,6 +132,18 @@ int main(int argc, char* argv[])
         mp4Out.printHierarchy();
         mp4Out.printHierarchyData();
     }
+
+    if ( false ) {
+        for ( auto track : mp4.getTracks() ) {
+            uint32_t trackSize = 0;
+            for ( auto stsz : track->getTypeAtoms<MP4::stsz>() ) {
+                for ( auto size : stsz->stszTable )
+                    trackSize += size;
+            }
+            std::cout << track->getID() << " " << trackSize << std::endl;
+        }
+    }
+
 
     std::cout << "\n**** END ****\n\n";
 
