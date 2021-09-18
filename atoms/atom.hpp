@@ -78,10 +78,13 @@ protected:
 
     void                            create_(splunkType &splunk);
     void                            createHeader_(splunkType &splunk);
+    void                            createHeaderCopy_(splunkType &splunk);
+    void                            createHeaderNew_(splunkType &splunk, std::string key_ = "", bool size64_ = false);
     void                            createData_(splunkType &splunk);
     void                            createChildren_(splunkType &splunk);
     void                            createTail_(splunkType &splunk);
     
+    bool                                headerSize64_;
     int64_t                             size_;
     std::string                         filePath_;
     std::string                         path_;

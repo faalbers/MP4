@@ -50,9 +50,11 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     dataBlock.size32 = _byteswap_ulong(dataBlock.size32);     // big to little endian
     dataBlock.size64 = _byteswap_uint64(dataBlock.size64);    // big to little endian
     if ( dataBlock.size32 == 1 ) {
+        headerSize64_ = true;
         size_ = (int64_t) dataBlock.size64;
         fileDataPos_ = filePos_ + 16;
     } else {
+        headerSize64_ = false;
         size_ = (int64_t) dataBlock.size32;
         fileDataPos_ = filePos_ + 8;
     }
@@ -338,10 +340,11 @@ void MP4::atom::create_(splunkType &splunk)
 
 void MP4::atom::createHeader(splunkType &splunk)
 {
-    createHeader_(splunk);
+    createHeaderCopy_(splunk);
+    //createHeaderNew_(splunk, key, false);
 }
 
-void MP4::atom::createHeader_(splunkType &splunk)
+void MP4::atom::createHeaderCopy_(splunkType &splunk)
 {
     char    *buffer;
     size_t  bufferSize;
@@ -353,9 +356,8 @@ void MP4::atom::createHeader_(splunkType &splunk)
     // write atom header to new file
     // adjust size later when data is handled
     createHeaderSizePos_ = splunk.fileWrite->tellp();
-    createHeaderSize64_ = false;
+    createHeaderSize64_ = headerSize64_;
     bufferSize = (size_t) (fileDataPos_ - filePos_);
-    if ( bufferSize == 16 ) createHeaderSize64_ = true;
     buffer = new char[bufferSize];
     fileRead.read(buffer, bufferSize);
     splunk.fileWrite->write(buffer, bufferSize);
@@ -371,6 +373,26 @@ void MP4::atom::createHeader_(splunkType &splunk)
     splunk.fileWrite->seekp(comeBack, splunk.fileWrite->beg);
     */
 
+}
+
+void MP4::atom::createHeaderNew_(splunkType &splunk, std::string key_, bool size64_)
+{
+    if ( splunk.fileWrite == nullptr )
+        throw std::runtime_error("MP4::stom_create has no file write strezm");
+    
+    // create atom header
+    createHeaderSizePos_ = splunk.fileWrite->tellp();
+    createHeaderSize64_ = size64_;
+    datablock::atomHeaderBlock  atomHeader;
+    size_t headerSize;
+    if ( createHeaderSize64_ ) {
+        headerSize = sizeof(atomHeader);
+        atomHeader.size32 = _byteswap_ulong((uint32_t) 1);
+    } else {
+        headerSize = 8;
+    }
+    memcpy(&atomHeader.key, key_.c_str(), 4);
+    splunk.fileWrite->write((char *) &atomHeader, headerSize);
 }
 
 void MP4::atom::createChildren(splunkType &splunk)
