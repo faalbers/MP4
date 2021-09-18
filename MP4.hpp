@@ -33,6 +33,7 @@ public:
 
     splunkType getSplunk();
     void createFromSplunk(splunkType &splunk);
+    void createFromSplunkOld(splunkType &splunk);
 
     std::string                         filePath;
     int64_t                             fileSize;

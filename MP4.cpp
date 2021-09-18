@@ -174,7 +174,7 @@ MP4::splunkType MP4::MP4::getSplunk()
     // initializing unused data
     splunk.fileWrite = nullptr;
     splunk.filePath = "";
-    splunk.rootAtom = rootAtom_;
+    splunk.rootAtom = rootAtom_.get();
 
     // get video time scale and duration
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
@@ -219,6 +219,10 @@ MP4::splunkType MP4::MP4::getSplunk()
 }
 
 void MP4::MP4::createFromSplunk(splunkType &splunk)
+{
+}
+
+void MP4::MP4::createFromSplunkOld(splunkType &splunk)
 {
     splunk.filePath = std::filesystem::absolute(std::filesystem::path(splunk.filePath)).string();
 

@@ -34,6 +34,7 @@ public:
 
     static std::string  key;
 
+    friend class root_create;
 };
 
 }

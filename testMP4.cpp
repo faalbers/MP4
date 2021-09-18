@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
         }
         */
         splunk.filePath = "splunk_out.MP4";
-        mp4.createFromSplunk(splunk);
+        mp4.createFromSplunkOld(splunk);
 
         MP4::MP4 mp4Out(splunk.filePath);
 

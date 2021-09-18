@@ -48,7 +48,7 @@ typedef struct splunkType
     std::vector<sampleType> samples;
     uint32_t                videoTimeScale;
     uint32_t                videoDuration;
-    std::shared_ptr<root>   rootAtom;
+    root                    *rootAtom;
     std::string             filePath;
     std::ofstream           *fileWrite;
 } splunkType;
