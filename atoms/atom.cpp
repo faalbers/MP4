@@ -318,6 +318,128 @@ MP4::atom *MP4::atom::childMatch_(atom *childAtom, atom *parentSearchAtom)
     return nullptr;
 }
 
+void MP4::atom::create(splunkType &splunk)
+{
+    create_(splunk);
+}
+
+void MP4::atom::create_(splunkType &splunk)
+{
+    createHeader(splunk);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        createData(splunk);
+    else
+        createChildren(splunk);
+
+    createTail(splunk);
+}
+
+void MP4::atom::createHeader(splunkType &splunk)
+{
+    createHeader_(splunk);
+}
+
+void MP4::atom::createHeader_(splunkType &splunk)
+{
+    char    *buffer;
+    size_t  bufferSize;
+    
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::Atom::createHeader can not parse file: "+filePath_);
+    fileRead.seekg(filePos_, fileRead.beg);
+
+    // write atom header to new file
+    // adjust size later when data is handled
+    createHeaderSizePos_ = splunk.fileWrite->tellp();
+    createHeaderSize64_ = false;
+    bufferSize = (size_t) (fileDataPos_ - filePos_);
+    if ( bufferSize == 16 ) createHeaderSize64_ = true;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    splunk.fileWrite->write(buffer, bufferSize);
+    delete[] buffer;
+    fileRead.close();
+
+    // temporary name overwrite for testing
+    /*
+    auto comeBack = splunk.fileWrite->tellp();
+    splunk.fileWrite->seekp(createHeaderSizePos_, splunk.fileWrite->beg);
+    splunk.fileWrite->seekp(4, splunk.fileWrite->cur);
+    splunk.fileWrite->write(std::string("blob").c_str(), 4);
+    splunk.fileWrite->seekp(comeBack, splunk.fileWrite->beg);
+    */
+
+}
+
+void MP4::atom::createChildren(splunkType &splunk)
+{
+    createChildren_(splunk);
+}
+
+void MP4::atom::createChildren_(splunkType &splunk)
+{
+    for ( auto child : children_ ) child->create(splunk);
+}
+
+void MP4::atom::createTail(splunkType &splunk)
+{
+    createTail_(splunk);
+}
+
+void MP4::atom::createData(splunkType &splunk)
+{
+    createData_(splunk);
+}
+
+void MP4::atom::createData_(splunkType &splunk)
+{
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::createData_ can not parse file: "+filePath_);
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    
+    // write buffer blocks
+    // this seems to be the most optimal block size
+    size_t bufferSize = 1024*512;
+    auto buffer = new char[bufferSize];
+    auto bufferCount = (size_t) dataSize_ / bufferSize;
+
+    for ( size_t count = 0; count < bufferCount; count++ ) {
+        fileRead.read(buffer, bufferSize);
+        splunk.fileWrite->write(buffer, bufferSize);
+    }
+    delete[] buffer;
+
+    // write buffer rest
+    bufferSize = (size_t) dataSize_ % bufferSize;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    splunk.fileWrite->write(buffer, bufferSize);
+    delete[] buffer;
+
+    fileRead.close();
+}
+
+void MP4::atom::createTail_(splunkType &splunk)
+{
+    // after writing the atom's data we need to fix the atom size
+    auto createNextPos = splunk.fileWrite->tellp();
+    if ( createHeaderSize64_ ) {
+        auto createSize = (uint64_t) (createNextPos - createHeaderSizePos_);
+        createSize = _byteswap_uint64(createSize);
+        splunk.fileWrite->seekp(createHeaderSizePos_, splunk.fileWrite->beg);
+        splunk.fileWrite->seekp(8, splunk.fileWrite->cur);
+        splunk.fileWrite->write((char *) &createSize, sizeof(createSize));
+    } else {
+        auto createSize = (uint32_t) (createNextPos - createHeaderSizePos_);
+        createSize = _byteswap_ulong(createSize);
+        splunk.fileWrite->seekp(createHeaderSizePos_, splunk.fileWrite->beg);
+        splunk.fileWrite->write((char *) &createSize, sizeof(createSize));
+    }
+    splunk.fileWrite->seekp(createNextPos, splunk.fileWrite->beg);
+}
+
 std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;

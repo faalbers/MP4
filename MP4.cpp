@@ -119,6 +119,7 @@ void MP4::MP4::createFromSplunk(splunkType &splunk)
     if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.filePath);
     splunk.fileWrite = &fileWrite;
 
+    rootAtom_->create(splunk);
 
     fileWrite.close();
     splunk.fileWrite = nullptr;

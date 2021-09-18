@@ -37,11 +37,18 @@ public:
     virtual std::tuple<int64_t, bool>   writeHeader(std::ofstream &fileWrite);
     virtual void                        writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
+    
     virtual void                        append(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual std::tuple<int64_t, bool>   appendHeader(std::ofstream &fileWrite);
     virtual void                        appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     virtual void                        appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    
+
+    virtual void                        create(splunkType &splunk);
+    virtual void                        createHeader(splunkType &splunk);
+    virtual void                        createData(splunkType &splunk);
+    virtual void                        createChildren(splunkType &splunk);
+    virtual void                        createTail(splunkType &splunk);
+
     std::string     key;
 
 protected:
@@ -57,15 +64,23 @@ protected:
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
+    
     void                            write_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     std::tuple<int64_t, bool>       writeHeader_(std::ofstream &fileWrite);
     void                            writeData_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     void                            writeChildren_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     void                            writeTail_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit);
+    
     void                            append_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     //void                            appendData_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     void                            appendChildren_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     static atom                     *childMatch_(atom *childAtom, atom *parentSearchAtom);
+
+    void                            create_(splunkType &splunk);
+    void                            createHeader_(splunkType &splunk);
+    void                            createData_(splunkType &splunk);
+    void                            createChildren_(splunkType &splunk);
+    void                            createTail_(splunkType &splunk);
     
     int64_t                             size_;
     std::string                         filePath_;
@@ -76,6 +91,8 @@ protected:
     std::vector<std::shared_ptr<atom>>  children_;
     moov                                *moovAtom_;
     trak                                *trakAtom_;
+    int64_t                             createHeaderSizePos_;
+    bool                                createHeaderSize64_;
 };
 
 }

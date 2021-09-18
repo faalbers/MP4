@@ -32,6 +32,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void create(splunkType &splunk);
+    
     static std::string  key;
 
     friend class root_create;

@@ -166,10 +166,10 @@ int main(int argc, char* argv[])
         splunk.filePath = "splunk_out.MP4";
         mp4.createFromSplunk(splunk);
 
-        //MP4::MP4 mp4Out(splunk.filePath);
+        MP4::MP4 mp4Out(splunk.filePath);
 
-        //mp4Out.printHierarchy();
-        //mp4Out.printHierarchyData();
+        mp4Out.printHierarchy();
+        mp4Out.printHierarchyData();
     }
 
     //mp4.printHierarchy();
