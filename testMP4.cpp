@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
 
         MP4::MP4 mp4Out(splunk.filePath);
 
-        mp4Out.printHierarchy();
+        //mp4Out.printHierarchy();
         mp4Out.printHierarchyData();
     }
 

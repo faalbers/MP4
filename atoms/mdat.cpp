@@ -125,5 +125,50 @@ void MP4::mdat::extract_(std::ofstream &fileWrite,
     }
 }
 
+void MP4::mdat::createHeader(splunkType &splunk)
+{
+    //createHeaderCopy_(splunk);
+    createHeaderNew_(splunk, key, true);
+}
+
+void MP4::mdat::createData(splunkType &splunk)
+{
+    //createData_(splunk);
+    //return;
+
+    if (  splunk.samples.size() == 0 ) {
+        createData_(splunk);
+        return;
+    }
+
+    std::string readPath = splunk.samples[0].filePath;
+    std::ifstream fileRead(readPath, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::mdat::createData can not parse file: "+readPath);
+
+    // find largest sample size
+    size_t bufferSize = 0;
+    for ( auto sample : splunk.samples )
+        if ( sample.size > bufferSize ) bufferSize = sample.size;
+
+    //now copy sample buffers
+    auto buffer = new char[bufferSize];
+    for ( size_t index = 0; index < splunk.samples.size(); index++ ) {
+        if ( splunk.samples[index].filePath != readPath ) {
+            readPath = splunk.samples[index].filePath;
+            fileRead.close();
+            fileRead = std::ifstream(readPath, std::ios::binary);
+            if ( fileRead.fail() ) throw std::runtime_error("MP4::mdat::createData can not parse file: "+readPath);
+        }
+        fileRead.seekg(splunk.samples[index].filePos, fileRead.beg);
+        fileRead.read(buffer, splunk.samples[index].size);
+        splunk.samples[index].filePos = (uint64_t) splunk.fileWrite->tellp();
+        splunk.samples[index].filePath = splunk.filePath;
+        splunk.fileWrite->write(buffer, splunk.samples[index].size);
+    }
+    delete[] buffer;
+
+    fileRead.close();
+}
+
 std::string MP4::mdat::key = "mdat";
 

@@ -120,5 +120,41 @@ void MP4::co64::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     }
 }
 
+void MP4::co64::createData(splunkType &splunk)
+{
+    if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
+        createData_(splunk);
+        return;
+    } else if ( splunk.includeTracks[filePath_].find(trakAtom_->getID()) == splunk.includeTracks[filePath_].end() ) {
+        createData_(splunk);
+        return;
+    }
+
+    auto trackID = trakAtom_->getID();
+
+    datablock::atomTableBlock stcoData;
+    stcoData.version = 0;
+    stcoData.flag[0] = 0;
+    stcoData.flag[1] = 0;
+    stcoData.flag[2] = 0;
+
+    splunk.fileWrite->write((char *) &stcoData, sizeof(stcoData));
+    auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
+    uint32_t sampleCount = 0;
+    for ( auto sample : splunk.samples ) {
+        if ( sample.trackID == trackID && sample.filePath == splunk.filePath ) {
+            auto offset = _byteswap_uint64((uint64_t) sample.filePos);
+            splunk.fileWrite->write((char *) &offset, sizeof(offset));
+            sampleCount++;
+        }
+    }
+    auto lastPos = splunk.fileWrite->tellp();
+    splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
+    sampleCount = _byteswap_ulong(sampleCount);
+    splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
+    splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
+    
+}
+
 std::string MP4::co64::key = "co64";
 
