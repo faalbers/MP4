@@ -55,9 +55,9 @@ size_t MP4::trak::getSampleCount()
     return 0;
 }
 
-MP4::samplesType MP4::trak::getSamples()
+MP4::trackSamplesType MP4::trak::getSamples()
 {
-    samplesType samples;
+    trackSamplesType samples;
 
     // get data references
     samples.filePath = "";
@@ -97,11 +97,8 @@ MP4::samplesType MP4::trak::getSamples()
             do {
                 sampleID++;
                 sample.ID = sampleID;
-                sample.filePath =  samples.filePath;
-                sample.trackID = samples.trackID;
                 sample.time = time;
                 sample.duration = entry[1];
-                sample.timeScale = samples.mediaTimeScale;
                 samples.samples.push_back(sample);
                 time += sample.duration;
                 index++;

@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
             std::cout << "Samples Time Scale: " << samples.samplesDuration << std::endl;
             for ( auto sample : samples.samples )
                 std::cout
-                    << "[" << sample.trackID << "]"
+                    << "[" << samples.trackID << "]"
                     << "[" << sample.ID << "] "
                     << sample.time
                     << " " << sample.duration 

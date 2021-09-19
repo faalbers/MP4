@@ -22,17 +22,13 @@ class MP4;
 typedef struct sampleType
 {
     uint32_t    ID;
-    uint32_t    trackID;
-    std::string filePath;
     int64_t     filePos;
     size_t      size;
     uint32_t    time;
     uint32_t    duration;
-    uint32_t    timeScale;
-    std::string format;
 } sampleType;
 
-typedef struct samplesType
+typedef struct trackSamplesType
 {
     std::vector<sampleType> samples;
     size_t                  sampleCount;
@@ -42,11 +38,24 @@ typedef struct samplesType
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
     uint32_t                samplesDuration;
-} samplesType;
+} trackSamplesType;
+
+typedef struct splunkSampleType
+{
+    uint32_t    ID;
+    uint32_t    trackID;
+    std::string filePath;
+    int64_t     filePos;
+    size_t      size;
+    uint32_t    time;
+    uint32_t    duration;
+    uint32_t    timeScale;
+    std::string format;
+} splunkSampleType;
 
 typedef struct splunkType
 {
-    std::vector<sampleType>         samples;
+    std::vector<splunkSampleType>   samples;
     std::map<std::string, std::map<uint32_t, std::string>> includeTracks;
     uint32_t                        videoTimeScale;
     uint32_t                        videoDuration;

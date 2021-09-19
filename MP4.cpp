@@ -197,7 +197,7 @@ MP4::splunkType MP4::MP4::getSplunk()
         splunk.videoDuration = mvhd->duration;
     }
 
-    std::vector<samplesType> tracksSamples;
+    std::vector<trackSamplesType> tracksSamples;
     std::map<uint32_t, std::string> trackInfo;
     for ( auto track : getTracks() ) {
         auto samples = track->getSamples();
@@ -229,7 +229,7 @@ MP4::splunkType MP4::MP4::getSplunk()
     uint32_t time = 0;
     bool samplesDepleted = false;
     do {
-        std::map<uint32_t, samplesType *> timeMap;
+        std::map<uint32_t, trackSamplesType *> timeMap;
         for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
             if ( tracksSamples[trackIndex].samples.size() != 0 ) {
                 auto timeScaleMult = (double) splunk.videoTimeScale / tracksSamples[trackIndex].mediaTimeScale;
@@ -239,7 +239,17 @@ MP4::splunkType MP4::MP4::getSplunk()
         }
         if ( timeMap.size() != 0 ) {
             for ( auto samples : timeMap ) {
-                splunk.samples.push_back(samples.second->samples.back());
+                splunkSampleType splunkSample;
+                splunkSample.ID = samples.second->samples.back().ID;
+                splunkSample.filePos = samples.second->samples.back().filePos;
+                splunkSample.size = samples.second->samples.back().size;
+                splunkSample.time = samples.second->samples.back().time;
+                splunkSample.duration = samples.second->samples.back().duration;
+                splunkSample.trackID = samples.second->trackID;
+                splunkSample.filePath = samples.second->filePath;
+                splunkSample.timeScale = samples.second->mediaTimeScale;
+                splunkSample.format = samples.second->dataFormat;
+                splunk.samples.push_back(splunkSample);
                 time = samples.first;
                 samples.second->samples.pop_back();
                 break;
