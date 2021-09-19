@@ -147,5 +147,51 @@ void MP4::stts::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     //writeData_(fileWrite, writeInfo);
 }
 
+void MP4::stts::createData(splunkType &splunk)
+{
+    //createData_(splunk);
+
+    std::vector<uint32_t> sampleDurations;
+    auto trackID = trakAtom_->getID();
+    for ( auto sample : splunk.samples ) {
+        if ( sample.trackID == trackID && sample.filePath == splunk.filePath ) {
+            sampleDurations.push_back(sample.duration);
+        }
+    }
+    sampleDurations.push_back(0);
+
+    std::vector<std::vector<uint32_t>> sttsNew;
+    uint32_t sampleCounter = 0;
+    uint32_t lastDuration = sampleDurations[0];
+    for ( auto duration : sampleDurations ) {
+        if ( duration != lastDuration) {
+            std::vector<uint32_t> entry;
+            entry.push_back(sampleCounter);
+            entry.push_back(lastDuration);
+            sttsNew.push_back(entry);
+            sampleCounter = 0;
+        }
+        sampleCounter++;
+        lastDuration = duration;
+    }
+
+    datablock::atomTableBlock sttsData;
+    sttsData.version = 0;
+    sttsData.flag[0] = 0;
+    sttsData.flag[1] = 0;
+    sttsData.flag[2] = 0;
+    sttsData.numberOfEntries = _byteswap_ulong((uint32_t) sttsNew.size());
+
+    splunk.fileWrite->write((char *) &sttsData, sizeof(sttsData));
+
+    uint32_t entryVal;
+    for ( auto entry : sttsNew ) {
+        entryVal = _byteswap_ulong(entry[0]);
+        splunk.fileWrite->write((char *) &entryVal, sizeof(entryVal));
+        entryVal = _byteswap_ulong(entry[1]);
+        splunk.fileWrite->write((char *) &entryVal, sizeof(entryVal));
+    }
+}
+
 std::string MP4::stts::key = "stts";
 

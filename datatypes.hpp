@@ -29,6 +29,7 @@ typedef struct sampleType
     uint32_t    time;
     uint32_t    duration;
     uint32_t    timeScale;
+    std::string format;
 } sampleType;
 
 typedef struct samplesType

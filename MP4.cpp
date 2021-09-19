@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <map>
+#include <algorithm>
 #include "atoms_create/root_create.hpp"
 #ifdef MP4_PARSE_TIME
 #include <chrono>
@@ -191,9 +192,9 @@ MP4::splunkType MP4::MP4::getSplunk()
     splunk.rootAtom = rootAtom_.get();
 
     // get video time scale and duration
-    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
-        splunk.videoTimeScale = mdhd->timeScale;
-        splunk.videoDuration = mdhd->duration;
+    for ( auto mvhd : getTypeAtoms<mvhd>() ) {
+        splunk.videoTimeScale = mvhd->timeScale;
+        splunk.videoDuration = mvhd->duration;
     }
 
     std::vector<samplesType> tracksSamples;
@@ -206,10 +207,18 @@ MP4::splunkType MP4::MP4::getSplunk()
 
         // add to include tracks map
         trackInfo[samples.trackID] = samples.dataFormat;
-        //trackInfo.filePath = samples.filePath;
 
-        // get the track samples and reverse the vector so we can pop
+        // flatten media duration to video duration
+        auto timeScaleMult = (double) splunk.videoTimeScale / samples.mediaTimeScale;
+        double toVideoTimeScale = timeScaleMult * (double) samples.mediaDuration;
+        int64_t timeDifference = ((double) splunk.videoDuration - toVideoTimeScale) / timeScaleMult;        
+
+        // get the track samples and flatten last sample duration with difference to video duration
         auto trackSamples = samples;
+        auto updatedDuration = std::max((int64_t)trackSamples.samples.back().duration + timeDifference, (int64_t)0);
+        trackSamples.samples.back().duration = (uint32_t)updatedDuration;
+
+        // reverse for popping
         std::reverse(trackSamples.samples.begin(),trackSamples.samples.end());
 
         tracksSamples.push_back(trackSamples);
