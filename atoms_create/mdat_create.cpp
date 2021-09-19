@@ -31,7 +31,7 @@ MP4::mdat_create::mdat_create(splunkType &splunk)
             fileRead.seekg(splunk.samples[index].filePos, fileRead.beg);
             fileRead.read(buffer, splunk.samples[index].size);
             splunk.samples[index].filePos = fileWrite_->tellp();
-            splunk.samples[index].filePath = splunk.filePath;
+            splunk.samples[index].filePath = splunk.fileWritePath;
             fileWrite_->write(buffer, splunk.samples[index].size);
         }
         delete[] buffer;

@@ -114,10 +114,10 @@ void MP4::MP4::write(std::string filePath_, writeSettingsType &writeSettings)
 
 void MP4::MP4::createFromSplunk(splunkType &splunk)
 {
-    splunk.filePath = std::filesystem::absolute(std::filesystem::path(splunk.filePath)).string();
+    splunk.fileWritePath = std::filesystem::absolute(std::filesystem::path(splunk.fileWritePath)).string();
 
-    std::ofstream fileWrite(splunk.filePath, std::ios::binary);
-    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.filePath);
+    std::ofstream fileWrite(splunk.fileWritePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.fileWritePath);
     splunk.fileWrite = &fileWrite;
 
     rootAtom_->create(splunk);
@@ -188,7 +188,7 @@ MP4::splunkType MP4::MP4::getSplunk()
     
     // initializing unused data
     splunk.fileWrite = nullptr;
-    splunk.filePath = "";
+    splunk.fileWritePath = "";
     splunk.rootAtom = rootAtom_.get();
 
     // get video time scale and duration
@@ -262,10 +262,10 @@ MP4::splunkType MP4::MP4::getSplunk()
 
 void MP4::MP4::createFromSplunkOld(splunkType &splunk)
 {
-    splunk.filePath = std::filesystem::absolute(std::filesystem::path(splunk.filePath)).string();
+    splunk.fileWritePath = std::filesystem::absolute(std::filesystem::path(splunk.fileWritePath)).string();
 
-    std::ofstream fileWrite(splunk.filePath, std::ios::binary);
-    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.filePath);
+    std::ofstream fileWrite(splunk.fileWritePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.fileWritePath);
     splunk.fileWrite = &fileWrite;
 
     root_create create(splunk);

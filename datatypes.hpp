@@ -60,7 +60,7 @@ typedef struct splunkType
     uint32_t                        videoTimeScale;
     uint32_t                        videoDuration;
     root                            *rootAtom;
-    std::string                     filePath;
+    std::string                     fileWritePath;
     std::ofstream                   *fileWrite;
 } splunkType;
 

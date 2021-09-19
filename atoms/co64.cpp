@@ -142,7 +142,7 @@ void MP4::co64::createData(splunkType &splunk)
     auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.filePath == splunk.filePath ) {
+        if ( sample.trackID == trackID && sample.filePath == splunk.fileWritePath ) {
             auto offset = _byteswap_uint64((uint64_t) sample.filePos);
             splunk.fileWrite->write((char *) &offset, sizeof(offset));
             sampleCount++;

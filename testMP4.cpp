@@ -122,10 +122,10 @@ int main(int argc, char* argv[])
                 << " " << sample.filePath << std::endl;
         }
         */
-        splunk.filePath = "splunk_out.MP4";
+        splunk.fileWritePath = "splunk_out.MP4";
         mp4.createFromSplunkOld(splunk);
 
-        MP4::MP4 mp4Out(splunk.filePath);
+        MP4::MP4 mp4Out(splunk.fileWritePath);
 
         mp4Out.printHierarchy();
         mp4Out.printHierarchyData();
@@ -163,10 +163,10 @@ int main(int argc, char* argv[])
                     << data.second << " " << entry.first << std::endl;
             }
         }
-        splunk.filePath = "splunk_out.MP4";
+        splunk.fileWritePath = "splunk_out.MP4";
         mp4.createFromSplunk(splunk);
 
-        MP4::MP4 mp4Out(splunk.filePath);
+        MP4::MP4 mp4Out(splunk.fileWritePath);
 
         //mp4Out.printHierarchy();
         mp4Out.printHierarchyData();

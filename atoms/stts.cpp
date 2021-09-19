@@ -154,7 +154,7 @@ void MP4::stts::createData(splunkType &splunk)
     std::vector<uint32_t> sampleDurations;
     auto trackID = trakAtom_->getID();
     for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.filePath == splunk.filePath ) {
+        if ( sample.trackID == trackID && sample.filePath == splunk.fileWritePath ) {
             sampleDurations.push_back(sample.duration);
         }
     }
