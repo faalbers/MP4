@@ -141,18 +141,22 @@ void MP4::mdat::createData(splunkType &splunk)
         return;
     }
 
-    std::string readPath = splunk.samples[0].filePath;
-    std::ifstream fileRead(readPath, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("MP4::mdat::createData can not parse file: "+readPath);
 
     // find largest sample size
     size_t bufferSize = 0;
     for ( auto sample : splunk.samples )
         if ( sample.size > bufferSize ) bufferSize = sample.size;
 
+    std::string readPath = splunk.samples[0].filePath;
+    std::ifstream fileRead(readPath, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::mdat::createData can not parse file: "+readPath);
+
     //now copy sample buffers
     auto buffer = new char[bufferSize];
     for ( size_t index = 0; index < splunk.samples.size(); index++ ) {
+
+        continue;
+
         if ( splunk.samples[index].filePath != readPath ) {
             readPath = splunk.samples[index].filePath;
             fileRead.close();

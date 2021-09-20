@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     if (true)
     {
-        auto splunk = mp4A.appendSplunk(mp4B, "splunk_append.MP4");
+        auto splunk = mp4A.appendSplunk(mp4B);
         /*
         for ( auto sample : splunk.samples ) {
             std::cout
@@ -60,14 +60,23 @@ int main(int argc, char* argv[])
                 << " " << sample.filePath << std::endl;
         }
         */
-        /*
+
+        for ( auto trackMatchPath : splunk.trackMatchB ) {
+            std::cout << "Path: " << trackMatchPath.first << std::endl;
+            for ( auto trackMatch : trackMatchPath.second ) {
+                std::cout << "  Track: " << trackMatch.first << std::endl;
+                for ( auto thisMatch : trackMatch.second ) {
+                    std::cout << "    -> " << thisMatch << std::endl;
+                }
+            }
+        }
+
         for ( auto entry : splunk.includeTracks ) {
             for ( auto data : entry.second ) {
                 std::cout << "[" << data.first << "] "
                     << data.second << " " << entry.first << std::endl;
             }
         }
-        */
 
         //splunk.fileWritePath = "splunk_append.MP4";
         //mp4A.createFromSplunk(splunk);

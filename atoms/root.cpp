@@ -48,7 +48,9 @@ void MP4::root::printHierarchyData(bool fullLists)
 
 void MP4::root::create(splunkType &splunk)
 {
-    for ( auto child : children_ ) child->create(splunk);
+    for ( auto child : children_ ) {
+        if ( child->key == "mdat" ) child->create(splunk);
+    }
 }
 
 std::string MP4::root::key = "root";

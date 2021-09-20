@@ -60,6 +60,8 @@ typedef struct splunkType
     std::map<std::string, std::map<uint32_t, std::string>>                                  includeTracks;
     // trackMatch["filePath"][trackID][file Path to match] =  = matching trackID set
     std::map<std::string, std::map<uint32_t, std::map<std::string, std::set<uint32_t>>>>    trackMatch;
+    // trackMatchB["filePath"][trackID] =  = matching trackID set
+    std::map<std::string, std::map<uint32_t, std::set<uint32_t>>>                           trackMatchB;
     uint32_t                        videoTimeScale;
     uint32_t                        videoDuration;
     root                            *rootAtom;
