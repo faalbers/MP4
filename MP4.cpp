@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <map>
+#include <set>
 #include <algorithm>
 #include "atoms_create/root_create.hpp"
 #ifdef MP4_PARSE_TIME
@@ -256,7 +257,79 @@ MP4::splunkType MP4::MP4::getSplunk()
             }
         } else samplesDepleted = true;
     } while ( !samplesDepleted );
+    return splunk;
+}
 
+MP4::splunkType MP4::MP4::appendSplunk(MP4 &appendMP4, std::string fileWritePath)
+{
+    auto splunk = getSplunk();
+    auto splunkAppend = appendMP4.getSplunk();
+
+    std::cout << splunk.videoDuration << " " << splunkAppend.videoDuration << std::endl;
+
+    // trackMatchMap[trackID][file Path to match] = matching trackID set
+    std::map<uint32_t, std::map<std::string, std::set<uint32_t>>> trackMatchMap;
+    for ( auto includeMap : splunk.includeTracks[filePath] ) {
+        // trackMatch[file Path to match] = matching trackID
+        std::map<std::string, std::set<uint32_t>> trackMatch;
+        for ( auto appendIncludeMap : splunkAppend.includeTracks ) {
+            if ( appendIncludeMap.first != filePath) {
+                // set of matching track ID's
+                std::set<uint32_t> trackIDs;
+                for ( auto appendMap : splunkAppend.includeTracks[appendIncludeMap.first] ) {
+                    if ( appendMap.second == includeMap.second) {
+                        trackIDs.insert(appendMap.first);
+                    }
+                }
+                if ( trackIDs.size() != 0 ) trackMatch[appendIncludeMap.first] = trackIDs;
+            }
+        }
+        if ( trackMatch.size() != 0 ) trackMatchMap[includeMap.first] = trackMatch;
+    }
+    std::cout << std::endl;
+
+    // addSamplesFrom[file path] = trackID set
+    std::map<std::string, std::set<uint32_t>> addSamplesFrom;
+    for ( auto trackMatch : trackMatchMap ) {
+        std::cout << "Track matches for Track: " << trackMatch.first << std::endl;
+        for ( auto fileMatch : trackMatch.second ) {
+            std::cout << "    file path: " << fileMatch.first << std::endl;
+            if ( addSamplesFrom.find(fileMatch.first) == addSamplesFrom.end() ) {
+                addSamplesFrom[fileMatch.first] = std::set<uint32_t>();
+            }
+            for ( auto trackID : fileMatch.second ) {
+                std::cout << "    Track ID: " << trackID << std::endl;
+                addSamplesFrom[fileMatch.first].insert(trackID);
+            }
+        }
+    }
+
+    if ( trackMatchMap.size() != 0 ) splunk.trackMatch[filePath] = trackMatchMap;
+
+    for ( auto sample : splunkAppend.samples ) {
+        if ( addSamplesFrom.find(sample.filePath) != addSamplesFrom.end() ) {
+            if ( addSamplesFrom[sample.filePath].find(sample.trackID) != addSamplesFrom[sample.filePath].end() )
+                splunk.samples.push_back(sample);
+        }
+    }
+
+    if ( splunk.videoTimeScale == splunkAppend.videoTimeScale ) {
+        splunk.videoDuration += splunkAppend.videoDuration;
+    } else {
+        throw std::runtime_error("MP4::MP4::appendSplunk Did not implement different timescale append yet");
+    }
+
+    splunk.fileWritePath = std::filesystem::absolute(std::filesystem::path(fileWritePath)).string();
+
+    std::ofstream fileWrite(splunk.fileWritePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("MP4::MP4::appendSplunk: Can not write MP4 file: "+splunk.fileWritePath);
+    splunk.fileWrite = &fileWrite;
+
+    //rootAtom_->create(splunk);
+
+    fileWrite.close();
+    splunk.fileWrite = nullptr;
+   
     return splunk;
 }
 

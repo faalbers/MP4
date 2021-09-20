@@ -32,6 +32,7 @@ public:
     void    append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings);
 
     splunkType getSplunk();
+    splunkType appendSplunk(MP4 &appendMP4, std::string fileWritePath);
     void createFromSplunk(splunkType &splunk);
     void createFromSplunkOld(splunkType &splunk);
 

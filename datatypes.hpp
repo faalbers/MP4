@@ -56,7 +56,10 @@ typedef struct splunkSampleType
 typedef struct splunkType
 {
     std::vector<splunkSampleType>   samples;
-    std::map<std::string, std::map<uint32_t, std::string>> includeTracks;
+    // includeTracks["filePath"][trackID] = dataFormat
+    std::map<std::string, std::map<uint32_t, std::string>>                                  includeTracks;
+    // trackMatch["filePath"][trackID][file Path to match] =  = matching trackID set
+    std::map<std::string, std::map<uint32_t, std::map<std::string, std::set<uint32_t>>>>    trackMatch;
     uint32_t                        videoTimeScale;
     uint32_t                        videoDuration;
     root                            *rootAtom;
