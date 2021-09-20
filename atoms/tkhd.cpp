@@ -84,5 +84,18 @@ void MP4::tkhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     fileWrite.write((char *) &tkhdData, sizeof(tkhdData));
 }
 
+void MP4::tkhd::createData(splunkType &splunk)
+{
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("tkhd atom can not parse file: "+filePath_);
+    datablock::tkhdDataBlock tkhdData;
+    fileStream.seekg(fileDataPos_, fileStream.beg);
+    fileStream.read((char *) &tkhdData, sizeof(tkhdData));
+    tkhdData.duration = _byteswap_ulong(splunk.videoDuration);
+
+    splunk.fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
+
+}
+
 std::string MP4::tkhd::key = "tkhd";
 

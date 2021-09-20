@@ -1,6 +1,7 @@
 #include "mdhd.hpp"
 #include "../atoms.hpp"
 #include <iostream>
+#include <chrono>
 
 MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
     : atom(atomBuild)
@@ -10,6 +11,8 @@ MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
     datablock::mdhdDataBlock mdhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mdhdData, sizeof(mdhdData));
+    creationTime = _byteswap_ulong(mdhdData.creationTime);
+    modificationTime = _byteswap_ulong(mdhdData.modificationTime);
     timeScale = _byteswap_ulong(mdhdData.timeScale);
     duration = _byteswap_ulong(mdhdData.duration);
     fileStream.close();
@@ -61,6 +64,22 @@ void MP4::mdhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     mdhdData.duration = _byteswap_ulong(timeScaled);
 
     fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
+}
+
+void MP4::mdhd::createData(splunkType &splunk)
+{
+    auto timeScaleMult = (double) timeScale / splunk.videoTimeScale;
+    auto fullDuration = (uint32_t) (timeScaleMult * (double) splunk.videoDuration);
+
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("MP4::mdhd::createData atom can not parse file: "+filePath_);
+    datablock::mdhdDataBlock mdhdData;
+    fileStream.seekg(fileDataPos_, fileStream.beg);
+    fileStream.read((char *) &mdhdData, sizeof(mdhdData));
+    mdhdData.duration = _byteswap_ulong(fullDuration);
+
+    splunk.fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
+
 }
 
 std::string MP4::mdhd::key = "mdhd";

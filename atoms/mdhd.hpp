@@ -23,11 +23,19 @@ public:
 
     void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
 
+    void createData(splunkType &splunk);
+
     static std::string  key;
     uint32_t            timeScale;  // time units per second
     uint32_t            duration;   // amount of timeScale units
+    uint32_t            creationTime;
+    uint32_t            modificationTime;
+    uint16_t            language;
+    uint16_t            quality;
+    
 
 };
 
 }
 #endif
+

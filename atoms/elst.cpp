@@ -89,5 +89,42 @@ void MP4::elst::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
 }
 
+void MP4::elst::createData(splunkType &splunk)
+{
+    //createData_(splunk);
+
+    uint32_t timeScale;
+    for ( auto mdhd : trakAtom_->getTypeAtoms<mdhd>() ) timeScale = mdhd->timeScale;
+    
+    auto timeScaleMult = (double) timeScale / splunk.videoTimeScale;
+    auto fullDuration = (uint32_t) (timeScaleMult * (double) splunk.videoDuration);
+
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("MP4::elst::createData atom can not parse file: "+filePath_);
+    datablock::atomTableBlock elstData;
+    fileStream.seekg(fileDataPos_, fileStream.beg);
+    fileStream.read((char *) &elstData, sizeof(elstData));
+    splunk.fileWrite->write((char *) &elstData, sizeof(elstData));
+    auto index = elstTable.size();
+    datablock::elstEntryDataBlock elstEntryBlock;
+    do {
+        fileStream.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
+        elstEntryBlock.duration = _byteswap_ulong(fullDuration);
+        splunk.fileWrite->write((char *) &elstEntryBlock, sizeof(elstEntryBlock));
+        index--;
+    } while ( index > 0);
+    /*
+    
+    std::ifstream fileStream(filePath_, std::ios::binary);
+    if ( fileStream.fail() ) throw std::runtime_error("MP4::mdhd::createData atom can not parse file: "+filePath_);
+    datablock::mdhdDataBlock mdhdData;
+    fileStream.seekg(fileDataPos_, fileStream.beg);
+    fileStream.read((char *) &mdhdData, sizeof(mdhdData));
+    mdhdData.duration = _byteswap_ulong(fullDuration);
+
+    splunk.fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
+    */
+}
+
 std::string MP4::elst::key = "elst";
 

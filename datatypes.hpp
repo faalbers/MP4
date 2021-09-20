@@ -168,6 +168,8 @@ typedef struct mdhdDataBlock
     uint32_t    modificationTime;
     uint32_t    timeScale;          // time units per second
     uint32_t    duration;           // amount of timeScale units
+    uint16_t    language;
+    uint16_t    quality;
 } mdhdDataBlock;
 
 typedef struct mvhdDataBlock
