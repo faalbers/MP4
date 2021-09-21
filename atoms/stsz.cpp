@@ -28,7 +28,7 @@ void MP4::stsz::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Sample Size Atom)" << std::endl;
+    std::cout << path_ << " (Sample Size Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
     if ( stszTable.size() != 0 ) std::cout << dataIndent << "[#] (sample Size)\n";
     size_t index = 1;

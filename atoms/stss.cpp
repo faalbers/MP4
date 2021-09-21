@@ -25,7 +25,7 @@ void MP4::stss::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Sync Sample Atom)" << std::endl;
+    std::cout << path_ << " (Sync Sample Atom) ["<< headerSize_ << "]" << std::endl;
     size_t index = 1;
     std::cout << dataIndent << "[#] (sample number)\n";
     if ( fullLists || (!fullLists && stssTable.size() <= 6) ) {

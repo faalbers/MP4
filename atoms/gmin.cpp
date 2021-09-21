@@ -22,7 +22,7 @@ void MP4::gmin::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Base Media Info Atom)" << std::endl;
+    std::cout << path_ << " (Base Media Info Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << std::hex;
     std::cout << dataIndent << "graphicMode: 0x" << graphicMode << std::endl;
     std::cout << dataIndent << "opColorR   : 0x" << opColorR << std::endl;

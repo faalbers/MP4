@@ -18,7 +18,7 @@ void MP4::smhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Sound Media Information Header Atom)" << std::endl;
+    std::cout << path_ << " (Sound Media Information Header Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "balance: " << balance << std::endl;
 
 }

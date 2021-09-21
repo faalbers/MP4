@@ -51,12 +51,14 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     dataBlock.size64 = _byteswap_uint64(dataBlock.size64);    // big to little endian
     if ( dataBlock.size32 == 1 ) {
         headerSize64_ = true;
+        headerSize_ = 16;
         size_ = (int64_t) dataBlock.size64;
-        fileDataPos_ = filePos_ + 16;
+        fileDataPos_ = filePos_ + headerSize_;
     } else {
         headerSize64_ = false;
+        headerSize_ = 8;
         size_ = (int64_t) dataBlock.size32;
-        fileDataPos_ = filePos_ + 8;
+        fileDataPos_ = filePos_ + headerSize_;
     }
 
     // set filestream to data position
@@ -126,7 +128,7 @@ void MP4::atom::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Atom)" << std::endl;
+    std::cout << path_ << " (Atom) ["<< headerSize_ << "]" << std::endl;
     if ( dataSize_ == 0 )
         std::cout << dataIndent << "This Atom is empty ..." << std::endl;
     else

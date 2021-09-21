@@ -27,7 +27,7 @@ void MP4::dref::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Data Reference Atom)" << std::endl;
+    std::cout << path_ << " (Data Reference Atom) ["<< headerSize_ << "]" << std::endl;
     int index = 1;
     std::cout << dataIndent << "[#] ( Data Reference Type Atom )\n";
     for ( auto entry : dataReferences ) {

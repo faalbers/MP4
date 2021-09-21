@@ -32,7 +32,7 @@ void MP4::tmcd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     if ( isTrackReference ) {
-        std::cout << path_ << " (Track Reference Atom)" << std::endl;
+        std::cout << path_ << " (Track Reference Atom) ["<< headerSize_ << "]" << std::endl;
         std::cout << dataIndent << "[#] (trackID)\n";
         size_t index = 1;
         for ( auto entry : trackIDs ) {
@@ -40,7 +40,7 @@ void MP4::tmcd::printData(bool fullLists)
             index++;
         }
     } else {
-        std::cout << path_ << " (Timecode Sample Description Atom)" << std::endl;
+        std::cout << path_ << " (Timecode Sample Description Atom) ["<< headerSize_ << "]" << std::endl;
         std::cout << dataIndent << "This is a container Atom ..." << std::endl;
     }
 }

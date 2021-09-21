@@ -186,7 +186,7 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
 MP4::splunkType MP4::MP4::splunkGetB()
 {
     splunkType splunk;
-/*
+
     // initializing unused data
     splunk.fileWrite = nullptr;
     splunk.fileWritePath = "";
@@ -232,11 +232,29 @@ MP4::splunkType MP4::MP4::splunkGetB()
         std::map<int64_t, trackSamplesType *> positionMap;
         for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
             if ( tracksSamples[trackIndex].samples.size() != 0 ) {
-                positionMap[toVideoTimeScale] = &tracksSamples[trackIndex];
+                auto filePos = tracksSamples[trackIndex].samples.back().filePos;
+                positionMap[filePos] = &tracksSamples[trackIndex];
             }
         }
+        if ( positionMap.size() != 0 ) {
+            for ( auto samples : positionMap ) {
+                splunkSampleType splunkSample;
+                splunkSample.ID = samples.second->samples.back().ID;
+                splunkSample.filePos = samples.second->samples.back().filePos;
+                splunkSample.size = samples.second->samples.back().size;
+                splunkSample.time = samples.second->samples.back().time;
+                splunkSample.duration = samples.second->samples.back().duration;
+                splunkSample.trackID = samples.second->trackID;
+                splunkSample.filePath = samples.second->filePath;
+                splunkSample.timeScale = samples.second->mediaTimeScale;
+                splunkSample.format = samples.second->dataFormat;
+                splunk.samples.push_back(splunkSample);
+                samples.second->samples.pop_back();
+                break;
+            }
+        } else samplesDepleted = true;
     } while ( !samplesDepleted );
-*/
+
     return splunk;
 }
 

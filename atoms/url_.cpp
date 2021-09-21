@@ -19,7 +19,7 @@ MP4::url_::url_(internal::atomBuildType &atomBuild)
 
 void MP4::url_::printData(bool fullLists)
 {
-    std::cout << "'url ' )";
+    std::cout << "'url ' ) ["<< headerSize_ << "]";
     if (dataInSameFile)
         std::cout << " ( Data is in same file )";
     std::cout << std::endl;

@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
 
     //mp4.printHierarchy();
-    //mp4.printHierarchyData();
+    mp4.printHierarchyData();
 
     std::cout << "\n**** END ****\n\n";
 

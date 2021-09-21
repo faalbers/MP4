@@ -250,7 +250,7 @@ void MP4::trak::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Track Atom)" << std::endl;
+    std::cout << path_ << " (Track Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 

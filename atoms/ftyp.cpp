@@ -38,7 +38,7 @@ void MP4::ftyp::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (File Type Atom)" << std::endl;
+    std::cout << path_ << " (File Type Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "majorBrand    : " << majorBrand << std::endl;
     std::cout << dataIndent << "version       : " << version << std::endl;
     std::cout << dataIndent << "version string: " << versionString << std::endl;

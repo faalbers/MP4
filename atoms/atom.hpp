@@ -86,6 +86,7 @@ protected:
     
     bool                                headerSize64_;
     int64_t                             size_;
+    int64_t                             headerSize_;
     std::string                         filePath_;
     std::string                         path_;
     std::string                         parentPath_;

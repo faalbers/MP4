@@ -41,7 +41,7 @@ void MP4::stsd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Sample Description Atom)" << std::endl;
+    std::cout << path_ << " (Sample Description Atom) ["<< headerSize_ << "]" << std::endl;
     int index = 1;
     std::cout << dataIndent << "[#] (data format, data reference index, extended data)\n";
     for ( auto entry : stsdTable ) {

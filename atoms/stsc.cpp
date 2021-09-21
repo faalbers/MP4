@@ -32,7 +32,7 @@ void MP4::stsc::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Sample-To-Chunk Atom)" << std::endl;
+    std::cout << path_ << " (Sample-To-Chunk Atom) ["<< headerSize_ << "]" << std::endl;
     size_t index = 1;
     std::cout << dataIndent << "[#] (first chunk , samples per chunk, sample description ID)\n";
     if ( fullLists || (!fullLists && stscTable.size() <= 6) ) {

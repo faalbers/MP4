@@ -21,7 +21,7 @@ void MP4::vmhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Video Media Information Header Atom)" << std::endl;
+    std::cout << path_ << " (Video Media Information Header Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << std::hex;
     std::cout << dataIndent << "graphicMode: 0x" << graphicMode << std::endl;
     std::cout << dataIndent << "opColorR   : 0x" << opColorR << std::endl;

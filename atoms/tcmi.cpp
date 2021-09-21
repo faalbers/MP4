@@ -40,7 +40,7 @@ void MP4::tcmi::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Data Information Atom)" << std::endl;
+    std::cout << path_ << " (Data Information Atom) ["<< headerSize_ << "]" << std::endl;
     if ( fontName == "" )
         std::cout << dataIndent << "textFont: " << (int) textFont << std::endl;
     else

@@ -24,7 +24,7 @@ void MP4::hdlr::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Handler Reference Atom)" << std::endl;
+    std::cout << path_ << " (Handler Reference Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "componentType   : " << componentType << std::endl;
     std::cout << dataIndent << "componentSubType: " << componentSubType << std::endl;
     std::cout << dataIndent << "componentName   : " << componentName << std::endl;

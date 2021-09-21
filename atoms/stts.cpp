@@ -30,7 +30,7 @@ void MP4::stts::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Time-To-Sample Atom)" << std::endl;
+    std::cout << path_ << " (Time-To-Sample Atom) ["<< headerSize_ << "]" << std::endl;
     int index = 1;
     std::cout << dataIndent << "[#] (sampleCount , sampleDuration)\n";
     for ( auto entry : sttsTable ) {
