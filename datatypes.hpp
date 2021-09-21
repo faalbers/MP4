@@ -69,6 +69,23 @@ typedef struct splunkType
     std::ofstream                   *fileWrite;
 } splunkType;
 
+typedef struct trackInfoType
+{
+    std::string dataFormat;
+    size_t      sampleCount;
+} trackInfoType;
+
+typedef struct splunkBType
+{
+    std::vector<splunkSampleType>       samples;
+    std::map<uint32_t, trackInfoType>   tracks;
+    uint32_t                            videoTimeScale;
+    uint32_t                            videoDuration;
+    std::string                         fileWritePath;
+    std::ofstream                       *fileWrite;
+    root                                *rootAtom;
+} splunkBType;
+
 typedef struct chunkType
 {
     uint32_t    ID;

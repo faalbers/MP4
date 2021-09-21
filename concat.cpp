@@ -47,7 +47,8 @@ int main(int argc, char* argv[])
 
     if (true)
     {
-        auto splunk = mp4A.appendSplunk(mp4B);
+        //auto splunk = mp4A.splunkGet();
+        auto splunk = mp4A.splunkAppend(mp4B);
         /*
         for ( auto sample : splunk.samples ) {
             std::cout
@@ -61,6 +62,7 @@ int main(int argc, char* argv[])
         }
         */
 
+        /*
         for ( auto trackMatchPath : splunk.trackMatchB ) {
             std::cout << "Path: " << trackMatchPath.first << std::endl;
             for ( auto trackMatch : trackMatchPath.second ) {
@@ -77,14 +79,15 @@ int main(int argc, char* argv[])
                     << data.second << " " << entry.first << std::endl;
             }
         }
+        */
 
-        //splunk.fileWritePath = "splunk_append.MP4";
-        //mp4A.createFromSplunk(splunk);
+        splunk.fileWritePath = "splunk_append.MP4";
+        mp4A.splunkCreate(splunk);
 
         //MP4::MP4 mp4Append(splunk.fileWritePath);
 
-        //mp4Out.printHierarchy();
-        //mp4Out.printHierarchyData();
+        //mp4Append.printHierarchy();
+        //mp4Append.printHierarchyData();
     }
 
     std::cout << "\n**** END ****\n\n";

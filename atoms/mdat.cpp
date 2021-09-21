@@ -134,13 +134,12 @@ void MP4::mdat::createHeader(splunkType &splunk)
 void MP4::mdat::createData(splunkType &splunk)
 {
     //createData_(splunk);
-    //return;
+    return;
 
     if (  splunk.samples.size() == 0 ) {
         createData_(splunk);
         return;
     }
-
 
     // find largest sample size
     size_t bufferSize = 0;
@@ -155,8 +154,6 @@ void MP4::mdat::createData(splunkType &splunk)
     auto buffer = new char[bufferSize];
     for ( size_t index = 0; index < splunk.samples.size(); index++ ) {
 
-        continue;
-
         if ( splunk.samples[index].filePath != readPath ) {
             readPath = splunk.samples[index].filePath;
             fileRead.close();
@@ -165,8 +162,12 @@ void MP4::mdat::createData(splunkType &splunk)
         }
         fileRead.seekg(splunk.samples[index].filePos, fileRead.beg);
         fileRead.read(buffer, splunk.samples[index].size);
+
+        auto matchingTracks = splunk.trackMatchB[splunk.samples[index].filePath][splunk.samples[index].trackID];
+        if ( matchingTracks.size() == 0 ) std::cout << splunk.samples[index].filePath << " " << splunk.samples[index].trackID << std::endl;
         splunk.samples[index].filePos = (uint64_t) splunk.fileWrite->tellp();
         splunk.samples[index].filePath = splunk.fileWritePath;
+
         splunk.fileWrite->write(buffer, splunk.samples[index].size);
     }
     delete[] buffer;

@@ -127,6 +127,20 @@ void MP4::MP4::createFromSplunk(splunkType &splunk)
     splunk.fileWrite = nullptr;
 }
 
+void MP4::MP4::splunkCreate(splunkBType &splunk)
+{
+    splunk.fileWritePath = std::filesystem::absolute(std::filesystem::path(splunk.fileWritePath)).string();
+
+    std::ofstream fileWrite(splunk.fileWritePath, std::ios::binary);
+    if ( fileWrite.fail() ) throw std::runtime_error("Can not write MP4 file: "+splunk.fileWritePath);
+    splunk.fileWrite = &fileWrite;
+
+    //rootAtom_->create(splunk);
+
+    fileWrite.close();
+    splunk.fileWrite = nullptr;
+}
+
 void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings)
 {
     std::ofstream fileWrite(filePath_, std::ios::binary);
@@ -181,6 +195,84 @@ void MP4::MP4::append(MP4 &appendMP4, std::string filePath_, writeSettingsType &
     }
 
     fileWrite.close();
+}
+
+MP4::splunkBType MP4::MP4::splunkGet()
+{
+    splunkBType splunk;
+
+    // initializing unused data
+    splunk.fileWrite = nullptr;
+    splunk.fileWritePath = "";
+    splunk.rootAtom = rootAtom_.get();
+
+    // get video time scale and duration
+    for ( auto mvhd : getTypeAtoms<mvhd>() ) {
+        splunk.videoTimeScale = mvhd->timeScale;
+        splunk.videoDuration = mvhd->duration;
+    }
+
+    std::vector<trackSamplesType> tracksSamples;
+    for ( auto track : getTracks() ) {
+        auto samples = track->getSamples();
+
+        // exclude tracks where sample duration does not match like fdsc
+        if ( samples.mediaDuration != samples.samplesDuration ) continue;
+
+        // add to tracks
+        trackInfoType trackInfo;
+        trackInfo.dataFormat = samples.dataFormat;
+        trackInfo.sampleCount = samples.sampleCount;
+        splunk.tracks[samples.trackID] = trackInfo;
+
+        // flatten media duration to video duration
+        auto timeScaleMult = (double) splunk.videoTimeScale / samples.mediaTimeScale;
+        double toVideoTimeScale = timeScaleMult * (double) samples.mediaDuration;
+        int64_t timeDifference = ((double) splunk.videoDuration - toVideoTimeScale) / timeScaleMult;
+        
+        // get the track samples and flatten last sample duration with difference to video duration
+        auto trackSamples = samples;
+        auto updatedDuration = std::max((int64_t)trackSamples.samples.back().duration + timeDifference, (int64_t)0);
+        trackSamples.samples.back().duration = (uint32_t)updatedDuration;
+        
+        // reverse for popping
+        std::reverse(trackSamples.samples.begin(),trackSamples.samples.end());
+
+        tracksSamples.push_back(trackSamples);
+    }
+
+    uint32_t time = 0;
+    bool samplesDepleted = false;
+    do {
+        std::map<uint32_t, trackSamplesType *> timeMap;
+        for ( int trackIndex = 0; trackIndex < tracksSamples.size(); trackIndex++ ) {
+            if ( tracksSamples[trackIndex].samples.size() != 0 ) {
+                auto timeScaleMult = (double) splunk.videoTimeScale / tracksSamples[trackIndex].mediaTimeScale;
+                auto toVideoTimeScale = (uint32_t) (timeScaleMult * tracksSamples[trackIndex].samples.back().time);
+                timeMap[toVideoTimeScale] = &tracksSamples[trackIndex];
+            }
+        }
+        if ( timeMap.size() != 0 ) {
+            for ( auto samples : timeMap ) {
+                splunkSampleType splunkSample;
+                splunkSample.ID = samples.second->samples.back().ID;
+                splunkSample.filePos = samples.second->samples.back().filePos;
+                splunkSample.size = samples.second->samples.back().size;
+                splunkSample.time = samples.second->samples.back().time;
+                splunkSample.duration = samples.second->samples.back().duration;
+                splunkSample.trackID = samples.second->trackID;
+                splunkSample.filePath = samples.second->filePath;
+                splunkSample.timeScale = samples.second->mediaTimeScale;
+                splunkSample.format = samples.second->dataFormat;
+                splunk.samples.push_back(splunkSample);
+                time = samples.first;
+                samples.second->samples.pop_back();
+                break;
+            }
+        } else samplesDepleted = true;
+    } while ( !samplesDepleted );
+
+    return splunk;
 }
 
 MP4::splunkType MP4::MP4::getSplunk()
@@ -264,6 +356,46 @@ MP4::splunkType MP4::MP4::getSplunk()
     return splunk;
 }
 
+MP4::splunkBType MP4::MP4::splunkAppend(MP4 &appendMP4)
+{
+    auto splunk = splunkGet();
+    std::set<std::string> formats;
+    for ( auto track : splunk.tracks ) {
+        if ( formats.find(track.second.dataFormat) != formats.end() )
+            throw std::runtime_error("MP4::MP4::splunkAppend multiple tracks with same format not handled yet");
+        formats.insert(track.second.dataFormat);
+    }
+    auto splunkAppend = appendMP4.splunkGet();
+    formats.clear();
+    for ( auto track : splunkAppend.tracks ) {
+        if ( formats.find(track.second.dataFormat) != formats.end() )
+            throw std::runtime_error("MP4::MP4::splunkAppend multiple tracks with same format not handled yet");
+        formats.insert(track.second.dataFormat);
+    }
+
+    // trackMatch[appendTrackID] = currentTrackID
+    std::map<uint32_t, uint32_t> trackMatch;
+    for ( auto appendTrack: splunkAppend.tracks ) {
+        for ( auto currentTrack : splunk.tracks ) {
+            if ( appendTrack.second.dataFormat == currentTrack.second.dataFormat ) {
+                trackMatch[appendTrack.first] = currentTrack.first;
+                break;
+            }
+        }
+    }
+
+    // add samples if in track match
+    auto tracks = splunk.tracks;
+    for ( auto appendSample : splunkAppend.samples ) {
+        appendSample.trackID = trackMatch[appendSample.trackID];
+        appendSample.ID += tracks[appendSample.trackID].sampleCount;
+        splunk.tracks[appendSample.trackID].sampleCount = appendSample.ID;
+        splunk.samples.push_back(appendSample);
+    }
+
+    return splunk;
+}
+
 MP4::splunkType MP4::MP4::appendSplunk(MP4 &appendMP4)
 {
     auto splunk = getSplunk();
@@ -316,13 +448,12 @@ MP4::splunkType MP4::MP4::appendSplunk(MP4 &appendMP4)
         }
     }
 
-/*
     if ( splunk.videoTimeScale == splunkAppend.videoTimeScale ) {
         splunk.videoDuration += splunkAppend.videoDuration;
     } else {
         throw std::runtime_error("MP4::MP4::appendSplunk Did not implement different timescale append yet");
     }
-*/
+
     return splunk;
 
     /*
