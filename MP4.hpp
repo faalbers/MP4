@@ -31,12 +31,9 @@ public:
     void    write(std::string filePath_, writeSettingsType &writeSettings);
     void    append(MP4 &appendMP4, std::string filePath_, writeSettingsType &writeSettings);
 
-    splunkType  getSplunk();
-    splunkBType splunkGet();
-    splunkType  appendSplunk(MP4 &appendMP4);
-    splunkBType  splunkAppend(MP4 &appendMP4);
-    void createFromSplunk(splunkType &splunk);
-    void splunkCreate(splunkBType &splunk);
+    splunkType  splunkGet();
+    splunkType  splunkAppend(MP4 &appendMP4);
+    void splunkCreate(splunkType &splunk);
     void createFromSplunkOld(splunkType &splunk);
 
     std::string                         filePath;

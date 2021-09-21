@@ -53,29 +53,13 @@ typedef struct splunkSampleType
     std::string format;
 } splunkSampleType;
 
-typedef struct splunkType
-{
-    std::vector<splunkSampleType>   samples;
-    // includeTracks["filePath"][trackID] = dataFormat
-    std::map<std::string, std::map<uint32_t, std::string>>                                  includeTracks;
-    // trackMatch["filePath"][trackID][file Path to match] =  = matching trackID set
-    std::map<std::string, std::map<uint32_t, std::map<std::string, std::set<uint32_t>>>>    trackMatch;
-    // trackMatchB["filePath"][trackID] =  = matching trackID set
-    std::map<std::string, std::map<uint32_t, std::set<uint32_t>>>                           trackMatchB;
-    uint32_t                        videoTimeScale;
-    uint32_t                        videoDuration;
-    root                            *rootAtom;
-    std::string                     fileWritePath;
-    std::ofstream                   *fileWrite;
-} splunkType;
-
 typedef struct trackInfoType
 {
     std::string dataFormat;
     size_t      sampleCount;
 } trackInfoType;
 
-typedef struct splunkBType
+typedef struct splunkType
 {
     std::vector<splunkSampleType>       samples;
     std::map<uint32_t, trackInfoType>   tracks;
@@ -84,7 +68,7 @@ typedef struct splunkBType
     std::string                         fileWritePath;
     std::ofstream                       *fileWrite;
     root                                *rootAtom;
-} splunkBType;
+} splunkType;
 
 typedef struct chunkType
 {

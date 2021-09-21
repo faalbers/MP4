@@ -124,7 +124,7 @@ void MP4::mdat::extract_(std::ofstream &fileWrite,
         chunkList.push_back(sharedCHunk);
     }
 }
-
+/*
 void MP4::mdat::createHeader(splunkType &splunk)
 {
     //createHeaderCopy_(splunk);
@@ -134,7 +134,6 @@ void MP4::mdat::createHeader(splunkType &splunk)
 void MP4::mdat::createData(splunkType &splunk)
 {
     //createData_(splunk);
-    return;
 
     if (  splunk.samples.size() == 0 ) {
         createData_(splunk);
@@ -174,6 +173,6 @@ void MP4::mdat::createData(splunkType &splunk)
 
     fileRead.close();
 }
-
+*/
 std::string MP4::mdat::key = "mdat";
 

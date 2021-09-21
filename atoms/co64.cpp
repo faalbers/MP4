@@ -120,8 +120,10 @@ void MP4::co64::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     }
 }
 
+/*
 void MP4::co64::createData(splunkType &splunk)
 {
+    //createData_(splunk);
     if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
         createData_(splunk);
         return;
@@ -153,8 +155,7 @@ void MP4::co64::createData(splunkType &splunk)
     sampleCount = _byteswap_ulong(sampleCount);
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
-    
 }
-
+*/
 std::string MP4::co64::key = "co64";
 

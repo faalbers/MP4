@@ -135,7 +135,7 @@ void MP4::stco::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
         fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
     }
 }
-
+/*
 void MP4::stco::createHeader(splunkType &splunk)
 {
     createHeaderNew_(splunk, "co64", false);
@@ -143,6 +143,7 @@ void MP4::stco::createHeader(splunkType &splunk)
 
 void MP4::stco::createData(splunkType &splunk)
 {
+    //createData_(splunk);
     if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
         createData_(splunk);
         return;
@@ -175,7 +176,6 @@ void MP4::stco::createData(splunkType &splunk)
     sampleCount = _byteswap_ulong(sampleCount);
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
-    
 }
-
+*/
 std::string MP4::stco::key = "stco";

@@ -262,11 +262,13 @@ void MP4::trak::printHierarchyData(bool fullLists)
 
 void MP4::trak::create(splunkType &splunk)
 {
+    /*
     if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
         return;
     } else if ( splunk.includeTracks[filePath_].find(trakAtom_->getID()) == splunk.includeTracks[filePath_].end() ) {
         return;
     }
+    */
 
     create_(splunk);
 }

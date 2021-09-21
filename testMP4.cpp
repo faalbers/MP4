@@ -62,74 +62,7 @@ int main(int argc, char* argv[])
             std::cout << std::endl;
         }
     }
-    
-        if (false)
-    {
-        auto splunk = mp4.getSplunk();
-        std::map<uint32_t, uint32_t> trackSizeMap;
-        for ( auto sample : splunk.samples ) {
-            if ( trackSizeMap.count(sample.trackID) == 0)
-                trackSizeMap[sample.trackID] = sample.size;
-            else
-                trackSizeMap[sample.trackID] += sample.size;
-        }
-        for ( auto trackSize : trackSizeMap )
-            std::cout << trackSize.first << " " << trackSize.second << std::endl;
-        for ( auto track : mp4.getTracks() ) {
-            /*
-            std::cout << "Track: " << track->getID() << std::endl;
-            uint32_t stszTotal = 0;
-            for ( auto stsz : track->getTypeAtoms<MP4::stsz>() ) {
-                int index = 1;
-                for ( auto size : stsz->stszTable ) {
-                    //std::cout << track->getID() << " " << index << " " << size << std::endl;
-                    stszTotal += size;
-                    index++;
-                }
-            }
-            auto samples = track->getSamples();
-            uint32_t getSamplesTotal = 0;
-            for ( auto sample : samples.samples ) {
-                //std::cout << sample.trackID << " " << sample.ID << " " << sample.size << std::endl;
-                getSamplesTotal += sample.size;
-            }
-            uint32_t splunkTotal = 0;
-            for ( auto sample : splunk.samples ) {
-                if ( sample.trackID == track->getID() ) {
-                    //std::cout << sample.trackID << " " << sample.ID << " " << sample.size << std::endl;
-                    splunkTotal += sample.size;
-                }
-            }
-            */
-            //std::cout << stszTotal << std::endl;
-            //std::cout << getSamplesTotal << std::endl;
-            //std::cout << splunkTotal << std::endl;
-        }
-    }
 
-    if (false)
-    {
-        auto splunk = mp4.getSplunk();
-        /*
-        for ( auto sample : splunk.samples ) {
-            std::cout
-                << "[" << sample.trackID << "]"
-                << "[" << sample.ID << "] "
-                << sample.time
-                << " " << sample.duration 
-                << " " << sample.filePos 
-                << " " << sample.size
-                << " " << sample.filePath << std::endl;
-        }
-        */
-        splunk.fileWritePath = "splunk_out.MP4";
-        mp4.createFromSplunkOld(splunk);
-
-        MP4::MP4 mp4Out(splunk.fileWritePath);
-
-        mp4Out.printHierarchy();
-        mp4Out.printHierarchyData();
-    }
 
     if ( false ) {
         for ( auto track : mp4.getTracks() ) {
@@ -142,35 +75,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true)
-    {
-        auto splunk = mp4.getSplunk();
-        /*
-        for ( auto sample : splunk.samples ) {
-            std::cout
-                << "[" << sample.trackID << "]"
-                << "[" << sample.ID << "] "
-                << sample.time
-                << " " << sample.duration 
-                << " " << sample.filePos 
-                << " " << sample.size
-                << " " << sample.filePath << std::endl;
-        }
-        */
-        for ( auto entry : splunk.includeTracks ) {
-            for ( auto data : entry.second ) {
-                std::cout << "[" << data.first << "] "
-                    << data.second << " " << entry.first << std::endl;
-            }
-        }
-        splunk.fileWritePath = "splunk_out.MP4";
-        mp4.createFromSplunk(splunk);
-
-        MP4::MP4 mp4Out(splunk.fileWritePath);
-
-        //mp4Out.printHierarchy();
-        mp4Out.printHierarchyData();
-    }
 
     //mp4.printHierarchy();
     //mp4.printHierarchyData();

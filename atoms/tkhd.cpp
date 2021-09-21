@@ -83,7 +83,7 @@ void MP4::tkhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     
     fileWrite.write((char *) &tkhdData, sizeof(tkhdData));
 }
-
+/*
 void MP4::tkhd::createData(splunkType &splunk)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);
@@ -96,6 +96,6 @@ void MP4::tkhd::createData(splunkType &splunk)
     splunk.fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
 
 }
-
+*/
 std::string MP4::tkhd::key = "tkhd";
 

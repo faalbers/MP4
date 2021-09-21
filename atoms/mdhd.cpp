@@ -65,7 +65,7 @@ void MP4::mdhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
     fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
 }
-
+/*
 void MP4::mdhd::createData(splunkType &splunk)
 {
     auto timeScaleMult = (double) timeScale / splunk.videoTimeScale;
@@ -81,6 +81,6 @@ void MP4::mdhd::createData(splunkType &splunk)
     splunk.fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
 
 }
-
+*/
 std::string MP4::mdhd::key = "mdhd";
 
