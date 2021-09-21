@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         //auto splunk = mp4A.splunkGet();
         auto splunk = mp4A.splunkAppend(mp4B);
 
-        splunk.fileWritePath = "splunk_append.MP4";
+        splunk.fileWritePath = "..\\testvideos\\justAppendB.MP4";
         mp4A.splunkCreate(splunk);
 
         MP4::MP4 mp4Append(splunk.fileWritePath);

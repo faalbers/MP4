@@ -240,6 +240,7 @@ MP4::splunkType MP4::MP4::splunkGetB()
             for ( auto samples : positionMap ) {
                 splunkSampleType splunkSample;
                 splunkSample.ID = samples.second->samples.back().ID;
+                splunkSample.sync = samples.second->samples.back().sync;
                 splunkSample.filePos = samples.second->samples.back().filePos;
                 splunkSample.size = samples.second->samples.back().size;
                 splunkSample.time = samples.second->samples.back().time;
@@ -317,6 +318,7 @@ MP4::splunkType MP4::MP4::splunkGet()
             for ( auto samples : timeMap ) {
                 splunkSampleType splunkSample;
                 splunkSample.ID = samples.second->samples.back().ID;
+                splunkSample.sync = samples.second->samples.back().sync;
                 splunkSample.filePos = samples.second->samples.back().filePos;
                 splunkSample.size = samples.second->samples.back().size;
                 splunkSample.time = samples.second->samples.back().time;

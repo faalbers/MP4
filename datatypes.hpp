@@ -22,6 +22,7 @@ class MP4;
 typedef struct sampleType
 {
     uint32_t    ID;
+    bool        sync;
     int64_t     filePos;
     size_t      size;
     uint32_t    time;
@@ -43,6 +44,7 @@ typedef struct trackSamplesType
 typedef struct splunkSampleType
 {
     uint32_t    ID;
+    bool        sync;
     uint32_t    trackID;
     std::string filePath;
     int64_t     filePos;

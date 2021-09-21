@@ -86,6 +86,12 @@ MP4::trackSamplesType MP4::trak::getSamples()
         samples.mediaTimeScale = mdhd->timeScale;
         samples.mediaDuration = mdhd->duration;
     }
+
+    // get sync samples
+    std::set<uint32_t> syncSamples;
+    for ( auto stss : getTypeAtoms<stss>() ) {
+        for ( auto syncID : stss->stssTable ) syncSamples.insert(syncID);
+    }
     
     // greate samples from time-to-sample and set time and durations
     uint32_t sampleID = 0;
@@ -97,6 +103,8 @@ MP4::trackSamplesType MP4::trak::getSamples()
             do {
                 sampleID++;
                 sample.ID = sampleID;
+                sample.sync = false;
+                if ( syncSamples.find(sample.ID) != syncSamples.end()) sample.sync = true;
                 sample.time = time;
                 sample.duration = entry[1];
                 samples.samples.push_back(sample);
