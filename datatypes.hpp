@@ -62,6 +62,7 @@ typedef struct trackInfoType
 typedef struct splunkType
 {
     std::vector<splunkSampleType>       samples;
+    // tracks[trackID] = trackInfo
     std::map<uint32_t, trackInfoType>   tracks;
     uint32_t                            videoTimeScale;
     uint32_t                            videoDuration;

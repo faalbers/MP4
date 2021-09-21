@@ -89,7 +89,6 @@ void MP4::elst::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
 }
 
-/*
 void MP4::elst::createData(splunkType &splunk)
 {
     //createData_(splunk);
@@ -115,6 +114,6 @@ void MP4::elst::createData(splunkType &splunk)
         index--;
     } while ( index > 0);
 }
-*/
+
 std::string MP4::elst::key = "elst";
 

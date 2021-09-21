@@ -146,7 +146,7 @@ void MP4::stts::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
 
     //writeData_(fileWrite, writeInfo);
 }
-/*
+
 void MP4::stts::createData(splunkType &splunk)
 {
     //createData_(splunk);
@@ -154,7 +154,7 @@ void MP4::stts::createData(splunkType &splunk)
     std::vector<uint32_t> sampleDurations;
     auto trackID = trakAtom_->getID();
     for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.filePath == splunk.fileWritePath ) {
+        if ( sample.trackID == trackID ) {
             sampleDurations.push_back(sample.duration);
         }
     }
@@ -192,6 +192,6 @@ void MP4::stts::createData(splunkType &splunk)
         splunk.fileWrite->write((char *) &entryVal, sizeof(entryVal));
     }
 }
-*/
+
 std::string MP4::stts::key = "stts";
 

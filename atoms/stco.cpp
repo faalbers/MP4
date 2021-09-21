@@ -135,7 +135,7 @@ void MP4::stco::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
         fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
     }
 }
-/*
+
 void MP4::stco::createHeader(splunkType &splunk)
 {
     createHeaderNew_(splunk, "co64", false);
@@ -144,13 +144,8 @@ void MP4::stco::createHeader(splunkType &splunk)
 void MP4::stco::createData(splunkType &splunk)
 {
     //createData_(splunk);
-    if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
-        createData_(splunk);
-        return;
-    } else if ( splunk.includeTracks[filePath_].find(trakAtom_->getID()) == splunk.includeTracks[filePath_].end() ) {
-        createData_(splunk);
-        return;
-    }
+
+    // no checking of trackID since that is done in the trak level
 
     auto trackID = trakAtom_->getID();
 
@@ -164,7 +159,7 @@ void MP4::stco::createData(splunkType &splunk)
     auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.filePath == splunk.fileWritePath ) {
+        if ( sample.trackID == trackID ) {
             //auto offset = _byteswap_ulong((uint32_t) sample.filePos);
             auto offset = _byteswap_uint64((uint64_t) sample.filePos);
             splunk.fileWrite->write((char *) &offset, sizeof(offset));
@@ -177,5 +172,5 @@ void MP4::stco::createData(splunkType &splunk)
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
 }
-*/
+
 std::string MP4::stco::key = "stco";

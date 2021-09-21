@@ -30,8 +30,8 @@ void MP4::stsz::printData(bool fullLists)
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Size Atom)" << std::endl;
     std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
+    if ( stszTable.size() != 0 ) std::cout << dataIndent << "[#] (sample Size)\n";
     size_t index = 1;
-    std::cout << dataIndent << "[#] (sample Size)\n";
     if ( fullLists || (!fullLists && stszTable.size() <= 6) ) {
         for ( auto entry : stszTable ) {
             std::cout << dataIndent << "[" << index << "] ( " << entry << " )" << std::endl;
@@ -82,6 +82,50 @@ void MP4::stsz::appendData(atom *appendAtom, std::ofstream &fileWrite, internal:
     for ( auto entry : ((stsz *) appendAtom)->stszTable ) {
         entry = _byteswap_ulong(entry);
         fileWrite.write((char *) &entry, sizeof(entry));
+    }
+}
+
+void MP4::stsz::createData(splunkType &splunk)
+{
+    // no checking of trackID since that is done in the trak level
+    
+    auto trackID = trakAtom_->getID();
+
+    datablock::stszTableBlock stszData;
+    stszData.version = 0;
+    stszData.flag[0] = 0;
+    stszData.flag[1] = 0;
+    stszData.flag[2] = 0;
+    stszData.numberOfEntries = 0;
+
+    // check to see if all sizes are the same
+    for ( auto sample : splunk.samples ) {
+        if ( sample.trackID == trackID ) {
+            stszData.defaultSampleSize = sample.size;
+            break;
+        }
+    }
+    for ( auto sample : splunk.samples ) {
+        if ( sample.trackID == trackID && sample.size != stszData.defaultSampleSize ) {
+            stszData.defaultSampleSize = 0;
+            stszData.numberOfEntries = _byteswap_ulong((uint32_t)splunk.tracks[trackID].sampleCount);
+            break;
+        }
+    }
+
+    // write datablock
+    splunk.fileWrite->write((char *) &stszData, sizeof(stszData));
+
+    if ( stszData.defaultSampleSize != 0 ) return;
+
+    uint32_t sampleCount = 0;
+    for ( auto sample : splunk.samples ) {
+        if ( sample.trackID == trackID ) {
+            //auto offset = _byteswap_ulong((uint32_t) sample.filePos);
+            auto size = _byteswap_ulong(sample.size);
+            splunk.fileWrite->write((char *) &size, sizeof(size));
+            sampleCount++;
+        }
     }
 }
 

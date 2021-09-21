@@ -47,8 +47,8 @@ int main(int argc, char* argv[])
 
     if (true)
     {
-        auto splunk = mp4A.splunkGet();
-        //auto splunk = mp4A.splunkAppend(mp4B);
+        //auto splunk = mp4A.splunkGet();
+        auto splunk = mp4A.splunkAppend(mp4B);
         /*
         for ( auto sample : splunk.samples ) {
             std::cout
