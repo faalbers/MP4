@@ -167,10 +167,8 @@ MP4::splunkType MP4::MP4::splunkGet()
     return splunk;
 }
 
-MP4::splunkType MP4::MP4::splunkAppend(MP4 &appendMP4)
+void MP4::MP4::splunkAppend(splunkType &splunk, MP4 &appendMP4)
 {
-    auto splunk = splunkGet();
-
     std::set<std::string> formats;
     for ( auto track : splunk.tracks ) {
         if ( formats.find(track.second.dataFormat) != formats.end() )
@@ -206,6 +204,13 @@ MP4::splunkType MP4::MP4::splunkAppend(MP4 &appendMP4)
 
     // update total video duration
     splunk.videoDuration += splunkAppend.videoDuration;
+}
+
+MP4::splunkType MP4::MP4::splunkAppend(MP4 &appendMP4)
+{
+    auto splunk = splunkGet();
+
+    splunkAppend(splunk, appendMP4);
 
     return splunk;
 }
