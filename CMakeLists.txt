@@ -16,6 +16,3 @@ target_link_libraries(testMP4 PRIVATE MP4)
 
 add_executable(concat concat.cpp)
 target_link_libraries(concat PRIVATE MP4)
-
-add_executable(joinGoPro joinGoPro.cpp)
-target_link_libraries(joinGoPro PRIVATE MP4)
