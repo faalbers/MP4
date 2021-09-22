@@ -48,47 +48,6 @@ void MP4::elst::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::elst::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("MP4::elst::appendData can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    datablock::atomTableBlock elstData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &elstData, sizeof(elstData));
-
-    // not sure what to do in this situation
-    if ( elstTable.size() > 1 ) throw std::runtime_error("MP4::elst::appendData elstTable larger the 1");
-
-    fileWrite.write((char *) &elstData, sizeof(elstData));
-
-    uint32_t movieTimeScaleA;
-    uint32_t movieDurationA;
-    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>()) {
-        movieTimeScaleA = mvhd->timeScale;
-        movieDurationA = mvhd->duration;
-    }
-    uint32_t movieTimeScaleB;
-    uint32_t movieDurationB;
-    for ( auto mvhd : ((elst *)appendAtom)->moovAtom_->getTypeAtoms<mvhd>()) {
-        movieTimeScaleB = mvhd->timeScale;
-        movieDurationB = mvhd->duration;
-    }
-
-    auto movieDuration = movieDurationA;
-    auto timeScaleMult = (double) movieTimeScaleB / movieTimeScaleA;
-    movieDuration += (uint32_t) (movieDurationB / timeScaleMult);
-
-    datablock::elstEntryDataBlock elstEntryBlock;
-    for ( auto entry : elstTable ) {
-        fileRead.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
-        elstEntryBlock.duration = _byteswap_ulong(movieDuration);
-        fileWrite.write((char *) &elstEntryBlock, sizeof(elstEntryBlock));
-    }
-    fileRead.close();
-
-}
-
 void MP4::elst::createData(splunkType &splunk)
 {
     //createData_(splunk);

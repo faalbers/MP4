@@ -28,7 +28,6 @@ void MP4::vmhd::printData(bool fullLists)
     std::cout << dataIndent << "opColorG   : 0x" << opColorG << std::endl;
     std::cout << dataIndent << "opColorB   : 0x" << opColorB << std::endl;
     std::cout << std::dec;
-
 }
 
 void MP4::vmhd::printHierarchyData(bool fullLists)

@@ -43,7 +43,7 @@ public:
     chunkType                   sampleToChunk(sampleType sample);
 
     std::vector<std::shared_ptr<atom>>  getDataReferences();
-    std::shared_ptr<atom>       getDataReference(std::string dataFormat);
+    std::shared_ptr<atom>               getDataReference(std::string dataFormat);
 
     // track checkers
     bool isComponentType(std::string type);
@@ -56,7 +56,6 @@ public:
     void create(splunkType &splunk);
     
     static std::string  key;
-
 };
 
 }

@@ -53,25 +53,6 @@ void MP4::mvhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::mvhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    // add append duration
-    auto movieDuration = duration;
-    auto timeScaleMult = (double) ((mvhd *)appendAtom)->timeScale / timeScale;
-    movieDuration += (uint32_t) (((mvhd *)appendAtom)->duration / timeScaleMult);
-
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    datablock::mvhdDataBlock mvhdData;
-    fileRead.read((char *) &mvhdData, sizeof(mvhdData));
-    fileRead.close();
-
-    mvhdData.duration = _byteswap_ulong(movieDuration);
-    
-    fileWrite.write((char *) &mvhdData, sizeof(mvhdData));
-}
-
 void MP4::mvhd::createData(splunkType &splunk)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);

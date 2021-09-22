@@ -36,7 +36,6 @@ public:
     // data if it's a timecode track reference
     bool                    isTrackReference;
     std::vector<uint32_t>   trackIDs;
-
     // if it's not a track reference atom , it is a container
 };
 

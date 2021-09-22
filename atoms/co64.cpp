@@ -52,85 +52,9 @@ void MP4::co64::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::co64::writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    if ( writeInfo.chunkLists.size() == 0 ) {
-        writeData_(fileWrite, writeInfo);
-        return;
-    }
-
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeData can not parse file: "+filePath_);
-    
-    // Handle atomTableBlock first
-    datablock::atomTableBlock stcoData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &stcoData, sizeof(stcoData));
-
-    // recreate chunlist for this track
-    std::vector<std::shared_ptr<chunkType>> chunkList;
-    for ( auto chunk : writeInfo.chunkLists[0] )
-        if ( chunk->trackID == trakAtom_->getID() )
-            chunkList.push_back(chunk);
-
-    // write data table block
-    stcoData.numberOfEntries = _byteswap_ulong( (uint32_t) chunkList.size());
-    fileRead.close();
-    fileWrite.write((char *) &stcoData, sizeof(stcoData));
-
-    // now add all chunk offset values in uint32_t
-    for ( auto chunk : chunkList ) {
-        auto chunkOffset = chunk->dataOffset;
-        chunkOffset = _byteswap_uint64(chunkOffset);
-        fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
-    }
-}
-
-void MP4::co64::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    if ( writeInfo.chunkLists.size() == 0 ) {
-        writeData_(fileWrite, writeInfo);
-        return;
-    }
-
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeData can not parse file: "+filePath_);
-    
-    // Handle atomTableBlock first
-    datablock::atomTableBlock stcoData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &stcoData, sizeof(stcoData));
-
-    // recreate chunlist for this track
-    std::vector<std::shared_ptr<chunkType>> chunkList;
-    for ( auto chunk : writeInfo.chunkLists[0] )
-        if ( chunk->trackID == trakAtom_->getID() )
-            chunkList.push_back(chunk);
-
-    // write data table block
-    stcoData.numberOfEntries = _byteswap_ulong( (uint32_t) chunkList.size());
-    fileRead.close();
-    fileWrite.write((char *) &stcoData, sizeof(stcoData));
-
-    // now add all chunk offset values in uint32_t
-    for ( auto chunk : chunkList ) {
-        auto chunkOffset = chunk->dataOffset;
-        chunkOffset = _byteswap_uint64(chunkOffset);
-        fileWrite.write((char *) &chunkOffset, sizeof(chunkOffset));
-    }
-}
-
-/*
 void MP4::co64::createData(splunkType &splunk)
 {
-    //createData_(splunk);
-    if ( splunk.includeTracks.find(filePath_) == splunk.includeTracks.end() ) {
-        createData_(splunk);
-        return;
-    } else if ( splunk.includeTracks[filePath_].find(trakAtom_->getID()) == splunk.includeTracks[filePath_].end() ) {
-        createData_(splunk);
-        return;
-    }
+    // no checking of trackID since that is done in the trak level
 
     auto trackID = trakAtom_->getID();
 
@@ -144,7 +68,7 @@ void MP4::co64::createData(splunkType &splunk)
     auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.filePath == splunk.fileWritePath ) {
+        if ( sample.trackID == trackID ) {
             auto offset = _byteswap_uint64((uint64_t) sample.filePos);
             splunk.fileWrite->write((char *) &offset, sizeof(offset));
             sampleCount++;
@@ -156,6 +80,6 @@ void MP4::co64::createData(splunkType &splunk)
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
 }
-*/
+
 std::string MP4::co64::key = "co64";
 

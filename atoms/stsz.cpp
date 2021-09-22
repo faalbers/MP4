@@ -54,37 +54,6 @@ void MP4::stsz::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::stsz::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    //writeData_(fileWrite, writeInfo);
-    //return;
-
-    // we need to handle default sample size properly, but for now lets handle size array
-    
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    datablock::stszTableBlock stszData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &stszData, sizeof(stszData));
-    fileRead.close();
-
-    auto newTableSize = stszTable.size() + ((stsz *) appendAtom)->stszTable.size();
-
-    stszData.numberOfEntries = _byteswap_ulong((uint32_t) newTableSize);
-    
-    fileWrite.write((char *) &stszData, sizeof(stszData));
-
-    for ( auto entry : stszTable ) {
-        entry = _byteswap_ulong(entry);
-        fileWrite.write((char *) &entry, sizeof(entry));
-    }
-    for ( auto entry : ((stsz *) appendAtom)->stszTable ) {
-        entry = _byteswap_ulong(entry);
-        fileWrite.write((char *) &entry, sizeof(entry));
-    }
-}
-
 void MP4::stsz::createData(splunkType &splunk)
 {
     // no checking of trackID since that is done in the trak level

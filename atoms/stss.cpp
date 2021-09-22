@@ -50,46 +50,8 @@ void MP4::stss::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::stss::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    //writeData_(fileWrite, writeInfo);
-    //return;
-
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    datablock::atomTableBlock stssData;
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    fileRead.read((char *) &stssData, sizeof(stssData));
-    fileRead.close();
-
-    auto newTableSize = stssTable.size() + ((stss *) appendAtom)->stssTable.size();
-    std::cout << newTableSize << std::endl;
-
-    stssData.numberOfEntries = _byteswap_ulong((uint32_t) newTableSize);
-    
-    fileWrite.write((char *) &stssData, sizeof(stssData));
-
-    for ( auto entry : stssTable ) {
-        entry = _byteswap_ulong(entry);
-        fileWrite.write((char *) &entry, sizeof(entry));
-    }
-    
-    uint32_t sampleCountA = 0;
-    auto trackID = trakAtom_->getID();
-    for ( auto chunk : writeInfo.chunkLists[0] )
-        if ( chunk->trackID == trackID) sampleCountA += chunk->samples;
-    std::cout << sampleCountA << std::endl;
-    for ( auto entry : ((stss *) appendAtom)->stssTable ) {
-        entry = _byteswap_ulong(entry+sampleCountA);
-        fileWrite.write((char *) &entry, sizeof(entry));
-    }
-}
-
 void MP4::stss::createData(splunkType &splunk)
 {
-    //createData_(splunk);
-
     // no checking of trackID since that is done in the trak level
 
     auto trackID = trakAtom_->getID();

@@ -33,16 +33,6 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
-    virtual void                        write(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    virtual std::tuple<int64_t, bool>   writeHeader(std::ofstream &fileWrite);
-    virtual void                        writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    virtual void                        writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    
-    virtual void                        append(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    virtual std::tuple<int64_t, bool>   appendHeader(std::ofstream &fileWrite);
-    virtual void                        appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    virtual void                        appendChildren(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-
     virtual void                        create(splunkType &splunk);
     virtual void                        createHeader(splunkType &splunk);
     virtual void                        createData(splunkType &splunk);
@@ -65,17 +55,6 @@ protected:
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
     
-    void                            write_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    std::tuple<int64_t, bool>       writeHeader_(std::ofstream &fileWrite);
-    void                            writeData_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    void                            writeChildren_(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    void                            writeTail_(std::ofstream &fileWrite, int64_t writeSizePos, bool posVal64bit);
-    
-    void                            append_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    //void                            appendData_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    void                            appendChildren_(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    static atom                     *childMatch_(atom *childAtom, atom *parentSearchAtom);
-
     void                            create_(splunkType &splunk);
     void                            createHeader_(splunkType &splunk);
     void                            createHeaderCopy_(splunkType &splunk);

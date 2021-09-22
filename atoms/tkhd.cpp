@@ -55,35 +55,6 @@ void MP4::tkhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::tkhd::appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo)
-{
-    uint32_t movieTimeScaleA;
-    uint32_t movieDurationA;
-    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>()) {
-        movieTimeScaleA = mvhd->timeScale;
-        movieDurationA = mvhd->duration;
-    }
-    uint32_t movieTimeScaleB;
-    for ( auto mvhd : ((tkhd *)appendAtom)->moovAtom_->getTypeAtoms<mvhd>())
-        movieTimeScaleB  = mvhd->timeScale;
-
-    // add append duration
-    auto movieDuration = movieDurationA;
-    auto timeScaleMultB = (double) movieTimeScaleB / movieTimeScaleA;
-    movieDuration += (uint32_t) (((tkhd *)appendAtom)->duration / timeScaleMultB);
-
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("Atom::writeAtomDataToFile_ can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    datablock::tkhdDataBlock tkhdData;
-    fileRead.read((char *) &tkhdData, sizeof(tkhdData));
-    fileRead.close();
-
-    tkhdData.duration = _byteswap_ulong(movieDuration);
-    
-    fileWrite.write((char *) &tkhdData, sizeof(tkhdData));
-}
-
 void MP4::tkhd::createData(splunkType &splunk)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);
@@ -94,7 +65,6 @@ void MP4::tkhd::createData(splunkType &splunk)
     tkhdData.duration = _byteswap_ulong(splunk.videoDuration);
 
     splunk.fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
-
 }
 
 std::string MP4::tkhd::key = "tkhd";

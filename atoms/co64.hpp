@@ -28,10 +28,7 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void writeData(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-    
-    //void createData(splunkType &splunk);
+    void createData(splunkType &splunk);
 
     static std::string      key;
     uint32_t                defaultSampleSize;

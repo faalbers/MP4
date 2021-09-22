@@ -21,8 +21,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void appendData(atom *appendAtom, std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
-
     void createData(splunkType &splunk);
 
     static std::string  key;
@@ -32,8 +30,6 @@ public:
     uint32_t            modificationTime;
     uint16_t            language;
     uint16_t            quality;
-    
-
 };
 
 }
