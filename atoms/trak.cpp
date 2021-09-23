@@ -27,32 +27,15 @@ uint32_t MP4::trak::getMediaTimeScale()
     throw std::runtime_error("MP4: Track has no time scale !");
 }
 
-std::vector<std::shared_ptr<MP4::atom>> MP4::trak::getDataReferences()
-{
-    for ( auto dref : getTypeAtoms<dref>() )
-        return dref->dataReferences;
-    throw std::runtime_error("MP4: SampleData has no data references !");
-}
-
-std::shared_ptr<MP4::atom> MP4::trak::getDataReference(std::string dataFormat)
-{
-    for ( auto sampleDesc : getSampleDescriptions() ) {
-        if ( sampleDesc.dataFormat == dataFormat ) {
-            for ( auto dref : getTypeAtoms<dref>() )
-                if ( dref->dataReferences.size() <= sampleDesc.dataReferenceIndex ) {
-                    return dref->dataReferences[sampleDesc.dataReferenceIndex-1];
-                }
+bool MP4::trak::isDataInSameFile() {
+    for ( auto dref : getTypeAtoms<dref>() ) {
+        for ( auto dataReference : dref->dataReferences ) {
+            if ( dataReference-> key == "url " ) return ((url_ *) dataReference.get())->dataInSameFile;
+            else if ( dataReference-> key == "alis" ) return ((alis *) dataReference.get())->dataInSameFile;
+            else throw std::runtime_error("MP4::trak::isDataInSameFile Can't find data reference");
         }
     }
-    throw std::runtime_error("MP4: Samples have no data reference of that format !");
-}
-
-size_t MP4::trak::getSampleCount()
-{
-    for ( auto stsz : getTypeAtoms<stsz>() ) {
-        return stsz->stszTable.size();
-    }
-    return 0;
+    return false;
 }
 
 MP4::trackSamplesType MP4::trak::getSamples()
