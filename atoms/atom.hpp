@@ -14,7 +14,7 @@
 #define XXH_swap16 OSSwapInt16
 #define XXH_swap32 OSSwapInt32
 #define XXH_swap64 OSSwapInt64
-#else
+#elif defined(WIN32)
 #include <stdlib.h>
 #define XXH_swap16 _byteswap_ushort
 #define XXH_swap32 _byteswap_ulong
