@@ -11,12 +11,12 @@ MP4::stco::stco(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock stcoData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stcoData, sizeof(stcoData));
-    stcoData.numberOfEntries = _byteswap_ulong(stcoData.numberOfEntries);
+    stcoData.numberOfEntries = XXH_swap32(stcoData.numberOfEntries);
     auto index = stcoData.numberOfEntries;
     uint32_t chunkOffset;
     do {
         fileStream.read((char *) &chunkOffset, sizeof(chunkOffset));
-        chunkOffset = _byteswap_ulong(chunkOffset);
+        chunkOffset = XXH_swap32(chunkOffset);
         stcoTable.push_back((uint64_t)chunkOffset);
         index--;
     } while ( index > 0);
@@ -74,15 +74,15 @@ void MP4::stco::createData(splunkType &splunk)
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
         if ( sample.trackID == trackID ) {
-            //auto offset = _byteswap_ulong((uint32_t) sample.filePos);
-            auto offset = _byteswap_uint64((uint64_t) sample.filePos);
+            //auto offset = XXH_swap32((uint32_t) sample.filePos);
+            auto offset = XXH_swap64((uint64_t) sample.filePos);
             splunk.fileWrite->write((char *) &offset, sizeof(offset));
             sampleCount++;
         }
     }
     auto lastPos = splunk.fileWrite->tellp();
     splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
-    sampleCount = _byteswap_ulong(sampleCount);
+    sampleCount = XXH_swap32(sampleCount);
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
 }

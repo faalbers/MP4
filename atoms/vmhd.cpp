@@ -10,10 +10,10 @@ MP4::vmhd::vmhd(internal::atomBuildType &atomBuild)
     datablock::vmhdDataBlock vmhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &vmhdData, sizeof(vmhdData));
-    graphicMode = _byteswap_ushort(vmhdData.graphicsMode);
-    opColorR = _byteswap_ushort(vmhdData.opColorR);
-    opColorG = _byteswap_ushort(vmhdData.opColorG);
-    opColorB = _byteswap_ushort(vmhdData.opColorB);
+    graphicMode = XXH_swap16(vmhdData.graphicsMode);
+    opColorR = XXH_swap16(vmhdData.opColorR);
+    opColorG = XXH_swap16(vmhdData.opColorG);
+    opColorB = XXH_swap16(vmhdData.opColorB);
     fileStream.close();
 }
 

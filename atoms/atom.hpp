@@ -9,6 +9,18 @@
 #include <string>
 #include <tuple>
 
+#if defined(__APPLE__)
+#include <libkern/OSByteOrder.h>
+#define XXH_swap16 OSSwapInt16
+#define XXH_swap32 OSSwapInt32
+#define XXH_swap64 OSSwapInt64
+#else
+#include <stdlib.h>
+#define XXH_swap16 _byteswap_ushort
+#define XXH_swap32 _byteswap_ulong
+#define XXH_swap64 _byteswap_uint64
+#endif
+
 namespace MP4
 {
 

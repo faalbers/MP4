@@ -11,15 +11,15 @@ MP4::elst::elst(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock elstData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &elstData, sizeof(elstData));
-    elstData.numberOfEntries = _byteswap_ulong(elstData.numberOfEntries);
+    elstData.numberOfEntries = XXH_swap32(elstData.numberOfEntries);
     auto index = elstData.numberOfEntries;
     datablock::elstEntryDataBlock elstEntryBlock;
     do {
         elstEntryType elstEntry;
         fileStream.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
-        elstEntry.duration = _byteswap_ulong(elstEntryBlock.duration);
-        elstEntry.mediaTime = _byteswap_ulong(elstEntryBlock.mediaTime);
-        elstEntryBlock.mediaRate = _byteswap_ulong(elstEntryBlock.mediaRate);
+        elstEntry.duration = XXH_swap32(elstEntryBlock.duration);
+        elstEntry.mediaTime = XXH_swap32(elstEntryBlock.mediaTime);
+        elstEntryBlock.mediaRate = XXH_swap32(elstEntryBlock.mediaRate);
         elstEntry.mediaRate = (float)elstEntryBlock.mediaRate / (float)(1 << 16);
         elstTable.push_back(elstEntry);
         index--;
@@ -68,7 +68,7 @@ void MP4::elst::createData(splunkType &splunk)
     datablock::elstEntryDataBlock elstEntryBlock;
     do {
         fileStream.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
-        elstEntryBlock.duration = _byteswap_ulong(fullDuration);
+        elstEntryBlock.duration = XXH_swap32(fullDuration);
         splunk.fileWrite->write((char *) &elstEntryBlock, sizeof(elstEntryBlock));
         index--;
     } while ( index > 0);

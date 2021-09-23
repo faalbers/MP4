@@ -12,21 +12,21 @@ MP4::tkhd::tkhd(internal::atomBuildType &atomBuild)
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &tkhdData, sizeof(tkhdData));
     
-    trackID = _byteswap_ulong(tkhdData.trackID);
-    duration = _byteswap_ulong(tkhdData.duration);
-    tkhdData.volume = _byteswap_ushort(tkhdData.volume);
+    trackID = XXH_swap32(tkhdData.trackID);
+    duration = XXH_swap32(tkhdData.duration);
+    tkhdData.volume = XXH_swap16(tkhdData.volume);
     volume = (float)tkhdData.volume / (float)(1 << 8);
-    tkhdData.trackWidth = _byteswap_ulong(tkhdData.trackWidth);
+    tkhdData.trackWidth = XXH_swap32(tkhdData.trackWidth);
     trackWidth = (float)tkhdData.trackWidth / (float)(1 << 16);
-    tkhdData.trackHeight = _byteswap_ulong(tkhdData.trackHeight);
+    tkhdData.trackHeight = XXH_swap32(tkhdData.trackHeight);
     trackHeight = (float)tkhdData.trackHeight / (float)(1 << 16);
 
     for ( int i = 0; i < 3; i++ ) {
         for ( int j = 0; j < 2; j++) {
-            tkhdData.matrix[i][j] = _byteswap_ulong(tkhdData.matrix[i][j]);
+            tkhdData.matrix[i][j] = XXH_swap32(tkhdData.matrix[i][j]);
             matrix[i][j] = (float)tkhdData.matrix[i][j] / (float)(1 << 16);
         }
-        tkhdData.matrix[i][2] = _byteswap_ulong(tkhdData.matrix[i][2]);
+        tkhdData.matrix[i][2] = XXH_swap32(tkhdData.matrix[i][2]);
         matrix[i][2] = (float)tkhdData.matrix[i][2] / (float)(1 << 30);
     }
     
@@ -62,7 +62,7 @@ void MP4::tkhd::createData(splunkType &splunk)
     datablock::tkhdDataBlock tkhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &tkhdData, sizeof(tkhdData));
-    tkhdData.duration = _byteswap_ulong(splunk.videoDuration);
+    tkhdData.duration = XXH_swap32(splunk.videoDuration);
 
     splunk.fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
 }

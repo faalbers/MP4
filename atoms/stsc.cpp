@@ -11,17 +11,17 @@ MP4::stsc::stsc(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock stscData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stscData, sizeof(stscData));
-    stscData.numberOfEntries = _byteswap_ulong(stscData.numberOfEntries);
+    stscData.numberOfEntries = XXH_swap32(stscData.numberOfEntries);
     auto index = stscData.numberOfEntries;
     do {
         std::vector<uint32_t> stscEntry;
         uint32_t val;
         fileStream.read((char *) &val, sizeof(val));
-        stscEntry.push_back(_byteswap_ulong(val));
+        stscEntry.push_back(XXH_swap32(val));
         fileStream.read((char *) &val, sizeof(val));
-        stscEntry.push_back(_byteswap_ulong(val));
+        stscEntry.push_back(XXH_swap32(val));
         fileStream.read((char *) &val, sizeof(val));
-        stscEntry.push_back(_byteswap_ulong(val));
+        stscEntry.push_back(XXH_swap32(val));
         stscTable.push_back(stscEntry);
         index--;
     } while ( index > 0);

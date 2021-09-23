@@ -47,8 +47,8 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     #endif
 
     // get atom size and data position
-    dataBlock.size32 = _byteswap_ulong(dataBlock.size32);     // big to little endian
-    dataBlock.size64 = _byteswap_uint64(dataBlock.size64);    // big to little endian
+    dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
+    dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
     if ( dataBlock.size32 == 1 ) {
         headerSize64_ = true;
         headerSize_ = 16;
@@ -198,7 +198,7 @@ void MP4::atom::createHeaderNew_(splunkType &splunk, std::string key_, bool size
     size_t headerSize;
     if ( createHeaderSize64_ ) {
         headerSize = sizeof(atomHeader);
-        atomHeader.size32 = _byteswap_ulong((uint32_t) 1);
+        atomHeader.size32 = XXH_swap32((uint32_t) 1);
     } else {
         headerSize = 8;
     }
@@ -260,13 +260,13 @@ void MP4::atom::createTail_(splunkType &splunk)
     auto createNextPos = splunk.fileWrite->tellp();
     if ( createHeaderSize64_ ) {
         auto createSize = (uint64_t) (createNextPos - createHeaderSizePos_);
-        createSize = _byteswap_uint64(createSize);
+        createSize = XXH_swap64(createSize);
         splunk.fileWrite->seekp(createHeaderSizePos_, splunk.fileWrite->beg);
         splunk.fileWrite->seekp(8, splunk.fileWrite->cur);
         splunk.fileWrite->write((char *) &createSize, sizeof(createSize));
     } else {
         auto createSize = (uint32_t) (createNextPos - createHeaderSizePos_);
-        createSize = _byteswap_ulong(createSize);
+        createSize = XXH_swap32(createSize);
         splunk.fileWrite->seekp(createHeaderSizePos_, splunk.fileWrite->beg);
         splunk.fileWrite->write((char *) &createSize, sizeof(createSize));
     }
@@ -341,8 +341,8 @@ bool MP4::atom::isContainer_(std::ifstream &fileStream, int64_t dataSize)
     bool result = false;
     do {
         fileStream.read((char *) &dataBlock, sizeof(dataBlock));
-        dataBlock.size32 = _byteswap_ulong(dataBlock.size32);     // big to little endian
-        dataBlock.size64 = _byteswap_uint64(dataBlock.size64);    // big to little endian
+        dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
+        dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
         if ( dataBlock.size32 == 1 ) size = dataBlock.size64;
         else size = (int64_t) dataBlock.size32;
 

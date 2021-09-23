@@ -10,11 +10,11 @@ MP4::gmin::gmin(internal::atomBuildType &atomBuild)
     datablock::gminDataBlock gminData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &gminData, sizeof(gminData));
-    graphicMode = _byteswap_ushort(gminData.graphicsMode);
-    opColorR = _byteswap_ushort(gminData.opColorR);
-    opColorG = _byteswap_ushort(gminData.opColorG);
-    opColorB = _byteswap_ushort(gminData.opColorB);
-    balance = (float)_byteswap_ushort(gminData.balance) / (float)(1 << 8);
+    graphicMode = XXH_swap16(gminData.graphicsMode);
+    opColorR = XXH_swap16(gminData.opColorR);
+    opColorG = XXH_swap16(gminData.opColorG);
+    opColorB = XXH_swap16(gminData.opColorB);
+    balance = (float)XXH_swap16(gminData.balance) / (float)(1 << 8);
     fileStream.close();
 }
 

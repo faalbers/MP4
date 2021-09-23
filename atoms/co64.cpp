@@ -11,12 +11,12 @@ MP4::co64::co64(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock co64Data;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &co64Data, sizeof(co64Data));
-    co64Data.numberOfEntries = _byteswap_ulong(co64Data.numberOfEntries);
+    co64Data.numberOfEntries = XXH_swap32(co64Data.numberOfEntries);
     auto index = co64Data.numberOfEntries;
     uint64_t chunkOffset;
     do {
         fileStream.read((char *) &chunkOffset, sizeof(chunkOffset));
-        chunkOffset = _byteswap_uint64(chunkOffset);
+        chunkOffset = XXH_swap64(chunkOffset);
         co64Table.push_back(chunkOffset);
         index--;
     } while ( index > 0);
@@ -69,14 +69,14 @@ void MP4::co64::createData(splunkType &splunk)
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
         if ( sample.trackID == trackID ) {
-            auto offset = _byteswap_uint64((uint64_t) sample.filePos);
+            auto offset = XXH_swap64((uint64_t) sample.filePos);
             splunk.fileWrite->write((char *) &offset, sizeof(offset));
             sampleCount++;
         }
     }
     auto lastPos = splunk.fileWrite->tellp();
     splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
-    sampleCount = _byteswap_ulong(sampleCount);
+    sampleCount = XXH_swap32(sampleCount);
     splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
 }

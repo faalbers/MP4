@@ -12,15 +12,15 @@ MP4::tcmi::tcmi(internal::atomBuildType &atomBuild)
 
     datablock::tcmiDataBlock tcmiData;
     fileStream.read((char *) &tcmiData, sizeof(tcmiData));
-    textFont = _byteswap_ushort(tcmiData.textFont);
-    textFace = _byteswap_ushort(tcmiData.textFace);
-    textSize = _byteswap_ushort(tcmiData.textSize);
-    textColorR = _byteswap_ushort(tcmiData.textColorR);
-    textColorG = _byteswap_ushort(tcmiData.textColorG);
-    textColorB = _byteswap_ushort(tcmiData.textColorB);
-    backgroundColorR = _byteswap_ushort(tcmiData.backgroundColorR);
-    backgroundColorG = _byteswap_ushort(tcmiData.backgroundColorG);
-    backgroundColorB = _byteswap_ushort(tcmiData.backgroundColorB);
+    textFont = XXH_swap16(tcmiData.textFont);
+    textFace = XXH_swap16(tcmiData.textFace);
+    textSize = XXH_swap16(tcmiData.textSize);
+    textColorR = XXH_swap16(tcmiData.textColorR);
+    textColorG = XXH_swap16(tcmiData.textColorG);
+    textColorB = XXH_swap16(tcmiData.textColorB);
+    backgroundColorR = XXH_swap16(tcmiData.backgroundColorR);
+    backgroundColorG = XXH_swap16(tcmiData.backgroundColorG);
+    backgroundColorB = XXH_swap16(tcmiData.backgroundColorB);
 
     if ( (fileNextPos_ - fileStream.tellg()) > 0 ) {
         uint8_t pascalLength;

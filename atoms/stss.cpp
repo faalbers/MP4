@@ -10,12 +10,12 @@ MP4::stss::stss(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock stssData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stssData, sizeof(stssData));
-    stssData.numberOfEntries = _byteswap_ulong(stssData.numberOfEntries);
+    stssData.numberOfEntries = XXH_swap32(stssData.numberOfEntries);
     auto index = stssData.numberOfEntries;
     uint32_t numberTemp;
     do {
         fileStream.read((char *) &numberTemp, sizeof(numberTemp));
-        stssTable.push_back(_byteswap_ulong(numberTemp));
+        stssTable.push_back(XXH_swap32(numberTemp));
         index--;
     } while ( index > 0);
     fileStream.close();
@@ -67,14 +67,14 @@ void MP4::stss::createData(splunkType &splunk)
     uint32_t syncCount = 0;
     for ( auto sample : splunk.samples ) {
         if ( sample.trackID == trackID && sample.sync ) {
-            auto ID = _byteswap_ulong((uint32_t) sample.ID);
+            auto ID = XXH_swap32((uint32_t) sample.ID);
             splunk.fileWrite->write((char *) &ID, sizeof(ID));
             syncCount++;
         }
     }
     auto lastPos = splunk.fileWrite->tellp();
     splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
-    syncCount = _byteswap_ulong(syncCount);
+    syncCount = XXH_swap32(syncCount);
     splunk.fileWrite->write((char *) &syncCount, sizeof(syncCount));
     splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
 }

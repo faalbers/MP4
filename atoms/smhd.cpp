@@ -10,7 +10,7 @@ MP4::smhd::smhd(internal::atomBuildType &atomBuild)
     datablock::smhdDataBlock smhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &smhdData, sizeof(smhdData));
-    balance = (float)_byteswap_ushort(smhdData.balance) / (float)(1 << 8);
+    balance = (float)XXH_swap16(smhdData.balance) / (float)(1 << 8);
     fileStream.close();
 }
 

@@ -14,7 +14,7 @@ MP4::dref::dref(internal::atomBuildType &atomBuild)
     atomBuild.filePos = fileStream.tellg();
     fileStream.close();
 
-    drefData.numberOfEntries = _byteswap_ulong(drefData.numberOfEntries);
+    drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
     uint32_t index = 1;
     atomBuild.parentPath += "dref/";
     do {

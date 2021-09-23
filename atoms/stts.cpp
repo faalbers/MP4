@@ -11,15 +11,15 @@ MP4::stts::stts(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock sttsData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &sttsData, sizeof(sttsData));
-    sttsData.numberOfEntries = _byteswap_ulong(sttsData.numberOfEntries);
+    sttsData.numberOfEntries = XXH_swap32(sttsData.numberOfEntries);
     auto index = sttsData.numberOfEntries;
     do {
         std::vector<uint32_t> sttsEntry;
         uint32_t val;
         fileStream.read((char *) &val, sizeof(val));
-        sttsEntry.push_back(_byteswap_ulong(val));
+        sttsEntry.push_back(XXH_swap32(val));
         fileStream.read((char *) &val, sizeof(val));
-        sttsEntry.push_back(_byteswap_ulong(val));
+        sttsEntry.push_back(XXH_swap32(val));
         sttsTable.push_back(sttsEntry);
         index--;
     } while ( index > 0);
@@ -76,15 +76,15 @@ void MP4::stts::createData(splunkType &splunk)
     sttsData.flag[0] = 0;
     sttsData.flag[1] = 0;
     sttsData.flag[2] = 0;
-    sttsData.numberOfEntries = _byteswap_ulong((uint32_t) sttsNew.size());
+    sttsData.numberOfEntries = XXH_swap32((uint32_t) sttsNew.size());
 
     splunk.fileWrite->write((char *) &sttsData, sizeof(sttsData));
 
     uint32_t entryVal;
     for ( auto entry : sttsNew ) {
-        entryVal = _byteswap_ulong(entry[0]);
+        entryVal = XXH_swap32(entry[0]);
         splunk.fileWrite->write((char *) &entryVal, sizeof(entryVal));
-        entryVal = _byteswap_ulong(entry[1]);
+        entryVal = XXH_swap32(entry[1]);
         splunk.fileWrite->write((char *) &entryVal, sizeof(entryVal));
     }
 }

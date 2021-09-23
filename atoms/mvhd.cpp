@@ -10,23 +10,23 @@ MP4::mvhd::mvhd(internal::atomBuildType &atomBuild)
     datablock::mvhdDataBlock mvhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mvhdData, sizeof(mvhdData));
-    timeScale = _byteswap_ulong(mvhdData.timeScale);
-    duration = _byteswap_ulong(mvhdData.duration);
-    mvhdData.preferredRate = _byteswap_ulong(mvhdData.preferredRate);
+    timeScale = XXH_swap32(mvhdData.timeScale);
+    duration = XXH_swap32(mvhdData.duration);
+    mvhdData.preferredRate = XXH_swap32(mvhdData.preferredRate);
     preferredRate = (float)mvhdData.preferredRate / (float)(1 << 16);
-    mvhdData.preferredVolume = _byteswap_ushort(mvhdData.preferredVolume);
+    mvhdData.preferredVolume = XXH_swap16(mvhdData.preferredVolume);
     preferredVolume = (float)mvhdData.preferredVolume / (float)(1 << 8);
     
     for ( int i = 0; i < 3; i++ ) {
         for ( int j = 0; j < 2; j++) {
-            mvhdData.matrix[i][j] = _byteswap_ulong(mvhdData.matrix[i][j]);
+            mvhdData.matrix[i][j] = XXH_swap32(mvhdData.matrix[i][j]);
             matrix[i][j] = (float)mvhdData.matrix[i][j] / (float)(1 << 16);
         }
-        mvhdData.matrix[i][2] = _byteswap_ulong(mvhdData.matrix[i][2]);
+        mvhdData.matrix[i][2] = XXH_swap32(mvhdData.matrix[i][2]);
         matrix[i][2] = (float)mvhdData.matrix[i][2] / (float)(1 << 30);
     }
     
-    nextTrackID = _byteswap_ulong(mvhdData.nextTrackID);
+    nextTrackID = XXH_swap32(mvhdData.nextTrackID);
 
     fileStream.close();
 }
@@ -60,7 +60,7 @@ void MP4::mvhd::createData(splunkType &splunk)
     datablock::mvhdDataBlock mvhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mvhdData, sizeof(mvhdData));
-    mvhdData.duration = _byteswap_ulong(splunk.videoDuration);
+    mvhdData.duration = XXH_swap32(splunk.videoDuration);
 
     splunk.fileWrite->write((char *) &mvhdData, sizeof(mvhdData));
 

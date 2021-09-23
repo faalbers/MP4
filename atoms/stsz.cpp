@@ -10,14 +10,14 @@ MP4::stsz::stsz(internal::atomBuildType &atomBuild)
     datablock::stszTableBlock stszData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stszData, sizeof(stszData));
-    defaultSampleSize = _byteswap_ulong(stszData.defaultSampleSize);
+    defaultSampleSize = XXH_swap32(stszData.defaultSampleSize);
     if ( defaultSampleSize == 0 ) {
-        stszData.numberOfEntries = _byteswap_ulong(stszData.numberOfEntries);
+        stszData.numberOfEntries = XXH_swap32(stszData.numberOfEntries);
         auto index = stszData.numberOfEntries;
         uint32_t defaultSampleSizeTemp;
         do {
             fileStream.read((char *) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
-            stszTable.push_back(_byteswap_ulong(defaultSampleSizeTemp));
+            stszTable.push_back(XXH_swap32(defaultSampleSizeTemp));
             index--;
         } while ( index > 0);
     }
@@ -77,7 +77,7 @@ void MP4::stsz::createData(splunkType &splunk)
     for ( auto sample : splunk.samples ) {
         if ( sample.trackID == trackID && sample.size != stszData.defaultSampleSize ) {
             stszData.defaultSampleSize = 0;
-            stszData.numberOfEntries = _byteswap_ulong((uint32_t)splunk.tracks[trackID].sampleCount);
+            stszData.numberOfEntries = XXH_swap32((uint32_t)splunk.tracks[trackID].sampleCount);
             break;
         }
     }
@@ -90,8 +90,8 @@ void MP4::stsz::createData(splunkType &splunk)
     uint32_t sampleCount = 0;
     for ( auto sample : splunk.samples ) {
         if ( sample.trackID == trackID ) {
-            //auto offset = _byteswap_ulong((uint32_t) sample.filePos);
-            auto size = _byteswap_ulong(sample.size);
+            //auto offset = XXH_swap32((uint32_t) sample.filePos);
+            auto size = XXH_swap32(sample.size);
             splunk.fileWrite->write((char *) &size, sizeof(size));
             sampleCount++;
         }

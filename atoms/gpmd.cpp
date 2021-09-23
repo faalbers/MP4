@@ -9,7 +9,7 @@ MP4::gpmd::gpmd(internal::atomBuildType &atomBuild)
     if ( fileStream.fail() ) throw std::runtime_error("gpmd atom can not parse file: "+filePath_);
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &version, sizeof(version));
-    version = _byteswap_ulong(version);
+    version = XXH_swap32(version);
     fileStream.close();
 }
 

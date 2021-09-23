@@ -11,16 +11,16 @@ MP4::stsd::stsd(internal::atomBuildType &atomBuild)
     datablock::atomTableBlock stsdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stsdData, sizeof(stsdData));
-    stsdData.numberOfEntries = _byteswap_ulong(stsdData.numberOfEntries);
+    stsdData.numberOfEntries = XXH_swap32(stsdData.numberOfEntries);
     uint32_t index = 1;
     datablock::stsdEntryDataBlock sampleDescriptionBlock;
     do {
         stsdEntryType stsdEntry;
         fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
         stsdEntry.ID = index;
-        auto size = _byteswap_ulong(sampleDescriptionBlock.size);
+        auto size = XXH_swap32(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);
-        stsdEntry.dataReferenceIndex = _byteswap_ushort(sampleDescriptionBlock.dataReferenceIndex);
+        stsdEntry.dataReferenceIndex = XXH_swap16(sampleDescriptionBlock.dataReferenceIndex);
         stsdTable.push_back(stsdEntry);
         
         // not sure what is in the tail of the stsd entry

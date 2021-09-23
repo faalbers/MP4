@@ -14,7 +14,7 @@ MP4::ftyp::ftyp(internal::atomBuildType &atomBuild)
     fileStream.read((char *) &ftypData, sizeof(ftypData));
     
     majorBrand = std::string(ftypData.majorBrand).substr(0,4);
-    version = _byteswap_ulong(ftypData.version);
+    version = XXH_swap32(ftypData.version);
     
     std::stringstream date;
     date << std::hex << std::setfill('0')

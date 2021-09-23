@@ -19,7 +19,7 @@ MP4::tmcd::tmcd(internal::atomBuildType &atomBuild)
         uint32_t trackID;
         do {
             fileStream.read((char *) &trackID, sizeof(trackID));
-            trackIDs.push_back(_byteswap_ulong(trackID));
+            trackIDs.push_back(XXH_swap32(trackID));
         } while ( fileStream.tellg() < fileNextPos_ );
     } else {
     }

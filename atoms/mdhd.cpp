@@ -11,10 +11,10 @@ MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
     datablock::mdhdDataBlock mdhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mdhdData, sizeof(mdhdData));
-    creationTime = _byteswap_ulong(mdhdData.creationTime);
-    modificationTime = _byteswap_ulong(mdhdData.modificationTime);
-    timeScale = _byteswap_ulong(mdhdData.timeScale);
-    duration = _byteswap_ulong(mdhdData.duration);
+    creationTime = XXH_swap32(mdhdData.creationTime);
+    modificationTime = XXH_swap32(mdhdData.modificationTime);
+    timeScale = XXH_swap32(mdhdData.timeScale);
+    duration = XXH_swap32(mdhdData.duration);
     fileStream.close();
 }
 
@@ -44,7 +44,7 @@ void MP4::mdhd::createData(splunkType &splunk)
     datablock::mdhdDataBlock mdhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mdhdData, sizeof(mdhdData));
-    mdhdData.duration = _byteswap_ulong(fullDuration);
+    mdhdData.duration = XXH_swap32(fullDuration);
 
     splunk.fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
 }
