@@ -119,7 +119,7 @@ MP4::splunkType MP4::MP4::splunkGet()
         // flatten media duration to video duration
         auto timeScaleMult = (double) splunk.videoTimeScale / samples.mediaTimeScale;
         double toVideoTimeScale = timeScaleMult * (double) samples.mediaDuration;
-        int64_t timeDifference = ((double) splunk.videoDuration - toVideoTimeScale) / timeScaleMult;
+        int64_t timeDifference = (int64_t)(((double) splunk.videoDuration - toVideoTimeScale) / timeScaleMult);
         
         // get the track samples and flatten last sample duration with difference to video duration
         auto trackSamples = samples;
@@ -197,7 +197,7 @@ void MP4::MP4::splunkAppend(splunkType &splunk, MP4 &appendMP4)
     auto tracks = splunk.tracks;
     for ( auto appendSample : splunkAppend.samples ) {
         appendSample.trackID = trackMatch[appendSample.trackID];
-        appendSample.ID += tracks[appendSample.trackID].sampleCount;
+        appendSample.ID += (uint32_t) tracks[appendSample.trackID].sampleCount;
         splunk.tracks[appendSample.trackID].sampleCount = appendSample.ID;
         splunk.samples.push_back(appendSample);
     }

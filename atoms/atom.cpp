@@ -25,7 +25,7 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
 {
-    int64_t fileSize, childFilePos;
+    int64_t fileSize;
     bool container;
 
     std::ifstream fileStream(filePath_, std::ios::binary);

@@ -122,7 +122,7 @@ MP4::trackSamplesType MP4::trak::getSamples()
     for ( auto chunk : getChunks() ) {
         if ( chunk.sampleDescriptionID > 1 )
             throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
-        if (filePos > chunk.dataOffset )
+        if (filePos > (int64_t) chunk.dataOffset )
             throw std::runtime_error("MP4::getSamples: wrong file position on samples");
         auto lastChunkSampleID = chunk.firstSampleID + chunk.samples - 1;
         filePos = chunk.dataOffset;

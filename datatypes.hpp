@@ -24,7 +24,7 @@ typedef struct sampleType
     uint32_t    ID;
     bool        sync;
     int64_t     filePos;
-    size_t      size;
+    uint32_t    size;
     uint32_t    time;
     uint32_t    duration;
 } sampleType;
@@ -48,7 +48,7 @@ typedef struct splunkSampleType
     uint32_t    trackID;
     std::string filePath;
     int64_t     filePos;
-    size_t      size;
+    uint32_t    size;
     uint32_t    time;
     uint32_t    duration;
     uint32_t    timeScale;
@@ -119,7 +119,7 @@ namespace internal
 typedef struct atomBuildType
 {
     std::string filePath;
-    uint64_t    filePos;
+    int64_t     filePos;
     std::string parentPath;
 } atomBuildType;
 
