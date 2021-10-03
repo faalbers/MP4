@@ -2,6 +2,7 @@
 #define MP4_DREF_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -22,7 +23,7 @@ public:
     void printHierarchyData(bool fullLists = false);
     
     static std::string                  key;
-    std::vector<std::shared_ptr<atom>>  dataReferences;
+    std::map<uint32_t, std::shared_ptr<atom>>   dataReferences;
 };
 
 }

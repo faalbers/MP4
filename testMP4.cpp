@@ -58,6 +58,15 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (false) {
+        // test isDataInSameFile
+        for ( auto track : mp4A.getTracks() ) {
+            if ( track->isDataInSameFile() )
+                std::cout << track->getID() << " in same file " << std::endl;
+        }
+    }
+
+
     auto end = std::chrono::high_resolution_clock::now();
     ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - testStart);
     std::cout << "\nTest Time : " << ms_int.count() << "ms\n";

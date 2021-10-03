@@ -30,8 +30,8 @@ uint32_t MP4::trak::getMediaTimeScale()
 bool MP4::trak::isDataInSameFile() {
     for ( auto dref : getTypeAtoms<dref>() ) {
         for ( auto dataReference : dref->dataReferences ) {
-            if ( dataReference-> key == "url " ) return ((url_ *) dataReference.get())->dataInSameFile;
-            else if ( dataReference-> key == "alis" ) return ((alis *) dataReference.get())->dataInSameFile;
+            if ( dataReference.second->key == "url " ) return ((url_ *) dataReference.second.get())->dataInSameFile;
+            else if ( dataReference.second-> key == "alis" ) return ((alis *) dataReference.second.get())->dataInSameFile;
             else throw std::runtime_error("MP4::trak::isDataInSameFile Can't find data reference");
         }
     }

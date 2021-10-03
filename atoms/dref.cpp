@@ -15,12 +15,12 @@ MP4::dref::dref(internal::atomBuildType &atomBuild)
     fileStream.close();
 
     drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
-    uint32_t index = 1;
+    uint32_t ID = 1;
     atomBuild.parentPath += "dref/";
     do {
-        dataReferences.push_back(makeAtom_(atomBuild));
-        index++;
-    } while ( index <= drefData.numberOfEntries );
+        dataReferences[ID] = makeAtom_(atomBuild);
+        ID++;
+    } while ( ID <= drefData.numberOfEntries );
 }
 
 void MP4::dref::printData(bool fullLists)
@@ -28,12 +28,10 @@ void MP4::dref::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Data Reference Atom) ["<< headerSize_ << "]" << std::endl;
-    int index = 1;
     std::cout << dataIndent << "[#] ( Data Reference Type Atom )\n";
     for ( auto entry : dataReferences ) {
-        std::cout << dataIndent << "[" << index << "] ( ";
-        entry->printData();
-        index++;
+        std::cout << dataIndent << "[" << entry.first << "] ( ";
+        entry.second->printData();
     }
 }
 
