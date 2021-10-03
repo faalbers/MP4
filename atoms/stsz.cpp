@@ -15,10 +15,12 @@ MP4::stsz::stsz(internal::atomBuildType &atomBuild)
         stszData.numberOfEntries = XXH_swap32(stszData.numberOfEntries);
         auto index = stszData.numberOfEntries;
         uint32_t defaultSampleSizeTemp;
+        uint32_t ID = 1;
         do {
             fileStream.read((char *) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
-            stszTable.push_back(XXH_swap32(defaultSampleSizeTemp));
+            stszTable[ID] = XXH_swap32(defaultSampleSizeTemp);
             index--;
+            ID++;
         } while ( index > 0);
     }
     fileStream.close();
@@ -31,19 +33,18 @@ void MP4::stsz::printData(bool fullLists)
     std::cout << path_ << " (Sample Size Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
     if ( stszTable.size() != 0 ) std::cout << dataIndent << "[#] (sample Size)\n";
-    size_t index = 1;
     if ( fullLists || (!fullLists && stszTable.size() <= 6) ) {
         for ( auto entry : stszTable ) {
-            std::cout << dataIndent << "[" << index << "] ( " << entry << " )" << std::endl;
-            index++;
+            std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second << " )" << std::endl;
         }
     } else {
-        for ( index = 0 ; index < 3; index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
+        for ( uint32_t index = 1 ; index <= 3; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stszTable[index] << " )" << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
-        for ( index = stszTable.size()-3 ; index < stszTable.size(); index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stszTable[index] << " )" << std::endl;
+        uint32_t tableSize = (uint32_t) stszTable.size();
+        for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stszTable[index] << " )" << std::endl;
         }
     }
 }

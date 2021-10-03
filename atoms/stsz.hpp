@@ -2,6 +2,7 @@
 #define MP4_STSZ_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -26,7 +27,8 @@ public:
 
     static std::string      key;
     uint32_t                defaultSampleSize;
-    std::vector<uint32_t>   stszTable;
+    // stszTable[sampleID] = sampleSize;
+    std::map<uint32_t, uint32_t>   stszTable;
 };
 
 }
