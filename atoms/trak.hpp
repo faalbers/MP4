@@ -36,7 +36,7 @@ public:
     size_t                      getSampleCount();
     std::map<uint32_t, stsdEntryType>   getSampleDescriptions();
 
-    std::vector<chunkType>      getChunks();
+    std::map<uint32_t, chunkType>       getChunks();
     size_t                      getChunkCount();
     std::map<uint32_t, uint64_t>    getChunkOffsets();
 

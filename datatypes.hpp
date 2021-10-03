@@ -21,8 +21,6 @@ class MP4;
 
 typedef struct chunkType
 {
-    uint32_t    ID;
-    uint32_t    trackID;
     uint32_t    samples;
     uint32_t    firstSampleID;
     uint32_t    currentSampleID;

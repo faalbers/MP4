@@ -56,9 +56,9 @@ size_t MP4::trak::getChunkCount()
     return 0;
 }
 
-std::vector<MP4::chunkType> MP4::trak::getChunks()
+std::map<uint32_t, MP4::chunkType> MP4::trak::getChunks()
 {
-    std::vector<chunkType> chunks;
+    std::map<uint32_t, chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {
         uint32_t sampleID = 1;
         std::map<uint32_t, uint64_t> chunkOffsets;
@@ -80,14 +80,12 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
 
         do {
             chunkType chunk;
-            chunk.ID = currentChunkID;
-            chunk.trackID = getID();
             chunk.samples = stscTable.back().second[1];
             chunk.firstSampleID = sampleID;
             chunk.currentSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back().second[2];
             chunk.dataOffset = chunkOffsets[currentChunkID];
-            chunks.push_back(chunk);
+            chunks[currentChunkID] = chunk;
             sampleID += stscTable.back().second[1];
             currentChunkID++;
             // check next first chunk if available and pop if we get there

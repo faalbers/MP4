@@ -44,12 +44,12 @@ int main(int argc, char* argv[])
         // test getChunks
         for ( auto track : mp4A.getTracks() ) {
             for ( auto chunk : track->getChunks() ) {
-                std::cout << chunk.ID << " " << chunk.firstSampleID << " " << chunk.dataOffset << std::endl;
+                std::cout << chunk.first << " " << chunk.second.firstSampleID << " " << chunk.second.dataOffset << std::endl;
             }
         }
     }
 
-    if (true) {
+    if (false) {
         // test getSampleDescriptions
         for ( auto track : mp4A.getTracks() ) {
             for ( auto sDesc : track->getSampleDescriptions() ) {
