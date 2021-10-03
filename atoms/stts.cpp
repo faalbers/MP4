@@ -13,6 +13,7 @@ MP4::stts::stts(internal::atomBuildType &atomBuild)
     fileStream.read((char *) &sttsData, sizeof(sttsData));
     sttsData.numberOfEntries = XXH_swap32(sttsData.numberOfEntries);
     auto index = sttsData.numberOfEntries;
+    uint32_t ID = 1;
     do {
         std::vector<uint32_t> sttsEntry;
         uint32_t val;
@@ -20,8 +21,9 @@ MP4::stts::stts(internal::atomBuildType &atomBuild)
         sttsEntry.push_back(XXH_swap32(val));
         fileStream.read((char *) &val, sizeof(val));
         sttsEntry.push_back(XXH_swap32(val));
-        sttsTable.push_back(sttsEntry);
+        sttsTable[ID] = sttsEntry;
         index--;
+        ID++;
     } while ( index > 0);
     fileStream.close();
 }
@@ -31,12 +33,9 @@ void MP4::stts::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Time-To-Sample Atom) ["<< headerSize_ << "]" << std::endl;
-    int index = 1;
     std::cout << dataIndent << "[#] (sampleCount , sampleDuration)\n";
-    for ( auto entry : sttsTable ) {
-        std::cout << dataIndent << "[" << index << "] ( " << entry[0] << ", " << entry[1] << " )" << std::endl;
-        index++;
-    }
+    for ( auto entry : sttsTable )
+        std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second[0] << ", " << entry.second[1] << " )" << std::endl;
 }
 
 void MP4::stts::printHierarchyData(bool fullLists)
