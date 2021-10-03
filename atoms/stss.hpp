@@ -31,7 +31,7 @@ public:
     void printHierarchyData(bool fullLists = false);
 
     static std::string      key;
-    std::vector<uint32_t>   stssTable;
+    std::map<uint32_t, uint32_t>    stssTable;
 };
 
 }

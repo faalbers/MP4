@@ -12,11 +12,13 @@ MP4::stss::stss(internal::atomBuildType &atomBuild)
     fileStream.read((char *) &stssData, sizeof(stssData));
     stssData.numberOfEntries = XXH_swap32(stssData.numberOfEntries);
     auto index = stssData.numberOfEntries;
-    uint32_t numberTemp;
+    uint32_t sampleID;
+    uint32_t ID = 1;
     do {
-        fileStream.read((char *) &numberTemp, sizeof(numberTemp));
-        stssTable.push_back(XXH_swap32(numberTemp));
+        fileStream.read((char *) &sampleID, sizeof(sampleID));
+        stssTable[ID] = XXH_swap32(sampleID);
         index--;
+        ID++;
     } while ( index > 0);
     fileStream.close();
 }
@@ -26,20 +28,18 @@ void MP4::stss::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sync Sample Atom) ["<< headerSize_ << "]" << std::endl;
-    size_t index = 1;
-    std::cout << dataIndent << "[#] (sample number)\n";
+    std::cout << dataIndent << "[#] (sample ID)\n";
     if ( fullLists || (!fullLists && stssTable.size() <= 6) ) {
-        for ( auto entry : stssTable ) {
-            std::cout << dataIndent << "[" << index << "] ( " << entry << " )" << std::endl;
-            index++;
-        }
+        for ( auto entry : stssTable )
+            std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second << " )" << std::endl;
     } else {
-        for ( index = 0 ; index < 3; index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stssTable[index] << " )" << std::endl;
+        for ( uint32_t index = 1 ; index <= 3; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stssTable[index] << " )" << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
-        for ( index = stssTable.size()-3 ; index < stssTable.size(); index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stssTable[index] << " )" << std::endl;
+        uint32_t tableSize = (uint32_t) stssTable.size();
+        for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stssTable[index] << " )" << std::endl;
         }
     }
 }
