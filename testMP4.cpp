@@ -40,6 +40,15 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (false) {
+        // test getChunks
+        for ( auto track : mp4A.getTracks() ) {
+            for ( auto chunk : track->getChunks() ) {
+                std::cout << chunk.ID << " " << chunk.firstSampleID << " " << chunk.dataOffset << std::endl;
+            }
+        }
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
     ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - testStart);
     std::cout << "\nTest Time : " << ms_int.count() << "ms\n";

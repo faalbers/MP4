@@ -14,11 +14,13 @@ MP4::stco::stco(internal::atomBuildType &atomBuild)
     stcoData.numberOfEntries = XXH_swap32(stcoData.numberOfEntries);
     auto index = stcoData.numberOfEntries;
     uint32_t chunkOffset;
+    uint32_t ID = 1;
     do {
         fileStream.read((char *) &chunkOffset, sizeof(chunkOffset));
         chunkOffset = XXH_swap32(chunkOffset);
-        stcoTable.push_back((uint64_t)chunkOffset);
+        stcoTable[ID] = (uint64_t) chunkOffset;
         index--;
+        ID++;
     } while ( index > 0);
     fileStream.close();
 }
@@ -28,20 +30,18 @@ void MP4::stco::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Chunk Offset Atom (32-bit)) ["<< headerSize_ << "]" << std::endl;
-    size_t index = 1;
     std::cout << dataIndent << "[#] ( chunk offset )\n";
     if ( fullLists || (!fullLists && stcoTable.size() <= 6) ) {
-        for ( auto entry : stcoTable ) {
-            std::cout << dataIndent << "[" << index << "] ( " << entry << " )" << std::endl;
-            index++;
-        }
+        for ( auto entry : stcoTable )
+            std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second << " )" << std::endl;
     } else {
-        for ( index = 0 ; index < 3; index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stcoTable[index] << " )" << std::endl;
+        for ( uint32_t index = 1 ; index <= 3; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stcoTable[index] << " )" << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
-        for ( index = stcoTable.size()-3 ; index < stcoTable.size(); index++ ) {
-            std::cout << dataIndent << "[" << index+1 << "] ( " << stcoTable[index] << " )" << std::endl;
+        uint32_t tableSize = (uint32_t) stcoTable.size();
+        for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
+            std::cout << dataIndent << "[" << index << "] ( " << stcoTable[index] << " )" << std::endl;
         }
     }
 }

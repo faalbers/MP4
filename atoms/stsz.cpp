@@ -34,9 +34,8 @@ void MP4::stsz::printData(bool fullLists)
     std::cout << dataIndent << "defaultSamplSize: " << defaultSampleSize << std::endl;
     if ( stszTable.size() != 0 ) std::cout << dataIndent << "[#] (sample Size)\n";
     if ( fullLists || (!fullLists && stszTable.size() <= 6) ) {
-        for ( auto entry : stszTable ) {
+        for ( auto entry : stszTable )
             std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second << " )" << std::endl;
-        }
     } else {
         for ( uint32_t index = 1 ; index <= 3; index++ ) {
             std::cout << dataIndent << "[" << index << "] ( " << stszTable[index] << " )" << std::endl;

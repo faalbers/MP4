@@ -38,7 +38,7 @@ public:
 
     std::vector<chunkType>      getChunks();
     size_t                      getChunkCount();
-    std::vector<uint64_t>       getChunkOffsets();
+    std::map<uint32_t, uint64_t>    getChunkOffsets();
 
     bool isDataInSameFile();
 

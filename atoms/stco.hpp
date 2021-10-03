@@ -2,6 +2,7 @@
 #define MP4_STCO_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -30,7 +31,8 @@ public:
     
     static std::string      key;
     uint32_t                defaultSampleSize;
-    std::vector<uint64_t>   stcoTable;
+    // stcoTable[chunkID] = chunkOffset
+    std::map<uint32_t, uint64_t>    stcoTable;
 };
 
 }

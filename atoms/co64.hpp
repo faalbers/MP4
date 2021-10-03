@@ -2,6 +2,7 @@
 #define MP4_CO64_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -30,7 +31,7 @@ public:
 
     static std::string      key;
     uint32_t                defaultSampleSize;
-    std::vector<uint64_t>   co64Table;
+    std::map<uint32_t, uint64_t>    co64Table;
 };
 
 }

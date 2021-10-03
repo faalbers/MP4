@@ -61,7 +61,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
     std::vector<chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {
         uint32_t sampleID = 1;
-        std::vector<uint64_t> chunkOffsets;
+        std::map<uint32_t, uint64_t> chunkOffsets;
         for ( auto stco : getTypeAtoms<stco>() ) {
             chunkOffsets = stco->stcoTable;
         }
@@ -84,7 +84,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
             chunk.firstSampleID = sampleID;
             chunk.currentSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back()[2];
-            chunk.dataOffset = chunkOffsets[currentChunkID-1];
+            chunk.dataOffset = chunkOffsets[currentChunkID];
             chunks.push_back(chunk);
             sampleID += stscTable.back()[1];
             currentChunkID++;
@@ -97,7 +97,7 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
     return chunks;
 }
 
-std::vector<uint64_t> MP4::trak::getChunkOffsets()
+std::map<uint32_t, uint64_t> MP4::trak::getChunkOffsets()
 {
     for ( auto stco : getTypeAtoms<stco>() ) {
         return stco->stcoTable;
