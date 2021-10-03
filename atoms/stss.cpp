@@ -50,34 +50,5 @@ void MP4::stss::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::stss::createData(splunkType &splunk)
-{
-    // no checking of trackID since that is done in the trak level
-
-    auto trackID = trakAtom_->getID();
-
-    datablock::atomTableBlock stssData;
-    stssData.version = 0;
-    stssData.flag[0] = 0;
-    stssData.flag[1] = 0;
-    stssData.flag[2] = 0;
-
-    splunk.fileWrite->write((char *) &stssData, sizeof(stssData) );
-    auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
-    uint32_t syncCount = 0;
-    for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID && sample.sync ) {
-            auto ID = XXH_swap32((uint32_t) sample.ID);
-            splunk.fileWrite->write((char *) &ID, sizeof(ID));
-            syncCount++;
-        }
-    }
-    auto lastPos = splunk.fileWrite->tellp();
-    splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
-    syncCount = XXH_swap32(syncCount);
-    splunk.fileWrite->write((char *) &syncCount, sizeof(syncCount));
-    splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
-}
-
 std::string MP4::stss::key = "stss";
 

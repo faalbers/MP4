@@ -30,8 +30,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void createData(splunkType &splunk);
-
     static std::string      key;
     std::vector<uint32_t>   stssTable;
 };

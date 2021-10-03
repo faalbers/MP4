@@ -33,14 +33,12 @@ public:
 
     uint32_t                    getMediaTimeScale(); // float in seconds
 
-    trackSamplesType            getSamples();
     size_t                      getSampleCount();
     std::vector<stsdEntryType>  getSampleDescriptions();
 
     std::vector<chunkType>      getChunks();
     size_t                      getChunkCount();
     std::vector<uint64_t>       getChunkOffsets();
-    chunkType                   sampleToChunk(sampleType sample);
 
     bool isDataInSameFile();
 
@@ -52,8 +50,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void create(splunkType &splunk);
-    
     static std::string  key;
 };
 

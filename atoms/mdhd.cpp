@@ -33,21 +33,5 @@ void MP4::mdhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::mdhd::createData(splunkType &splunk)
-{
-
-    auto timeScaleMult = (double) timeScale / splunk.videoTimeScale;
-    auto fullDuration = (uint32_t) (timeScaleMult * (double) splunk.videoDuration);
-
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("MP4::mdhd::createData atom can not parse file: "+filePath_);
-    datablock::mdhdDataBlock mdhdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &mdhdData, sizeof(mdhdData));
-    mdhdData.duration = XXH_swap32(fullDuration);
-
-    splunk.fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
-}
-
 std::string MP4::mdhd::key = "mdhd";
 

@@ -20,9 +20,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void createHeader(splunkType &splunk);
-    void createData(splunkType &splunk);
-
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;

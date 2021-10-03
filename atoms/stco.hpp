@@ -28,9 +28,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
     
-    void createHeader(splunkType &splunk);
-    void createData(splunkType &splunk);
-
     static std::string      key;
     uint32_t                defaultSampleSize;
     std::vector<uint64_t>   stcoTable;

@@ -52,34 +52,5 @@ void MP4::co64::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::co64::createData(splunkType &splunk)
-{
-    // no checking of trackID since that is done in the trak level
-
-    auto trackID = trakAtom_->getID();
-
-    datablock::atomTableBlock stcoData;
-    stcoData.version = 0;
-    stcoData.flag[0] = 0;
-    stcoData.flag[1] = 0;
-    stcoData.flag[2] = 0;
-
-    splunk.fileWrite->write((char *) &stcoData, sizeof(stcoData));
-    auto entriesSizePos = splunk.fileWrite->tellp() - (int64_t) 4;
-    uint32_t sampleCount = 0;
-    for ( auto sample : splunk.samples ) {
-        if ( sample.trackID == trackID ) {
-            auto offset = XXH_swap64((uint64_t) sample.filePos);
-            splunk.fileWrite->write((char *) &offset, sizeof(offset));
-            sampleCount++;
-        }
-    }
-    auto lastPos = splunk.fileWrite->tellp();
-    splunk.fileWrite->seekp(entriesSizePos, splunk.fileWrite->beg);
-    sampleCount = XXH_swap32(sampleCount);
-    splunk.fileWrite->write((char *) &sampleCount, sizeof(sampleCount));
-    splunk.fileWrite->seekp(lastPos, splunk.fileWrite->beg);
-}
-
 std::string MP4::co64::key = "co64";
 

@@ -53,18 +53,5 @@ void MP4::mvhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::mvhd::createData(splunkType &splunk)
-{
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("MP4::tkhd::createData atom can not parse file: "+filePath_);
-    datablock::mvhdDataBlock mvhdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &mvhdData, sizeof(mvhdData));
-    mvhdData.duration = XXH_swap32(splunk.videoDuration);
-
-    splunk.fileWrite->write((char *) &mvhdData, sizeof(mvhdData));
-
-}
-
 std::string MP4::mvhd::key = "mvhd";
 

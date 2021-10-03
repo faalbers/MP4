@@ -28,11 +28,6 @@ public:
     void    printHierarchy();                           // Hierarchy print out of all atoms in file
     void    printHierarchyData(bool fullLists = false);  // Data print out. Only data that is handled so far
 
-    splunkType  splunkGet();
-    splunkType  splunkAppend(MP4 &appendMP4);
-    static void splunkAppend(splunkType &splunk, MP4 &appendMP4);
-    void        splunkCreate(splunkType &splunk);
-
     std::string                         filePath;
     int64_t                             fileSize;
 

@@ -21,8 +21,6 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
-    void createData(splunkType &splunk);
-
     static std::string  key;
     uint32_t            timeScale;  // time units per second
     uint32_t            duration;   // amount of timeScale units

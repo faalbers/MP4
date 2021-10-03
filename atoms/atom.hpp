@@ -45,12 +45,6 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
-    virtual void                        create(splunkType &splunk);
-    virtual void                        createHeader(splunkType &splunk);
-    virtual void                        createData(splunkType &splunk);
-    virtual void                        createChildren(splunkType &splunk);
-    virtual void                        createTail(splunkType &splunk);
-
     std::string     key;
 
 protected:
@@ -66,14 +60,6 @@ protected:
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
-    
-    void                            create_(splunkType &splunk);
-    void                            createHeader_(splunkType &splunk);
-    void                            createHeaderCopy_(splunkType &splunk);
-    void                            createHeaderNew_(splunkType &splunk, std::string key_ = "", bool size64_ = false);
-    void                            createData_(splunkType &splunk);
-    void                            createChildren_(splunkType &splunk);
-    void                            createTail_(splunkType &splunk);
     
     bool                                headerSize64_;
     int64_t                             size_;

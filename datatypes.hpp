@@ -19,60 +19,6 @@ class moov;
 class trak;
 class MP4;
 
-typedef struct sampleType
-{
-    uint32_t    ID;
-    bool        sync;
-    int64_t     filePos;
-    uint32_t    size;
-    uint32_t    time;
-    uint32_t    duration;
-} sampleType;
-
-typedef struct trackSamplesType
-{
-    std::vector<sampleType> samples;
-    size_t                  sampleCount;
-    uint32_t                trackID;
-    std::string             filePath;
-    std::string             dataFormat;
-    uint32_t                mediaTimeScale;
-    uint32_t                mediaDuration;
-    uint32_t                samplesDuration;
-} trackSamplesType;
-
-typedef struct splunkSampleType
-{
-    uint32_t    ID;
-    bool        sync;
-    uint32_t    trackID;
-    std::string filePath;
-    int64_t     filePos;
-    uint32_t    size;
-    uint32_t    time;
-    uint32_t    duration;
-    uint32_t    timeScale;
-    std::string format;
-} splunkSampleType;
-
-typedef struct trackInfoType
-{
-    std::string dataFormat;
-    size_t      sampleCount;
-} trackInfoType;
-
-typedef struct splunkType
-{
-    std::vector<splunkSampleType>       samples;
-    // tracks[trackID] = trackInfo
-    std::map<uint32_t, trackInfoType>   tracks;
-    uint32_t                            videoTimeScale;
-    uint32_t                            videoDuration;
-    std::string                         fileWritePath;
-    std::ofstream                       *fileWrite;
-    root                                *rootAtom;
-} splunkType;
-
 typedef struct chunkType
 {
     uint32_t    ID;
