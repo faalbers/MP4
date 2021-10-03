@@ -49,6 +49,15 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (true) {
+        // test getSampleDescriptions
+        for ( auto track : mp4A.getTracks() ) {
+            for ( auto sDesc : track->getSampleDescriptions() ) {
+                std::cout << sDesc.first << " " << sDesc.second.dataFormat << " " << sDesc.second.dataReferenceIndex << std::endl;
+            }
+        }
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
     ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - testStart);
     std::cout << "\nTest Time : " << ms_int.count() << "ms\n";

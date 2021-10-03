@@ -2,6 +2,7 @@
 #define MP4_STSC_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -26,7 +27,8 @@ public:
     void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
-    std::vector<std::vector<uint32_t>>  stscTable; // (first chunk , samples per chunk, sample description ID)
+    // stscTable[stscID] = sampleToChunkEntry
+    std::map<uint32_t, std::vector<uint32_t>>  stscTable; // (first chunk , samples per chunk, sample description ID)
 };
 
 }

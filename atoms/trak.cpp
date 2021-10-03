@@ -38,7 +38,7 @@ bool MP4::trak::isDataInSameFile() {
     return false;
 }
 
-std::vector<MP4::stsdEntryType> MP4::trak::getSampleDescriptions()
+std::map<uint32_t, MP4::stsdEntryType> MP4::trak::getSampleDescriptions()
 {
     for ( auto stsd : getTypeAtoms<stsd>() )
         return stsd->stsdTable;
@@ -70,26 +70,28 @@ std::vector<MP4::chunkType> MP4::trak::getChunks()
         }
         if ( chunkOffsets.size() == 0 )
             throw std::runtime_error("MP4::trak: No chunk offsets found !");
-        auto stscTable = stsc->stscTable;
+        auto stscTableMap = stsc->stscTable;
 
         // reverse vectors so we can pop first elements from back
+        std::vector<std::pair<uint32_t, std::vector<uint32_t>>> stscTable;
+        for ( auto stscEntry : stscTableMap ) stscTable.push_back(stscEntry);
         std::reverse(stscTable.begin(),stscTable.end());
-        uint32_t currentChunkID = stscTable.back()[0];
+        uint32_t currentChunkID = stscTable.back().second[0];
 
         do {
             chunkType chunk;
             chunk.ID = currentChunkID;
             chunk.trackID = getID();
-            chunk.samples = stscTable.back()[1];
+            chunk.samples = stscTable.back().second[1];
             chunk.firstSampleID = sampleID;
             chunk.currentSampleID = sampleID;
-            chunk.sampleDescriptionID = stscTable.back()[2];
+            chunk.sampleDescriptionID = stscTable.back().second[2];
             chunk.dataOffset = chunkOffsets[currentChunkID];
             chunks.push_back(chunk);
-            sampleID += stscTable.back()[1];
+            sampleID += stscTable.back().second[1];
             currentChunkID++;
             // check next first chunk if available and pop if we get there
-            if ( stscTable.size() >= 2 && stscTable[stscTable.size()-2][0] == currentChunkID )
+            if ( stscTable.size() >= 2 && stscTable[stscTable.size()-2].second[0] == currentChunkID )
                     stscTable.pop_back();
         } while ( currentChunkID <= chunkOffsets.size() );
     }
@@ -125,7 +127,7 @@ bool MP4::trak::isComponentSubType(std::string type)
 bool MP4::trak::hasSampleDataFormat(std::string format)
 {
     for ( auto entry : getSampleDescriptions() )
-        if ( entry.dataFormat == format) return true;
+        if ( entry.second.dataFormat == format) return true;
     return false;
 }
 

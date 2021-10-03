@@ -34,7 +34,7 @@ public:
     uint32_t                    getMediaTimeScale(); // float in seconds
 
     size_t                      getSampleCount();
-    std::vector<stsdEntryType>  getSampleDescriptions();
+    std::map<uint32_t, stsdEntryType>   getSampleDescriptions();
 
     std::vector<chunkType>      getChunks();
     size_t                      getChunkCount();

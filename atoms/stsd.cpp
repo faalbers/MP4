@@ -12,16 +12,16 @@ MP4::stsd::stsd(internal::atomBuildType &atomBuild)
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = XXH_swap32(stsdData.numberOfEntries);
-    uint32_t index = 1;
+    uint32_t ID = 1;
     datablock::stsdEntryDataBlock sampleDescriptionBlock;
     do {
         stsdEntryType stsdEntry;
         fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
-        stsdEntry.ID = index;
         auto size = XXH_swap32(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);
         stsdEntry.dataReferenceIndex = XXH_swap16(sampleDescriptionBlock.dataReferenceIndex);
-        stsdTable.push_back(stsdEntry);
+
+        stsdTable[ID] = stsdEntry;
         
         // not sure what is in the tail of the stsd entry
         // visualize it with a string
@@ -29,11 +29,11 @@ MP4::stsd::stsd(internal::atomBuildType &atomBuild)
         char tail[200];
         if ( tailSize > 0 && tailSize <= 200 ) {
             fileStream.read((char *) tail, tailSize);
-            stsdEntry.extendedData = std::string(tail).substr(0,tailSize);
+            stsdTable[ID].extendedData = std::string(tail).substr(0,tailSize);
         }
     
-        index++;
-    } while ( index <= stsdData.numberOfEntries );
+        ID++;
+    } while ( ID <= stsdData.numberOfEntries );
     fileStream.close();
 }
 
@@ -42,13 +42,11 @@ void MP4::stsd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Description Atom) ["<< headerSize_ << "]" << std::endl;
-    int index = 1;
     std::cout << dataIndent << "[#] (data format, data reference index, extended data)\n";
     for ( auto entry : stsdTable ) {
-        std::cout << dataIndent << "[" <<  entry.ID << "] ( '" << entry.dataFormat
-        << "', " << entry.dataReferenceIndex
-        << ", '" << entry.extendedData << "' )" << std::endl;
-        index++;
+        std::cout << dataIndent << "[" <<  entry.first << "] ( '" << entry.second.dataFormat
+        << "', " << entry.second.dataReferenceIndex
+        << ", '" << entry.second.extendedData << "' )" << std::endl;
     }
 }
 

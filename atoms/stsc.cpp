@@ -13,6 +13,7 @@ MP4::stsc::stsc(internal::atomBuildType &atomBuild)
     fileStream.read((char *) &stscData, sizeof(stscData));
     stscData.numberOfEntries = XXH_swap32(stscData.numberOfEntries);
     auto index = stscData.numberOfEntries;
+    uint32_t ID = 1;
     do {
         std::vector<uint32_t> stscEntry;
         uint32_t val;
@@ -22,8 +23,9 @@ MP4::stsc::stsc(internal::atomBuildType &atomBuild)
         stscEntry.push_back(XXH_swap32(val));
         fileStream.read((char *) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
-        stscTable.push_back(stscEntry);
+        stscTable[ID] = stscEntry;
         index--;
+        ID++;
     } while ( index > 0);
     fileStream.close();
 }
@@ -33,17 +35,16 @@ void MP4::stsc::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample-To-Chunk Atom) ["<< headerSize_ << "]" << std::endl;
-    size_t index = 1;
     std::cout << dataIndent << "[#] (first chunk , samples per chunk, sample description ID)\n";
     if ( fullLists || (!fullLists && stscTable.size() <= 6) ) {
         for ( auto entry : stscTable ) {
             std::cout << dataIndent
-            << "[" << index << "] ( " << entry[0] << ", " << entry[1] << ", " << entry[2] << " )"
+            << "[" << entry.first << "] ( " << entry.second[0]
+            << ", " << entry.second[1] << ", " << entry.second[2] << " )"
             << std::endl;
-            index++;
         }
     } else {
-        for ( index = 0 ; index < 3; index++ ) {
+        for ( uint32_t index = 1 ; index <= 3; index++ ) {
             std::cout << dataIndent
             << "  [" << index << "] ( " << stscTable[index][0]
             << ", " << stscTable[index][1]
@@ -51,7 +52,8 @@ void MP4::stsc::printData(bool fullLists)
             << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
-        for ( index = stscTable.size()-3 ; index < stscTable.size(); index++ ) {
+        uint32_t tableSize = (uint32_t) stscTable.size();
+        for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
             std::cout << dataIndent
             << "  [" << index << "] ( " << stscTable[index][0]
             << ", " << stscTable[index][1]
