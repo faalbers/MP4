@@ -27,6 +27,98 @@ uint32_t MP4::trak::getMediaTimeScale()
     throw std::runtime_error("MP4: Track has no time scale !");
 }
 
+MP4::samplesType MP4::trak::getSamples()
+{
+    samplesType samples;
+    
+    // get data references
+    samples.filePath = "";
+    for ( auto dref : getTypeAtoms<dref>() ) {
+        if ( dref->dataReferences.size() > 1 )
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple data references");
+        if ( dref->dataReferences[1]->key =="url " && ((url_ *) dref->dataReferences[1].get())->dataInSameFile )
+            samples.filePath = filePath_;
+        if ( dref->dataReferences[1]->key =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
+            samples.filePath = filePath_;
+    }
+
+    // get sample description
+    auto sampleDescriptions = getSampleDescriptions();
+    if ( sampleDescriptions.size() > 1 )
+        throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
+    samples.dataFormat = sampleDescriptions[1].dataFormat;
+
+    // get trackID
+    samples.trackID = getID();
+
+    // get track time scale and duration
+    for ( auto mdhd : getTypeAtoms<mdhd>() ) {
+        samples.mediaTimeScale = mdhd->timeScale;
+        samples.mediaDuration = mdhd->duration;
+    }
+
+    // get sync samples
+    std::set<uint32_t> syncSamples;
+    for ( auto stss : getTypeAtoms<stss>() ) {
+        for ( auto syncID : stss->stssTable ) syncSamples.insert(syncID.second);
+    }
+
+    // greate samples from time-to-sample and set time and durations
+    uint32_t sampleID = 0;
+    sampleType sample;
+    uint32_t time = 0;
+    for ( auto stts : getTypeAtoms<stts>() ) {
+        for ( auto entry : stts->sttsTable ) {
+            uint32_t index = 0;
+            do {
+                sampleID++;
+                sample.sync = false;
+                if ( syncSamples.find(sampleID) != syncSamples.end()) sample.sync = true;
+                sample.time = time;
+                sample.duration = entry.second[1];
+                samples.samples[sampleID] = sample;
+                time += sample.duration;
+                index++;
+            } while ( index < entry.second[0] );
+        }
+    }
+    samples.samplesDuration =  time;
+
+    // set sample data sizes
+    for ( auto stsz : getTypeAtoms<stsz>()) {
+        if ( stsz->defaultSampleSize == 0 ) {
+            uint32_t sampleID = 1;
+            for ( auto entry : stsz->stszTable )
+                samples.samples[entry.first].size = entry.second;
+            /*
+            sampleID--;
+            if ( sampleID != samples.sampleCount )
+                throw std::runtime_error("MP4::getSamples: wrong sample count: "+std::to_string(sampleID));
+            */
+        } else {
+            for ( auto sample : samples.samples )
+                samples.samples[sample.first].size = stsz->defaultSampleSize;
+        }
+    }
+
+    // get chunks and set file positions for samples
+    int64_t filePos = 0;
+    for ( auto chunk : getChunks() ) {
+        if ( chunk.second.sampleDescriptionID > 1 )
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
+        if (filePos > (int64_t) chunk.second.dataOffset )
+            throw std::runtime_error("MP4::getSamples: wrong file position on samples");
+        auto lastChunkSampleID = chunk.second.firstSampleID + chunk.second.samples - 1;
+        filePos = chunk.second.dataOffset;
+        for ( auto sampleID = chunk.second.firstSampleID; sampleID <= lastChunkSampleID; sampleID++ ) {
+            samples.samples[sampleID].filePos = filePos;
+            filePos += samples.samples[sampleID].size;
+        }
+    }
+
+    return samples;
+}
+
 bool MP4::trak::isDataInSameFile() {
     for ( auto dref : getTypeAtoms<dref>() ) {
         for ( auto dataReference : dref->dataReferences ) {

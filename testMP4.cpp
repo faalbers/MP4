@@ -66,6 +66,25 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (false) {
+        // test getSamples
+        for ( auto track : mp4A.getTracks() ) {
+            auto samples = track->getSamples();
+            std::cout << samples.dataFormat << " " << samples.filePath << std::endl;
+            std::cout << samples.trackID << std::endl;
+            std::cout << samples.mediaTimeScale
+            << " " << samples.mediaDuration
+            << " " << samples.samplesDuration << std::endl;
+            for ( auto sample : samples.samples ) {
+                std::cout << "[" << sample.first << "] "
+                << sample.second.sync
+                << " " << sample.second.duration
+                << " " << sample.second.time
+                << " " << sample.second.filePos
+                << " " << sample.second.size << std::endl;
+            }
+        }
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - testStart);

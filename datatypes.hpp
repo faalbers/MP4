@@ -19,6 +19,26 @@ class moov;
 class trak;
 class MP4;
 
+typedef struct sampleType
+{
+    bool        sync;
+    int64_t     filePos;
+    uint32_t    size;
+    uint32_t    time;
+    uint32_t    duration;
+} sampleType;
+
+typedef struct samplesType
+{
+    std::map<uint32_t, sampleType>  samples;
+    uint32_t                trackID;
+    std::string             filePath;
+    std::string             dataFormat;
+    uint32_t                mediaTimeScale;
+    uint32_t                mediaDuration;
+    uint32_t                samplesDuration;
+} samplesType;
+
 typedef struct chunkType
 {
     uint32_t    samples;

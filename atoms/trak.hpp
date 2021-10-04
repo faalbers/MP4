@@ -33,6 +33,7 @@ public:
 
     uint32_t                    getMediaTimeScale(); // float in seconds
 
+    samplesType                 getSamples();
     size_t                      getSampleCount();
     std::map<uint32_t, stsdEntryType>   getSampleDescriptions();
 
