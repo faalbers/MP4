@@ -1,5 +1,4 @@
 #include "minf.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::minf::minf(internal::atomBuildType &atomBuild)

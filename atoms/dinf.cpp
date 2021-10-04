@@ -1,5 +1,4 @@
 #include "dinf.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::dinf::dinf(internal::atomBuildType &atomBuild)

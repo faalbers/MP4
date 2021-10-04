@@ -1,5 +1,4 @@
 #include "elst.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::elst::elst(internal::atomBuildType &atomBuild)

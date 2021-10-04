@@ -1,5 +1,4 @@
 #include "stts.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stts::stts(internal::atomBuildType &atomBuild)

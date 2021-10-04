@@ -1,5 +1,4 @@
 #include "smhd.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::smhd::smhd(internal::atomBuildType &atomBuild)

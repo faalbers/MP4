@@ -1,5 +1,4 @@
 #include "stss.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stss::stss(internal::atomBuildType &atomBuild)

@@ -1,5 +1,4 @@
 #include "ftyp.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 #include <iomanip>
 #include <sstream>

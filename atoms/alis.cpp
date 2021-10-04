@@ -1,5 +1,4 @@
 #include "alis.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::alis::alis(internal::atomBuildType &atomBuild)

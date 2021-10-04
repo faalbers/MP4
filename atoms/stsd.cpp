@@ -1,5 +1,4 @@
 #include "stsd.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stsd::stsd(internal::atomBuildType &atomBuild)

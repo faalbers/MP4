@@ -1,5 +1,4 @@
 #include "stbl.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stbl::stbl(internal::atomBuildType &atomBuild)

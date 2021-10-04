@@ -1,5 +1,4 @@
 #include "gpmd.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::gpmd::gpmd(internal::atomBuildType &atomBuild)

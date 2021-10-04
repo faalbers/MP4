@@ -1,5 +1,4 @@
 #include "tcmi.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::tcmi::tcmi(internal::atomBuildType &atomBuild)

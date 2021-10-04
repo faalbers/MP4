@@ -1,5 +1,4 @@
 #include "mdhd.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 #include <chrono>
 

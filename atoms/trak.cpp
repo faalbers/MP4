@@ -1,5 +1,18 @@
 #include "trak.hpp"
-#include "../atoms.hpp"
+#include "tkhd.hpp"
+#include "mdhd.hpp"
+#include "dref.hpp"
+#include "url_.hpp"
+#include "alis.hpp"
+#include "stss.hpp"
+#include "stts.hpp"
+#include "stsz.hpp"
+#include "stsd.hpp"
+#include "stsc.hpp"
+#include "stco.hpp"
+#include "co64.hpp"
+#include "hdlr.hpp"
+
 #include <iostream>
 #include <algorithm>
 #include <map>

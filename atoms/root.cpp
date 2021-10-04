@@ -1,5 +1,6 @@
 #include "root.hpp"
-#include "../atoms.hpp"
+#include "trak.hpp"
+#include "moov.hpp"
 #include <iostream>
 
 MP4::root::root(internal::atomBuildType &atomBuild)

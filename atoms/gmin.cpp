@@ -1,5 +1,4 @@
 #include "gmin.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::gmin::gmin(internal::atomBuildType &atomBuild)

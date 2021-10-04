@@ -1,5 +1,4 @@
 #include "stsc.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stsc::stsc(internal::atomBuildType &atomBuild)

@@ -1,5 +1,4 @@
 #include "stco.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stco::stco(internal::atomBuildType &atomBuild)

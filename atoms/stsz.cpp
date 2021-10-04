@@ -1,5 +1,4 @@
 #include "stsz.hpp"
-#include "../atoms.hpp"
 #include <iostream>
 
 MP4::stsz::stsz(internal::atomBuildType &atomBuild)
