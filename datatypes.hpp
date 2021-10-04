@@ -28,8 +28,9 @@ typedef struct sampleType
     uint32_t    duration;
 } sampleType;
 
-typedef struct samplesType
+typedef struct trackDataType
 {
+    // samples[ID] = sample
     std::map<uint32_t, sampleType>  samples;
     uint32_t                trackID;
     std::string             filePath;
@@ -37,7 +38,12 @@ typedef struct samplesType
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
     uint32_t                samplesDuration;
-} samplesType;
+} trackDataType;
+
+typedef struct dataType
+{
+    std::map<uint32_t, trackDataType>  tracks;
+} dataType;
 
 typedef struct chunkType
 {

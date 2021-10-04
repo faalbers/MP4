@@ -66,16 +66,16 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (false) {
+    if (true) {
         // test getSamples
         for ( auto track : mp4A.getTracks() ) {
-            auto samples = track->getSamples();
-            std::cout << samples.dataFormat << " " << samples.filePath << std::endl;
-            std::cout << samples.trackID << std::endl;
-            std::cout << samples.mediaTimeScale
-            << " " << samples.mediaDuration
-            << " " << samples.samplesDuration << std::endl;
-            for ( auto sample : samples.samples ) {
+            auto trackData = track->getTrackData();
+            std::cout << trackData.dataFormat << " " << trackData.filePath << std::endl;
+            std::cout << trackData.trackID << std::endl;
+            std::cout << trackData.mediaTimeScale
+            << " " << trackData.mediaDuration
+            << " " << trackData.samplesDuration << std::endl;
+            for ( auto sample : trackData.samples ) {
                 std::cout << "[" << sample.first << "] "
                 << sample.second.sync
                 << " " << sample.second.duration
