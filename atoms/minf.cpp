@@ -1,7 +1,7 @@
 #include "minf.hpp"
 #include <iostream>
 
-MP4::minf::minf(internal::atomBuildType &atomBuild)
+MP4::minf::minf(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

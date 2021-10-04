@@ -30,7 +30,7 @@ namespace MP4
 class tref : public atom
 {
 public:
-    tref(internal::atomBuildType &atomBuild);
+    tref(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

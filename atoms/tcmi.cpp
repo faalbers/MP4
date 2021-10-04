@@ -1,15 +1,31 @@
 #include "tcmi.hpp"
 #include <iostream>
 
-MP4::tcmi::tcmi(internal::atomBuildType &atomBuild)
+MP4::tcmi::tcmi(atomBuildType &atomBuild)
     : atom(atomBuild)
     , fontName("")
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint8_t         flag[3];
+        uint16_t        textFont;
+        uint16_t        textFace;
+        uint16_t        textSize;
+        uint16_t        reserved;
+        uint16_t        textColorR;
+        uint16_t        textColorG;
+        uint16_t        textColorB;
+        uint16_t        backgroundColorR;
+        uint16_t        backgroundColorG;
+        uint16_t        backgroundColorB;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("tcmi atom can not parse file: "+filePath_);
     fileStream.seekg(fileDataPos_, fileStream.beg);
 
-    datablock::tcmiDataBlock tcmiData;
+    dataBlock tcmiData;
     fileStream.read((char *) &tcmiData, sizeof(tcmiData));
     textFont = XXH_swap16(tcmiData.textFont);
     textFace = XXH_swap16(tcmiData.textFace);

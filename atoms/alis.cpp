@@ -1,13 +1,13 @@
 #include "alis.hpp"
 #include <iostream>
 
-MP4::alis::alis(internal::atomBuildType &atomBuild)
+MP4::alis::alis(atomBuildType &atomBuild)
     : atom(atomBuild)
     , dataInSameFile(false)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("alis atom can not parse file: "+filePath_);
-    datablock::drefTypeBlock drefType;
+    versionBlock drefType;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefType, sizeof(drefType));
     fileStream.close();

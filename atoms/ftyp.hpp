@@ -32,7 +32,7 @@ namespace MP4
 class ftyp : public atom
 {
 public:
-    ftyp(internal::atomBuildType &atomBuild);
+    ftyp(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

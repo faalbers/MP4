@@ -2,6 +2,7 @@
 #define MP4_STSS_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -25,7 +26,7 @@ namespace MP4
 class stss : public atom
 {
 public:
-    stss(internal::atomBuildType &atomBuild);
+    stss(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

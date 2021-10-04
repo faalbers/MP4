@@ -1,20 +1,29 @@
 #include "stsd.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(internal::atomBuildType &atomBuild)
+MP4::stsd::stsd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct entryDataBlock
+    {
+        uint32_t    size;
+        char        dataFormat[4];          // format type FourCC
+        uint8_t     reserved[6];            // reserved and set to zero
+        uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
+                                            // with samples that use this sample description. Data references are stored in data reference atoms
+    } entryDataBlock;
+
     // handle data 
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsd atom can not parse file: "+filePath_);
-    datablock::atomTableBlock stsdData;
+    tableBlock stsdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = XXH_swap32(stsdData.numberOfEntries);
     uint32_t ID = 1;
-    datablock::stsdEntryDataBlock sampleDescriptionBlock;
+    entryDataBlock sampleDescriptionBlock;
     do {
-        stsdEntryType stsdEntry;
+        entryType stsdEntry;
         fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
         auto size = XXH_swap32(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);

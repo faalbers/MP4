@@ -18,7 +18,7 @@ MP4::MP4::MP4(std::string fileName)
     
     filePath = std::filesystem::absolute(std::filesystem::path(fileName)).string();
 
-    internal::atomBuildType atomBuild;
+    atomBuildType atomBuild;
     atomBuild.filePath = filePath;
     rootAtom_ = std::make_shared<root>(atomBuild);
     

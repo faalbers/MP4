@@ -2,12 +2,23 @@
 #include <iostream>
 #include <chrono>
 
-MP4::mdhd::mdhd(internal::atomBuildType &atomBuild)
+MP4::mdhd::mdhd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint32_t        creationTime;
+        uint32_t        modificationTime;
+        uint32_t        timeScale;          // time units per second
+        uint32_t        duration;           // amount of timeScale units
+        uint16_t        language;
+        uint16_t        quality;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath_);
-    datablock::mdhdDataBlock mdhdData;
+    dataBlock mdhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mdhdData, sizeof(mdhdData));
     creationTime = XXH_swap32(mdhdData.creationTime);

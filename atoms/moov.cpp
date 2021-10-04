@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 
-MP4::moov::moov(internal::atomBuildType &atomBuild)
+MP4::moov::moov(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

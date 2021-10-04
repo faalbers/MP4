@@ -1,13 +1,13 @@
 #include "stts.hpp"
 #include <iostream>
 
-MP4::stts::stts(internal::atomBuildType &atomBuild)
+MP4::stts::stts(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
     // handle data 
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stts atom can not parse file: "+filePath_);
-    datablock::atomTableBlock sttsData;
+    tableBlock sttsData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &sttsData, sizeof(sttsData));
     sttsData.numberOfEntries = XXH_swap32(sttsData.numberOfEntries);

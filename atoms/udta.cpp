@@ -1,7 +1,7 @@
 #include "udta.hpp"
 #include <iostream>
 
-MP4::udta::udta(internal::atomBuildType &atomBuild)
+MP4::udta::udta(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

@@ -1,7 +1,7 @@
 #include "gpmd.hpp"
 #include <iostream>
 
-MP4::gpmd::gpmd(internal::atomBuildType &atomBuild)
+MP4::gpmd::gpmd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
     std::ifstream fileStream(filePath_, std::ios::binary);

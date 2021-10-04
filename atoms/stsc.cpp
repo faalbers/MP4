@@ -1,13 +1,13 @@
 #include "stsc.hpp"
 #include <iostream>
 
-MP4::stsc::stsc(internal::atomBuildType &atomBuild)
+MP4::stsc::stsc(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
     // handle data 
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsc atom can not parse file: "+filePath_);
-    datablock::atomTableBlock stscData;
+    tableBlock stscData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stscData, sizeof(stscData));
     stscData.numberOfEntries = XXH_swap32(stscData.numberOfEntries);

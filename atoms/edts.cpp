@@ -1,7 +1,7 @@
 #include "edts.hpp"
 #include <iostream>
 
-MP4::edts::edts(internal::atomBuildType &atomBuild)
+MP4::edts::edts(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

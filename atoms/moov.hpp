@@ -34,12 +34,10 @@ namespace MP4
 class moov : public atom
 {
 public:
-    moov(internal::atomBuildType &atomBuild);
+    moov(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
-    
-    void writeChildren(std::ofstream &fileWrite, internal::writeInfoType &writeInfo);
     
     static std::string  key;
 };

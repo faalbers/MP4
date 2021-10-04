@@ -16,13 +16,19 @@ namespace MP4
 class elst : public atom
 {
 public:
-    elst(internal::atomBuildType &atomBuild);
+    elst(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
-    std::vector<elstEntryType> elstTable;
+    typedef struct entryType
+    {
+        uint32_t    duration;
+        uint32_t    mediaTime;
+        float       mediaRate;
+    } entryType;
+    std::vector<entryType> elstTable;
 
 };
 

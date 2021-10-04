@@ -16,9 +16,10 @@
 #include <iostream>
 #include <algorithm>
 #include <map>
+#include <set>
 #include <vector>
 
-MP4::trak::trak(internal::atomBuildType &atomBuild)
+MP4::trak::trak(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }
@@ -40,9 +41,9 @@ uint32_t MP4::trak::getMediaTimeScale()
     throw std::runtime_error("MP4: Track has no time scale !");
 }
 
-MP4::trackDataType MP4::trak::getTrackData()
+MP4::trackType MP4::trak::getTrack()
 {
-    trackDataType trackData;
+    trackType trackData;
     
     // get data references
     trackData.filePath = "";
@@ -56,10 +57,11 @@ MP4::trackDataType MP4::trak::getTrackData()
     }
 
     // get sample description
-    auto sampleDescriptions = getSampleDescriptions();
-    if ( sampleDescriptions.size() > 1 )
-        throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
-    trackData.dataFormat = sampleDescriptions[1].dataFormat;
+    for ( auto stsd : getTypeAtoms<stsd>() ) {
+        if ( stsd->stsdTable.size() > 1 )
+            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
+        trackData.dataFormat = stsd->stsdTable[1].dataFormat;
+    }
 
     // get trackID
     trackData.trackID = getID();
@@ -116,7 +118,7 @@ MP4::trackDataType MP4::trak::getTrackData()
 
     // get chunks and set file positions for samples
     int64_t filePos = 0;
-    for ( auto chunk : getChunks() ) {
+    for ( auto chunk : _getChunks() ) {
         if ( chunk.second.sampleDescriptionID > 1 )
             throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
         if (filePos > (int64_t) chunk.second.dataOffset )
@@ -143,13 +145,6 @@ bool MP4::trak::isDataInSameFile() {
     return false;
 }
 
-std::map<uint32_t, MP4::stsdEntryType> MP4::trak::getSampleDescriptions()
-{
-    for ( auto stsd : getTypeAtoms<stsd>() )
-        return stsd->stsdTable;
-    throw std::runtime_error("MP4: no sample descriptions found !");
-}
-
 size_t MP4::trak::getChunkCount()
 {
     for ( auto stco : getTypeAtoms<stco>() ) {
@@ -161,9 +156,9 @@ size_t MP4::trak::getChunkCount()
     return 0;
 }
 
-std::map<uint32_t, MP4::chunkType> MP4::trak::getChunks()
+std::map<uint32_t, MP4::trak::_chunkType> MP4::trak::_getChunks()
 {
-    std::map<uint32_t, chunkType> chunks;
+    std::map<uint32_t, _chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {
         uint32_t sampleID = 1;
         std::map<uint32_t, uint64_t> chunkOffsets;
@@ -184,7 +179,7 @@ std::map<uint32_t, MP4::chunkType> MP4::trak::getChunks()
         uint32_t currentChunkID = stscTable.back().second[0];
 
         do {
-            chunkType chunk;
+            _chunkType chunk;
             chunk.samples = stscTable.back().second[1];
             chunk.firstSampleID = sampleID;
             chunk.currentSampleID = sampleID;
@@ -224,13 +219,6 @@ bool MP4::trak::isComponentSubType(std::string type)
 {
     for ( auto hdlr : getTypeAtoms<hdlr>() )
         if ( hdlr->componentSubType == type) return true;
-    return false;
-}
-
-bool MP4::trak::hasSampleDataFormat(std::string format)
-{
-    for ( auto entry : getSampleDescriptions() )
-        if ( entry.second.dataFormat == format) return true;
     return false;
 }
 

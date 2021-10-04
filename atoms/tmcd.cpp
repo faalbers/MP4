@@ -1,7 +1,7 @@
 #include "tmcd.hpp"
 #include <iostream>
 
-MP4::tmcd::tmcd(internal::atomBuildType &atomBuild)
+MP4::tmcd::tmcd(atomBuildType &atomBuild)
     : atom(atomBuild)
     , isTrackReference(false)
 {

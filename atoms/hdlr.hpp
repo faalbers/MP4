@@ -22,7 +22,7 @@ namespace MP4
 class hdlr : public atom
 {
 public:
-    hdlr(internal::atomBuildType &atomBuild);
+    hdlr(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -16,7 +16,7 @@ namespace MP4
 class gpmd : public atom
 {
 public:
-    gpmd(internal::atomBuildType &atomBuild);
+    gpmd(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

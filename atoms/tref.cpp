@@ -1,7 +1,7 @@
 #include "tref.hpp"
 #include <iostream>
 
-MP4::tref::tref(internal::atomBuildType &atomBuild)
+MP4::tref::tref(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

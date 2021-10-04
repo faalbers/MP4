@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true) {
+    if (false) {
         // test getSamples
         for ( auto track : mp4A.getTracks() ) {
             auto trackData = track->getTrackData();

@@ -17,7 +17,7 @@ namespace MP4
 class edts : public atom
 {
 public:
-    edts(internal::atomBuildType &atomBuild);
+    edts(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

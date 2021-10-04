@@ -1,12 +1,19 @@
 #include "stsz.hpp"
 #include <iostream>
 
-MP4::stsz::stsz(internal::atomBuildType &atomBuild)
+MP4::stsz::stsz(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct tableBlock
+    {
+        versionBlock    version;
+        uint32_t        defaultSampleSize;             // if zero, all samples have different size.
+        uint32_t        numberOfEntries;        // number of sample descriptions that follow
+    } tableBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("stsz atom can not parse file: "+filePath_);
-    datablock::stszTableBlock stszData;
+    tableBlock stszData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &stszData, sizeof(stszData));
     defaultSampleSize = XXH_swap32(stszData.defaultSampleSize);

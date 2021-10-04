@@ -21,7 +21,7 @@ namespace MP4
 class stsc : public atom
 {
 public:
-    stsc(internal::atomBuildType &atomBuild);
+    stsc(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

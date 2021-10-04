@@ -1,12 +1,23 @@
 #include "gmin.hpp"
 #include <iostream>
 
-MP4::gmin::gmin(internal::atomBuildType &atomBuild)
+MP4::gmin::gmin(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint16_t        graphicsMode;
+        uint16_t        opColorR;
+        uint16_t        opColorG;
+        uint16_t        opColorB;
+        uint16_t        balance;
+        uint16_t        reserved;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("gmin atom can not parse file: "+filePath_);
-    datablock::gminDataBlock gminData;
+    dataBlock gminData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &gminData, sizeof(gminData));
     graphicMode = XXH_swap16(gminData.graphicsMode);

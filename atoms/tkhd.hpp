@@ -16,7 +16,7 @@ namespace MP4
 class tkhd : public atom
 {
 public:
-    tkhd(internal::atomBuildType &atomBuild);
+    tkhd(atomBuildType &atomBuild);
     
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

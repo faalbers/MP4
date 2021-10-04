@@ -1,13 +1,23 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(internal::atomBuildType &atomBuild)
+MP4::hdlr::hdlr(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        char            componentType[4];
+        char            componentSubType[4];
+        uint32_t        componentManufacturer;
+        uint32_t        componentFlags;
+        uint32_t        componentFlagsMask;
+    } dataBlock;
+
     // get data
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("hdlr atom can not parse file: "+filePath_);
-    datablock::hdlrDataBlock hdlrData;
+    dataBlock hdlrData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &hdlrData, sizeof(hdlrData));
     componentType = std::string(hdlrData.componentType).substr(0,4);

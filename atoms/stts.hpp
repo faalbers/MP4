@@ -2,6 +2,7 @@
 #define MP4_STTS_H
 #include <string>
 #include <memory>
+#include <map>
 #include "atom.hpp"
 
 /*
@@ -31,7 +32,7 @@ namespace MP4
 class stts : public atom
 {
 public:
-    stts(internal::atomBuildType &atomBuild);
+    stts(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

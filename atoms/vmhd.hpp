@@ -15,7 +15,7 @@ namespace MP4
 class vmhd : public atom
 {
 public:
-    vmhd(internal::atomBuildType &atomBuild);
+    vmhd(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

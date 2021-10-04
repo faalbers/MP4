@@ -2,7 +2,7 @@
 #include <iostream>
 #include <map>
 
-MP4::mdat::mdat(internal::atomBuildType &atomBuild)
+MP4::mdat::mdat(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
     sampleDataPos = fileDataPos_;

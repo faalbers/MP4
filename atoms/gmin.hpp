@@ -16,7 +16,7 @@ namespace MP4
 class gmin : public atom
 {
 public:
-    gmin(internal::atomBuildType &atomBuild);
+    gmin(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -1,13 +1,13 @@
 #include "dref.hpp"
 #include <iostream>
 
-MP4::dref::dref(internal::atomBuildType &atomBuild)
+MP4::dref::dref(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
     // handle data 
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("dref atom can not parse file: "+filePath_);
-    datablock::atomTableBlock drefData;
+    tableBlock drefData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &drefData, sizeof(drefData));
     atomBuild.filePos = fileStream.tellg();

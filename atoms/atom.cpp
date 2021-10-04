@@ -54,7 +54,7 @@ MP4::atom::atom()
 
 }
 
-MP4::atom::atom(internal::atomBuildType &atomBuild)
+MP4::atom::atom(atomBuildType &atomBuild)
     : filePath_(atomBuild.filePath)
     , filePos_(atomBuild.filePos)
     , parentPath_(atomBuild.parentPath)
@@ -73,7 +73,7 @@ MP4::atom::atom(internal::atomBuildType &atomBuild)
     fileStream.seekg(filePos_, fileStream.beg);
 
     // read the header
-    datablock::atomHeaderBlock dataBlock;
+    headerBlock dataBlock;
     fileStream.read((char *) &dataBlock, sizeof(dataBlock));
 
     key = std::string(dataBlock.key).substr(0,4);
@@ -177,7 +177,7 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(internal::atomBuildType &atomBuild)
+std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;
 
@@ -240,7 +240,7 @@ bool MP4::atom::isContainer_(std::ifstream &fileStream, int64_t dataSize)
     int64_t fileSize = fileStream.tellg();
     fileStream.seekg(startPos, fileStream.beg);
 
-    datablock::atomHeaderBlock dataBlock;
+    headerBlock dataBlock;
     int64_t size, totalSize = 0;
     bool result = false;
     do {

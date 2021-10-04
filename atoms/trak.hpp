@@ -1,10 +1,11 @@
 #ifndef MP4_TRAK_H
 #define MP4_TRAK_H
+#include "atom.hpp"
+#include "../data/types.hpp"
 #include <string>
 #include <memory>
 #include <vector>
 #include <tuple>
-#include "atom.hpp"
 
 /*
 TRACK ATOM:
@@ -25,7 +26,7 @@ namespace MP4
 class trak : public atom
 {
 public:
-    trak(internal::atomBuildType &atomBuild);
+    trak(atomBuildType &atomBuild);
 
     // data retrieval
 
@@ -33,11 +34,9 @@ public:
 
     uint32_t                    getMediaTimeScale(); // float in seconds
 
-    trackDataType               getTrackData();
+    trackType                   getTrack();
     size_t                      getSampleCount();
-    std::map<uint32_t, stsdEntryType>   getSampleDescriptions();
 
-    std::map<uint32_t, chunkType>       getChunks();
     size_t                      getChunkCount();
     std::map<uint32_t, uint64_t>    getChunkOffsets();
 
@@ -46,12 +45,24 @@ public:
     // track checkers
     bool isComponentType(std::string type);
     bool isComponentSubType(std::string type);
-    bool hasSampleDataFormat(std::string format);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     static std::string  key;
+
+private:
+    typedef struct _chunkType
+    {
+        uint32_t    samples;
+        uint32_t    firstSampleID;
+        uint32_t    currentSampleID;
+        uint32_t    sampleDescriptionID;
+        uint64_t    dataOffset;
+    } _chunkType;
+
+    std::map<uint32_t, _chunkType>   _getChunks();
+
 };
 
 }

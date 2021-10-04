@@ -3,7 +3,7 @@
 #include "moov.hpp"
 #include <iostream>
 
-MP4::root::root(internal::atomBuildType &atomBuild)
+MP4::root::root(atomBuildType &atomBuild)
 {
     filePath_ = atomBuild.filePath;
     atomBuild.filePos = 0;

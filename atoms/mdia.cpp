@@ -1,7 +1,7 @@
 #include "mdia.hpp"
 #include <iostream>
 
-MP4::mdia::mdia(internal::atomBuildType &atomBuild)
+MP4::mdia::mdia(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
 }

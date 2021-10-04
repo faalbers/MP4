@@ -1,12 +1,19 @@
 #include "smhd.hpp"
 #include <iostream>
 
-MP4::smhd::smhd(internal::atomBuildType &atomBuild)
+MP4::smhd::smhd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint16_t        balance;
+        uint16_t        reserved;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("smhd atom can not parse file: "+filePath_);
-    datablock::smhdDataBlock smhdData;
+    dataBlock smhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &smhdData, sizeof(smhdData));
     balance = (float)XXH_swap16(smhdData.balance) / (float)(1 << 8);

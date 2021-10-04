@@ -1,12 +1,32 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(internal::atomBuildType &atomBuild)
+MP4::mvhd::mvhd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint32_t        creationTime;
+        uint32_t        modificationTime;
+        uint32_t        timeScale;          // time units per second
+        uint32_t        duration;           // amount of timeScale units
+        uint32_t        preferredRate;      // fixed point
+        uint16_t        preferredVolume;    // fixed point
+        uint8_t         reserved[10];
+        uint32_t        matrix[3][3];
+        uint32_t        previewTime;
+        uint32_t        previewDuration;
+        uint32_t        posterTime;
+        uint32_t        selectionTime;
+        uint32_t        selectionDuration;
+        uint32_t        currentTime;
+        uint32_t        nextTrackID;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mvhd atom can not parse file: "+filePath_);
-    datablock::mvhdDataBlock mvhdData;
+    dataBlock mvhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &mvhdData, sizeof(mvhdData));
     timeScale = XXH_swap32(mvhdData.timeScale);

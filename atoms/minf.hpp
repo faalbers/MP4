@@ -24,7 +24,7 @@ namespace MP4
 class minf : public atom
 {
 public:
-    minf(internal::atomBuildType &atomBuild);
+    minf(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

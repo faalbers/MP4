@@ -3,13 +3,19 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(internal::atomBuildType &atomBuild)
+MP4::ftyp::ftyp(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        char        majorBrand[4];
+        uint32_t    version;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath_);
     fileStream.seekg(fileDataPos_, fileStream.beg);
-    datablock::ftypDataBlock ftypData;
+    dataBlock ftypData;
     fileStream.read((char *) &ftypData, sizeof(ftypData));
     
     majorBrand = std::string(ftypData.majorBrand).substr(0,4);

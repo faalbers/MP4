@@ -1,7 +1,7 @@
 #ifndef MP4_ATOM_H
 #define MP4_ATOM_H
 
-#include "../datatypes.hpp"
+//#include "../datatypes.hpp"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -24,11 +24,22 @@
 namespace MP4
 {
 
+typedef struct atomBuildType
+{
+    std::string filePath;
+    int64_t     filePos;
+    std::string parentPath;
+} atomBuildType;
+
+// because they include atom as base. included in cpp
+class moov;
+class trak;
+
 class atom
 {
 public:
     atom();
-    atom(internal::atomBuildType &atomBuild);
+    atom(atomBuildType &atomBuild);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -48,13 +59,32 @@ public:
     std::string     key;
 
 protected:
+    typedef struct headerBlock
+    {
+        uint32_t    size32; // (big endian) size of atom 32 bit
+        char        key[4]; // (4 char) FourCC key of atom
+        uint64_t    size64; // (big endian) size of atom 64 bit
+    } headerBlock;
+
+    typedef struct versionBlock
+    {
+        uint8_t     version;
+        uint8_t     flag[3];
+    } atomVersionBlock;
+
+    typedef struct tableBlock
+    {
+        versionBlock    version;
+        uint32_t        numberOfEntries;
+    } tableBlock;
+
     friend class MP4;
     friend class root;
     friend class dref;
     friend class uuid;
     friend class tkhd;
 
-    static std::shared_ptr<atom>    makeAtom_(internal::atomBuildType &atomBuild);
+    static std::shared_ptr<atom>    makeAtom_(atomBuildType &atomBuild);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);

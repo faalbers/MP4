@@ -1,12 +1,21 @@
 #include "vmhd.hpp"
 #include <iostream>
 
-MP4::vmhd::vmhd(internal::atomBuildType &atomBuild)
+MP4::vmhd::vmhd(atomBuildType &atomBuild)
     : atom(atomBuild)
 {
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint16_t        graphicsMode;
+        uint16_t        opColorR;
+        uint16_t        opColorG;
+        uint16_t        opColorB;
+    } dataBlock;
+
     std::ifstream fileStream(filePath_, std::ios::binary);
     if ( fileStream.fail() ) throw std::runtime_error("vmhd atom can not parse file: "+filePath_);
-    datablock::vmhdDataBlock vmhdData;
+    dataBlock vmhdData;
     fileStream.seekg(fileDataPos_, fileStream.beg);
     fileStream.read((char *) &vmhdData, sizeof(vmhdData));
     graphicMode = XXH_swap16(vmhdData.graphicsMode);
