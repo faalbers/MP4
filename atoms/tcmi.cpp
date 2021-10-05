@@ -8,7 +8,6 @@ MP4::tcmi::tcmi(atomBuildType &atomBuild)
     typedef struct dataBlock
     {
         versionBlock    version;
-        uint8_t         flag[3];
         uint16_t        textFont;
         uint16_t        textFace;
         uint16_t        textSize;

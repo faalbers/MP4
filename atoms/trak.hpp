@@ -1,7 +1,7 @@
 #ifndef MP4_TRAK_H
 #define MP4_TRAK_H
 #include "atom.hpp"
-#include "../data/types.hpp"
+#include "../types.hpp"
 #include <string>
 #include <memory>
 #include <vector>

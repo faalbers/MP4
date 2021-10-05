@@ -1,7 +1,6 @@
 #ifndef MP4_ATOM_H
 #define MP4_ATOM_H
 
-//#include "../datatypes.hpp"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -78,7 +77,7 @@ protected:
         uint32_t        numberOfEntries;
     } tableBlock;
 
-    friend class MP4;
+    friend class Parser;
     friend class root;
     friend class dref;
     friend class uuid;

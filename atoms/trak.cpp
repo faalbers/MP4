@@ -18,6 +18,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <string>
 
 MP4::trak::trak(atomBuildType &atomBuild)
     : atom(atomBuild)
@@ -46,14 +47,17 @@ MP4::trackType MP4::trak::getTrack()
     trackType trackData;
     
     // get data references
-    trackData.filePath = "";
+    std::string filePath = "";
     for ( auto dref : getTypeAtoms<dref>() ) {
         if ( dref->dataReferences.size() > 1 )
             throw std::runtime_error("MP4::getSamples: don't know how to handle multiple data references");
         if ( dref->dataReferences[1]->key =="url " && ((url_ *) dref->dataReferences[1].get())->dataInSameFile )
-            trackData.filePath = filePath_;
-        if ( dref->dataReferences[1]->key =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
-            trackData.filePath = filePath_;
+            filePath = filePath_;
+        else if ( dref->dataReferences[1]->key =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
+            filePath = filePath_;
+        else {
+            throw std::runtime_error("MP4::getSamples: Can't handle reference of type: "+dref->dataReferences[1]->key);
+        }
     }
 
     // get sample description
@@ -87,6 +91,7 @@ MP4::trackType MP4::trak::getTrack()
             uint32_t index = 0;
             do {
                 sampleID++;
+                sample.filePath = filePath;
                 sample.sync = false;
                 if ( syncSamples.find(sampleID) != syncSamples.end()) sample.sync = true;
                 sample.time = time;

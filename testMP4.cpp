@@ -1,4 +1,4 @@
-#include "MP4.cpp"
+#include "Parser.cpp"
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -10,18 +10,18 @@ int main(int argc, char* argv[])
     
     auto createStart = std::chrono::high_resolution_clock::now();
 
-    std::cout << "**** CREATE MP4 ****\n\n";
+    std::cout << "**** PARSE MP4 ****\n\n";
 
-    MP4::MP4 mp4A(argv[1]);
+    MP4::Parser parserA(argv[1]);
 
     auto testStart = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(testStart - createStart);
     std::cout << "\nCreate Time: " << ms_int.count() << "ms\n";
     std::cout << "**** TEST MP4 ****\n\n";
     
-    //mp4A.printHierarchy();
-    mp4A.printHierarchyData();
-
+    //parserA.printHierarchy();
+    parserA.printHierarchyData();
+/*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;
         // testing map data manipulation
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-
+*/
     auto end = std::chrono::high_resolution_clock::now();
     ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(end - testStart);
     std::cout << "\nTest Time : " << ms_int.count() << "ms\n";

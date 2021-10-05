@@ -10,11 +10,12 @@ namespace MP4
 
 typedef struct sampleType
 {
-    bool        sync;
+    std::string filePath;
     int64_t     filePos;
     uint32_t    size;
     uint32_t    time;
     uint32_t    duration;
+    bool        sync;
 } sampleType;
 
 typedef struct trackType
@@ -22,7 +23,6 @@ typedef struct trackType
     // samples[ID] = sample
     std::map<uint32_t, sampleType>  samples;
     uint32_t                trackID;
-    std::string             filePath;
     std::string             dataFormat;
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
