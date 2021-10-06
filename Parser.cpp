@@ -4,6 +4,7 @@
 #include "atoms/atom.hpp"
 #include "atoms/trak.hpp"
 #include "atoms/stsd.hpp"
+#include "atoms/hdlr.hpp"
 #include <iostream>
 
 MP4::Parser::Parser(std::string fileName)
@@ -51,11 +52,37 @@ std::set<std::string> MP4::Parser::getDataFormats()
     return dataFormats;
 }
 
-std::set<uint32_t> MP4::Parser::getTrackIDs(std::string dataFormat)
+std::set<std::string> MP4::Parser::getComponentTypes()
+{
+    std::set<std::string> componentSubTypes;
+    for ( auto hdlr : rootAtom_->getTypeAtoms<hdlr>() )
+        componentSubTypes.insert(hdlr->componentType);
+    return componentSubTypes;
+}
+
+std::set<std::string> MP4::Parser::getComponentSubTypes()
+{
+    std::set<std::string> componentSubTypes;
+    for ( auto hdlr : rootAtom_->getTypeAtoms<hdlr>() )
+        componentSubTypes.insert(hdlr->componentSubType);
+    return componentSubTypes;
+}
+
+std::set<uint32_t> MP4::Parser::getDataFormatTrackIDs(std::string dataFormat)
 {
     std::set<uint32_t> trackIDs;
     for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
         if ( dataFormat != "" && !trak->isDataFormat(dataFormat) ) continue;
+        trackIDs.insert(trak->getID());
+    }
+    return trackIDs;
+}
+
+std::set<uint32_t> MP4::Parser::getComponentSubTypeTrackIDs(std::string componentSubType)
+{
+    std::set<uint32_t> trackIDs;
+    for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
+        if ( componentSubType != "" && !trak->isComponentSubType(componentSubType) ) continue;
         trackIDs.insert(trak->getID());
     }
     return trackIDs;

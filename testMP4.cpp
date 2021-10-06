@@ -26,18 +26,31 @@ int main(int argc, char* argv[])
     MP4::Processor processor;
 
     if (false) {
-        for ( auto dataFormat : parserA.getDataFormats() ) {
-            std::cout << dataFormat << std::endl;
+        std::cout << "dataFormats:\n" << std::endl;
+        for ( auto entry : parserA.getDataFormats() ) {
+            std::cout << entry << std::endl;
+        }
+        std::cout << "componentTypes:\n" << std::endl;
+        for ( auto entry : parserA.getComponentTypes() ) {
+            std::cout << entry << std::endl;
+        }
+        std::cout << "componentSubTypes:\n" << std::endl;
+        for ( auto entry : parserA.getComponentSubTypes() ) {
+            std::cout << entry << std::endl;
         }
     }
 
     if (false) {
-        std::cout << "all tracks:\n";
-        for ( auto trackID : parserA.getTrackIDs() ) {
+        std::cout << "dataFormat 'gpmd' tracks;\n";
+        for ( auto trackID : parserA.getDataFormatTrackIDs("gpmd") ) {
             std::cout << trackID << std::endl;
         }
-        std::cout << "'gpmd' dataFormat tracks:\n";
-        for ( auto trackID : parserA.getTrackIDs("gpmd") ) {
+        std::cout << "componentSubType 'vide' tracks;\n";
+        for ( auto trackID : parserA.getComponentSubTypeTrackIDs("vide") ) {
+            std::cout << trackID << std::endl;
+        }
+        std::cout << "componentSubType 'soun' tracks;\n";
+        for ( auto trackID : parserA.getComponentSubTypeTrackIDs("soun") ) {
             std::cout << trackID << std::endl;
         }
     }

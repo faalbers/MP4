@@ -18,7 +18,10 @@ public:
     void    printHierarchyData(bool fullLists = false);
 
     std::set<std::string>   getDataFormats();
-    std::set<uint32_t>      getTrackIDs(std::string dataFormat = "");
+    std::set<std::string>   getComponentTypes();
+    std::set<std::string>   getComponentSubTypes();
+    std::set<uint32_t>      getDataFormatTrackIDs(std::string dataFormat);
+    std::set<uint32_t>      getComponentSubTypeTrackIDs(std::string componentSubType);
 
 private:
     std::string                         filePath_;
