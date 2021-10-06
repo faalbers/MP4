@@ -27,6 +27,8 @@ typedef struct trackType
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
     uint32_t                samplesDuration;
+    float                   width;
+    float                   height;
 } trackType;
 
 }

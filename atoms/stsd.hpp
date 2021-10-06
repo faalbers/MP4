@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <set>
 #include "atom.hpp"
 
 /*
@@ -24,6 +25,8 @@ public:
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
+
+    std::set<std::string>   getDataFormats();
 
     static std::string  key;
     typedef struct entryType

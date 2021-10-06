@@ -45,6 +45,7 @@ public:
     // track checkers
     bool isComponentType(std::string type);
     bool isComponentSubType(std::string type);
+    bool isDataFormat(std::string dataFormat);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

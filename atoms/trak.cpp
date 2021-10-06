@@ -227,6 +227,14 @@ bool MP4::trak::isComponentSubType(std::string type)
     return false;
 }
 
+bool MP4::trak::isDataFormat(std::string dataFormat)
+{
+    for ( auto stsd : getTypeAtoms<stsd>() )
+        for ( auto entry : stsd->stsdTable )
+            if ( entry.second.dataFormat == dataFormat ) return true;
+    return false;
+}
+
 void MP4::trak::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

@@ -2,6 +2,8 @@
 #include <filesystem>
 #include <memory>
 #include "atoms/atom.hpp"
+#include "atoms/trak.hpp"
+#include "atoms/stsd.hpp"
 #include <iostream>
 
 MP4::Parser::Parser(std::string fileName)
@@ -37,4 +39,24 @@ void MP4::Parser::printHierarchyData(bool fullLists)
     //std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
     std::cout << std::endl;
     rootAtom_->printHierarchyData(fullLists);
+}
+
+std::set<std::string> MP4::Parser::getDataFormats()
+{
+    std::set<std::string> dataFormats;
+    for ( auto stsd : rootAtom_->getTypeAtoms<stsd>() ) {
+        for ( auto dataFormat : stsd->getDataFormats() )
+            dataFormats.insert(dataFormat);
+    }
+    return dataFormats;
+}
+
+std::set<uint32_t> MP4::Parser::getTrackIDs(std::string dataFormat)
+{
+    std::set<uint32_t> trackIDs;
+    for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
+        if ( dataFormat != "" && !trak->isDataFormat(dataFormat) ) continue;
+        trackIDs.insert(trak->getID());
+    }
+    return trackIDs;
 }

@@ -1,4 +1,5 @@
-#include "Parser.cpp"
+#include "Parser.hpp"
+#include "Processor.hpp"
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -20,12 +21,33 @@ int main(int argc, char* argv[])
     std::cout << "**** TEST MP4 ****\n\n";
     
     //parserA.printHierarchy();
-    parserA.printHierarchyData();
+    //parserA.printHierarchyData();
+
+    // create a processor
+    MP4::Processor processor;
+
+    if (false) {
+        for ( auto dataFormat : parserA.getDataFormats() ) {
+            std::cout << dataFormat << std::endl;
+        }
+    }
+
+    if (false) {
+        std::cout << "all tracks:\n";
+        for ( auto trackID : parserA.getTrackIDs() ) {
+            std::cout << trackID << std::endl;
+        }
+        std::cout << "'gpmd' dataFormat tracks:\n";
+        for ( auto trackID : parserA.getTrackIDs("gpmd") ) {
+            std::cout << trackID << std::endl;
+        }
+    }
+
 /*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;
         // testing map data manipulation
-        for ( auto track : mp4A.getTracks() ) {
+        for ( auto track : parserA.getTracks() ) {
             auto trackID = track->getID();
             for ( auto stsz : track->getTypeAtoms<MP4::stsz>() ) {
                 tracksData[trackID] = stsz->stszTable;
@@ -42,7 +64,7 @@ int main(int argc, char* argv[])
 
     if (false) {
         // test getChunks
-        for ( auto track : mp4A.getTracks() ) {
+        for ( auto track : parserA.getTracks() ) {
             for ( auto chunk : track->getChunks() ) {
                 std::cout << chunk.first << " " << chunk.second.firstSampleID << " " << chunk.second.dataOffset << std::endl;
             }
@@ -51,7 +73,7 @@ int main(int argc, char* argv[])
 
     if (false) {
         // test getSampleDescriptions
-        for ( auto track : mp4A.getTracks() ) {
+        for ( auto track : parserA.getTracks() ) {
             for ( auto sDesc : track->getSampleDescriptions() ) {
                 std::cout << sDesc.first << " " << sDesc.second.dataFormat << " " << sDesc.second.dataReferenceIndex << std::endl;
             }
@@ -60,7 +82,7 @@ int main(int argc, char* argv[])
 
     if (false) {
         // test isDataInSameFile
-        for ( auto track : mp4A.getTracks() ) {
+        for ( auto track : parserA.getTracks() ) {
             if ( track->isDataInSameFile() )
                 std::cout << track->getID() << " in same file " << std::endl;
         }
@@ -68,7 +90,7 @@ int main(int argc, char* argv[])
 
     if (false) {
         // test getSamples
-        for ( auto track : mp4A.getTracks() ) {
+        for ( auto track : parserA.getTracks() ) {
             auto trackData = track->getTrackData();
             std::cout << trackData.dataFormat << " " << trackData.filePath << std::endl;
             std::cout << trackData.trackID << std::endl;

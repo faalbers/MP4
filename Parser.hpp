@@ -3,6 +3,7 @@
 
 #include "types.hpp"
 #include <string>
+#include <set>
 #include "atoms/root.hpp"
 
 namespace MP4
@@ -15,6 +16,9 @@ public:
 
     void    printHierarchy();
     void    printHierarchyData(bool fullLists = false);
+
+    std::set<std::string>   getDataFormats();
+    std::set<uint32_t>      getTrackIDs(std::string dataFormat = "");
 
 private:
     std::string                         filePath_;
