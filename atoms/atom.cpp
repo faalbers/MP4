@@ -37,7 +37,66 @@
 #include "stss.hpp"
 
 #include <iostream>
+#include <filesystem>
+
 #include <iomanip>
+
+MP4::atomReadFile::atomReadFile(std::string fileName)
+{
+    filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
+    fileStream_ = std::ifstream(filePath_, std::ios::binary);
+    if ( fileStream_.fail() )
+        throw std::runtime_error("atomReadFile: can not find mp4 file: "+filePath_);
+    fileStream_.seekg(0, fileStream_.end);
+    fileSize_ = fileStream_.tellg();
+    if ( fileSize_ < 8 )
+        throw std::runtime_error("atomReadFile: mp4 file has no proper data: "+filePath_);
+    fileStream_.seekg(0, fileStream_.beg);
+}
+
+MP4::atomReadFile::~atomReadFile()
+{
+    fileStream_.close();
+}
+
+std::string MP4::atomReadFile::getFilePath()
+{
+    return filePath_;
+}
+
+int64_t MP4::atomReadFile::getFileSize()
+{
+    return fileSize_;
+}
+
+std::ifstream *MP4::atomReadFile::getFileStream()
+{
+    return &fileStream_;
+}
+
+MP4::atomBuild::atomBuild(std::string fileName)
+    : parentPath("/")
+{
+    readFile_ = std::make_shared<atomReadFile>(fileName);
+}
+
+std::string MP4::atomBuild::getFilePath()
+{
+    if ( readFile_ != nullptr ) return readFile_->getFilePath();
+    return "";
+}
+
+int64_t MP4::atomBuild::getFileSize()
+{
+    if ( readFile_ != nullptr ) return readFile_->getFileSize();
+    return 0;
+}
+
+std::ifstream *MP4::atomBuild::getFileStream()
+{
+    if ( readFile_ != nullptr ) return readFile_->getFileStream();
+    return nullptr;
+}
 
 MP4::atom::atom()
     : key("atom")
@@ -51,6 +110,66 @@ MP4::atom::atom()
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
 {
+
+}
+
+MP4::atom::atom(atomBuild &build)
+    : filePath_(build.getFilePath())
+    , parentPath_(build.parentPath)
+    , moovAtom_(nullptr)
+    , trakAtom_(nullptr)
+{
+    auto fileStream = build.getFileStream();
+    int64_t fileSize;
+    bool container;
+
+    filePos_ = fileStream->tellg();
+
+    // get file size and set file position to start of atom
+    fileStream->seekg(0, fileStream->end);
+    fileSize = fileStream->tellg();
+    fileStream->seekg(filePos_, fileStream->beg);
+
+    // read the header
+    headerBlock dataBlock;
+    fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+
+    key = std::string(dataBlock.key).substr(0,4);
+    path_ = parentPath_ + key;
+
+    // get atom size and data position
+    dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
+    dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
+    if ( dataBlock.size32 == 1 ) {
+        headerSize64_ = true;
+        headerSize_ = 16;
+        size_ = (int64_t) dataBlock.size64;
+        fileDataPos_ = filePos_ + headerSize_;
+    } else {
+        headerSize64_ = false;
+        headerSize_ = 8;
+        size_ = (int64_t) dataBlock.size32;
+        fileDataPos_ = filePos_ + headerSize_;
+    }
+
+    // set filestream to data position
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+
+    // get other data
+    fileNextPos_ = filePos_ + size_;
+    dataSize_ = fileNextPos_ - fileDataPos_;
+    container = isContainerB_(fileStream, dataSize_);
+
+    // find child atoms
+    if ( !container ) return;
+    int64_t childNextPos;
+    do {
+        build.parentPath = path_+"/";
+        auto child = makeAtomB_(build);
+        childNextPos = child->fileNextPos_;
+        fileStream->seekg(childNextPos, fileStream->beg);
+        children_.push_back(child);
+    } while ( childNextPos < fileNextPos_ );
 
 }
 
@@ -177,6 +296,26 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::shared_ptr<MP4::atom> MP4::atom::makeAtomB_(atomBuild &build)
+{
+    std::shared_ptr<atom> newAtom;
+
+    auto fileStream = build.getFileStream();
+
+    char charKey[4];
+    auto filePos = fileStream->tellg();
+    fileStream->seekg(4, fileStream->cur);
+    fileStream->read((char *) &charKey, sizeof(charKey));
+    fileStream->seekg(filePos, fileStream->beg);
+
+    std::string key = std::string(charKey).substr(0,4);
+
+    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(build);
+    else newAtom = std::make_shared<atom>(build);
+
+    return newAtom;
+}
+
 std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomBuildType &atomBuild)
 {
     std::shared_ptr<atom> newAtom;
@@ -231,6 +370,39 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomBuildType &atomBuild)
     else newAtom = std::make_shared<atom>(atomBuild);
 
     return newAtom;
+}
+
+bool MP4::atom::isContainerB_(std::ifstream *fileStream, int64_t dataSize)
+{
+    int64_t startPos = fileStream->tellg(), nextPos = startPos;
+    fileStream->seekg(0, fileStream->end);
+    int64_t fileSize = fileStream->tellg();
+    fileStream->seekg(startPos, fileStream->beg);
+
+    headerBlock dataBlock;
+    int64_t size, totalSize = 0;
+    bool result = false;
+    do {
+        fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+        dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
+        dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
+        if ( dataBlock.size32 == 1 ) size = dataBlock.size64;
+        else size = (int64_t) dataBlock.size32;
+
+        if ( size < 8 || size > (dataSize-totalSize) ) break;
+        
+        totalSize += size;
+        if ( totalSize == dataSize ) {
+            result = true;
+            break;
+        }
+
+        nextPos += size;
+        fileStream->seekg(nextPos, fileStream->beg);
+    } while ( totalSize < dataSize );
+
+    fileStream->seekg(startPos, fileStream->beg);
+    return result;
 }
 
 bool MP4::atom::isContainer_(std::ifstream &fileStream, int64_t dataSize)

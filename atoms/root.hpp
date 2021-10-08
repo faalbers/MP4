@@ -27,6 +27,7 @@ namespace MP4
 class root : public atom
 {
 public:
+    root(atomBuild &build);
     root(atomBuildType &atomBuild);
 
     void printData(bool fullLists = false);

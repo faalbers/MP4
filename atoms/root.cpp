@@ -3,6 +3,30 @@
 #include "moov.hpp"
 #include <iostream>
 
+MP4::root::root(atomBuild &build)
+{
+    auto fileStream = build.getFileStream();
+    filePath_ = build.getFilePath();
+    size_ = build.getFileSize();
+    fileNextPos_ = size_;
+    dataSize_ = size_;
+
+    int64_t childNextPos;
+    do {
+        build.parentPath = "/";
+        auto child = atom::makeAtomB_(build);
+        childNextPos = child->fileNextPos_;
+        fileStream->seekg(childNextPos, fileStream->beg);
+        children_.push_back(child);
+    } while ( childNextPos < fileNextPos_ );
+
+    // inject moov atom into all atoms
+    for ( auto moov : getTypeAtoms<moov>() )
+        for ( auto child : children_ ) child->setMoov_(moov);
+    
+    for ( auto trak : getTypeAtoms<trak>() ) trak->setTrak_(trak);
+}
+
 MP4::root::root(atomBuildType &atomBuild)
 {
     filePath_ = atomBuild.filePath;

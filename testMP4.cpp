@@ -18,10 +18,10 @@ int main(int argc, char* argv[])
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(testStart - createStart);
     std::cout << "\nCreate Time: " << ms_int.count() << "ms\n";
     std::cout << "**** TEST MP4 ****\n\n";
-    
-    //parserA.printHierarchy();
-    //parserA.printHierarchyData();
 
+    //parserA.printHierarchy();
+    parserA.printHierarchyData();
+/*
     // create a processor
     MP4::Processor processor;
 
@@ -55,6 +55,10 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (true) {
+        processor.addTrack(parserA,1);
+    }
+*/
 /*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;

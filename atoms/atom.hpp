@@ -23,6 +23,38 @@
 namespace MP4
 {
 
+class atomReadFile
+{
+public:
+    atomReadFile(std::string fileName);
+    ~atomReadFile();
+
+    std::string     getFilePath();
+    int64_t         getFileSize();
+    std::ifstream   *getFileStream();
+
+private:
+    std::string     filePath_;
+    std::ifstream   fileStream_;
+    int64_t         fileSize_;
+
+};
+
+class atomBuild
+{
+public:
+    atomBuild(std::string fileName);
+
+    std::string     getFilePath();
+    int64_t         getFileSize();
+    std::ifstream   *getFileStream();
+
+    std::string parentPath;
+
+private:
+    std::shared_ptr<atomReadFile> readFile_;
+};
+
 typedef struct atomBuildType
 {
     std::string filePath;
@@ -38,6 +70,7 @@ class atom
 {
 public:
     atom();
+    atom(atomBuild &build);
     atom(atomBuildType &atomBuild);
     
     template<typename T>
@@ -83,10 +116,12 @@ protected:
     friend class uuid;
     friend class tkhd;
 
+    static std::shared_ptr<atom>    makeAtomB_(atomBuild &build);
     static std::shared_ptr<atom>    makeAtom_(atomBuildType &atomBuild);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
+    static bool                     isContainerB_(std::ifstream *fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
     
