@@ -4,6 +4,7 @@
 #include "types.hpp"
 #include <string>
 #include <set>
+#include <memory>
 #include "atoms/root.hpp"
 
 namespace MP4
@@ -23,10 +24,14 @@ public:
     std::set<uint32_t>      getDataFormatTrackIDs(std::string dataFormat);
     std::set<uint32_t>      getComponentSubTypeTrackIDs(std::string componentSubType);
 
+    std::shared_ptr<trackType>  getTrack(uint32_t trackID);
+
 private:
-    std::string                         filePath_;
-    int64_t                             fileSize_;
-    std::shared_ptr<root>               rootAtom_;
+    void                    warning_(std::string message);
+
+    std::string             filePath_;
+    int64_t                 fileSize_;
+    std::shared_ptr<root>   rootAtom_;
 };
 
 }

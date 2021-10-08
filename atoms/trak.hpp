@@ -34,7 +34,7 @@ public:
 
     uint32_t                    getMediaTimeScale(); // float in seconds
 
-    trackType                   getTrack();
+    std::shared_ptr<trackType>  getTrack();
     size_t                      getSampleCount();
 
     size_t                      getChunkCount();

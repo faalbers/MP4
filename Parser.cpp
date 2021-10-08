@@ -9,11 +9,20 @@
 
 MP4::Parser::Parser(std::string fileName)
 {
-    filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
+    try {
+        atomBuild build(fileName);
+        filePath_ = build.getFilePath();
+        rootAtom_ = std::make_shared<root>(build);
+    } catch (std::runtime_error &error) {
+        std::cout << "Parser: " << error.what() << std::endl;
+        std::cout << "exiting application ..." << std::endl;
+        exit(1);
+    }
 
-    atomBuildType atomBuild;
-    atomBuild.filePath = filePath_;
-    rootAtom_ = std::make_shared<root>(atomBuild);
+    //filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
+    //atomBuildType atomBuild;
+    //atomBuild.filePath = filePath_;
+    //rootAtom_ = std::make_shared<root>(atomBuild);
 }
 
 void MP4::Parser::printHierarchy()
@@ -86,4 +95,19 @@ std::set<uint32_t> MP4::Parser::getComponentSubTypeTrackIDs(std::string componen
         trackIDs.insert(trak->getID());
     }
     return trackIDs;
+}
+
+std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(uint32_t trackID)
+{
+    for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
+        if ( trak->getID() == trackID ) return trak->getTrack();
+    }
+    warning_("TrackID: " + std::to_string(trackID) + " does not exist in mp4 file.");
+    return nullptr;
+}
+
+void MP4::Parser::warning_(std::string message)
+{
+    std::cout << "Parser: " << filePath_ << std::endl;
+    std::cout << "-> " << message << std::endl;
 }
