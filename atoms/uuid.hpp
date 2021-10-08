@@ -13,7 +13,7 @@ namespace MP4
 class uuid : public atom
 {
 public:
-    uuid(atomBuildType &atomBuild);
+    uuid(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

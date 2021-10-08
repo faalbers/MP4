@@ -15,7 +15,7 @@ namespace MP4
 class free : public atom
 {
 public:
-    free(atomBuildType &atomBuild);
+    free(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

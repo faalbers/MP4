@@ -110,7 +110,6 @@ MP4::atom::atom()
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
 {
-
 }
 
 MP4::atom::atom(atomBuild &build)
@@ -171,77 +170,6 @@ MP4::atom::atom(atomBuild &build)
         children_.push_back(child);
     } while ( childNextPos < fileNextPos_ );
 
-}
-
-MP4::atom::atom(atomBuildType &atomBuild)
-    : filePath_(atomBuild.filePath)
-    , filePos_(atomBuild.filePos)
-    , parentPath_(atomBuild.parentPath)
-    , moovAtom_(nullptr)
-    , trakAtom_(nullptr)
-{
-    int64_t fileSize;
-    bool container;
-
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("Atom can not parse file: "+filePath_);
-
-    // get file size anset file position to start of atom
-    fileStream.seekg(0, fileStream.end);
-    fileSize = fileStream.tellg();
-    fileStream.seekg(filePos_, fileStream.beg);
-
-    // read the header
-    headerBlock dataBlock;
-    fileStream.read((char *) &dataBlock, sizeof(dataBlock));
-
-    key = std::string(dataBlock.key).substr(0,4);
-    path_ = parentPath_ + key;
-    #ifdef MP4_PARSE_PATH
-    std::cout << path_ << std::endl;
-    #endif
-
-    // get atom size and data position
-    dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
-    dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
-    if ( dataBlock.size32 == 1 ) {
-        headerSize64_ = true;
-        headerSize_ = 16;
-        size_ = (int64_t) dataBlock.size64;
-        fileDataPos_ = filePos_ + headerSize_;
-    } else {
-        headerSize64_ = false;
-        headerSize_ = 8;
-        size_ = (int64_t) dataBlock.size32;
-        fileDataPos_ = filePos_ + headerSize_;
-    }
-
-    // set filestream to data position
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-
-    // get other data
-    fileNextPos_ = filePos_ + size_;
-    dataSize_ = fileNextPos_ - fileDataPos_;
-    container = isContainer_(fileStream, dataSize_);
-    fileStream.close();
-
-    #ifdef MP4_PARSE_DATA
-    std::cout << "  size       : " << size_ << std::endl;
-    std::cout << "  filePos    : " << filePos_ << std::endl;
-    std::cout << "  fileDataPos: " << fileDataPos_ << std::endl;
-    std::cout << "  dataSize   : " << dataSize_ << std::endl;
-    std::cout << "  fileNextPos: " << fileNextPos_ << std::endl;
-    #endif
-
-    // find child atoms
-    if ( !container ) return;
-    atomBuild.filePos = fileDataPos_;
-    do {
-        atomBuild.parentPath = path_+"/";
-        auto child = makeAtom_(atomBuild);
-        atomBuild.filePos = child->fileNextPos_;
-        children_.push_back(child);
-    } while ( atomBuild.filePos < fileNextPos_ );
 }
 
 void MP4::atom::setMoov_(moov *moovAtom)

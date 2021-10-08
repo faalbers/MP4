@@ -28,7 +28,7 @@ class root : public atom
 {
 public:
     root(atomBuild &build);
-    root(atomBuildType &atomBuild);
+    root(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

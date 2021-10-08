@@ -27,7 +27,7 @@ namespace MP4
 class mdia : public atom
 {
 public:
-    mdia(atomBuildType &atomBuild);
+    mdia(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

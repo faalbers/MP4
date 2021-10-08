@@ -71,7 +71,6 @@ class atom
 public:
     atom();
     atom(atomBuild &build);
-    atom(atomBuildType &atomBuild);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -117,7 +116,7 @@ protected:
     friend class tkhd;
 
     static std::shared_ptr<atom>    makeAtomB_(atomBuild &build);
-    static std::shared_ptr<atom>    makeAtom_(atomBuildType &atomBuild);
+    static std::shared_ptr<atom>    makeAtom_(atomBuild &build);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
     static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);

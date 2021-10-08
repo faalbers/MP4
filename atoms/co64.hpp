@@ -24,7 +24,7 @@ namespace MP4
 class co64 : public atom
 {
 public:
-    co64(atomBuildType &atomBuild);
+    co64(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

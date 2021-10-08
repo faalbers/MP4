@@ -26,7 +26,7 @@ namespace MP4
 class stss : public atom
 {
 public:
-    stss(atomBuildType &atomBuild);
+    stss(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

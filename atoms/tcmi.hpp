@@ -17,7 +17,7 @@ namespace MP4
 class tcmi : public atom
 {
 public:
-    tcmi(atomBuildType &atomBuild);
+    tcmi(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

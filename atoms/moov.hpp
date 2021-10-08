@@ -34,7 +34,7 @@ namespace MP4
 class moov : public atom
 {
 public:
-    moov(atomBuildType &atomBuild);
+    moov(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

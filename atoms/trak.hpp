@@ -26,7 +26,7 @@ namespace MP4
 class trak : public atom
 {
 public:
-    trak(atomBuildType &atomBuild);
+    trak(atomBuild &build);
 
     // data retrieval
 

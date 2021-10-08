@@ -16,7 +16,7 @@ namespace MP4
 class elst : public atom
 {
 public:
-    elst(atomBuildType &atomBuild);
+    elst(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

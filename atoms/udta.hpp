@@ -27,7 +27,7 @@ namespace MP4
 class udta : public atom
 {
 public:
-    udta(atomBuildType &atomBuild);
+    udta(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
