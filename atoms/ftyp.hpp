@@ -33,7 +33,6 @@ class ftyp : public atom
 {
 public:
     ftyp(atomBuild &build);
-    ftyp(atomBuild &build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

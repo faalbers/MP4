@@ -1,8 +1,8 @@
 #include "tcmi.hpp"
 #include <iostream>
 
-MP4::tcmi::tcmi(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::tcmi::tcmi(atomBuild &build)
+    : atom(build)
     , fontName("")
 {
     typedef struct dataBlock
@@ -20,12 +20,12 @@ MP4::tcmi::tcmi(atomBuildType &atomBuild)
         uint16_t        backgroundColorB;
     } dataBlock;
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("tcmi atom can not parse file: "+filePath_);
-    fileStream.seekg(fileDataPos_, fileStream.beg);
+    auto fileStream = build.getFileStream();
+
+    fileStream->seekg(fileDataPos_, fileStream->beg);
 
     dataBlock tcmiData;
-    fileStream.read((char *) &tcmiData, sizeof(tcmiData));
+    fileStream->read((char *) &tcmiData, sizeof(tcmiData));
     textFont = XXH_swap16(tcmiData.textFont);
     textFace = XXH_swap16(tcmiData.textFace);
     textSize = XXH_swap16(tcmiData.textSize);
@@ -36,17 +36,16 @@ MP4::tcmi::tcmi(atomBuildType &atomBuild)
     backgroundColorG = XXH_swap16(tcmiData.backgroundColorG);
     backgroundColorB = XXH_swap16(tcmiData.backgroundColorB);
 
-    if ( (fileNextPos_ - fileStream.tellg()) > 0 ) {
+    if ( (fileNextPos_ - fileStream->tellg()) > 0 ) {
         uint8_t pascalLength;
-        fileStream.read((char *) &pascalLength, sizeof(pascalLength));
+        fileStream->read((char *) &pascalLength, sizeof(pascalLength));
         auto bufferSize = (size_t) pascalLength;
         char *buffer = new char[bufferSize];
-        fileStream.read(buffer, bufferSize);
+        fileStream->read(buffer, bufferSize);
         delete[] buffer;
         fontName = std::string(buffer).substr(0, bufferSize);
     }
 
-    fileStream.close();
 
 }
 

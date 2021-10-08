@@ -1,23 +1,21 @@
 #include "dref.hpp"
 #include <iostream>
 
-MP4::dref::dref(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::dref::dref(atomBuild &build)
+    : atom(build)
 {
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("dref atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock drefData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &drefData, sizeof(drefData));
-    atomBuild.filePos = fileStream.tellg();
-    fileStream.close();
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &drefData, sizeof(drefData));
 
     drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
     uint32_t ID = 1;
-    atomBuild.parentPath += "dref/";
+    build.parentPath += "dref/";
     do {
-        dataReferences[ID] = makeAtom_(atomBuild);
+        dataReferences[ID] = makeAtom_(build);
         ID++;
     } while ( ID <= drefData.numberOfEntries );
 }

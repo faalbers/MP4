@@ -1,25 +1,24 @@
 #include "stss.hpp"
 #include <iostream>
 
-MP4::stss::stss(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stss::stss(atomBuild &build)
+    : atom(build)
 {
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stss atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock stssData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &stssData, sizeof(stssData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &stssData, sizeof(stssData));
     stssData.numberOfEntries = XXH_swap32(stssData.numberOfEntries);
     auto index = stssData.numberOfEntries;
     uint32_t sampleID;
     uint32_t ID = 1;
     do {
-        fileStream.read((char *) &sampleID, sizeof(sampleID));
+        fileStream->read((char *) &sampleID, sizeof(sampleID));
         stssTable[ID] = XXH_swap32(sampleID);
         index--;
         ID++;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::stss::printData(bool fullLists)

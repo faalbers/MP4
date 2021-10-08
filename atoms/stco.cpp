@@ -1,27 +1,26 @@
 #include "stco.hpp"
 #include <iostream>
 
-MP4::stco::stco(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stco::stco(atomBuild &build)
+    : atom(build)
 {
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stco atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock stcoData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &stcoData, sizeof(stcoData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &stcoData, sizeof(stcoData));
     stcoData.numberOfEntries = XXH_swap32(stcoData.numberOfEntries);
     auto index = stcoData.numberOfEntries;
     uint32_t chunkOffset;
     uint32_t ID = 1;
     do {
-        fileStream.read((char *) &chunkOffset, sizeof(chunkOffset));
+        fileStream->read((char *) &chunkOffset, sizeof(chunkOffset));
         chunkOffset = XXH_swap32(chunkOffset);
         stcoTable[ID] = (uint64_t) chunkOffset;
         index--;
         ID++;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::stco::printData(bool fullLists)

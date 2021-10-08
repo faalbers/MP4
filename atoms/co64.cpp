@@ -1,27 +1,26 @@
 #include "co64.hpp"
 #include <iostream>
 
-MP4::co64::co64(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::co64::co64(atomBuild &build)
+    : atom(build)
 {
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("co64 atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock co64Data;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &co64Data, sizeof(co64Data));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &co64Data, sizeof(co64Data));
     co64Data.numberOfEntries = XXH_swap32(co64Data.numberOfEntries);
     auto index = co64Data.numberOfEntries;
     uint64_t chunkOffset;
     uint32_t ID = 1;
     do {
-        fileStream.read((char *) &chunkOffset, sizeof(chunkOffset));
+        fileStream->read((char *) &chunkOffset, sizeof(chunkOffset));
         chunkOffset = XXH_swap64(chunkOffset);
         co64Table[ID] = chunkOffset;
         index--;
         ID++;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::co64::printData(bool fullLists)

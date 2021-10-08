@@ -20,8 +20,8 @@
 #include <vector>
 #include <string>
 
-MP4::trak::trak(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::trak::trak(atomBuild &build)
+    : atom(build)
 {
 }
 

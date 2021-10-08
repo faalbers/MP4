@@ -1,30 +1,29 @@
 #include "stts.hpp"
 #include <iostream>
 
-MP4::stts::stts(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stts::stts(atomBuild &build)
+    : atom(build)
 {
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stts atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock sttsData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &sttsData, sizeof(sttsData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &sttsData, sizeof(sttsData));
     sttsData.numberOfEntries = XXH_swap32(sttsData.numberOfEntries);
     auto index = sttsData.numberOfEntries;
     uint32_t ID = 1;
     do {
         std::vector<uint32_t> sttsEntry;
         uint32_t val;
-        fileStream.read((char *) &val, sizeof(val));
+        fileStream->read((char *) &val, sizeof(val));
         sttsEntry.push_back(XXH_swap32(val));
-        fileStream.read((char *) &val, sizeof(val));
+        fileStream->read((char *) &val, sizeof(val));
         sttsEntry.push_back(XXH_swap32(val));
         sttsTable[ID] = sttsEntry;
         index--;
         ID++;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::stts::printData(bool fullLists)

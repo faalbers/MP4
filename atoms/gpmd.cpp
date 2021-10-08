@@ -1,15 +1,14 @@
 #include "gpmd.hpp"
 #include <iostream>
 
-MP4::gpmd::gpmd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::gpmd::gpmd(atomBuild &build)
+    : atom(build)
 {
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("gpmd atom can not parse file: "+filePath_);
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &version, sizeof(version));
+    auto fileStream = build.getFileStream();
+
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &version, sizeof(version));
     version = XXH_swap32(version);
-    fileStream.close();
 }
 
 void MP4::gpmd::printData(bool fullLists)

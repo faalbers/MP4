@@ -1,8 +1,8 @@
 #include "stbl.hpp"
 #include <iostream>
 
-MP4::stbl::stbl(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stbl::stbl(atomBuild &build)
+    : atom(build)
 {
 }
 

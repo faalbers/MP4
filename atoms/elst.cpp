@@ -1,8 +1,8 @@
 #include "elst.hpp"
 #include <iostream>
 
-MP4::elst::elst(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::elst::elst(atomBuild &build)
+    : atom(build)
 {
     typedef struct entryDataBlock
     {
@@ -12,17 +12,17 @@ MP4::elst::elst(atomBuildType &atomBuild)
     } entryDataBlock;
 
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("elst atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock elstData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &elstData, sizeof(elstData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &elstData, sizeof(elstData));
     elstData.numberOfEntries = XXH_swap32(elstData.numberOfEntries);
     auto index = elstData.numberOfEntries;
     entryDataBlock elstEntryBlock;
     do {
         entryType elstEntry;
-        fileStream.read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
+        fileStream->read((char *) &elstEntryBlock, sizeof(elstEntryBlock));
         elstEntry.duration = XXH_swap32(elstEntryBlock.duration);
         elstEntry.mediaTime = XXH_swap32(elstEntryBlock.mediaTime);
         elstEntryBlock.mediaRate = XXH_swap32(elstEntryBlock.mediaRate);
@@ -30,7 +30,6 @@ MP4::elst::elst(atomBuildType &atomBuild)
         elstTable.push_back(elstEntry);
         index--;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::elst::printData(bool fullLists)

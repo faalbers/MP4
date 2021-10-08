@@ -1,8 +1,8 @@
 #include "stsd.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stsd::stsd(atomBuild &build)
+    : atom(build)
 {
     typedef struct entryDataBlock
     {
@@ -14,17 +14,17 @@ MP4::stsd::stsd(atomBuildType &atomBuild)
     } entryDataBlock;
 
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stsd atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock stsdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &stsdData, sizeof(stsdData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = XXH_swap32(stsdData.numberOfEntries);
     uint32_t ID = 1;
     entryDataBlock sampleDescriptionBlock;
     do {
         entryType stsdEntry;
-        fileStream.read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
+        fileStream->read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
         auto size = XXH_swap32(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);
         stsdEntry.dataReferenceIndex = XXH_swap16(sampleDescriptionBlock.dataReferenceIndex);
@@ -36,13 +36,12 @@ MP4::stsd::stsd(atomBuildType &atomBuild)
         auto tailSize = size - sizeof(sampleDescriptionBlock);
         char tail[200];
         if ( tailSize > 0 && tailSize <= 200 ) {
-            fileStream.read((char *) tail, tailSize);
+            fileStream->read((char *) tail, tailSize);
             stsdTable[ID].extendedData = std::string(tail).substr(0,tailSize);
         }
     
         ID++;
     } while ( ID <= stsdData.numberOfEntries );
-    fileStream.close();
 }
 
 void MP4::stsd::printData(bool fullLists)

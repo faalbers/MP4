@@ -1,8 +1,8 @@
 #include "tmcd.hpp"
 #include <iostream>
 
-MP4::tmcd::tmcd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::tmcd::tmcd(atomBuild &build)
+    : atom(build)
     , isTrackReference(false)
 {
     // there are several atoms with the same key name.
@@ -10,20 +10,19 @@ MP4::tmcd::tmcd(atomBuildType &atomBuild)
         isTrackReference = true;
     }
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("vmhd atom can not parse file: "+filePath_);
-    fileStream.seekg(fileDataPos_, fileStream.beg);
+    auto fileStream = build.getFileStream();
+
+    fileStream->seekg(fileDataPos_, fileStream->beg);
 
     if ( isTrackReference ) {
         uint32_t trackID;
         do {
-            fileStream.read((char *) &trackID, sizeof(trackID));
+            fileStream->read((char *) &trackID, sizeof(trackID));
             trackIDs.push_back(XXH_swap32(trackID));
-        } while ( fileStream.tellg() < fileNextPos_ );
+        } while ( fileStream->tellg() < fileNextPos_ );
     } else {
     }
 
-    fileStream.close();
 }
 
 void MP4::tmcd::printData(bool fullLists)

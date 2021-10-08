@@ -4,8 +4,8 @@
 #include <set>
 #include <map>
 
-MP4::moov::moov(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::moov::moov(atomBuild &build)
+    : atom(build)
 {
 }
 

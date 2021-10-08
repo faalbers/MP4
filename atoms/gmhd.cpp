@@ -1,8 +1,8 @@
 #include "gmhd.hpp"
 #include <iostream>
 
-MP4::gmhd::gmhd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::gmhd::gmhd(atomBuild &build)
+    : atom(build)
 {
 }
 

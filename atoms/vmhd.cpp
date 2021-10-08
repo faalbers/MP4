@@ -1,8 +1,8 @@
 #include "vmhd.hpp"
 #include <iostream>
 
-MP4::vmhd::vmhd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::vmhd::vmhd(atomBuild &build)
+    : atom(build)
 {
     typedef struct dataBlock
     {
@@ -13,16 +13,15 @@ MP4::vmhd::vmhd(atomBuildType &atomBuild)
         uint16_t        opColorB;
     } dataBlock;
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("vmhd atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     dataBlock vmhdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &vmhdData, sizeof(vmhdData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &vmhdData, sizeof(vmhdData));
     graphicMode = XXH_swap16(vmhdData.graphicsMode);
     opColorR = XXH_swap16(vmhdData.opColorR);
     opColorG = XXH_swap16(vmhdData.opColorG);
     opColorB = XXH_swap16(vmhdData.opColorB);
-    fileStream.close();
 }
 
 void MP4::vmhd::printData(bool fullLists)

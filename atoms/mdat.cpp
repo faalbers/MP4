@@ -2,8 +2,8 @@
 #include <iostream>
 #include <map>
 
-MP4::mdat::mdat(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::mdat::mdat(atomBuild &build)
+    : atom(build)
 {
     sampleDataPos = fileDataPos_;
     sampleDataSize = dataSize_;

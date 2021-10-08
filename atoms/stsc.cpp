@@ -1,32 +1,31 @@
 #include "stsc.hpp"
 #include <iostream>
 
-MP4::stsc::stsc(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stsc::stsc(atomBuild &build)
+    : atom(build)
 {
     // handle data 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stsc atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock stscData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &stscData, sizeof(stscData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &stscData, sizeof(stscData));
     stscData.numberOfEntries = XXH_swap32(stscData.numberOfEntries);
     auto index = stscData.numberOfEntries;
     uint32_t ID = 1;
     do {
         std::vector<uint32_t> stscEntry;
         uint32_t val;
-        fileStream.read((char *) &val, sizeof(val));
+        fileStream->read((char *) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
-        fileStream.read((char *) &val, sizeof(val));
+        fileStream->read((char *) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
-        fileStream.read((char *) &val, sizeof(val));
+        fileStream->read((char *) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
         stscTable[ID] = stscEntry;
         index--;
         ID++;
     } while ( index > 0);
-    fileStream.close();
 }
 
 void MP4::stsc::printData(bool fullLists)

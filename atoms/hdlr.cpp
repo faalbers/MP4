@@ -1,8 +1,8 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::hdlr::hdlr(atomBuild &build)
+    : atom(build)
 {
     typedef struct dataBlock
     {
@@ -15,19 +15,18 @@ MP4::hdlr::hdlr(atomBuildType &atomBuild)
     } dataBlock;
 
     // get data
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("hdlr atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     dataBlock hdlrData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &hdlrData, sizeof(hdlrData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &hdlrData, sizeof(hdlrData));
     componentType = std::string(hdlrData.componentType).substr(0,4);
     componentSubType = std::string(hdlrData.componentSubType).substr(0,4);
     uint8_t stringCount;
-    fileStream.read((char *) &stringCount, sizeof(stringCount));
+    fileStream->read((char *) &stringCount, sizeof(stringCount));
     char name[200];
-    fileStream.read((char *) name, stringCount);
+    fileStream->read((char *) name, stringCount);
     componentName = std::string(name).substr(0, stringCount);
-    fileStream.close();
 }
 
 void MP4::hdlr::printData(bool fullLists)

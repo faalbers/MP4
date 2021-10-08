@@ -1,8 +1,8 @@
 #include "stsz.hpp"
 #include <iostream>
 
-MP4::stsz::stsz(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::stsz::stsz(atomBuild &build)
+    : atom(build)
 {
     typedef struct tableBlock
     {
@@ -11,11 +11,11 @@ MP4::stsz::stsz(atomBuildType &atomBuild)
         uint32_t        numberOfEntries;        // number of sample descriptions that follow
     } tableBlock;
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("stsz atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     tableBlock stszData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &stszData, sizeof(stszData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &stszData, sizeof(stszData));
     defaultSampleSize = XXH_swap32(stszData.defaultSampleSize);
     if ( defaultSampleSize == 0 ) {
         stszData.numberOfEntries = XXH_swap32(stszData.numberOfEntries);
@@ -23,13 +23,12 @@ MP4::stsz::stsz(atomBuildType &atomBuild)
         uint32_t defaultSampleSizeTemp;
         uint32_t ID = 1;
         do {
-            fileStream.read((char *) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
+            fileStream->read((char *) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
             stszTable[ID] = XXH_swap32(defaultSampleSizeTemp);
             index--;
             ID++;
         } while ( index > 0);
     }
-    fileStream.close();
 }
 
 void MP4::stsz::printData(bool fullLists)

@@ -14,43 +14,11 @@ MP4::root::root(atomBuild &build)
     int64_t childNextPos;
     do {
         build.parentPath = "/";
-        auto child = atom::makeAtomB_(build);
+        auto child = atom::makeAtom_(build);
         childNextPos = child->fileNextPos_;
         fileStream->seekg(childNextPos, fileStream->beg);
         children_.push_back(child);
     } while ( childNextPos < fileNextPos_ );
-
-    // inject moov atom into all atoms
-    for ( auto moov : getTypeAtoms<moov>() )
-        for ( auto child : children_ ) child->setMoov_(moov);
-    
-    for ( auto trak : getTypeAtoms<trak>() ) trak->setTrak_(trak);
-}
-
-MP4::root::root(atomBuildType &atomBuild)
-{
-    filePath_ = atomBuild.filePath;
-    atomBuild.filePos = 0;
-
-    std::ifstream fileStream(atomBuild.filePath, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("MP4::MP4 can not open file: " + atomBuild.filePath);
-
-    // get file length
-    fileStream.seekg(0, fileStream.end);
-    size_ = fileStream.tellg();
-    fileNextPos_ = size_;
-    dataSize_ = size_;
-    fileStream.seekg(0, fileStream.beg);
-    fileStream.close();
-
-    if ( size_ < 8 ) throw std::runtime_error("MP4::MP4 can not open file: " + atomBuild.filePath);
-
-    do {
-        atomBuild.parentPath = "/";
-        auto child = atom::makeAtom_(atomBuild);
-        atomBuild.filePos = child->fileNextPos_;
-        children_.push_back(child);
-    } while ( atomBuild.filePos < fileNextPos_ );
 
     // inject moov atom into all atoms
     for ( auto moov : getTypeAtoms<moov>() )

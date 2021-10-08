@@ -1,8 +1,8 @@
 #include "gmin.hpp"
 #include <iostream>
 
-MP4::gmin::gmin(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::gmin::gmin(atomBuild &build)
+    : atom(build)
 {
     typedef struct dataBlock
     {
@@ -15,17 +15,16 @@ MP4::gmin::gmin(atomBuildType &atomBuild)
         uint16_t        reserved;
     } dataBlock;
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("gmin atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     dataBlock gminData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &gminData, sizeof(gminData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &gminData, sizeof(gminData));
     graphicMode = XXH_swap16(gminData.graphicsMode);
     opColorR = XXH_swap16(gminData.opColorR);
     opColorG = XXH_swap16(gminData.opColorG);
     opColorB = XXH_swap16(gminData.opColorB);
     balance = (float)XXH_swap16(gminData.balance) / (float)(1 << 8);
-    fileStream.close();
 }
 
 void MP4::gmin::printData(bool fullLists)

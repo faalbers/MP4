@@ -115,12 +115,10 @@ protected:
     friend class uuid;
     friend class tkhd;
 
-    static std::shared_ptr<atom>    makeAtomB_(atomBuild &build);
     static std::shared_ptr<atom>    makeAtom_(atomBuild &build);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
-    static bool                     isContainer_(std::ifstream &fileStream, int64_t dataSize);
-    static bool                     isContainerB_(std::ifstream *fileStream, int64_t dataSize);
+    static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
     

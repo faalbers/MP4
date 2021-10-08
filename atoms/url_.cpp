@@ -1,16 +1,15 @@
 #include "url_.hpp"
 #include <iostream>
 
-MP4::url_::url_(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::url_::url_(atomBuild &build)
+    : atom(build)
     , dataInSameFile(false)
 {
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("url_ atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     versionBlock drefType;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &drefType, sizeof(drefType));
-    fileStream.close();
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &drefType, sizeof(drefType));
     if ( drefType.flag[2] == 1) dataInSameFile = true;
     if ( !dataInSameFile )
         throw std::runtime_error("url_ data reference should be in same file");

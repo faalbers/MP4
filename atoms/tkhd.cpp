@@ -1,8 +1,8 @@
 #include "tkhd.hpp"
 #include <iostream>
 
-MP4::tkhd::tkhd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::tkhd::tkhd(atomBuild &build)
+    : atom(build)
 {
 typedef struct dataBlock
 {
@@ -25,11 +25,11 @@ typedef struct dataBlock
     uint32_t        trackHeight;
 } dataBlock;
     // get data
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("tkhd atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     dataBlock tkhdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &tkhdData, sizeof(tkhdData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &tkhdData, sizeof(tkhdData));
     
     trackID = XXH_swap32(tkhdData.trackID);
     duration = XXH_swap32(tkhdData.duration);
@@ -49,7 +49,6 @@ typedef struct dataBlock
         matrix[i][2] = (float)tkhdData.matrix[i][2] / (float)(1 << 30);
     }
     
-    fileStream.close();
 }
 
 void MP4::tkhd::printData(bool fullLists)

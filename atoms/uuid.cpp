@@ -1,18 +1,17 @@
 #include "uuid.hpp"
 #include <iostream>
 
-MP4::uuid::uuid(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::uuid::uuid(atomBuild &build)
+    : atom(build)
 {
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("mdhd atom can not parse file: "+filePath_);
-    fileStream.seekg(fileDataPos_, fileStream.beg);
+    auto fileStream = build.getFileStream();
+
+    fileStream->seekg(fileDataPos_, fileStream->beg);
     char nameBlock[4];
-    fileStream.read((char *) nameBlock, 4);
+    fileStream->read((char *) nameBlock, 4);
 
     name = std::string(nameBlock).substr(0,4);
 
-    fileStream.close();
 }
 
 void MP4::uuid::printData(bool fullLists)

@@ -1,8 +1,8 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(atomBuildType &atomBuild)
-    : atom(atomBuild)
+MP4::mvhd::mvhd(atomBuild &build)
+    : atom(build)
 {
     typedef struct dataBlock
     {
@@ -24,11 +24,11 @@ MP4::mvhd::mvhd(atomBuildType &atomBuild)
         uint32_t        nextTrackID;
     } dataBlock;
 
-    std::ifstream fileStream(filePath_, std::ios::binary);
-    if ( fileStream.fail() ) throw std::runtime_error("mvhd atom can not parse file: "+filePath_);
+    auto fileStream = build.getFileStream();
+
     dataBlock mvhdData;
-    fileStream.seekg(fileDataPos_, fileStream.beg);
-    fileStream.read((char *) &mvhdData, sizeof(mvhdData));
+    fileStream->seekg(fileDataPos_, fileStream->beg);
+    fileStream->read((char *) &mvhdData, sizeof(mvhdData));
     timeScale = XXH_swap32(mvhdData.timeScale);
     duration = XXH_swap32(mvhdData.duration);
     mvhdData.preferredRate = XXH_swap32(mvhdData.preferredRate);
@@ -47,7 +47,6 @@ MP4::mvhd::mvhd(atomBuildType &atomBuild)
     
     nextTrackID = XXH_swap32(mvhdData.nextTrackID);
 
-    fileStream.close();
 }
 
 void MP4::mvhd::printData(bool fullLists)
