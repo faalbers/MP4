@@ -14,7 +14,7 @@ class Processor
 public:
     Processor();
 
-    void addTrack(Parser &parser, uint32_t trackID);
+    void    addTrack(Parser &parser, uint32_t trackID);
 
 private:
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
