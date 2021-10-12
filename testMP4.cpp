@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     std::cout << "**** TEST MP4 ****\n\n";
 
     //parserA.printHierarchy();
-    //parserA.printHierarchyData();
+    parserA.printHierarchyData();
 
     // create a processor
     MP4::Processor processor;

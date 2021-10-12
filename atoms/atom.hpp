@@ -5,8 +5,10 @@
 #include <fstream>
 #include <vector>
 #include <memory>
+#include <map>
 #include <string>
 #include <tuple>
+#include "../types.hpp"
 
 #if defined(__APPLE__)
 #include <libkern/OSByteOrder.h>
@@ -55,12 +57,16 @@ private:
     std::shared_ptr<atomReadFile> readFile_;
 };
 
-typedef struct atomParseType
+class atomBuild
 {
-    std::string filePath;
-    int64_t     filePos;
-    std::string parentPath;
-} atomParseType;
+public:
+    atomBuild();
+
+private:
+    std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
+    uint32_t                                        timeScale_;
+    uint32_t                                        duration_;
+};
 
 // because they include atom as base. included in cpp
 class moov;

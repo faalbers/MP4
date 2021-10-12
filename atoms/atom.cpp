@@ -98,6 +98,13 @@ std::ifstream *MP4::atomParse::getFileStream()
     return nullptr;
 }
 
+MP4::atomBuild::atomBuild()
+    : timeScale_(0)
+    , duration_(0)
+{
+
+}
+
 MP4::atom::atom()
     : key("atom")
     , filePath_("")
