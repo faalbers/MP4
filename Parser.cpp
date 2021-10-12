@@ -14,9 +14,7 @@ MP4::Parser::Parser(std::string fileName)
         filePath_ = build.getFilePath();
         rootAtom_ = std::make_shared<root>(build);
     } catch (std::runtime_error &error) {
-        std::cout << "Parser: " << error.what() << std::endl;
-        std::cout << "exiting application ..." << std::endl;
-        exit(1);
+        error_(error.what());
     }
 
     //filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
@@ -102,12 +100,14 @@ std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(uint32_t trackID)
     for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
         if ( trak->getID() == trackID ) return trak->getTrack();
     }
-    warning_("TrackID: " + std::to_string(trackID) + " does not exist in mp4 file.");
+    error_("getTrack: Can not find track ID: "+std::to_string(trackID));
     return nullptr;
 }
 
-void MP4::Parser::warning_(std::string message)
+void MP4::Parser::error_(std::string message)
 {
     std::cout << "Parser: " << filePath_ << std::endl;
     std::cout << "-> " << message << std::endl;
+    std::cout << "exit application ..." << std::endl;
+    exit(1);
 }

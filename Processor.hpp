@@ -3,6 +3,7 @@
 
 #include "types.hpp"
 #include "Parser.hpp"
+#include <string>
 #include <map>
 #include <memory>
 
@@ -17,6 +18,9 @@ public:
     void    addTrack(Parser &parser, uint32_t trackID);
 
 private:
+    friend class    Writer;
+    void            error_(std::string message);
+
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
     uint32_t                                        timeScale_;
     uint32_t                                        duration_;

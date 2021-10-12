@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
     std::cout << "**** TEST MP4 ****\n\n";
 
     //parserA.printHierarchy();
-    parserA.printHierarchyData();
-/*
+    //parserA.printHierarchyData();
+
     // create a processor
     MP4::Processor processor;
 
@@ -57,8 +57,16 @@ int main(int argc, char* argv[])
 
     if (true) {
         processor.addTrack(parserA,1);
+        //processor.addTrack(parserA,2);
+
+        //MP4::Writer writer(parserA);
+        MP4::Writer writer(processor);
+
+        auto filePath = writer.write("writeResult.mp4");
+
+        std::cout << filePath << std::endl;
     }
-*/
+
 /*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;

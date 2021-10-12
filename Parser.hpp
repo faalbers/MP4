@@ -27,7 +27,7 @@ public:
     std::shared_ptr<trackType>  getTrack(uint32_t trackID);
 
 private:
-    void                    warning_(std::string message);
+    void                    error_(std::string message);
 
     std::string             filePath_;
     int64_t                 fileSize_;
