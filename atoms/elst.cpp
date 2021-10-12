@@ -1,7 +1,7 @@
 #include "elst.hpp"
 #include <iostream>
 
-MP4::elst::elst(atomParse parse)
+MP4::elst::elst(atomParse &parse)
     : atom(parse)
 {
     typedef struct entryDataBlock

@@ -1,7 +1,7 @@
 #include "dref.hpp"
 #include <iostream>
 
-MP4::dref::dref(atomParse parse)
+MP4::dref::dref(atomParse &parse)
     : atom(parse)
 {
     // handle data 

@@ -1,7 +1,7 @@
 #include "stsz.hpp"
 #include <iostream>
 
-MP4::stsz::stsz(atomParse parse)
+MP4::stsz::stsz(atomParse &parse)
     : atom(parse)
 {
     typedef struct tableBlock

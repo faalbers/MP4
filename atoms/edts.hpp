@@ -17,7 +17,7 @@ namespace MP4
 class edts : public atom
 {
 public:
-    edts(atomParse parse);
+    edts(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

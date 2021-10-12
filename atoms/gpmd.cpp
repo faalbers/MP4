@@ -1,7 +1,7 @@
 #include "gpmd.hpp"
 #include <iostream>
 
-MP4::gpmd::gpmd(atomParse parse)
+MP4::gpmd::gpmd(atomParse &parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();

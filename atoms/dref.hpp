@@ -17,7 +17,7 @@ namespace MP4
 class dref : public atom
 {
 public:
-    dref(atomParse parse);
+    dref(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

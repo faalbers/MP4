@@ -1,7 +1,7 @@
 #include "uuid.hpp"
 #include <iostream>
 
-MP4::uuid::uuid(atomParse parse)
+MP4::uuid::uuid(atomParse &parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();

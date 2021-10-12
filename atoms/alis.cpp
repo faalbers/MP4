@@ -1,7 +1,7 @@
 #include "alis.hpp"
 #include <iostream>
 
-MP4::alis::alis(atomParse parse)
+MP4::alis::alis(atomParse &parse)
     : atom(parse)
     , dataInSameFile(false)
 {

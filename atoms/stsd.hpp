@@ -21,7 +21,7 @@ namespace MP4
 class stsd : public atom
 {
 public:
-    stsd(atomParse parse);
+    stsd(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

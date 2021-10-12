@@ -1,7 +1,7 @@
 #include "url_.hpp"
 #include <iostream>
 
-MP4::url_::url_(atomParse parse)
+MP4::url_::url_(atomParse &parse)
     : atom(parse)
     , dataInSameFile(false)
 {

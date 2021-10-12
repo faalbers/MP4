@@ -1,7 +1,7 @@
 #include "gmhd.hpp"
 #include <iostream>
 
-MP4::gmhd::gmhd(atomParse parse)
+MP4::gmhd::gmhd(atomParse &parse)
     : atom(parse)
 {
 }

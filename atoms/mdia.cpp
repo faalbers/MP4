@@ -1,7 +1,7 @@
 #include "mdia.hpp"
 #include <iostream>
 
-MP4::mdia::mdia(atomParse parse)
+MP4::mdia::mdia(atomParse &parse)
     : atom(parse)
 {
 }

@@ -47,7 +47,7 @@ namespace MP4
 class stbl : public atom
 {
 public:
-    stbl(atomParse parse);
+    stbl(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

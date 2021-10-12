@@ -2,7 +2,7 @@
 #include <iostream>
 #include <chrono>
 
-MP4::mdhd::mdhd(atomParse parse)
+MP4::mdhd::mdhd(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

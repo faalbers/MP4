@@ -27,7 +27,7 @@ namespace MP4
 class root : public atom
 {
 public:
-    root(atomParse parse);
+    root(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

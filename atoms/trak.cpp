@@ -20,7 +20,7 @@
 #include <vector>
 #include <string>
 
-MP4::trak::trak(atomParse parse)
+MP4::trak::trak(atomParse &parse)
     : atom(parse)
 {
 }

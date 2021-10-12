@@ -15,7 +15,7 @@ namespace MP4
 class vmhd : public atom
 {
 public:
-    vmhd(atomParse parse);
+    vmhd(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

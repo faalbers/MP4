@@ -1,7 +1,7 @@
 #include "tkhd.hpp"
 #include <iostream>
 
-MP4::tkhd::tkhd(atomParse parse)
+MP4::tkhd::tkhd(atomParse &parse)
     : atom(parse)
 {
 typedef struct dataBlock

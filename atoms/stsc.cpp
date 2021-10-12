@@ -1,7 +1,7 @@
 #include "stsc.hpp"
 #include <iostream>
 
-MP4::stsc::stsc(atomParse parse)
+MP4::stsc::stsc(atomParse &parse)
     : atom(parse)
 {
     // handle data 

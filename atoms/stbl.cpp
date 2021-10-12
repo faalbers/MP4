@@ -1,7 +1,7 @@
 #include "stbl.hpp"
 #include <iostream>
 
-MP4::stbl::stbl(atomParse parse)
+MP4::stbl::stbl(atomParse &parse)
     : atom(parse)
 {
 }

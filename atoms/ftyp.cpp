@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(atomParse parse)
+MP4::ftyp::ftyp(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

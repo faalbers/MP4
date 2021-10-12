@@ -76,7 +76,7 @@ class atom
 {
 public:
     atom();
-    atom(atomParse parse);
+    atom(atomParse &parse);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -121,7 +121,7 @@ protected:
     friend class uuid;
     friend class tkhd;
 
-    static std::shared_ptr<atom>    makeAtom_(atomParse parse);
+    static std::shared_ptr<atom>    makeAtom_(atomParse &parse);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
     static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);

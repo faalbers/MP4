@@ -1,7 +1,7 @@
 #include "tcmi.hpp"
 #include <iostream>
 
-MP4::tcmi::tcmi(atomParse parse)
+MP4::tcmi::tcmi(atomParse &parse)
     : atom(parse)
     , fontName("")
 {

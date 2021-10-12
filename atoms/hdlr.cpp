@@ -1,7 +1,7 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(atomParse parse)
+MP4::hdlr::hdlr(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

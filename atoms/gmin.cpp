@@ -1,7 +1,7 @@
 #include "gmin.hpp"
 #include <iostream>
 
-MP4::gmin::gmin(atomParse parse)
+MP4::gmin::gmin(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

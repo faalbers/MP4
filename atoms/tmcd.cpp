@@ -1,7 +1,7 @@
 #include "tmcd.hpp"
 #include <iostream>
 
-MP4::tmcd::tmcd(atomParse parse)
+MP4::tmcd::tmcd(atomParse &parse)
     : atom(parse)
     , isTrackReference(false)
 {

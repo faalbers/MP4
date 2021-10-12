@@ -119,7 +119,7 @@ MP4::atom::atom()
 {
 }
 
-MP4::atom::atom(atomParse parse)
+MP4::atom::atom(atomParse &parse)
     : filePath_(parse.getFilePath())
     , parentPath_(parse.parentPath)
     , moovAtom_(nullptr)
@@ -231,7 +231,7 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse parse)
+std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
 {
     std::shared_ptr<atom> newAtom;
 

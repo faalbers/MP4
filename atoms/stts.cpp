@@ -1,7 +1,7 @@
 #include "stts.hpp"
 #include <iostream>
 
-MP4::stts::stts(atomParse parse)
+MP4::stts::stts(atomParse &parse)
     : atom(parse)
 {
     // handle data 

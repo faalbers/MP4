@@ -30,7 +30,7 @@ namespace MP4
 class tref : public atom
 {
 public:
-    tref(atomParse parse);
+    tref(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

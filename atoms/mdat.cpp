@@ -2,7 +2,7 @@
 #include <iostream>
 #include <map>
 
-MP4::mdat::mdat(atomParse parse)
+MP4::mdat::mdat(atomParse &parse)
     : atom(parse)
 {
     sampleDataPos = fileDataPos_;

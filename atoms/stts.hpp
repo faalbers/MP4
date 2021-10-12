@@ -32,7 +32,7 @@ namespace MP4
 class stts : public atom
 {
 public:
-    stts(atomParse parse);
+    stts(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

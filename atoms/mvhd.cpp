@@ -1,7 +1,7 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(atomParse parse)
+MP4::mvhd::mvhd(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

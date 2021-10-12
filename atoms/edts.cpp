@@ -1,7 +1,7 @@
 #include "edts.hpp"
 #include <iostream>
 
-MP4::edts::edts(atomParse parse)
+MP4::edts::edts(atomParse &parse)
     : atom(parse)
 {
 }

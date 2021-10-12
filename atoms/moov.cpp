@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 
-MP4::moov::moov(atomParse parse)
+MP4::moov::moov(atomParse &parse)
     : atom(parse)
 {
 }

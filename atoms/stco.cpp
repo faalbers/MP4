@@ -1,7 +1,7 @@
 #include "stco.hpp"
 #include <iostream>
 
-MP4::stco::stco(atomParse parse)
+MP4::stco::stco(atomParse &parse)
     : atom(parse)
 {
     // handle data 

@@ -1,7 +1,7 @@
 #include "co64.hpp"
 #include <iostream>
 
-MP4::co64::co64(atomParse parse)
+MP4::co64::co64(atomParse &parse)
     : atom(parse)
 {
     // handle data 

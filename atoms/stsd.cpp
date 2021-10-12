@@ -1,7 +1,7 @@
 #include "stsd.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(atomParse parse)
+MP4::stsd::stsd(atomParse &parse)
     : atom(parse)
 {
     typedef struct entryDataBlock

@@ -1,7 +1,7 @@
 #include "stss.hpp"
 #include <iostream>
 
-MP4::stss::stss(atomParse parse)
+MP4::stss::stss(atomParse &parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();

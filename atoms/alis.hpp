@@ -17,7 +17,7 @@ namespace MP4
 class alis : public atom
 {
 public:
-    alis(atomParse parse);
+    alis(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

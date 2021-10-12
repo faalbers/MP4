@@ -1,7 +1,7 @@
 #include "smhd.hpp"
 #include <iostream>
 
-MP4::smhd::smhd(atomParse parse)
+MP4::smhd::smhd(atomParse &parse)
     : atom(parse)
 {
     typedef struct dataBlock

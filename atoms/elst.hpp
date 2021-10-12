@@ -16,7 +16,7 @@ namespace MP4
 class elst : public atom
 {
 public:
-    elst(atomParse parse);
+    elst(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

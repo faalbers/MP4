@@ -24,7 +24,7 @@ namespace MP4
 class stco : public atom
 {
 public:
-    stco(atomParse parse);
+    stco(atomParse &parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
