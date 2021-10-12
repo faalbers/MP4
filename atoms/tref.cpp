@@ -1,8 +1,8 @@
 #include "tref.hpp"
 #include <iostream>
 
-MP4::tref::tref(atomBuild &build)
-    : atom(build)
+MP4::tref::tref(atomParse parse)
+    : atom(parse)
 {
 }
 

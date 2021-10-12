@@ -1,8 +1,8 @@
 #include "stsd.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(atomBuild &build)
-    : atom(build)
+MP4::stsd::stsd(atomParse parse)
+    : atom(parse)
 {
     typedef struct entryDataBlock
     {
@@ -14,7 +14,7 @@ MP4::stsd::stsd(atomBuild &build)
     } entryDataBlock;
 
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock stsdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

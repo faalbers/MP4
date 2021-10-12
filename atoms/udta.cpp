@@ -1,8 +1,8 @@
 #include "udta.hpp"
 #include <iostream>
 
-MP4::udta::udta(atomBuild &build)
-    : atom(build)
+MP4::udta::udta(atomParse parse)
+    : atom(parse)
 {
 }
 

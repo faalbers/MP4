@@ -3,8 +3,8 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(atomBuild &build)
-    : atom(build)
+MP4::ftyp::ftyp(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -12,7 +12,7 @@ MP4::ftyp::ftyp(atomBuild &build)
         uint32_t    version;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
     dataBlock ftypData;

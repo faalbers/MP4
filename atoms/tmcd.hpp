@@ -26,7 +26,7 @@ namespace MP4
 class tmcd : public atom
 {
 public:
-    tmcd(atomBuild &build);
+    tmcd(atomParse parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

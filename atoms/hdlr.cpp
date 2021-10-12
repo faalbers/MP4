@@ -1,8 +1,8 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(atomBuild &build)
-    : atom(build)
+MP4::hdlr::hdlr(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -15,7 +15,7 @@ MP4::hdlr::hdlr(atomBuild &build)
     } dataBlock;
 
     // get data
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock hdlrData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

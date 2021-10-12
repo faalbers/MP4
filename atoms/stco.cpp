@@ -1,11 +1,11 @@
 #include "stco.hpp"
 #include <iostream>
 
-MP4::stco::stco(atomBuild &build)
-    : atom(build)
+MP4::stco::stco(atomParse parse)
+    : atom(parse)
 {
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock stcoData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

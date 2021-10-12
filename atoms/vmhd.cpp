@@ -1,8 +1,8 @@
 #include "vmhd.hpp"
 #include <iostream>
 
-MP4::vmhd::vmhd(atomBuild &build)
-    : atom(build)
+MP4::vmhd::vmhd(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -13,7 +13,7 @@ MP4::vmhd::vmhd(atomBuild &build)
         uint16_t        opColorB;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock vmhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

@@ -1,8 +1,8 @@
 #include "smhd.hpp"
 #include <iostream>
 
-MP4::smhd::smhd(atomBuild &build)
-    : atom(build)
+MP4::smhd::smhd(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -11,7 +11,7 @@ MP4::smhd::smhd(atomBuild &build)
         uint16_t        reserved;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock smhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

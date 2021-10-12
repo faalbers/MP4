@@ -1,8 +1,8 @@
 #include "dinf.hpp"
 #include <iostream>
 
-MP4::dinf::dinf(atomBuild &build)
-    : atom(build)
+MP4::dinf::dinf(atomParse parse)
+    : atom(parse)
 {
 }
 

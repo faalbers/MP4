@@ -1,8 +1,8 @@
 #include "free.hpp"
 #include <iostream>
 
-MP4::free::free(atomBuild &build)
-    : atom(build)
+MP4::free::free(atomParse parse)
+    : atom(parse)
 {
     freeSize = fileNextPos_ - fileDataPos_;
 }

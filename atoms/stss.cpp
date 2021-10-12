@@ -1,10 +1,10 @@
 #include "stss.hpp"
 #include <iostream>
 
-MP4::stss::stss(atomBuild &build)
-    : atom(build)
+MP4::stss::stss(atomParse parse)
+    : atom(parse)
 {
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock stssData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

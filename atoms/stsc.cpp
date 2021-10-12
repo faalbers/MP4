@@ -1,11 +1,11 @@
 #include "stsc.hpp"
 #include <iostream>
 
-MP4::stsc::stsc(atomBuild &build)
-    : atom(build)
+MP4::stsc::stsc(atomParse parse)
+    : atom(parse)
 {
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock stscData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

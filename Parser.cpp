@@ -10,17 +10,12 @@
 MP4::Parser::Parser(std::string fileName)
 {
     try {
-        atomBuild build(fileName);
-        filePath_ = build.getFilePath();
-        rootAtom_ = std::make_shared<root>(build);
+        atomParse parse(fileName);
+        filePath_ = parse.getFilePath();
+        rootAtom_ = std::make_shared<root>(parse);
     } catch (std::runtime_error &error) {
         error_(error.what());
     }
-
-    //filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
-    //atomBuildType atomBuild;
-    //atomBuild.filePath = filePath_;
-    //rootAtom_ = std::make_shared<root>(atomBuild);
 }
 
 void MP4::Parser::printHierarchy()

@@ -1,10 +1,10 @@
 #include "uuid.hpp"
 #include <iostream>
 
-MP4::uuid::uuid(atomBuild &build)
-    : atom(build)
+MP4::uuid::uuid(atomParse parse)
+    : atom(parse)
 {
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
     char nameBlock[4];

@@ -17,7 +17,7 @@ namespace MP4
 class dinf : public atom
 {
 public:
-    dinf(atomBuild &build);
+    dinf(atomParse parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

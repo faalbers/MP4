@@ -1,8 +1,8 @@
 #include "tkhd.hpp"
 #include <iostream>
 
-MP4::tkhd::tkhd(atomBuild &build)
-    : atom(build)
+MP4::tkhd::tkhd(atomParse parse)
+    : atom(parse)
 {
 typedef struct dataBlock
 {
@@ -25,7 +25,7 @@ typedef struct dataBlock
     uint32_t        trackHeight;
 } dataBlock;
     // get data
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock tkhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

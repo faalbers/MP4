@@ -1,11 +1,11 @@
 #include "co64.hpp"
 #include <iostream>
 
-MP4::co64::co64(atomBuild &build)
-    : atom(build)
+MP4::co64::co64(atomParse parse)
+    : atom(parse)
 {
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock co64Data;
     fileStream->seekg(fileDataPos_, fileStream->beg);

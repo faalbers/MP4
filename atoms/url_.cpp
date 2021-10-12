@@ -1,11 +1,11 @@
 #include "url_.hpp"
 #include <iostream>
 
-MP4::url_::url_(atomBuild &build)
-    : atom(build)
+MP4::url_::url_(atomParse parse)
+    : atom(parse)
     , dataInSameFile(false)
 {
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     versionBlock drefType;
     fileStream->seekg(fileDataPos_, fileStream->beg);

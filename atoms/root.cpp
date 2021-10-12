@@ -3,18 +3,18 @@
 #include "moov.hpp"
 #include <iostream>
 
-MP4::root::root(atomBuild &build)
+MP4::root::root(atomParse parse)
 {
-    auto fileStream = build.getFileStream();
-    filePath_ = build.getFilePath();
-    size_ = build.getFileSize();
+    auto fileStream = parse.getFileStream();
+    filePath_ = parse.getFilePath();
+    size_ = parse.getFileSize();
     fileNextPos_ = size_;
     dataSize_ = size_;
 
     int64_t childNextPos;
     do {
-        build.parentPath = "/";
-        auto child = atom::makeAtom_(build);
+        parse.parentPath = "/";
+        auto child = atom::makeAtom_(parse);
         childNextPos = child->fileNextPos_;
         fileStream->seekg(childNextPos, fileStream->beg);
         children_.push_back(child);

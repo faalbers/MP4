@@ -1,8 +1,8 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(atomBuild &build)
-    : atom(build)
+MP4::mvhd::mvhd(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -24,7 +24,7 @@ MP4::mvhd::mvhd(atomBuild &build)
         uint32_t        nextTrackID;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock mvhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

@@ -1,8 +1,8 @@
 #include "tcmi.hpp"
 #include <iostream>
 
-MP4::tcmi::tcmi(atomBuild &build)
-    : atom(build)
+MP4::tcmi::tcmi(atomParse parse)
+    : atom(parse)
     , fontName("")
 {
     typedef struct dataBlock
@@ -20,7 +20,7 @@ MP4::tcmi::tcmi(atomBuild &build)
         uint16_t        backgroundColorB;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
 

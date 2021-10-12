@@ -1,8 +1,8 @@
 #include "minf.hpp"
 #include <iostream>
 
-MP4::minf::minf(atomBuild &build)
-    : atom(build)
+MP4::minf::minf(atomParse parse)
+    : atom(parse)
 {
 }
 

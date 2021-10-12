@@ -20,7 +20,7 @@ namespace MP4
 class stsz : public atom
 {
 public:
-    stsz(atomBuild &build);
+    stsz(atomParse parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

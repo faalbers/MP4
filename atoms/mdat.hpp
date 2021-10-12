@@ -15,7 +15,7 @@ namespace MP4
 class mdat : public atom
 {
 public:
-    mdat(atomBuild &build);
+    mdat(atomParse parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

@@ -40,10 +40,10 @@ private:
 
 };
 
-class atomBuild
+class atomParse
 {
 public:
-    atomBuild(std::string fileName);
+    atomParse(std::string fileName);
 
     std::string     getFilePath();
     int64_t         getFileSize();
@@ -55,12 +55,12 @@ private:
     std::shared_ptr<atomReadFile> readFile_;
 };
 
-typedef struct atomBuildType
+typedef struct atomParseType
 {
     std::string filePath;
     int64_t     filePos;
     std::string parentPath;
-} atomBuildType;
+} atomParseType;
 
 // because they include atom as base. included in cpp
 class moov;
@@ -70,7 +70,7 @@ class atom
 {
 public:
     atom();
-    atom(atomBuild &build);
+    atom(atomParse parse);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -115,7 +115,7 @@ protected:
     friend class uuid;
     friend class tkhd;
 
-    static std::shared_ptr<atom>    makeAtom_(atomBuild &build);
+    static std::shared_ptr<atom>    makeAtom_(atomParse parse);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);
     static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);

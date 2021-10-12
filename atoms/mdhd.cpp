@@ -2,8 +2,8 @@
 #include <iostream>
 #include <chrono>
 
-MP4::mdhd::mdhd(atomBuild &build)
-    : atom(build)
+MP4::mdhd::mdhd(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -16,7 +16,7 @@ MP4::mdhd::mdhd(atomBuild &build)
         uint16_t        quality;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock mdhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

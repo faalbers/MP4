@@ -1,11 +1,11 @@
 #include "alis.hpp"
 #include <iostream>
 
-MP4::alis::alis(atomBuild &build)
-    : atom(build)
+MP4::alis::alis(atomParse parse)
+    : atom(parse)
     , dataInSameFile(false)
 {
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     versionBlock drefType;
     fileStream->seekg(fileDataPos_, fileStream->beg);

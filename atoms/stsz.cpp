@@ -1,8 +1,8 @@
 #include "stsz.hpp"
 #include <iostream>
 
-MP4::stsz::stsz(atomBuild &build)
-    : atom(build)
+MP4::stsz::stsz(atomParse parse)
+    : atom(parse)
 {
     typedef struct tableBlock
     {
@@ -11,7 +11,7 @@ MP4::stsz::stsz(atomBuild &build)
         uint32_t        numberOfEntries;        // number of sample descriptions that follow
     } tableBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock stszData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

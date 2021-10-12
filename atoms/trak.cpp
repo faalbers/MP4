@@ -20,8 +20,8 @@
 #include <vector>
 #include <string>
 
-MP4::trak::trak(atomBuild &build)
-    : atom(build)
+MP4::trak::trak(atomParse parse)
+    : atom(parse)
 {
 }
 

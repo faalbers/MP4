@@ -1,8 +1,8 @@
 #include "elst.hpp"
 #include <iostream>
 
-MP4::elst::elst(atomBuild &build)
-    : atom(build)
+MP4::elst::elst(atomParse parse)
+    : atom(parse)
 {
     typedef struct entryDataBlock
     {
@@ -12,7 +12,7 @@ MP4::elst::elst(atomBuild &build)
     } entryDataBlock;
 
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock elstData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

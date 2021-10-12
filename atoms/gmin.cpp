@@ -1,8 +1,8 @@
 #include "gmin.hpp"
 #include <iostream>
 
-MP4::gmin::gmin(atomBuild &build)
-    : atom(build)
+MP4::gmin::gmin(atomParse parse)
+    : atom(parse)
 {
     typedef struct dataBlock
     {
@@ -15,7 +15,7 @@ MP4::gmin::gmin(atomBuild &build)
         uint16_t        reserved;
     } dataBlock;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     dataBlock gminData;
     fileStream->seekg(fileDataPos_, fileStream->beg);

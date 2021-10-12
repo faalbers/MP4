@@ -74,25 +74,25 @@ std::ifstream *MP4::atomReadFile::getFileStream()
     return &fileStream_;
 }
 
-MP4::atomBuild::atomBuild(std::string fileName)
+MP4::atomParse::atomParse(std::string fileName)
     : parentPath("/")
 {
     readFile_ = std::make_shared<atomReadFile>(fileName);
 }
 
-std::string MP4::atomBuild::getFilePath()
+std::string MP4::atomParse::getFilePath()
 {
     if ( readFile_ != nullptr ) return readFile_->getFilePath();
     return "";
 }
 
-int64_t MP4::atomBuild::getFileSize()
+int64_t MP4::atomParse::getFileSize()
 {
     if ( readFile_ != nullptr ) return readFile_->getFileSize();
     return 0;
 }
 
-std::ifstream *MP4::atomBuild::getFileStream()
+std::ifstream *MP4::atomParse::getFileStream()
 {
     if ( readFile_ != nullptr ) return readFile_->getFileStream();
     return nullptr;
@@ -112,13 +112,13 @@ MP4::atom::atom()
 {
 }
 
-MP4::atom::atom(atomBuild &build)
-    : filePath_(build.getFilePath())
-    , parentPath_(build.parentPath)
+MP4::atom::atom(atomParse parse)
+    : filePath_(parse.getFilePath())
+    , parentPath_(parse.parentPath)
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
 {
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
     int64_t fileSize;
     bool container;
 
@@ -163,8 +163,8 @@ MP4::atom::atom(atomBuild &build)
     if ( !container ) return;
     int64_t childNextPos;
     do {
-        build.parentPath = path_+"/";
-        auto child = makeAtom_(build);
+        parse.parentPath = path_+"/";
+        auto child = makeAtom_(parse);
         childNextPos = child->fileNextPos_;
         fileStream->seekg(childNextPos, fileStream->beg);
         children_.push_back(child);
@@ -224,11 +224,11 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomBuild &build)
+std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse parse)
 {
     std::shared_ptr<atom> newAtom;
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     char charKey[4];
     auto filePos = fileStream->tellg();
@@ -238,42 +238,42 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomBuild &build)
 
     std::string key = std::string(charKey).substr(0,4);
 
-    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(build);
-    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(build);
-    else if ( key == "udta" ) newAtom = std::make_shared<udta>(build);
-    else if ( key == "free" ) newAtom = std::make_shared<free>(build);
-    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(build);
-    else if ( key == "moov" ) newAtom = std::make_shared<moov>(build);
-    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(build);
-    else if ( key == "trak" ) newAtom = std::make_shared<trak>(build);
-    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(build);
-    else if ( key == "tref" ) newAtom = std::make_shared<tref>(build);
-    else if ( key == "tmcd" ) newAtom = std::make_shared<tmcd>(build);
-    else if ( key == "edts" ) newAtom = std::make_shared<edts>(build);
-    else if ( key == "elst" ) newAtom = std::make_shared<elst>(build);
-    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(build);
-    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(build);
-    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(build);
-    else if ( key == "minf" ) newAtom = std::make_shared<minf>(build);
-    else if ( key == "gmhd" ) newAtom = std::make_shared<gmhd>(build);
-    else if ( key == "gmin" ) newAtom = std::make_shared<gmin>(build);
-    else if ( key == "tcmi" ) newAtom = std::make_shared<tcmi>(build);
-    else if ( key == "vmhd" ) newAtom = std::make_shared<vmhd>(build);
-    else if ( key == "smhd" ) newAtom = std::make_shared<smhd>(build);
-    else if ( key == "gpmd" ) newAtom = std::make_shared<gpmd>(build);
-    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(build);
-    else if ( key == "dref" ) newAtom = std::make_shared<dref>(build);
-    else if ( key == "alis" ) newAtom = std::make_shared<alis>(build);
-    else if ( key == "url " ) newAtom = std::make_shared<url_>(build);
-    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(build);
-    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(build);
-    else if ( key == "stts" ) newAtom = std::make_shared<stts>(build);
-    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(build);
-    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(build);
-    else if ( key == "stco" ) newAtom = std::make_shared<stco>(build);
-    else if ( key == "co64" ) newAtom = std::make_shared<co64>(build);
-    else if ( key == "stss" ) newAtom = std::make_shared<stss>(build);
-    else newAtom = std::make_shared<atom>(build);
+    if ( key == "ftyp" ) newAtom = std::make_shared<ftyp>(parse);
+    else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(parse);
+    else if ( key == "udta" ) newAtom = std::make_shared<udta>(parse);
+    else if ( key == "free" ) newAtom = std::make_shared<free>(parse);
+    else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(parse);
+    else if ( key == "moov" ) newAtom = std::make_shared<moov>(parse);
+    else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(parse);
+    else if ( key == "trak" ) newAtom = std::make_shared<trak>(parse);
+    else if ( key == "tkhd" ) newAtom = std::make_shared<tkhd>(parse);
+    else if ( key == "tref" ) newAtom = std::make_shared<tref>(parse);
+    else if ( key == "tmcd" ) newAtom = std::make_shared<tmcd>(parse);
+    else if ( key == "edts" ) newAtom = std::make_shared<edts>(parse);
+    else if ( key == "elst" ) newAtom = std::make_shared<elst>(parse);
+    else if ( key == "mdia" ) newAtom = std::make_shared<mdia>(parse);
+    else if ( key == "mdhd" ) newAtom = std::make_shared<mdhd>(parse);
+    else if ( key == "hdlr" ) newAtom = std::make_shared<hdlr>(parse);
+    else if ( key == "minf" ) newAtom = std::make_shared<minf>(parse);
+    else if ( key == "gmhd" ) newAtom = std::make_shared<gmhd>(parse);
+    else if ( key == "gmin" ) newAtom = std::make_shared<gmin>(parse);
+    else if ( key == "tcmi" ) newAtom = std::make_shared<tcmi>(parse);
+    else if ( key == "vmhd" ) newAtom = std::make_shared<vmhd>(parse);
+    else if ( key == "smhd" ) newAtom = std::make_shared<smhd>(parse);
+    else if ( key == "gpmd" ) newAtom = std::make_shared<gpmd>(parse);
+    else if ( key == "dinf" ) newAtom = std::make_shared<dinf>(parse);
+    else if ( key == "dref" ) newAtom = std::make_shared<dref>(parse);
+    else if ( key == "alis" ) newAtom = std::make_shared<alis>(parse);
+    else if ( key == "url " ) newAtom = std::make_shared<url_>(parse);
+    else if ( key == "stbl" ) newAtom = std::make_shared<stbl>(parse);
+    else if ( key == "stsd" ) newAtom = std::make_shared<stsd>(parse);
+    else if ( key == "stts" ) newAtom = std::make_shared<stts>(parse);
+    else if ( key == "stsc" ) newAtom = std::make_shared<stsc>(parse);
+    else if ( key == "stsz" ) newAtom = std::make_shared<stsz>(parse);
+    else if ( key == "stco" ) newAtom = std::make_shared<stco>(parse);
+    else if ( key == "co64" ) newAtom = std::make_shared<co64>(parse);
+    else if ( key == "stss" ) newAtom = std::make_shared<stss>(parse);
+    else newAtom = std::make_shared<atom>(parse);
 
     return newAtom;
 }

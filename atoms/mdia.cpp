@@ -1,8 +1,8 @@
 #include "mdia.hpp"
 #include <iostream>
 
-MP4::mdia::mdia(atomBuild &build)
-    : atom(build)
+MP4::mdia::mdia(atomParse parse)
+    : atom(parse)
 {
 }
 

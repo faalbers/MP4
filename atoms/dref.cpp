@@ -1,11 +1,11 @@
 #include "dref.hpp"
 #include <iostream>
 
-MP4::dref::dref(atomBuild &build)
-    : atom(build)
+MP4::dref::dref(atomParse parse)
+    : atom(parse)
 {
     // handle data 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     tableBlock drefData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
@@ -13,9 +13,9 @@ MP4::dref::dref(atomBuild &build)
 
     drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
     uint32_t ID = 1;
-    build.parentPath += "dref/";
+    parse.parentPath += "dref/";
     do {
-        dataReferences[ID] = makeAtom_(build);
+        dataReferences[ID] = makeAtom_(parse);
         ID++;
     } while ( ID <= drefData.numberOfEntries );
 }

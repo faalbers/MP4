@@ -1,8 +1,8 @@
 #include "tmcd.hpp"
 #include <iostream>
 
-MP4::tmcd::tmcd(atomBuild &build)
-    : atom(build)
+MP4::tmcd::tmcd(atomParse parse)
+    : atom(parse)
     , isTrackReference(false)
 {
     // there are several atoms with the same key name.
@@ -10,7 +10,7 @@ MP4::tmcd::tmcd(atomBuild &build)
         isTrackReference = true;
     }
 
-    auto fileStream = build.getFileStream();
+    auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
 
