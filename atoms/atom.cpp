@@ -40,6 +40,7 @@
 #include <filesystem>
 
 #include <iomanip>
+#include "../Processor.hpp"
 
 MP4::atomReadFile::atomReadFile(std::string fileName)
 {
@@ -98,11 +99,11 @@ std::ifstream *MP4::atomParse::getFileStream()
     return nullptr;
 }
 
-MP4::atomBuild::atomBuild()
-    : timeScale_(0)
-    , duration_(0)
+MP4::atomBuild::atomBuild(Processor &processor)
+    : timeScale_(processor.timeScale_)
+    , duration_(processor.duration_)
+    , tracks_(processor.tracks_)
 {
-
 }
 
 MP4::atom::atom()
@@ -116,6 +117,7 @@ MP4::atom::atom()
     , dataSize_(0)
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
+    , build_(nullptr)
 {
 }
 
@@ -124,6 +126,7 @@ MP4::atom::atom(atomParse &parse)
     , parentPath_(parse.parentPath)
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
+    , build_(nullptr)
 {
     auto fileStream = parse.getFileStream();
     int64_t fileSize;
@@ -177,6 +180,20 @@ MP4::atom::atom(atomParse &parse)
         children_.push_back(child);
     } while ( childNextPos < fileNextPos_ );
 
+}
+
+MP4::atom::atom(std::shared_ptr<atomBuild> build)
+    : parentPath_(build->parentPath)
+    , filePath_("")
+    , path_("")
+    , filePos_(0)
+    , fileDataPos_(0)
+    , fileNextPos_(0)
+    , dataSize_(0)
+    , moovAtom_(nullptr)
+    , trakAtom_(nullptr)
+    , build_(build)
+{
 }
 
 void MP4::atom::setMoov_(moov *moovAtom)

@@ -9,6 +9,15 @@ MP4::mdat::mdat(atomParse &parse)
     sampleDataSize = dataSize_;
 }
 
+MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , sampleDataPos(0)
+    , sampleDataSize(0)
+{
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+}
+
 void MP4::mdat::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

@@ -1,6 +1,11 @@
 #include "root.hpp"
 #include "trak.hpp"
 #include "moov.hpp"
+#include "ftyp.hpp"
+#include "mdat.hpp"
+
+#include <memory>
+
 #include <iostream>
 
 MP4::root::root(atomParse &parse)
@@ -25,6 +30,18 @@ MP4::root::root(atomParse &parse)
         for ( auto child : children_ ) child->setMoov_(moov);
     
     for ( auto trak : getTypeAtoms<trak>() ) trak->setTrak_(trak);
+}
+
+MP4::root::root(std::shared_ptr<atomBuild> build)
+{
+    build->parentPath = "/";
+    std::shared_ptr<atom> child;
+    
+    child = std::make_shared<ftyp>(build);
+    children_.push_back(child);
+    
+    child = std::make_shared<mdat>(build);
+    children_.push_back(child);
 }
 
 void MP4::root::printData(bool fullLists)

@@ -16,6 +16,7 @@ class mdat : public atom
 {
 public:
     mdat(atomParse &parse);
+    mdat(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

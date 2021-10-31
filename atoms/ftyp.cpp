@@ -38,8 +38,19 @@ MP4::ftyp::ftyp(atomParse &parse)
     }
 }
 
-void MP4::ftyp::printData(bool fullLists)
+MP4::ftyp::ftyp(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , majorBrand("mp41")
+    , version(538120216)
+    , versionString("10/18/2013")
 {
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+    compatibleBrands.push_back("mp41");
+}
+
+void MP4::ftyp::printData(bool fullLists)
+{    
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (File Type Atom) ["<< headerSize_ << "]" << std::endl;

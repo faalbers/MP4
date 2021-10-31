@@ -13,6 +13,7 @@ namespace MP4
 class Processor
 {
 public:
+    friend class atomBuild;
     Processor();
 
     void    addTrack(Parser &parser, uint32_t trackID);

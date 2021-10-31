@@ -57,10 +57,13 @@ private:
     std::shared_ptr<atomReadFile> readFile_;
 };
 
+class Processor;
 class atomBuild
 {
 public:
-    atomBuild();
+    atomBuild(Processor &processor);
+
+    std::string parentPath;
 
 private:
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
@@ -77,6 +80,7 @@ class atom
 public:
     atom();
     atom(atomParse &parse);
+    atom(std::shared_ptr<atomBuild> build);
     
     template<typename T>
     std::vector<T *>     getTypeAtoms()
@@ -141,6 +145,7 @@ protected:
     trak                                *trakAtom_;
     int64_t                             createHeaderSizePos_;
     bool                                createHeaderSize64_;
+    std::shared_ptr<atomBuild>          build_;
 };
 
 }

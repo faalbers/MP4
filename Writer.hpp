@@ -4,6 +4,7 @@
 #include "types.hpp"
 #include "Processor.hpp"
 #include <string>
+#include "atoms/root.hpp"
 
 namespace MP4
 {
@@ -19,9 +20,7 @@ public:
 private:
     void    error_(std::string message);
 
-    std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
-    uint32_t                                        timeScale_;
-    uint32_t                                        duration_;
+    std::shared_ptr<root>   rootAtom_;
 };
 
 }

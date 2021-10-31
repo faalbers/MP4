@@ -10,6 +10,7 @@ MP4::Writer::Writer(Parser &parser)
 
 MP4::Writer::Writer(Processor &processor)
 {
+    /*
     if ( processor.timeScale_ == 0 )
         error_("Writer: Processor timeScale is 0 !");
     timeScale_ = processor.timeScale_;
@@ -17,6 +18,15 @@ MP4::Writer::Writer(Processor &processor)
     for ( auto track : processor.tracks_ ) {
         tracks_[track.first] = track.second;
     }
+    */
+    try {
+        auto build = std::make_shared<atomBuild>(processor);
+        //filePath_ = build.getFilePath();
+        rootAtom_ = std::make_shared<root>(build);
+    } catch (std::runtime_error &error) {
+        error_(error.what());
+    }
+
 }
 
 std::string MP4::Writer::write(std::string fileName)
