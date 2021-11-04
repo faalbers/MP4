@@ -33,5 +33,11 @@ void MP4::mdat::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::mdat::writeHeader(std::ofstream &fileWrite)
+{
+    //writeHeader_(fileWrite, key, false);
+    writeHeader_(fileWrite, "lulu", false);
+}
+
 std::string MP4::mdat::key = "mdat";
 

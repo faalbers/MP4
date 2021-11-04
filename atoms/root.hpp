@@ -33,6 +33,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void write(std::ofstream &fileWrite);
+
     static std::string  key;
 
     friend class root_create;

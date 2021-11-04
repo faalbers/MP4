@@ -97,6 +97,12 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
+    virtual void write(std::ofstream &fileWrite);
+    virtual void writeHeader(std::ofstream &fileWrite);
+    virtual void writeData(std::ofstream &fileWrite);
+    virtual void writeChildren(std::ofstream &fileWrite);
+    virtual void writeTail(std::ofstream &fileWrite);
+
     std::string     key;
 
 protected:
@@ -132,6 +138,12 @@ protected:
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
     
+    void                            write_(std::ofstream &fileWrite);
+    void                            writeHeader_(std::ofstream &fileWrite, std::string key_ = "", bool size64_ = false);
+    void                            writeData_(std::ofstream &fileWrite);
+    void                            writeChildren_(std::ofstream &fileWrite);
+    void                            writeTail_(std::ofstream &fileWrite);
+
     bool                                headerSize64_;
     int64_t                             size_;
     int64_t                             headerSize_;
@@ -143,8 +155,8 @@ protected:
     std::vector<std::shared_ptr<atom>>  children_;
     moov                                *moovAtom_;
     trak                                *trakAtom_;
-    int64_t                             createHeaderSizePos_;
-    bool                                createHeaderSize64_;
+    int64_t                             writeHeaderSizePos_;
+    bool                                writeHeaderSize64_;
     std::shared_ptr<atomBuild>          build_;
 };
 

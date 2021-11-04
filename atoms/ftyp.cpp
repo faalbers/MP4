@@ -72,5 +72,11 @@ void MP4::ftyp::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::ftyp::writeHeader(std::ofstream &fileWrite)
+{
+    //writeHeader_(fileWrite, key, false);
+    writeHeader_(fileWrite, "buba", false);
+}
+
 std::string MP4::ftyp::key = "ftyp";
 

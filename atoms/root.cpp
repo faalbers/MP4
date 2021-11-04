@@ -56,5 +56,18 @@ void MP4::root::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+void MP4::root::write(std::ofstream &fileWrite)
+{
+    /*
+    for ( auto child : children_ ) {
+        child->write(fileWrite);
+        break;
+    }
+    */
+    children_[0]->write(fileWrite);
+    children_[0]->write(fileWrite);
+    //for ( auto child : children_ ) child->write(fileWrite);
+}
+
 std::string MP4::root::key = "root";
 

@@ -21,6 +21,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void writeHeader(std::ofstream &fileWrite);
+
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;

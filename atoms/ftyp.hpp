@@ -38,6 +38,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    void writeHeader(std::ofstream &fileWrite);
+
     static std::string          key;
     std::string                 majorBrand;
     uint32_t                    version;

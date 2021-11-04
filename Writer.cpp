@@ -33,6 +33,17 @@ std::string MP4::Writer::write(std::string fileName)
 {
     std::string filePath = std::filesystem::absolute(std::filesystem::path(fileName)).string();
 
+    std::ofstream fileWrite(filePath, std::ios::binary);
+    if ( fileWrite.fail() ) error_("Can not write MP4 file: "+filePath);
+
+    rootAtom_->write(fileWrite);
+
+    //splunk.fileWrite = &fileWrite;
+
+    //rootAtom_->create(splunk);
+
+    fileWrite.close();
+
     return filePath;
 }
 
