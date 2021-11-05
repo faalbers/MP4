@@ -140,26 +140,24 @@ MP4::atom::atom(atomParse &parse)
     fileStream->seekg(filePos_, fileStream->beg);
 
     // read the header
+    // get atom size and data position
     headerBlock dataBlock;
     fileStream->read((char *) &dataBlock, 8);
-
-    key = std::string(dataBlock.key).substr(0,4);
-    path_ = parentPath_ + key;
-
-    // get atom size and data position
-    dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
-    dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
-    if ( dataBlock.size32 == 1 ) {
+    size_ = (int64_t) XXH_swap32(dataBlock.size32);     // big to little endian
+    headerSize64_ = false;
+    headerSize_ = 8;
+    if ( size_ == 1 ) {
         headerSize64_ = true;
         headerSize_ = 16;
-        size_ = (int64_t) dataBlock.size64;
-        fileDataPos_ = filePos_ + headerSize_;
-    } else {
-        headerSize64_ = false;
-        headerSize_ = 8;
-        size_ = (int64_t) dataBlock.size32;
-        fileDataPos_ = filePos_ + headerSize_;
+        fileStream->seekg(filePos_, fileStream->beg);
+        fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+        size_ = XXH_swap64(dataBlock.size64);
     }
+    fileDataPos_ = filePos_ + headerSize_;
+
+    // set key and path
+    key = std::string(dataBlock.key).substr(0,4);
+    path_ = parentPath_ + key;
 
     // set filestream to data position
     fileStream->seekg(fileDataPos_, fileStream->beg);
@@ -180,6 +178,7 @@ MP4::atom::atom(atomParse &parse)
         fileStream->seekg(childNextPos, fileStream->beg);
         children_.push_back(child);
     } while ( childNextPos < fileNextPos_ );
+
 }
 
 MP4::atom::atom(std::shared_ptr<atomBuild> build)
@@ -428,11 +427,13 @@ bool MP4::atom::isContainer_(std::ifstream *fileStream, int64_t dataSize)
     headerBlock dataBlock;
     int64_t size, totalSize = 0;
     do {
-        fileStream->read((char *) &dataBlock, sizeof(dataBlock));
-        dataBlock.size32 = XXH_swap32(dataBlock.size32);     // big to little endian
-        dataBlock.size64 = XXH_swap64(dataBlock.size64);    // big to little endian
-        if ( dataBlock.size32 == 1 ) size = dataBlock.size64;
-        else size = (int64_t) dataBlock.size32;
+        fileStream->read((char *) &dataBlock, 8);
+        size = (int64_t) XXH_swap32(dataBlock.size32);     // big to little endian
+        if ( size == 1 ) {
+            fileStream->seekg(nextPos, fileStream->beg);
+            fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+            size = XXH_swap64(dataBlock.size64);
+        }
 
         if ( size < 8 || size > (dataSize-totalSize) ) break;
         

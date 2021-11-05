@@ -6,12 +6,6 @@
 MP4::ftyp::ftyp(atomParse &parse)
     : atom(parse)
 {
-    typedef struct dataBlock
-    {
-        char        majorBrand[4];
-        uint32_t    version;
-    } dataBlock;
-
     auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
@@ -74,8 +68,15 @@ void MP4::ftyp::printHierarchyData(bool fullLists)
 
 void MP4::ftyp::writeHeader(std::ofstream &fileWrite)
 {
-    //writeHeader_(fileWrite, key, false);
-    writeHeader_(fileWrite, "buba", false);
+    writeHeader_(fileWrite, key, false);
+}
+
+void MP4::ftyp::writeData(std::ofstream &fileWrite)
+{
+    std::cout << "ftyp write Data: " << key << std::endl;
+    dataBlock ftypData;
+    memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
+    fileWrite.write((char *) &ftypData, sizeof(ftypData));
 }
 
 std::string MP4::ftyp::key = "ftyp";

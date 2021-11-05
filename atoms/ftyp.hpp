@@ -39,12 +39,21 @@ public:
     void printHierarchyData(bool fullLists = false);
 
     void writeHeader(std::ofstream &fileWrite);
+    void writeData(std::ofstream &fileWrite);
 
     static std::string          key;
     std::string                 majorBrand;
     uint32_t                    version;
     std::string                 versionString;
     std::vector<std::string>    compatibleBrands;
+
+private:
+    typedef struct dataBlock
+    {
+        char        majorBrand[4];
+        uint32_t    version;
+    } dataBlock;
+
 };
 
 }
