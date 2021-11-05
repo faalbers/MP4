@@ -22,10 +22,13 @@ typedef struct trackType
 {
     // samples[ID] = sample
     std::map<uint32_t, sampleType>  samples;
+    uint32_t                creationTime;
+    uint32_t                modificationTime;
     uint32_t                trackID;
     std::string             dataFormat;
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
+    uint16_t                layer;
     uint32_t                samplesDuration;
     float                   width;
     float                   height;

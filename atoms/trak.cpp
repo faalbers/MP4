@@ -85,6 +85,15 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     // get trackID
     trackData->trackID = getID();
 
+    // get tkhd data
+    for ( auto tkhd : getTypeAtoms<tkhd>() ) {
+        trackData->creationTime = tkhd->creationTime;
+        trackData->modificationTime = tkhd->modificationTime;
+        trackData->layer = tkhd->layer;
+        trackData->width = tkhd->trackWidth;
+        trackData->height = tkhd->trackHeight;
+    }
+
     // get track time scale and duration
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         trackData->mediaTimeScale = mdhd->timeScale;

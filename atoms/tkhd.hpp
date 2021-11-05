@@ -27,8 +27,11 @@ public:
     void writeData(std::ofstream &fileWrite);
 
     static std::string  key;
+    uint32_t            creationTime;
+    uint32_t            modificationTime;
     uint32_t            trackID;
     uint32_t            duration;
+    uint16_t            layer;
     float               volume;
     float               trackWidth;
     float               trackHeight;

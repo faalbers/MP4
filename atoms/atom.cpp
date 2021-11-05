@@ -134,10 +134,40 @@ uint32_t MP4::atomBuild::getDuration()
 
 uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID)
 {
+    return tracks_[newTrackID_(trackID)]->mediaDuration;
+}
+
+uint32_t MP4::atomBuild::getTrackCreationTime(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->creationTime;
+}
+
+uint32_t MP4::atomBuild::getTrackModificationTime(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->modificationTime;
+}
+
+uint32_t MP4::atomBuild::getTrackLayer(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->layer;
+}
+
+float MP4::atomBuild::getTrackWidth(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->width;
+}
+
+float MP4::atomBuild::getTrackHeight(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->height;
+}
+
+uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
+{
     if ( trackID == 0 ) trackID = currentTrackID_;
     if ( tracks_.find(trackID) == tracks_.end() )
         error_("getTrackDuration: trackID does " + std::to_string(trackID) + " does not exist");
-    return tracks_[trackID]->mediaDuration;
+    return trackID;
 }
 
 void MP4::atomBuild::error_(std::string message)
@@ -147,6 +177,8 @@ void MP4::atomBuild::error_(std::string message)
     std::cout << "exit application ..." << std::endl;
     exit(1);
 }
+
+
 
 MP4::atom::atom()
     : key_("atom")
