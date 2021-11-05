@@ -92,6 +92,8 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         trackData->layer = tkhd->layer;
         trackData->width = tkhd->trackWidth;
         trackData->height = tkhd->trackHeight;
+        trackData->volume = tkhd->volume;
+        trackData->matrix = tkhd->matrix;
     }
 
     // get track time scale and duration

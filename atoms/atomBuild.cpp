@@ -54,6 +54,11 @@ uint32_t MP4::atomBuild::getTrackLayer(uint32_t trackID)
     return tracks_[newTrackID_(trackID)]->layer;
 }
 
+float MP4::atomBuild::getTrackVolume(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->volume;
+}
+
 float MP4::atomBuild::getTrackWidth(uint32_t trackID)
 {
     return tracks_[newTrackID_(trackID)]->width;
@@ -62,6 +67,11 @@ float MP4::atomBuild::getTrackWidth(uint32_t trackID)
 float MP4::atomBuild::getTrackHeight(uint32_t trackID)
 {
     return tracks_[newTrackID_(trackID)]->height;
+}
+
+std::vector<std::vector<float>> MP4::atomBuild::getTrackMatrix(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->matrix;
 }
 
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)

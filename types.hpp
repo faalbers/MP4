@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <map>
+#include <vector>
 #include <string>
 
 namespace MP4
@@ -30,8 +31,10 @@ typedef struct trackType
     uint32_t                mediaDuration;
     uint16_t                layer;
     uint32_t                samplesDuration;
+    float                   volume;
     float                   width;
     float                   height;
+    std::vector<std::vector<float>> matrix;
 } trackType;
 
 }

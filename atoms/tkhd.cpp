@@ -16,6 +16,7 @@ MP4::tkhd::tkhd(atomParse &parse)
     trackID = XXH_swap32(tkhdData.trackID);
     duration = XXH_swap32(tkhdData.duration);
     layer = XXH_swap16(tkhdData.layer);
+    alternateGroupID = XXH_swap16(tkhdData.alternateGroupID);
     tkhdData.volume = XXH_swap16(tkhdData.volume);
     volume = (float)tkhdData.volume / (float)(1 << 8);
     tkhdData.trackWidth = XXH_swap32(tkhdData.trackWidth);
@@ -23,14 +24,13 @@ MP4::tkhd::tkhd(atomParse &parse)
     tkhdData.trackHeight = XXH_swap32(tkhdData.trackHeight);
     trackHeight = (float)tkhdData.trackHeight / (float)(1 << 16);
 
-
     for ( int i = 0; i < 3; i++ ) {
+        std::vector<float> row;
         for ( int j = 0; j < 2; j++) {
-            tkhdData.matrix[i][j] = XXH_swap32(tkhdData.matrix[i][j]);
-            matrix[i][j] = (float)tkhdData.matrix[i][j] / (float)(1 << 16);
+            row.push_back((float) XXH_swap32(tkhdData.matrix[i][j]) / (float)(1 << 16));
         }
-        tkhdData.matrix[i][2] = XXH_swap32(tkhdData.matrix[i][2]);
-        matrix[i][2] = (float)tkhdData.matrix[i][2] / (float)(1 << 30);
+        row.push_back((float) XXH_swap32(tkhdData.matrix[i][2]) / (float)(1 << 30));
+        matrix.push_back(row);
     }
     
 }
@@ -42,8 +42,10 @@ MP4::tkhd::tkhd(std::shared_ptr<atomBuild> build)
     , creationTime(build->getTrackCreationTime())
     , modificationTime(build->getTrackModificationTime())
     , layer(build->getTrackLayer())
+    , volume(build->getTrackVolume())
     , trackWidth(build->getTrackWidth())
     , trackHeight(build->getTrackHeight())
+    , matrix(build->getTrackMatrix())
 {
 }
 
@@ -90,14 +92,24 @@ void MP4::tkhd::writeData(std::ofstream &fileWrite)
     for ( int i = 0; i < 8; i++ ) tkhdData.reservedB[i] = 0;
     tkhdData.reservedC = 0;
 
+    // forced to value, check later if this needs a copy of original track
+    tkhdData.alternateGroupID = 0;
+
     // data settings
     tkhdData.creationTime = XXH_swap32(creationTime);
     tkhdData.modificationTime = XXH_swap32(modificationTime);
     tkhdData.trackID = XXH_swap32(trackID);
     tkhdData.duration = XXH_swap32(duration);
     tkhdData.layer = XXH_swap16(layer);
+    tkhdData.volume = XXH_swap16((uint16_t) (volume * (float)(1 << 8)));
     tkhdData.trackWidth = XXH_swap32((uint32_t) (trackWidth * (float)(1 << 16)));
     tkhdData.trackHeight =  XXH_swap32((uint32_t) (trackHeight * (float)(1 << 16)));
+    for ( int i = 0; i < 3; i++ ) {
+        for ( int j = 0; j < 2; j++) {
+            tkhdData.matrix[i][j] = XXH_swap32((uint32_t) (matrix[i][j] * (float)(1 << 16)));
+        }
+        tkhdData.matrix[i][2] = XXH_swap32((uint32_t) (matrix[i][2] * (float)(1 << 30)));
+    }
 
     //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     //ftypData.version = XXH_swap32(version);

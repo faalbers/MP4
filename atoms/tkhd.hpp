@@ -32,10 +32,11 @@ public:
     uint32_t            trackID;
     uint32_t            duration;
     uint16_t            layer;
+    uint16_t            alternateGroupID;
     float               volume;
     float               trackWidth;
     float               trackHeight;
-    float               matrix[3][3];
+    std::vector<std::vector<float>> matrix;
 
 private:
     typedef struct dataBlock
@@ -51,7 +52,7 @@ private:
                                     // movie timescale
         uint8_t         reservedB[8];
         uint16_t        layer;
-        uint16_t        alternateGroup;
+        uint16_t        alternateGroupID;
         uint16_t        volume;             // fixed point
         uint16_t        reservedC;
         uint32_t        matrix[3][3];

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include <map>
 #include "../types.hpp"
 
@@ -24,8 +25,10 @@ public:
     uint32_t    getTrackCreationTime(uint32_t trackID = 0);
     uint32_t    getTrackModificationTime(uint32_t trackID = 0);
     uint32_t    getTrackLayer(uint32_t trackID = 0);
+    float       getTrackVolume(uint32_t trackID = 0);
     float       getTrackWidth(uint32_t trackID = 0);
     float       getTrackHeight(uint32_t trackID = 0);
+    std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
 
 private:
     void        error_(std::string message);
