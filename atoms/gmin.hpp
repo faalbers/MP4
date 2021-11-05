@@ -21,6 +21,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string  key;
     uint16_t            graphicMode;
     uint16_t            opColorR;

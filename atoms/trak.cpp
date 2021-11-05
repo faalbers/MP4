@@ -249,4 +249,9 @@ void MP4::trak::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::trak::getKey()
+{
+    return key;
+}
+
 std::string MP4::trak::key = "trak";

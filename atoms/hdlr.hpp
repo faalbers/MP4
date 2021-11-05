@@ -27,6 +27,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string      key;
     std::string             componentType;
     std::string             componentSubType;

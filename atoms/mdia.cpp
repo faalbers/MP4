@@ -20,5 +20,10 @@ void MP4::mdia::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::mdia::getKey()
+{
+    return key;
+}
+
 std::string MP4::mdia::key = "mdia";
 

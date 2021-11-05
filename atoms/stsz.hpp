@@ -25,6 +25,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string      key;
     uint32_t                defaultSampleSize;
     // stszTable[sampleID] = sampleSize;

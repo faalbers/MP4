@@ -63,6 +63,11 @@ void MP4::stsd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::stsd::getKey()
+{
+    return key;
+}
+
 std::set<std::string> MP4::stsd::getDataFormats()
 {
     std::set<std::string> dataFormats;

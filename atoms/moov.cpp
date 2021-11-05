@@ -23,5 +23,10 @@ void MP4::moov::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::moov::getKey()
+{
+    return key;
+}
+
 std::string MP4::moov::key = "moov";
 

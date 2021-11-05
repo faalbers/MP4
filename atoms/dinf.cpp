@@ -20,5 +20,10 @@ void MP4::dinf::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::dinf::getKey()
+{
+    return key;
+}
+
 std::string MP4::dinf::key = "dinf";
 

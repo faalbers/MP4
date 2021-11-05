@@ -74,5 +74,10 @@ void MP4::tcmi::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::tcmi::getKey()
+{
+    return key;
+}
+
 std::string MP4::tcmi::key = "tcmi";
 

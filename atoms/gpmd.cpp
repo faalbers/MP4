@@ -25,5 +25,10 @@ void MP4::gpmd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::gpmd::getKey()
+{
+    return key;
+}
+
 std::string MP4::gpmd::key = "gpmd";
 

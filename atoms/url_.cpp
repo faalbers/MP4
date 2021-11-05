@@ -29,5 +29,10 @@ void MP4::url_::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::url_::getKey()
+{
+    return key;
+}
+
 std::string MP4::url_::key = "url ";
 

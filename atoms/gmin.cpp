@@ -47,5 +47,10 @@ void MP4::gmin::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::gmin::getKey()
+{
+    return key;
+}
+
 std::string MP4::gmin::key = "gmin";
 

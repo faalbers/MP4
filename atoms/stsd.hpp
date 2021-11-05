@@ -26,6 +26,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     std::set<std::string>   getDataFormats();
 
     static std::string  key;

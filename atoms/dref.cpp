@@ -38,5 +38,10 @@ void MP4::dref::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::dref::getKey()
+{
+    return key;
+}
+
 std::string MP4::dref::key = "dref";
 

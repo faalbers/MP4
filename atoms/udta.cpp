@@ -20,5 +20,10 @@ void MP4::udta::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::udta::getKey()
+{
+    return key;
+}
+
 std::string MP4::udta::key = "udta";
 

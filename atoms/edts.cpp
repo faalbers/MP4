@@ -20,5 +20,10 @@ void MP4::edts::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::edts::getKey()
+{
+    return key;
+}
+
 std::string MP4::edts::key = "edts";
 

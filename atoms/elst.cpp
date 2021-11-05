@@ -53,5 +53,10 @@ void MP4::elst::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::elst::getKey()
+{
+    return key;
+}
+
 std::string MP4::elst::key = "elst";
 

@@ -20,5 +20,10 @@ void MP4::tref::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::tref::getKey()
+{
+    return key;
+}
+
 std::string MP4::tref::key = "tref";
 

@@ -37,6 +37,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string  key;
     // sttsTable[sttsID] = timeToSampleEntry
     std::map<uint32_t, std::vector<uint32_t>>  sttsTable; // (sampleCount , sampleDuration)

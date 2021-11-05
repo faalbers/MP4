@@ -18,6 +18,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string  key;
     std::string         name;
     std::vector<std::shared_ptr<atom>>  uuidChildren;

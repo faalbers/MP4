@@ -26,6 +26,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     static std::string  key;
     // stscTable[stscID] = sampleToChunkEntry
     std::map<uint32_t, std::vector<uint32_t>>  stscTable; // (first chunk , samples per chunk, sample description ID)

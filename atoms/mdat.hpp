@@ -21,6 +21,8 @@ public:
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
+    std::string getKey();
+
     void writeHeader(std::ofstream &fileWrite);
 
     static std::string  key;

@@ -42,5 +42,10 @@ void MP4::mdhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::mdhd::getKey()
+{
+    return key;
+}
+
 std::string MP4::mdhd::key = "mdhd";
 

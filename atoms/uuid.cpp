@@ -28,5 +28,10 @@ void MP4::uuid::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::uuid::getKey()
+{
+    return key;
+}
+
 std::string MP4::uuid::key = "uuid";
 

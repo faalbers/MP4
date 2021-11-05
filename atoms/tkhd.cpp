@@ -73,5 +73,10 @@ void MP4::tkhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::tkhd::getKey()
+{
+    return key;
+}
+
 std::string MP4::tkhd::key = "tkhd";
 
