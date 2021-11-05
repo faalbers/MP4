@@ -1,5 +1,5 @@
 #include "moov.hpp"
-#include "ftyp.hpp"
+#include "trak.hpp"
 #include <iostream>
 #include <iomanip>
 #include <set>
@@ -18,9 +18,11 @@ MP4::moov::moov(std::shared_ptr<atomBuild> build)
 
     std::shared_ptr<atom> child;
     
-    build->parentPath = path_ + "/";
-    child = std::make_shared<ftyp>(build);
-    children_.push_back(child);
+    while ( build->nextTrack() ) {
+        build->parentPath = path_ + "/";
+        child = std::make_shared<trak>(build);
+        children_.push_back(child);
+    }
 }
 
 void MP4::moov::printData(bool fullLists)

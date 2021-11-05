@@ -25,6 +25,14 @@ MP4::trak::trak(atomParse &parse)
 {
 }
 
+MP4::trak::trak(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+
+}
+
 uint32_t MP4::trak::getID()
 {
     for ( auto tkhd : getTypeAtoms<tkhd>() ) {

@@ -64,8 +64,11 @@ public:
     atomBuild(Processor &processor);
 
     std::string parentPath;
+    bool        nextTrack();
+    uint32_t    currentTrackID();
 
 private:
+    uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
     uint32_t                                        timeScale_;
     uint32_t                                        duration_;

@@ -27,6 +27,7 @@ class trak : public atom
 {
 public:
     trak(atomParse &parse);
+    trak(std::shared_ptr<atomBuild> build);
 
     // data retrieval
 

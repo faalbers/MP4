@@ -103,7 +103,28 @@ MP4::atomBuild::atomBuild(Processor &processor)
     : timeScale_(processor.timeScale_)
     , duration_(processor.duration_)
     , tracks_(processor.tracks_)
+    , currentTrackID_(0)
 {
+    //if ( tracks_.size() > 0 ) currentTrackID_ = tracks_.begin()->first;
+}
+
+bool MP4::atomBuild::nextTrack()
+{
+    bool getNext = false;
+    if ( currentTrackID_ == 0 ) getNext = true;
+    for ( auto track : tracks_ ) {
+        if ( getNext ) {
+            currentTrackID_ = track.first;
+            return true;
+        }
+        if ( track.first == currentTrackID_ ) getNext = true;
+    }
+    return false;
+}
+
+uint32_t MP4::atomBuild::currentTrackID()
+{
+    return currentTrackID_;
 }
 
 MP4::atom::atom()
