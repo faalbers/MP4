@@ -23,8 +23,6 @@ public:
 
     std::string getKey();
 
-    void writeHeader(std::ofstream &fileWrite);
-
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;

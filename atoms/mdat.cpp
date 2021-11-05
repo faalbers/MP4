@@ -38,11 +38,5 @@ std::string MP4::mdat::getKey()
     return key;
 }
 
-void MP4::mdat::writeHeader(std::ofstream &fileWrite)
-{
-    //writeHeader_(fileWrite, key, false);
-    writeHeader_(fileWrite, "lulu", false);
-}
-
 std::string MP4::mdat::key = "mdat";
 

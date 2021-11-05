@@ -106,7 +106,6 @@ public:
     virtual void writeChildren(std::ofstream &fileWrite);
     virtual void writeTail(std::ofstream &fileWrite);
 
-    std::string     key_;
 
 protected:
     typedef struct headerBlock
@@ -142,11 +141,12 @@ protected:
     int                             nestLevel_(int level);
     
     void                            write_(std::ofstream &fileWrite);
-    void                            writeHeader_(std::ofstream &fileWrite, std::string key = "", bool size64_ = false);
+    void                            writeHeader_(std::ofstream &fileWrite);
     void                            writeData_(std::ofstream &fileWrite);
     void                            writeChildren_(std::ofstream &fileWrite);
     void                            writeTail_(std::ofstream &fileWrite);
 
+    std::string                         key_;
     bool                                headerSize64_;
     int64_t                             size_;
     int64_t                             headerSize_;

@@ -34,13 +34,16 @@ MP4::root::root(atomParse &parse)
 
 MP4::root::root(std::shared_ptr<atomBuild> build)
 {
-    build->parentPath = "/";
     std::shared_ptr<atom> child;
     
+    // build ftyp
+    build->parentPath = "/";
     child = std::make_shared<ftyp>(build);
     children_.push_back(child);
     
-    child = std::make_shared<mdat>(build);
+    // build moov
+    build->parentPath = "/";
+    child = std::make_shared<moov>(build);
     children_.push_back(child);
 }
 
@@ -63,16 +66,7 @@ std::string MP4::root::getKey()
 
 void MP4::root::write(std::ofstream &fileWrite)
 {
-    std::cout << "BLAH\n" ;
-    for ( auto child : children_ ) {
-        std::cout << child->getKey() << std::endl;
-        if ( child->getKey() == "ftyp" )
-            child->write(fileWrite);
-    }
-    std::cout << "BLOH\n" ;
-    //children_[0]->write(fileWrite);
-    //children_[0]->write(fileWrite);
-    //for ( auto child : children_ ) child->write(fileWrite);
+    for ( auto child : children_ ) child->write(fileWrite);
 }
 
 std::string MP4::root::key = "root";

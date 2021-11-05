@@ -38,8 +38,6 @@ MP4::ftyp::ftyp(std::shared_ptr<atomBuild> build)
     , version(538120216)
     , versionString("10/18/2013")
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
     compatibleBrands.push_back("mp41");
 }
 
@@ -69,11 +67,6 @@ void MP4::ftyp::printHierarchyData(bool fullLists)
 std::string MP4::ftyp::getKey()
 {
     return key;
-}
-
-void MP4::ftyp::writeHeader(std::ofstream &fileWrite)
-{
-    writeHeader_(fileWrite, key, false);
 }
 
 void MP4::ftyp::writeData(std::ofstream &fileWrite)

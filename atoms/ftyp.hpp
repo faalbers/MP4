@@ -40,7 +40,6 @@ public:
 
     std::string getKey();
 
-    void writeHeader(std::ofstream &fileWrite);
     void writeData(std::ofstream &fileWrite);
 
     static std::string          key;

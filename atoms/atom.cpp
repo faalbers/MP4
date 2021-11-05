@@ -184,15 +184,16 @@ MP4::atom::atom(atomParse &parse)
 MP4::atom::atom(std::shared_ptr<atomBuild> build)
     : parentPath_(build->parentPath)
     , filePath_("")
-    , path_("")
     , filePos_(0)
     , fileDataPos_(0)
     , fileNextPos_(0)
     , dataSize_(0)
+    , headerSize_(8)
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
     , build_(build)
 {
+    path_ = parentPath_ + getKey();
 }
 
 void MP4::atom::setMoov_(moov *moovAtom)
@@ -272,23 +273,15 @@ void MP4::atom::write_(std::ofstream &fileWrite)
 
 void MP4::atom::writeHeader(std::ofstream &fileWrite)
 {
-    writeHeader_(fileWrite, key_, false);
+    writeHeader_(fileWrite);
 }
 
-void MP4::atom::writeHeader_(std::ofstream &fileWrite, std::string key, bool size64_)
+void MP4::atom::writeHeader_(std::ofstream &fileWrite)
 {
     writeHeaderSizePos_ = fileWrite.tellp();
-    writeHeaderSize64_ = size64_;
     headerBlock  atomHeader;
-    size_t headerSize;
-    if ( writeHeaderSize64_ ) {
-        headerSize = sizeof(atomHeader);
-        atomHeader.size32 = XXH_swap32((uint32_t) 1);
-    } else {
-        headerSize = 8;
-    }
-    memcpy(&atomHeader.key, key.c_str(), 4);
-    fileWrite.write((char *) &atomHeader, headerSize);
+    memcpy(&atomHeader.key, getKey().c_str(), 4);
+    fileWrite.write((char *) &atomHeader, headerSize_);
 }
 
 void MP4::atom::writeChildren(std::ofstream &fileWrite)
@@ -298,9 +291,7 @@ void MP4::atom::writeChildren(std::ofstream &fileWrite)
 
 void MP4::atom::writeChildren_(std::ofstream &fileWrite)
 {
-    std::cout << "Write Children: " << key_ << std::endl;
-
-    //for ( auto child : children_ ) child->write(fileWrite);
+    for ( auto child : children_ ) child->write(fileWrite);
 }
 
 void MP4::atom::writeData(std::ofstream &fileWrite)
@@ -310,7 +301,6 @@ void MP4::atom::writeData(std::ofstream &fileWrite)
 
 void MP4::atom::writeData_(std::ofstream &fileWrite)
 {
-    std::cout << "Write Data: " << key_ << std::endl;
     /*
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::writeData_ can not parse file: "+filePath_);
@@ -346,20 +336,22 @@ void MP4::atom::writeTail(std::ofstream &fileWrite)
 
 void MP4::atom::writeTail_(std::ofstream &fileWrite)
 {
-    std::cout << "Write Tail" << std::endl;
     // after writing the atom's data we need to fix the atom size
     auto writeNextPos = fileWrite.tellp();
-    if ( writeHeaderSize64_ ) {
-        auto createSize = (uint64_t) (writeNextPos - writeHeaderSizePos_);
-        createSize = XXH_swap64(createSize);
+    uint32_t size32;
+    uint64_t size64;
+    if ( headerSize_ == 16 ) {
+        size32 = XXH_swap32((uint32_t) 1);
+        size64 = writeNextPos - writeHeaderSizePos_;
+        size64 = XXH_swap64(size64);
+        fileWrite.write((char *) &size32, sizeof(size32));
+        fileWrite.seekp(4, fileWrite.cur);
+        fileWrite.write((char *) &size64, sizeof(size64));
+    } else if ( headerSize_ == 8 ) {
+        size32 = (uint32_t) (writeNextPos - writeHeaderSizePos_);
+        size32 = XXH_swap32(size32);
         fileWrite.seekp(writeHeaderSizePos_, fileWrite.beg);
-        fileWrite.seekp(8, fileWrite.cur);
-        fileWrite.write((char *) &createSize, sizeof(createSize));
-    } else {
-        auto createSize = (uint32_t) (writeNextPos - writeHeaderSizePos_);
-        createSize = XXH_swap32(createSize);
-        fileWrite.seekp(writeHeaderSizePos_, fileWrite.beg);
-        fileWrite.write((char *) &createSize, sizeof(createSize));
+        fileWrite.write((char *) &size32, sizeof(size32));
     }
     fileWrite.seekp(writeNextPos, fileWrite.beg);
 }

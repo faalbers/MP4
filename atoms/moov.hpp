@@ -35,10 +35,11 @@ class moov : public atom
 {
 public:
     moov(atomParse &parse);
+    moov(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
-    
+
     std::string getKey();
 
     static std::string  key;
