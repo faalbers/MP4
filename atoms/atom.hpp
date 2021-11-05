@@ -66,8 +66,12 @@ public:
     std::string parentPath;
     bool        nextTrack();
     uint32_t    currentTrackID();
+    uint32_t    getDuration();
+    uint32_t    getTrackDuration(uint32_t trackID = 0);
 
 private:
+    void        error_(std::string message);
+
     uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
     uint32_t                                        timeScale_;

@@ -16,7 +16,7 @@ public:
     friend class atomBuild;
     Processor();
 
-    void    addTrack(Parser &parser, uint32_t trackID);
+    void    addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
 
 private:
     friend class    Writer;

@@ -31,6 +31,13 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
     headerSize_ = 8;
     path_ = parentPath_ + key;
 
+    std::shared_ptr<atom> child;
+    
+    std::cout << "Building Track: " << build->currentTrackID() << std::endl;
+    
+    build->parentPath = path_ + "/";
+    child = std::make_shared<tkhd>(build);
+    children_.push_back(child);
 }
 
 uint32_t MP4::trak::getID()

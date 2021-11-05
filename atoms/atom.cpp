@@ -127,6 +127,27 @@ uint32_t MP4::atomBuild::currentTrackID()
     return currentTrackID_;
 }
 
+uint32_t MP4::atomBuild::getDuration()
+{
+    return duration_;
+}
+
+uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID)
+{
+    if ( trackID == 0 ) trackID = currentTrackID_;
+    if ( tracks_.find(trackID) == tracks_.end() )
+        error_("getTrackDuration: trackID does " + std::to_string(trackID) + " does not exist");
+    return tracks_[trackID]->mediaDuration;
+}
+
+void MP4::atomBuild::error_(std::string message)
+{
+    std::cout << "MP4::atomBuild:" << std::endl;
+    std::cout << "-> " << message << std::endl;
+    std::cout << "exit application ..." << std::endl;
+    exit(1);
+}
+
 MP4::atom::atom()
     : key_("atom")
     , filePath_("")

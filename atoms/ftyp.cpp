@@ -71,7 +71,6 @@ std::string MP4::ftyp::getKey()
 
 void MP4::ftyp::writeData(std::ofstream &fileWrite)
 {
-    std::cout << "ftyp write Data: " << key << std::endl;
     dataBlock ftypData;
     memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     ftypData.version = XXH_swap32(version);

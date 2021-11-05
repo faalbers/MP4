@@ -4,26 +4,6 @@
 MP4::tkhd::tkhd(atomParse &parse)
     : atom(parse)
 {
-typedef struct dataBlock
-{
-    versionBlock    version;
-    uint32_t        creationTime;
-    uint32_t        modificationTime;
-    uint32_t        trackID;
-    uint32_t        reservedA;
-    uint32_t        duration;   // the sum of the durations of all of the track’s edits.
-                                // if there is no edit list, then the duration is
-                                // the sum of the sample durations, converted into the
-                                // movie timescale
-    uint8_t         reservedB[8];
-    uint16_t        layer;
-    uint16_t        alternateGroup;
-    uint16_t        volume;             // fixed point
-    uint16_t        reservedC;
-    uint32_t        matrix[3][3];
-    uint32_t        trackWidth;
-    uint32_t        trackHeight;
-} dataBlock;
     // get data
     auto fileStream = parse.getFileStream();
 
@@ -51,6 +31,13 @@ typedef struct dataBlock
     
 }
 
+MP4::tkhd::tkhd(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , trackID(build->currentTrackID())
+    , duration(build->getDuration())
+{
+}
+
 void MP4::tkhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -76,6 +63,21 @@ void MP4::tkhd::printHierarchyData(bool fullLists)
 std::string MP4::tkhd::getKey()
 {
     return key;
+}
+
+void MP4::tkhd::writeData(std::ofstream &fileWrite)
+{
+    dataBlock tkhdData;
+    tkhdData.trackID = XXH_swap32(trackID);
+    tkhdData.duration = XXH_swap32(duration);
+    //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
+    //ftypData.version = XXH_swap32(version);
+    fileWrite.write((char *) &tkhdData, sizeof(tkhdData));
+    /*
+    for ( auto brand : compatibleBrands ) {
+        fileWrite.write((char *) brand.c_str(), 4);
+    }
+    */
 }
 
 std::string MP4::tkhd::key = "tkhd";
