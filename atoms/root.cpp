@@ -58,14 +58,15 @@ void MP4::root::printHierarchyData(bool fullLists)
 
 void MP4::root::write(std::ofstream &fileWrite)
 {
-    /*
+    std::cout << "BLAH\n" ;
     for ( auto child : children_ ) {
-        child->write(fileWrite);
-        break;
+        std::cout << child->getKey() << std::endl;
+        if ( child->getKey() == "ftyp" )
+            child->write(fileWrite);
     }
-    */
-    children_[0]->write(fileWrite);
-    children_[0]->write(fileWrite);
+    std::cout << "BLOH\n" ;
+    //children_[0]->write(fileWrite);
+    //children_[0]->write(fileWrite);
     //for ( auto child : children_ ) child->write(fileWrite);
 }
 

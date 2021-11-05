@@ -66,6 +66,11 @@ void MP4::ftyp::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::ftyp::getKey()
+{
+    return key;
+}
+
 void MP4::ftyp::writeHeader(std::ofstream &fileWrite)
 {
     writeHeader_(fileWrite, key, false);
@@ -76,7 +81,11 @@ void MP4::ftyp::writeData(std::ofstream &fileWrite)
     std::cout << "ftyp write Data: " << key << std::endl;
     dataBlock ftypData;
     memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
+    ftypData.version = XXH_swap32(version);
     fileWrite.write((char *) &ftypData, sizeof(ftypData));
+    for ( auto brand : compatibleBrands ) {
+        fileWrite.write((char *) brand.c_str(), 4);
+    }
 }
 
 std::string MP4::ftyp::key = "ftyp";

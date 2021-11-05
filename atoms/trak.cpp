@@ -51,12 +51,12 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     for ( auto dref : getTypeAtoms<dref>() ) {
         if ( dref->dataReferences.size() > 1 )
             throw std::runtime_error("MP4::getSamples: don't know how to handle multiple data references");
-        if ( dref->dataReferences[1]->key =="url " && ((url_ *) dref->dataReferences[1].get())->dataInSameFile )
+        if ( dref->dataReferences[1]->getKey() =="url " && ((url_ *) dref->dataReferences[1].get())->dataInSameFile )
             filePath = filePath_;
-        else if ( dref->dataReferences[1]->key =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
+        else if ( dref->dataReferences[1]->getKey() =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
             filePath = filePath_;
         else {
-            throw std::runtime_error("MP4::getSamples: Can't handle reference of type: "+dref->dataReferences[1]->key);
+            throw std::runtime_error("MP4::getSamples: Can't handle reference of type: "+dref->dataReferences[1]->getKey());
         }
     }
 
@@ -142,8 +142,8 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
 bool MP4::trak::isDataInSameFile() {
     for ( auto dref : getTypeAtoms<dref>() ) {
         for ( auto dataReference : dref->dataReferences ) {
-            if ( dataReference.second->key == "url " ) return ((url_ *) dataReference.second.get())->dataInSameFile;
-            else if ( dataReference.second-> key == "alis" ) return ((alis *) dataReference.second.get())->dataInSameFile;
+            if ( dataReference.second->getKey() == "url " ) return ((url_ *) dataReference.second.get())->dataInSameFile;
+            else if ( dataReference.second->getKey() == "alis" ) return ((alis *) dataReference.second.get())->dataInSameFile;
             else throw std::runtime_error("MP4::trak::isDataInSameFile Can't find data reference");
         }
     }

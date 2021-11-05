@@ -107,7 +107,7 @@ MP4::atomBuild::atomBuild(Processor &processor)
 }
 
 MP4::atom::atom()
-    : key("atom")
+    : key_("atom")
     , filePath_("")
     , path_("")
     , parentPath_("")
@@ -156,8 +156,8 @@ MP4::atom::atom(atomParse &parse)
     fileDataPos_ = filePos_ + headerSize_;
 
     // set key and path
-    key = std::string(dataBlock.key).substr(0,4);
-    path_ = parentPath_ + key;
+    key_ = std::string(dataBlock.key).substr(0,4);
+    path_ = parentPath_ + key_;
 
     // set filestream to data position
     fileStream->seekg(fileDataPos_, fileStream->beg);
@@ -247,6 +247,11 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
+std::string MP4::atom::getKey()
+{
+    return key_;
+}
+
 void MP4::atom::write(std::ofstream &fileWrite)
 {
     write_(fileWrite);
@@ -267,10 +272,10 @@ void MP4::atom::write_(std::ofstream &fileWrite)
 
 void MP4::atom::writeHeader(std::ofstream &fileWrite)
 {
-    writeHeader_(fileWrite, key, false);
+    writeHeader_(fileWrite, key_, false);
 }
 
-void MP4::atom::writeHeader_(std::ofstream &fileWrite, std::string key_, bool size64_)
+void MP4::atom::writeHeader_(std::ofstream &fileWrite, std::string key, bool size64_)
 {
     writeHeaderSizePos_ = fileWrite.tellp();
     writeHeaderSize64_ = size64_;
@@ -282,7 +287,7 @@ void MP4::atom::writeHeader_(std::ofstream &fileWrite, std::string key_, bool si
     } else {
         headerSize = 8;
     }
-    memcpy(&atomHeader.key, key_.c_str(), 4);
+    memcpy(&atomHeader.key, key.c_str(), 4);
     fileWrite.write((char *) &atomHeader, headerSize);
 }
 
@@ -293,7 +298,7 @@ void MP4::atom::writeChildren(std::ofstream &fileWrite)
 
 void MP4::atom::writeChildren_(std::ofstream &fileWrite)
 {
-    std::cout << "Write Children: " << key << std::endl;
+    std::cout << "Write Children: " << key_ << std::endl;
 
     //for ( auto child : children_ ) child->write(fileWrite);
 }
@@ -305,7 +310,7 @@ void MP4::atom::writeData(std::ofstream &fileWrite)
 
 void MP4::atom::writeData_(std::ofstream &fileWrite)
 {
-    std::cout << "Write Data: " << key << std::endl;
+    std::cout << "Write Data: " << key_ << std::endl;
     /*
     std::ifstream fileRead(filePath_, std::ios::binary);
     if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::writeData_ can not parse file: "+filePath_);
@@ -454,7 +459,7 @@ bool MP4::atom::isContainer_(std::ifstream *fileStream, int64_t dataSize)
 void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found)
 {
     for ( auto child : children_ ) {
-        if ( child->key == findKey ) found.push_back(child);
+        if ( child->key_ == findKey ) found.push_back(child);
         child->getChildAtoms_(findKey, found);
     }
 }

@@ -87,13 +87,16 @@ public:
     {
         std::vector<T *> foundTypeAtoms;
         std::vector<std::shared_ptr<atom>> found;
-        if ( T::key == key ) foundTypeAtoms.push_back((T *) this);
+        if ( T::key == key_ ) foundTypeAtoms.push_back((T *) this);
         getChildAtoms_(T::key, found);
         for( auto foundAtom : found ) foundTypeAtoms.push_back((T *) foundAtom.get());
         return foundTypeAtoms;
     }
 
     void printHierarchy(int pathWith = 35, int valLevel = 10);
+
+    virtual std::string getKey();
+
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
@@ -103,7 +106,7 @@ public:
     virtual void writeChildren(std::ofstream &fileWrite);
     virtual void writeTail(std::ofstream &fileWrite);
 
-    std::string     key;
+    std::string     key_;
 
 protected:
     typedef struct headerBlock
@@ -139,7 +142,7 @@ protected:
     int                             nestLevel_(int level);
     
     void                            write_(std::ofstream &fileWrite);
-    void                            writeHeader_(std::ofstream &fileWrite, std::string key_ = "", bool size64_ = false);
+    void                            writeHeader_(std::ofstream &fileWrite, std::string key = "", bool size64_ = false);
     void                            writeData_(std::ofstream &fileWrite);
     void                            writeChildren_(std::ofstream &fileWrite);
     void                            writeTail_(std::ofstream &fileWrite);
