@@ -33,12 +33,13 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
 
     // handle timescale, duration and dates
     for ( auto track : tracks_ ) {
+        // get largest track timescale/duration for movie settings
         if ( track.second->mediaTimeScale > timeScale_ ) {
             timeScale_ = track.second->mediaTimeScale;
-            std::cout << "TimeScale changed: " << timeScale_ << std::endl;
             duration_ = track.second->mediaDuration;
-            std::cout << "Duration changed: " << duration_ << std::endl;
         }
+
+        // get the newest track times for movie settings
         if ( track.second->creationTime > creationTime_) creationTime_ = track.second->creationTime;
         if ( track.second->modificationTime > modificationTime_) modificationTime_ = track.second->modificationTime;
     }

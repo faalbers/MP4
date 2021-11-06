@@ -17,11 +17,14 @@ class mdhd : public atom
 {
 public:
     mdhd(atomParse &parse);
+    mdhd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
+
+    void writeData(std::ofstream &fileWrite);
 
     static std::string  key;
     uint32_t            creationTime;

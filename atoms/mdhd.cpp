@@ -17,6 +17,14 @@ MP4::mdhd::mdhd(atomParse &parse)
     quality = XXH_swap16(mdhdData.quality);
 }
 
+MP4::mdhd::mdhd(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    // use tkhd for media date
+    , creationTime(build->getTrackCreationTime())
+    , modificationTime(build->getTrackModificationTime())
+{
+}
+
 void MP4::mdhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -39,6 +47,24 @@ void MP4::mdhd::printHierarchyData(bool fullLists)
 std::string MP4::mdhd::getKey()
 {
     return key;
+}
+
+void MP4::mdhd::writeData(std::ofstream &fileWrite)
+{
+    dataBlock mdhdData;
+
+    // default settings
+    mdhdData.version.version = 0;
+    mdhdData.version.flag[0] = 0;
+    mdhdData.version.flag[1] = 0;
+    mdhdData.version.flag[2] = 0;
+
+    // data settings
+    mdhdData.creationTime = XXH_swap32(creationTime);
+    mdhdData.modificationTime = XXH_swap32(modificationTime);
+
+    fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
+
 }
 
 std::string MP4::mdhd::key = "mdhd";

@@ -34,6 +34,7 @@ MP4::mvhd::mvhd(atomParse &parse)
 
 MP4::mvhd::mvhd(std::shared_ptr<atomBuild> build)
     : atom(build)
+    // use largest track mdhd timeScale
     , timeScale(build->getTimeScale())
     , duration(build->getDuration())
     , creationTime(build->getCreationTime())
