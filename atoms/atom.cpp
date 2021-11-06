@@ -38,6 +38,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include "../date.hpp"
 
 MP4::atom::atom()
     : key_("atom")
@@ -162,6 +163,15 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
     std::cout << std::endl;
     for ( auto child : children_ )
         child->printHierarchy(pathWith, valLevel);
+}
+
+std::string MP4::atom::getDateTime(uint32_t seconds)
+{
+    constexpr auto offset =
+        std::chrono::sys_days(std::chrono::January/1/1970)
+        - std::chrono::sys_days(std::chrono::January/1/1904);
+    std::chrono::sys_seconds newSeconds = std::chrono::sys_seconds(std::chrono::seconds(seconds)) - offset;
+    return date::format("%m/%d/%Y %T", newSeconds);
 }
 
 void MP4::atom::printData(bool fullLists)

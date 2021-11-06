@@ -54,8 +54,8 @@ void MP4::tkhd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Track Header Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "creationTime     : " << creationTime << std::endl;
-    std::cout << dataIndent << "modificationTime : " << modificationTime << std::endl;
+    std::cout << dataIndent << "creationTime    : " << getDateTime(creationTime) << std::endl;
+    std::cout << dataIndent << "modificationTime: " << getDateTime(modificationTime) << std::endl;
     std::cout << dataIndent << "trackID          : " << trackID << std::endl;
     std::cout << dataIndent << "duration         : " << duration << std::endl;
     std::cout << dataIndent << "layer            : " << layer << std::endl;

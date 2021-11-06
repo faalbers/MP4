@@ -1,21 +1,9 @@
 #include "mdhd.hpp"
 #include <iostream>
-#include <chrono>
 
 MP4::mdhd::mdhd(atomParse &parse)
     : atom(parse)
 {
-    typedef struct dataBlock
-    {
-        versionBlock    version;
-        uint32_t        creationTime;
-        uint32_t        modificationTime;
-        uint32_t        timeScale;          // time units per second
-        uint32_t        duration;           // amount of timeScale units
-        uint16_t        language;
-        uint16_t        quality;
-    } dataBlock;
-
     auto fileStream = parse.getFileStream();
 
     dataBlock mdhdData;
@@ -25,6 +13,8 @@ MP4::mdhd::mdhd(atomParse &parse)
     modificationTime = XXH_swap32(mdhdData.modificationTime);
     timeScale = XXH_swap32(mdhdData.timeScale);
     duration = XXH_swap32(mdhdData.duration);
+    language = XXH_swap16(mdhdData.language);
+    quality = XXH_swap16(mdhdData.quality);
 }
 
 void MP4::mdhd::printData(bool fullLists)
@@ -32,8 +22,12 @@ void MP4::mdhd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Media Header Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "timeScale  : " << timeScale << std::endl;
-    std::cout << dataIndent << "duration   : " << duration << std::endl;
+    std::cout << dataIndent << "creationTime    : " << getDateTime(creationTime) << std::endl;
+    std::cout << dataIndent << "modificationTime: " << getDateTime(modificationTime) << std::endl;
+    std::cout << dataIndent << "timeScale       : " << timeScale << std::endl;
+    std::cout << dataIndent << "duration        : " << duration << std::endl;
+    std::cout << dataIndent << "language        : " << language << std::endl;
+    std::cout << dataIndent << "quality         : " << quality << std::endl;
 }
 
 void MP4::mdhd::printHierarchyData(bool fullLists)

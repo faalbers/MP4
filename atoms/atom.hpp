@@ -47,6 +47,7 @@ public:
     }
 
     void printHierarchy(int pathWith = 35, int valLevel = 10);
+    static std::string getDateTime(uint32_t seconds);
 
     virtual std::string getKey();
 
