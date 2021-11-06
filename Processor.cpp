@@ -4,6 +4,8 @@
 MP4::Processor::Processor()
     : timeScale_(0)
     , duration_(0)
+    , creationTime_(0)
+    , modificationTime_(0)
 {
 }
 
@@ -29,7 +31,7 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
     parsedTrack->trackID = trackID;
     tracks_[trackID] = parsedTrack;
 
-    // handle timescale and duration
+    // handle timescale, duration and dates
     for ( auto track : tracks_ ) {
         if ( track.second->mediaTimeScale > timeScale_ ) {
             timeScale_ = track.second->mediaTimeScale;
@@ -37,8 +39,12 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
             duration_ = track.second->mediaDuration;
             std::cout << "Duration changed: " << duration_ << std::endl;
         }
+        if ( track.second->creationTime > creationTime_) creationTime_ = track.second->creationTime;
+        if ( track.second->modificationTime > modificationTime_) modificationTime_ = track.second->modificationTime;
     }
 
+    // set next track after last
+    nextTrackID_ = (--tracks_.end())->first + 1;
 }
 
 void MP4::Processor::error_(std::string message)

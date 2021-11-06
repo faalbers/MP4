@@ -1,5 +1,8 @@
 #include "trak.hpp"
 #include "tkhd.hpp"
+#include "mdia.hpp"
+#include "tref.hpp"
+#include "edts.hpp"
 #include "mdhd.hpp"
 #include "dref.hpp"
 #include "url_.hpp"
@@ -37,6 +40,18 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
     
     build->parentPath = path_ + "/";
     child = std::make_shared<tkhd>(build);
+    children_.push_back(child);
+    
+    build->parentPath = path_ + "/";
+    child = std::make_shared<tref>(build);
+    children_.push_back(child);
+    
+    build->parentPath = path_ + "/";
+    child = std::make_shared<edts>(build);
+    children_.push_back(child);
+    
+    build->parentPath = path_ + "/";
+    child = std::make_shared<mdia>(build);
     children_.push_back(child);
 }
 

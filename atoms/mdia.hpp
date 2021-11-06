@@ -28,6 +28,7 @@ class mdia : public atom
 {
 public:
     mdia(atomParse &parse);
+    mdia(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

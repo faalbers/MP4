@@ -1,9 +1,28 @@
 #include "minf.hpp"
+#include "dinf.hpp"
+#include "stbl.hpp"
 #include <iostream>
 
 MP4::minf::minf(atomParse &parse)
     : atom(parse)
 {
+}
+
+MP4::minf::minf(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+
+    std::shared_ptr<atom> child;
+
+    build->parentPath = path_ + "/";
+    child = std::make_shared<dinf>(build);
+    children_.push_back(child);
+    
+    build->parentPath = path_ + "/";
+    child = std::make_shared<stbl>(build);
+    children_.push_back(child);
 }
 
 void MP4::minf::printData(bool fullLists)

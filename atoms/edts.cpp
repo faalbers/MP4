@@ -6,6 +6,14 @@ MP4::edts::edts(atomParse &parse)
 {
 }
 
+MP4::edts::edts(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+
+}
+
 void MP4::edts::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

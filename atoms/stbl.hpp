@@ -48,6 +48,7 @@ class stbl : public atom
 {
 public:
     stbl(atomParse &parse);
+    stbl(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

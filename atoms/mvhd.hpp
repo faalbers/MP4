@@ -18,19 +18,46 @@ class mvhd : public atom
 {
 public:
     mvhd(atomParse &parse);
+    mvhd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string  key;
+    uint32_t            creationTime;
+    uint32_t            modificationTime;
     uint32_t            timeScale;      // time units per second
     uint32_t            duration;       // amount of timeScale units
     float               preferredRate;
     float               preferredVolume;
-    float               matrix[3][3];
+    std::vector<std::vector<float>> matrix;
     uint32_t            nextTrackID;
+
+private:
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint32_t        creationTime;
+        uint32_t        modificationTime;
+        uint32_t        timeScale;          // time units per second
+        uint32_t        duration;           // amount of timeScale units
+        uint32_t        preferredRate;      // fixed point
+        uint16_t        preferredVolume;    // fixed point
+        uint8_t         reserved[10];
+        uint32_t        matrix[3][3];
+        uint32_t        previewTime;
+        uint32_t        previewDuration;
+        uint32_t        posterTime;
+        uint32_t        selectionTime;
+        uint32_t        selectionDuration;
+        uint32_t        currentTime;
+        uint32_t        nextTrackID;
+    } dataBlock;
+
 };
 
 }

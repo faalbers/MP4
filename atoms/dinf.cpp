@@ -6,6 +6,14 @@ MP4::dinf::dinf(atomParse &parse)
 {
 }
 
+MP4::dinf::dinf(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    headerSize_ = 8;
+    path_ = parentPath_ + key;
+
+}
+
 void MP4::dinf::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

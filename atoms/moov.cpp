@@ -1,4 +1,5 @@
 #include "moov.hpp"
+#include "mvhd.hpp"
 #include "trak.hpp"
 #include <iostream>
 #include <iomanip>
@@ -17,6 +18,10 @@ MP4::moov::moov(std::shared_ptr<atomBuild> build)
     path_ = parentPath_ + key;
 
     std::shared_ptr<atom> child;
+
+    build->parentPath = path_ + "/";
+    child = std::make_shared<mvhd>(build);
+    children_.push_back(child);
     
     while ( build->nextTrack() ) {
         build->parentPath = path_ + "/";

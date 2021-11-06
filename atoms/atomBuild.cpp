@@ -5,8 +5,11 @@
 MP4::atomBuild::atomBuild(Processor &processor)
     : timeScale_(processor.timeScale_)
     , duration_(processor.duration_)
+    , creationTime_(processor.creationTime_)
+    , modificationTime_(processor.modificationTime_)
     , tracks_(processor.tracks_)
     , currentTrackID_(0)
+    , nextTrackID_(processor.nextTrackID_)
 {
 }
 
@@ -29,9 +32,29 @@ uint32_t MP4::atomBuild::currentTrackID()
     return currentTrackID_;
 }
 
+uint32_t MP4::atomBuild::getTimeScale()
+{
+    return timeScale_;
+}
+
 uint32_t MP4::atomBuild::getDuration()
 {
     return duration_;
+}
+
+uint32_t MP4::atomBuild::getCreationTime()
+{
+    return creationTime_;
+}
+
+uint32_t MP4::atomBuild::getModificationTime()
+{
+    return modificationTime_;
+}
+
+uint32_t MP4::atomBuild::getNextTrackID()
+{
+    return nextTrackID_;
 }
 
 uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID)

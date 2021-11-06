@@ -25,6 +25,7 @@ class minf : public atom
 {
 public:
     minf(atomParse &parse);
+    minf(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

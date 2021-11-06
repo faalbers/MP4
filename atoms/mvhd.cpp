@@ -4,31 +4,14 @@
 MP4::mvhd::mvhd(atomParse &parse)
     : atom(parse)
 {
-    typedef struct dataBlock
-    {
-        versionBlock    version;
-        uint32_t        creationTime;
-        uint32_t        modificationTime;
-        uint32_t        timeScale;          // time units per second
-        uint32_t        duration;           // amount of timeScale units
-        uint32_t        preferredRate;      // fixed point
-        uint16_t        preferredVolume;    // fixed point
-        uint8_t         reserved[10];
-        uint32_t        matrix[3][3];
-        uint32_t        previewTime;
-        uint32_t        previewDuration;
-        uint32_t        posterTime;
-        uint32_t        selectionTime;
-        uint32_t        selectionDuration;
-        uint32_t        currentTime;
-        uint32_t        nextTrackID;
-    } dataBlock;
-
     auto fileStream = parse.getFileStream();
 
     dataBlock mvhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
     fileStream->read((char *) &mvhdData, sizeof(mvhdData));
+    creationTime = XXH_swap32(mvhdData.creationTime);
+    modificationTime = XXH_swap32(mvhdData.modificationTime);
+    std::cout << creationTime << " " << modificationTime << std::endl;
     timeScale = XXH_swap32(mvhdData.timeScale);
     duration = XXH_swap32(mvhdData.duration);
     mvhdData.preferredRate = XXH_swap32(mvhdData.preferredRate);
@@ -37,16 +20,26 @@ MP4::mvhd::mvhd(atomParse &parse)
     preferredVolume = (float)mvhdData.preferredVolume / (float)(1 << 8);
     
     for ( int i = 0; i < 3; i++ ) {
+        std::vector<float> row;
         for ( int j = 0; j < 2; j++) {
-            mvhdData.matrix[i][j] = XXH_swap32(mvhdData.matrix[i][j]);
-            matrix[i][j] = (float)mvhdData.matrix[i][j] / (float)(1 << 16);
+            row.push_back((float) XXH_swap32(mvhdData.matrix[i][j]) / (float)(1 << 16));
         }
-        mvhdData.matrix[i][2] = XXH_swap32(mvhdData.matrix[i][2]);
-        matrix[i][2] = (float)mvhdData.matrix[i][2] / (float)(1 << 30);
+        row.push_back((float) XXH_swap32(mvhdData.matrix[i][2]) / (float)(1 << 30));
+        matrix.push_back(row);
     }
     
     nextTrackID = XXH_swap32(mvhdData.nextTrackID);
 
+}
+
+MP4::mvhd::mvhd(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , timeScale(build->getTimeScale())
+    , duration(build->getDuration())
+    , creationTime(build->getCreationTime())
+    , modificationTime(build->getModificationTime())
+    , nextTrackID(build->getNextTrackID())
+{
 }
 
 void MP4::mvhd::printData(bool fullLists)
@@ -54,11 +47,13 @@ void MP4::mvhd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Movie Header Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "timeScale      : " << timeScale << std::endl;
-    std::cout << dataIndent << "duration       : " << duration << std::endl;
-    std::cout << dataIndent << "preferredRate  : " << preferredRate << std::endl;
-    std::cout << dataIndent << "preferredVolume: " << preferredVolume << std::endl;
-    std::cout << dataIndent << "matrix         :" << std::endl;
+    std::cout << dataIndent << "creationTime    : " << creationTime << std::endl;
+    std::cout << dataIndent << "modificationTime: " << modificationTime << std::endl;
+    std::cout << dataIndent << "timeScale       : " << timeScale << std::endl;
+    std::cout << dataIndent << "duration        : " << duration << std::endl;
+    std::cout << dataIndent << "preferredRate   : " << preferredRate << std::endl;
+    std::cout << dataIndent << "preferredVolume : " << preferredVolume << std::endl;
+    std::cout << dataIndent << "matrix          :" << std::endl;
     std::cout << dataIndent << matrix[0][0] << " " << matrix[0][1] << " " << matrix[0][2] << " " << std::endl;
     std::cout << dataIndent << matrix[1][0] << " " << matrix[1][1] << " " << matrix[1][2] << " " << std::endl;
     std::cout << dataIndent << matrix[2][0] << " " << matrix[2][1] << " " << matrix[2][2] << " " << std::endl;
@@ -74,6 +69,61 @@ void MP4::mvhd::printHierarchyData(bool fullLists)
 std::string MP4::mvhd::getKey()
 {
     return key;
+}
+
+void MP4::mvhd::writeData(std::ofstream &fileWrite)
+{
+    dataBlock mvhdData;
+
+    // default settings
+    mvhdData.version.version = 0;
+    mvhdData.version.flag[0] = 0;
+    mvhdData.version.flag[1] = 0;
+    mvhdData.version.flag[2] = 15;
+    for ( int i = 0; i < 10; i++ ) mvhdData.reserved[i] = 0;
+
+    // forced to value, check later if this needs a copy of original mp4
+    mvhdData.preferredRate = XXH_swap32((uint32_t) (1.0 * (float)(1 << 16)));
+    mvhdData.preferredVolume = XXH_swap16((uint16_t) (1.0 * (float)(1 << 8)));
+    mvhdData.matrix[0][0] = XXH_swap32((uint32_t) (1.0 * (float)(1 << 16)));
+    mvhdData.matrix[0][1] = 0;
+    mvhdData.matrix[0][2] = 0;
+    mvhdData.matrix[1][0] = 0;
+    mvhdData.matrix[1][1] = XXH_swap32((uint32_t) (1.0 * (float)(1 << 16)));
+    mvhdData.matrix[1][2] = 0;
+    mvhdData.matrix[2][0] = 0;
+    mvhdData.matrix[2][1] = 0;
+    mvhdData.matrix[2][2] = XXH_swap32((uint32_t) (1.0 * (float)(1 << 30)));
+
+    // data settings
+    mvhdData.creationTime = XXH_swap32(creationTime);
+    mvhdData.modificationTime = XXH_swap32(modificationTime);
+    mvhdData.timeScale = XXH_swap32(timeScale);
+    mvhdData.duration = XXH_swap32(duration);
+    mvhdData.nextTrackID = XXH_swap32(nextTrackID);
+
+    /*
+    // forced to value, check later if this needs a copy of original track
+    mvhdData.alternateGroupID = 0;
+
+    // data settings
+    mvhdData.trackID = XXH_swap32(trackID);
+    mvhdData.duration = XXH_swap32(duration);
+    mvhdData.layer = XXH_swap16(layer);
+    mvhdData.volume = XXH_swap16((uint16_t) (volume * (float)(1 << 8)));
+    mvhdData.trackWidth = XXH_swap32((uint32_t) (trackWidth * (float)(1 << 16)));
+    mvhdData.trackHeight =  XXH_swap32((uint32_t) (trackHeight * (float)(1 << 16)));
+    */
+
+    //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
+    //ftypData.version = XXH_swap32(version);
+    
+    fileWrite.write((char *) &mvhdData, sizeof(mvhdData));
+    /*
+    for ( auto brand : compatibleBrands ) {
+        fileWrite.write((char *) brand.c_str(), 4);
+    }
+    */
 }
 
 std::string MP4::mvhd::key = "mvhd";

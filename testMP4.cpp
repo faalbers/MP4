@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     auto testStart = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(testStart - createStart);
-    std::cout << "\nCreate Time: " << ms_int.count() << "ms\n";
+    std::cout << "\nParse Time: " << ms_int.count() << "ms\n";
     std::cout << "**** TEST MP4 ****\n\n";
 
     //parserA.printHierarchy();
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     if (true) {
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
-        processor.addTrack(parserA,4,3);
+        //processor.addTrack(parserA,4,3);
 
         //MP4::Writer writer(parserA);
         MP4::Writer writer(processor);
