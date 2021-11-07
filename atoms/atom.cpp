@@ -165,7 +165,7 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
         child->printHierarchy(pathWith, valLevel);
 }
 
-std::string MP4::atom::getDateTime(uint32_t seconds)
+std::string MP4::atom::getDateTimeString(uint32_t seconds)
 {
     constexpr auto offset =
         std::chrono::sys_days(std::chrono::January/1/1970)
