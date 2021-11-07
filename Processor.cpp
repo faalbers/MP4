@@ -2,15 +2,22 @@
 #include <iostream>
 
 MP4::Processor::Processor()
-    : timeScale_(0)
-    , duration_(0)
+    : videoTimeScale_(0)
+    , videoDuration_(0)
     , creationTime_(0)
     , modificationTime_(0)
 {
 }
 
+uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale)
+{
+    auto timeScaleMult = (double) sourceTimeScale / targetTimeScale;
+    return (uint32_t) (timeScaleMult * (double) duration);
+}
+
 void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID)
 {
+    std::cout << "addTrack: " << sourceTrackID << " " << targetTrackID << std::endl;
     auto parsedTrack = parser.getTrack(sourceTrackID);
 
     // find tracks with same data format
@@ -32,8 +39,10 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
     tracks_[trackID] = parsedTrack;
 
     // handle timescale, duration and dates
+    // not correct yet
+    /*
     for ( auto track : tracks_ ) {
-        // get largest track timescale/duration for movie settings
+        // get largest track timescale for movie settings
         if ( track.second->mediaTimeScale > timeScale_ ) {
             timeScale_ = track.second->mediaTimeScale;
             duration_ = track.second->mediaDuration;
@@ -43,6 +52,17 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
         if ( track.second->creationTime > creationTime_) creationTime_ = track.second->creationTime;
         if ( track.second->modificationTime > modificationTime_) modificationTime_ = track.second->modificationTime;
     }
+    */
+    // Not correct yet
+    /*
+    for ( auto track : tracks_ ) {
+        // get longest track duration for movie settings (in progress)
+        auto videoDuration = atom::timeScaleDuration(track.second->mediaDuration,
+            track.second->mediaTimeScale, timeScale_);
+        std::cout << "Track: " << track.first << " duration: " << track.second->mediaDuration
+            << " -> " << videoDuration << std::endl;
+    }
+    */
 
     // set next track after last
     nextTrackID_ = (--tracks_.end())->first + 1;

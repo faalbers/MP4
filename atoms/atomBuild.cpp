@@ -3,8 +3,8 @@
 #include <iostream>
 
 MP4::atomBuild::atomBuild(Processor &processor)
-    : timeScale_(processor.timeScale_)
-    , duration_(processor.duration_)
+    : videoTimeScale_(processor.videoTimeScale_)
+    , videoDuration_(processor.videoDuration_)
     , creationTime_(processor.creationTime_)
     , modificationTime_(processor.modificationTime_)
     , tracks_(processor.tracks_)
@@ -32,14 +32,14 @@ uint32_t MP4::atomBuild::currentTrackID()
     return currentTrackID_;
 }
 
-uint32_t MP4::atomBuild::getTimeScale()
+uint32_t MP4::atomBuild::getVideoTimeScale()
 {
-    return timeScale_;
+    return videoTimeScale_;
 }
 
-uint32_t MP4::atomBuild::getDuration()
+uint32_t MP4::atomBuild::getVideoDuration()
 {
-    return duration_;
+    return videoDuration_;
 }
 
 uint32_t MP4::atomBuild::getCreationTime()
@@ -59,7 +59,7 @@ uint32_t MP4::atomBuild::getNextTrackID()
 
 uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID)
 {
-    return tracks_[newTrackID_(trackID)]->mediaDuration;
+    return tracks_[newTrackID_(trackID)]->trackDuration;
 }
 
 uint32_t MP4::atomBuild::getTrackCreationTime(uint32_t trackID)
@@ -95,6 +95,26 @@ float MP4::atomBuild::getTrackHeight(uint32_t trackID)
 std::vector<std::vector<float>> MP4::atomBuild::getTrackMatrix(uint32_t trackID)
 {
     return tracks_[newTrackID_(trackID)]->matrix;
+}
+
+uint32_t MP4::atomBuild::getMediaTimeScale(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->mediaTimeScale;
+}
+
+uint32_t MP4::atomBuild::getMediaDuration(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->mediaDuration;
+}
+
+uint16_t MP4::atomBuild::getMediaLanguage(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->mediaLanguage;
+}
+
+uint16_t MP4::atomBuild::getMediaQuality(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->mediaQuality;
 }
 
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)

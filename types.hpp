@@ -27,6 +27,9 @@ typedef struct trackType
     uint32_t                modificationTime;
     uint32_t                trackID;
     std::string             dataFormat;
+    uint32_t                videoTimeScale;
+    uint32_t                videoDuration;
+    uint32_t                trackDuration;
     uint32_t                mediaTimeScale;
     uint32_t                mediaDuration;
     uint16_t                layer;
@@ -35,6 +38,8 @@ typedef struct trackType
     float                   width;
     float                   height;
     std::vector<std::vector<float>> matrix;
+    uint16_t                mediaLanguage;
+    uint16_t                mediaQuality;
 } trackType;
 
 }

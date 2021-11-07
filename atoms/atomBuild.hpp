@@ -20,8 +20,8 @@ public:
     std::string parentPath;
     bool        nextTrack();
     uint32_t    currentTrackID();
-    uint32_t    getTimeScale();
-    uint32_t    getDuration();
+    uint32_t    getVideoTimeScale();
+    uint32_t    getVideoDuration();
     uint32_t    getCreationTime();
     uint32_t    getModificationTime();
     uint32_t    getNextTrackID();
@@ -32,7 +32,11 @@ public:
     float       getTrackVolume(uint32_t trackID = 0);
     float       getTrackWidth(uint32_t trackID = 0);
     float       getTrackHeight(uint32_t trackID = 0);
-    std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
+    uint32_t    getMediaTimeScale(uint32_t trackID = 0);
+    uint32_t    getMediaDuration(uint32_t trackID = 0);
+    uint16_t    getMediaLanguage(uint32_t trackID = 0);
+    uint16_t    getMediaQuality(uint32_t trackID = 0);
+std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
 
 private:
     void        error_(std::string message);
@@ -40,8 +44,8 @@ private:
 
     uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
-    uint32_t                                        timeScale_;
-    uint32_t                                        duration_;
+    uint32_t                                        videoTimeScale_;
+    uint32_t                                        videoDuration_;
     uint32_t                                        creationTime_;
     uint32_t                                        modificationTime_;
     uint32_t                                        nextTrackID_;

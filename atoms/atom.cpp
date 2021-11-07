@@ -174,6 +174,12 @@ std::string MP4::atom::getDateTime(uint32_t seconds)
     return date::format("%m/%d/%Y %T", newSeconds);
 }
 
+uint32_t MP4::atom::timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale)
+{
+    auto timeScaleMult = (double) targetTimeScale / sourceTimeScale;
+    return (uint32_t) (timeScaleMult * (double) duration);
+}
+
 void MP4::atom::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

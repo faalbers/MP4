@@ -23,8 +23,8 @@ private:
     void            error_(std::string message);
 
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
-    uint32_t                                        timeScale_;
-    uint32_t                                        duration_;
+    uint32_t                                        videoTimeScale_;
+    uint32_t                                        videoDuration_;
     uint32_t                                        creationTime_;
     uint32_t                                        modificationTime_;
     uint32_t                                        nextTrackID_;

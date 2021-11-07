@@ -22,6 +22,10 @@ MP4::mdhd::mdhd(std::shared_ptr<atomBuild> build)
     // use tkhd for media date
     , creationTime(build->getTrackCreationTime())
     , modificationTime(build->getTrackModificationTime())
+    , timeScale(build->getMediaTimeScale())
+    , duration(build->getMediaDuration())
+    , language(build->getMediaLanguage())
+    , quality(build->getMediaQuality())
 {
 }
 
@@ -62,6 +66,10 @@ void MP4::mdhd::writeData(std::ofstream &fileWrite)
     // data settings
     mdhdData.creationTime = XXH_swap32(creationTime);
     mdhdData.modificationTime = XXH_swap32(modificationTime);
+    mdhdData.timeScale = XXH_swap32(timeScale);
+    mdhdData.duration = XXH_swap32(duration);
+    mdhdData.language = XXH_swap16(language);
+    mdhdData.quality = XXH_swap16(quality);
 
     fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
 

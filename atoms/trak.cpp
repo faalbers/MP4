@@ -15,6 +15,8 @@
 #include "stco.hpp"
 #include "co64.hpp"
 #include "hdlr.hpp"
+#include "moov.hpp"
+#include "mvhd.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -104,6 +106,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     for ( auto tkhd : getTypeAtoms<tkhd>() ) {
         trackData->creationTime = tkhd->creationTime;
         trackData->modificationTime = tkhd->modificationTime;
+        trackData->trackDuration = tkhd->duration;
         trackData->layer = tkhd->layer;
         trackData->width = tkhd->trackWidth;
         trackData->height = tkhd->trackHeight;
@@ -111,10 +114,18 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         trackData->matrix = tkhd->matrix;
     }
 
-    // get track time scale and duration
+    // get mdhd data
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         trackData->mediaTimeScale = mdhd->timeScale;
         trackData->mediaDuration = mdhd->duration;
+        trackData->mediaLanguage = mdhd->language;
+        trackData->mediaQuality = mdhd->quality;
+    }
+
+    // video time scale and duration for reference
+    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) {
+        trackData->videoTimeScale = mvhd->timeScale;
+        trackData->videoDuration = mvhd->duration;
     }
 
     // get sync samples
