@@ -167,11 +167,17 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
 
 std::string MP4::atom::getDateTimeString(uint32_t seconds)
 {
-    constexpr auto offset =
-        std::chrono::sys_days(std::chrono::January/1/1970)
-        - std::chrono::sys_days(std::chrono::January/1/1904);
-    std::chrono::sys_seconds newSeconds = std::chrono::sys_seconds(std::chrono::seconds(seconds)) - offset;
+    auto newSeconds = std::chrono::sys_seconds(std::chrono::seconds(seconds) - std::chrono::seconds(OFFSET_1904_1970));
     return date::format("%m/%d/%Y %T", newSeconds);
+}
+
+uint32_t MP4::atom::getCurrentDateTime()
+{
+    auto utcTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    auto diffTime = std::mktime(std::gmtime(&utcTime)) - utcTime;
+    auto currentSeconds = (uint32_t) (utcTime - diffTime);
+    uint32_t newSeconds = OFFSET_1904_1970 + currentSeconds;
+    return newSeconds;
 }
 
 uint32_t MP4::atom::timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale)

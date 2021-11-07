@@ -97,11 +97,13 @@ void MP4::mvhd::writeData(std::ofstream &fileWrite)
     mvhdData.matrix[2][2] = XXH_swap32((uint32_t) (1.0 * (float)(1 << 30)));
 
     // data settings
-    mvhdData.creationTime = XXH_swap32(creationTime);
-    mvhdData.modificationTime = XXH_swap32(modificationTime);
     mvhdData.timeScale = XXH_swap32(timeScale);
     mvhdData.duration = XXH_swap32(duration);
     mvhdData.nextTrackID = XXH_swap32(nextTrackID);
+
+    // we use the actual writing time as creation and modification time
+    mvhdData.creationTime = XXH_swap32(getCurrentDateTime());
+    mvhdData.modificationTime = XXH_swap32(getCurrentDateTime());
 
     /*
     // forced to value, check later if this needs a copy of original track

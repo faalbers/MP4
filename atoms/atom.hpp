@@ -21,6 +21,8 @@
 #define XXH_swap64 _byteswap_uint64
 #endif
 
+#define OFFSET_1904_1970 2082844800
+
 namespace MP4
 {
 
@@ -48,7 +50,7 @@ public:
 
     void printHierarchy(int pathWith = 35, int valLevel = 10);
     static std::string getDateTimeString(uint32_t seconds);
-    //static uint32_t getCurrentDateTime();
+    static uint32_t getCurrentDateTime();
     static uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale);
 
     virtual std::string getKey();
