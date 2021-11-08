@@ -11,7 +11,6 @@ MP4::mvhd::mvhd(atomParse &parse)
     fileStream->read((char *) &mvhdData, sizeof(mvhdData));
     creationTime = XXH_swap32(mvhdData.creationTime);
     modificationTime = XXH_swap32(mvhdData.modificationTime);
-    std::cout << creationTime << " " << modificationTime << std::endl;
     timeScale = XXH_swap32(mvhdData.timeScale);
     duration = XXH_swap32(mvhdData.duration);
     mvhdData.preferredRate = XXH_swap32(mvhdData.preferredRate);

@@ -17,7 +17,6 @@ uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t
 
 void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID)
 {
-    std::cout << "addTrack: " << sourceTrackID << " " << targetTrackID << std::endl;
     auto parsedTrack = parser.getTrack(sourceTrackID);
 
     // find tracks with same data format

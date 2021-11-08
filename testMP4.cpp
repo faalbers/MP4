@@ -65,7 +65,6 @@ int main(int argc, char* argv[])
 
         auto filePath = writer.write("writeResult.mp4");
 
-        std::cout << filePath << std::endl;
         MP4::Parser parserOut(filePath);
         parserOut.printHierarchy();
         parserOut.printHierarchyData();

@@ -38,8 +38,6 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
 
     std::shared_ptr<atom> child;
     
-    std::cout << "Building Track: " << build->currentTrackID() << std::endl;
-    
     build->parentPath = path_ + "/";
     child = std::make_shared<tkhd>(build);
     children_.push_back(child);
