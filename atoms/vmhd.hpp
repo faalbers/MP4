@@ -16,14 +16,18 @@ class vmhd : public atom
 {
 public:
     vmhd(atomParse &parse);
+    vmhd(std::shared_ptr<atomBuild> build);
+
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string  key;
-    uint16_t            graphicMode;
+    uint16_t            graphicsMode;
     uint16_t            opColorR;
     uint16_t            opColorG;
     uint16_t            opColorB;

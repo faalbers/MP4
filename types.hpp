@@ -43,6 +43,10 @@ typedef struct trackType
     std::string             componentType;
     std::string             componentSubType;
     std::string             componentName;
+    uint16_t                graphicsMode;
+    uint16_t                opColorR;
+    uint16_t                opColorG;
+    uint16_t                opColorB;
 } trackType;
 
 }

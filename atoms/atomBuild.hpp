@@ -32,6 +32,7 @@ public:
     float       getTrackVolume(uint32_t trackID = 0);
     float       getTrackWidth(uint32_t trackID = 0);
     float       getTrackHeight(uint32_t trackID = 0);
+    std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
     uint32_t    getMediaTimeScale(uint32_t trackID = 0);
     uint32_t    getMediaDuration(uint32_t trackID = 0);
     uint16_t    getMediaLanguage(uint32_t trackID = 0);
@@ -39,7 +40,10 @@ public:
     std::string getComponentType(uint32_t trackID = 0);
     std::string getComponentSubType(uint32_t trackID = 0);
     std::string getComponentName(uint32_t trackID = 0);
-    std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
+    uint16_t    getGraphicsMode(uint32_t trackID = 0);
+    uint16_t    getOpColorR(uint32_t trackID = 0);
+    uint16_t    getOpColorG(uint32_t trackID = 0);
+    uint16_t    getOpColorB(uint32_t trackID = 0);
 
 private:
     void        error_(std::string message);

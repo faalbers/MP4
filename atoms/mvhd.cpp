@@ -79,7 +79,7 @@ void MP4::mvhd::writeData(std::ofstream &fileWrite)
     mvhdData.version.version = 0;
     mvhdData.version.flag[0] = 0;
     mvhdData.version.flag[1] = 0;
-    mvhdData.version.flag[2] = 15;
+    mvhdData.version.flag[2] = 0;
     for ( int i = 0; i < 10; i++ ) mvhdData.reserved[i] = 0;
 
     // forced to value, check later if this needs a copy of original mp4

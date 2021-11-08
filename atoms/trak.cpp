@@ -15,9 +15,9 @@
 #include "stsc.hpp"
 #include "stco.hpp"
 #include "co64.hpp"
-#include "hdlr.hpp"
 #include "moov.hpp"
 #include "mvhd.hpp"
+#include "vmhd.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -126,6 +126,16 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         trackData->componentType = hdlr->componentType;
         trackData->componentSubType = hdlr->componentSubType;
         trackData->componentName = hdlr->componentName;
+    }
+
+    // get vmhd if it's a 'vide' track
+    if ( trackData->componentSubType == "vide") {
+        for ( auto vmhd : getTypeAtoms<vmhd>() ) {
+            trackData->graphicsMode = vmhd->graphicsMode;
+            trackData->opColorR = vmhd->opColorR;
+            trackData->opColorG = vmhd->opColorG;
+            trackData->opColorB = vmhd->opColorB;
+        }
     }
 
     // video time scale and duration for reference

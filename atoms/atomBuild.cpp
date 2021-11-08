@@ -132,6 +132,26 @@ std::string MP4::atomBuild::getComponentName(uint32_t trackID)
     return tracks_[newTrackID_(trackID)]->componentName;
 }
 
+uint16_t MP4::atomBuild::getGraphicsMode(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->graphicsMode;
+}
+
+uint16_t MP4::atomBuild::getOpColorR(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->opColorR;
+}
+
+uint16_t MP4::atomBuild::getOpColorG(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->opColorG;
+}
+
+uint16_t MP4::atomBuild::getOpColorB(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->opColorB;
+}
+
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
 {
     if ( trackID == 0 ) trackID = currentTrackID_;
