@@ -40,6 +40,9 @@ typedef struct trackType
     std::vector<std::vector<float>> matrix;
     uint16_t                mediaLanguage;
     uint16_t                mediaQuality;
+    std::string             componentType;
+    std::string             componentSubType;
+    std::string             componentName;
 } trackType;
 
 }

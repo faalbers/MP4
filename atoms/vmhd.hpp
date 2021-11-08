@@ -27,6 +27,16 @@ public:
     uint16_t            opColorR;
     uint16_t            opColorG;
     uint16_t            opColorB;
+
+private:
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint16_t        graphicsMode;
+        uint16_t        opColorR;
+        uint16_t        opColorG;
+        uint16_t        opColorB;
+    } dataBlock;
 };
 
 }

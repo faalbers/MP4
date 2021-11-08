@@ -4,15 +4,6 @@
 MP4::vmhd::vmhd(atomParse &parse)
     : atom(parse)
 {
-    typedef struct dataBlock
-    {
-        versionBlock    version;
-        uint16_t        graphicsMode;
-        uint16_t        opColorR;
-        uint16_t        opColorG;
-        uint16_t        opColorB;
-    } dataBlock;
-
     auto fileStream = parse.getFileStream();
 
     dataBlock vmhdData;

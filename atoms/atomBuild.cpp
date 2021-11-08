@@ -117,6 +117,21 @@ uint16_t MP4::atomBuild::getMediaQuality(uint32_t trackID)
     return tracks_[newTrackID_(trackID)]->mediaQuality;
 }
 
+std::string MP4::atomBuild::getComponentType(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->componentType;
+}
+
+std::string MP4::atomBuild::getComponentSubType(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->componentSubType;
+}
+
+std::string MP4::atomBuild::getComponentName(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->componentName;
+}
+
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
 {
     if ( trackID == 0 ) trackID = currentTrackID_;

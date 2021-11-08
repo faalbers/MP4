@@ -23,16 +23,30 @@ class hdlr : public atom
 {
 public:
     hdlr(atomParse &parse);
+    hdlr(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string      key;
     std::string             componentType;
     std::string             componentSubType;
     std::string             componentName;
+
+private:
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        char            componentType[4];
+        char            componentSubType[4];
+        uint32_t        componentManufacturer;
+        uint32_t        componentFlags;
+        uint32_t        componentFlagsMask;
+    } dataBlock;
 
 };
 

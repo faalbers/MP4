@@ -4,6 +4,7 @@
 #include "tref.hpp"
 #include "edts.hpp"
 #include "mdhd.hpp"
+#include "hdlr.hpp"
 #include "dref.hpp"
 #include "url_.hpp"
 #include "alis.hpp"
@@ -118,6 +119,13 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         trackData->mediaDuration = mdhd->duration;
         trackData->mediaLanguage = mdhd->language;
         trackData->mediaQuality = mdhd->quality;
+    }
+
+    // get hdlr data
+    for ( auto hdlr : getTypeAtoms<hdlr>() ) {
+        trackData->componentType = hdlr->componentType;
+        trackData->componentSubType = hdlr->componentSubType;
+        trackData->componentName = hdlr->componentName;
     }
 
     // video time scale and duration for reference

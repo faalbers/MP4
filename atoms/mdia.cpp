@@ -1,5 +1,6 @@
 #include "mdia.hpp"
 #include "mdhd.hpp"
+#include "hdlr.hpp"
 #include "minf.hpp"
 #include <iostream>
 
@@ -18,6 +19,10 @@ MP4::mdia::mdia(std::shared_ptr<atomBuild> build)
 
     build->parentPath = path_ + "/";
     child = std::make_shared<mdhd>(build);
+    children_.push_back(child);
+
+    build->parentPath = path_ + "/";
+    child = std::make_shared<hdlr>(build);
     children_.push_back(child);
 
     build->parentPath = path_ + "/";
