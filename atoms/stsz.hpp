@@ -21,16 +21,29 @@ class stsz : public atom
 {
 public:
     stsz(atomParse &parse);
+    stsz(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string      key;
     uint32_t                defaultSampleSize;
     // stszTable[sampleID] = sampleSize;
     std::map<uint32_t, uint32_t>   stszTable;
+
+private:
+    typedef struct tableBlock
+    {
+        versionBlock    version;
+        uint32_t        defaultSampleSize;             // if zero, all samples have different size.
+        uint32_t        numberOfEntries;        // number of sample descriptions that follow
+    } tableBlock;
+
+
 };
 
 }

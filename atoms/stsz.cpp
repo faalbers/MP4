@@ -4,13 +4,6 @@
 MP4::stsz::stsz(atomParse &parse)
     : atom(parse)
 {
-    typedef struct tableBlock
-    {
-        versionBlock    version;
-        uint32_t        defaultSampleSize;             // if zero, all samples have different size.
-        uint32_t        numberOfEntries;        // number of sample descriptions that follow
-    } tableBlock;
-
     auto fileStream = parse.getFileStream();
 
     tableBlock stszData;
@@ -29,6 +22,25 @@ MP4::stsz::stsz(atomParse &parse)
             ID++;
         } while ( index > 0);
     }
+}
+
+MP4::stsz::stsz(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    auto track = build->getTrack();
+    defaultSampleSize = 0;
+    for ( auto sample : track->samples ) {
+        if ( sample.first == 1 ) {
+            defaultSampleSize = sample.second.size;
+            continue;
+        }
+        if ( sample.second.size != defaultSampleSize ) {
+            defaultSampleSize = 0;
+            break;
+        }
+    }
+    if ( defaultSampleSize != 0 ) return;
+    for ( auto sample : track->samples ) stszTable[sample.first] = sample.second.size;
 }
 
 void MP4::stsz::printData(bool fullLists)
@@ -62,6 +74,30 @@ void MP4::stsz::printHierarchyData(bool fullLists)
 std::string MP4::stsz::getKey()
 {
     return key;
+}
+
+void MP4::stsz::writeData(std::ofstream &fileWrite)
+{
+    tableBlock stszData;
+
+    // default settings
+    stszData.version.version = 0;
+    stszData.version.flag[0] = 0;
+    stszData.version.flag[1] = 0;
+    stszData.version.flag[2] = 0;
+
+    // data settings
+    stszData.defaultSampleSize = XXH_swap32(defaultSampleSize);
+    stszData.numberOfEntries = XXH_swap32((uint32_t) stszTable.size());
+
+    fileWrite.write((char *) &stszData, sizeof(stszData));
+
+    // write table
+    uint32_t val;
+    for ( auto entry : stszTable ) {
+        val = XXH_swap32(entry.second);
+        fileWrite.write((char *) &val, sizeof(val));
+    }
 }
 
 std::string MP4::stsz::key = "stsz";

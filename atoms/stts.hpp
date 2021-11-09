@@ -33,15 +33,18 @@ class stts : public atom
 {
 public:
     stts(atomParse &parse);
+    stts(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string  key;
-    // sttsTable[sttsID] = timeToSampleEntry
-    std::map<uint32_t, std::vector<uint32_t>>  sttsTable; // (sampleCount , sampleDuration)
+    // sttsTable[sttsID] = (sampleCount , sampleDuration)
+    std::map<uint32_t, std::vector<uint32_t>>  sttsTable;
 };
 
 }
