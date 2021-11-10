@@ -50,8 +50,9 @@ void MP4::vmhd::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-void MP4::vmhd::writeData(std::ofstream &fileWrite)
+void MP4::vmhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     dataBlock vmhdData;
 
     // default settings
@@ -68,7 +69,7 @@ void MP4::vmhd::writeData(std::ofstream &fileWrite)
     vmhdData.opColorG = XXH_swap16(opColorG);
     vmhdData.opColorB = XXH_swap16(opColorB);
 
-    fileWrite.write((char *) &vmhdData, sizeof(vmhdData));
+    fileWrite->write((char *) &vmhdData, sizeof(vmhdData));
 }
 
 std::string MP4::vmhd::getKey()

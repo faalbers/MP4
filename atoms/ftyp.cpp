@@ -69,14 +69,15 @@ std::string MP4::ftyp::getKey()
     return key;
 }
 
-void MP4::ftyp::writeData(std::ofstream &fileWrite)
+void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     dataBlock ftypData;
     memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     ftypData.version = XXH_swap32(version);
-    fileWrite.write((char *) &ftypData, sizeof(ftypData));
+    fileWrite->write((char *) &ftypData, sizeof(ftypData));
     for ( auto brand : compatibleBrands ) {
-        fileWrite.write((char *) brand.c_str(), 4);
+        fileWrite->write((char *) brand.c_str(), 4);
     }
 }
 

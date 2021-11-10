@@ -24,7 +24,7 @@ public:
 
     std::string getKey();
 
-    void writeData(std::ofstream &fileWrite);
+    void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
     static std::string  key;
     int64_t             sampleDataPos;

@@ -8,6 +8,7 @@
 #include <tuple>
 #include "atomParse.hpp"
 #include "atomBuild.hpp"
+#include "atomWriteFile.hpp"
 
 #if defined(__APPLE__)
 #include <libkern/OSByteOrder.h>
@@ -59,11 +60,11 @@ public:
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
 
-    virtual void write(std::ofstream &fileWrite);
-    virtual void writeHeader(std::ofstream &fileWrite);
-    virtual void writeData(std::ofstream &fileWrite);
-    virtual void writeChildren(std::ofstream &fileWrite);
-    virtual void writeTail(std::ofstream &fileWrite);
+    virtual void write(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeData(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile);
 
 
 protected:
@@ -101,11 +102,11 @@ protected:
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
     int                             nestLevel_(int level);
     
-    void                            write_(std::ofstream &fileWrite);
-    void                            writeHeader_(std::ofstream &fileWrite);
-    void                            writeData_(std::ofstream &fileWrite);
-    void                            writeChildren_(std::ofstream &fileWrite);
-    void                            writeTail_(std::ofstream &fileWrite);
+    void                            write_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            writeHeader_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            writeData_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            writeTail_(std::shared_ptr<atomWriteFile> writeFile);
 
     std::string                         key_;
     bool                                headerSize64_;

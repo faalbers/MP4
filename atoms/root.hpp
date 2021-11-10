@@ -35,7 +35,7 @@ public:
 
     std::string getKey();
 
-    void write(std::ofstream &fileWrite);
+    void write(std::shared_ptr<atomWriteFile> writeFile);
 
     static std::string  key;
 

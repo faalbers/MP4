@@ -76,8 +76,9 @@ std::string MP4::stsz::getKey()
     return key;
 }
 
-void MP4::stsz::writeData(std::ofstream &fileWrite)
+void MP4::stsz::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     tableBlock stszData;
 
     // default settings
@@ -90,13 +91,13 @@ void MP4::stsz::writeData(std::ofstream &fileWrite)
     stszData.defaultSampleSize = XXH_swap32(defaultSampleSize);
     stszData.numberOfEntries = XXH_swap32((uint32_t) stszTable.size());
 
-    fileWrite.write((char *) &stszData, sizeof(stszData));
+    fileWrite->write((char *) &stszData, sizeof(stszData));
 
     // write table
     uint32_t val;
     for ( auto entry : stszTable ) {
         val = XXH_swap32(entry.second);
-        fileWrite.write((char *) &val, sizeof(val));
+        fileWrite->write((char *) &val, sizeof(val));
     }
 }
 

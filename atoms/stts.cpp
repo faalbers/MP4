@@ -78,8 +78,9 @@ std::string MP4::stts::getKey()
     return key;
 }
 
-void MP4::stts::writeData(std::ofstream &fileWrite)
+void MP4::stts::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     tableBlock sttsData;
 
     // default settings
@@ -91,15 +92,15 @@ void MP4::stts::writeData(std::ofstream &fileWrite)
     // data settings
     sttsData.numberOfEntries = XXH_swap32((uint32_t) sttsTable.size());
 
-    fileWrite.write((char *) &sttsData, sizeof(sttsData));
+    fileWrite->write((char *) &sttsData, sizeof(sttsData));
 
     // write table
     uint32_t val;
     for ( auto entry : sttsTable ) {
         val = XXH_swap32(entry.second[0]);
-        fileWrite.write((char *) &val, sizeof(val));
+        fileWrite->write((char *) &val, sizeof(val));
         val = XXH_swap32(entry.second[1]);
-        fileWrite.write((char *) &val, sizeof(val));
+        fileWrite->write((char *) &val, sizeof(val));
     }
 }
 

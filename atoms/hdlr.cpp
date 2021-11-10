@@ -49,8 +49,9 @@ std::string MP4::hdlr::getKey()
     return key;
 }
 
-void MP4::hdlr::writeData(std::ofstream &fileWrite)
+void MP4::hdlr::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     dataBlock hdlrData;
 
     // default settings
@@ -68,12 +69,12 @@ void MP4::hdlr::writeData(std::ofstream &fileWrite)
     memcpy(&hdlrData.componentType, componentType.c_str(), 4);
     memcpy(&hdlrData.componentSubType, componentSubType.c_str(), 4);
 
-    fileWrite.write((char *) &hdlrData, sizeof(hdlrData));
+    fileWrite->write((char *) &hdlrData, sizeof(hdlrData));
 
     // add component name to tail end
     uint8_t nameSize = (uint8_t) componentName.size();
-    fileWrite.write((char *) &nameSize, sizeof(nameSize));
-    fileWrite.write((char *) componentName.c_str(), (size_t) nameSize);
+    fileWrite->write((char *) &nameSize, sizeof(nameSize));
+    fileWrite->write((char *) componentName.c_str(), (size_t) nameSize);
 }
 
 std::string MP4::hdlr::key = "hdlr";

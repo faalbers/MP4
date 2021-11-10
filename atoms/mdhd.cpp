@@ -53,8 +53,9 @@ std::string MP4::mdhd::getKey()
     return key;
 }
 
-void MP4::mdhd::writeData(std::ofstream &fileWrite)
+void MP4::mdhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     dataBlock mdhdData;
 
     // default settings
@@ -71,7 +72,7 @@ void MP4::mdhd::writeData(std::ofstream &fileWrite)
     mdhdData.language = XXH_swap16(language);
     mdhdData.quality = XXH_swap16(quality);
 
-    fileWrite.write((char *) &mdhdData, sizeof(mdhdData));
+    fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
 
 }
 

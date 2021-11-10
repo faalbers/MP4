@@ -79,8 +79,9 @@ std::string MP4::tkhd::getKey()
     return key;
 }
 
-void MP4::tkhd::writeData(std::ofstream &fileWrite)
+void MP4::tkhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
+    auto fileWrite = writeFile->getFileWrite();
     dataBlock tkhdData;
 
     // default settings
@@ -114,10 +115,10 @@ void MP4::tkhd::writeData(std::ofstream &fileWrite)
     //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     //ftypData.version = XXH_swap32(version);
     
-    fileWrite.write((char *) &tkhdData, sizeof(tkhdData));
+    fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
     /*
     for ( auto brand : compatibleBrands ) {
-        fileWrite.write((char *) brand.c_str(), 4);
+        fileWrite->write((char *) brand.c_str(), 4);
     }
     */
 }

@@ -69,9 +69,10 @@ std::string MP4::mdat::getKey()
     return key;
 }
 
-void MP4::mdat::writeData(std::ofstream &fileWrite)
+void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
     // find largest sample buffer size
+    auto fileWrite = writeFile->getFileWrite();
     size_t bufferSize = 0;
     for ( auto mdatEntry : mdatWrite_ )
         if ( mdatEntry.size > bufferSize ) bufferSize = mdatEntry.size;
@@ -87,7 +88,7 @@ void MP4::mdat::writeData(std::ofstream &fileWrite)
         }
         fileRead.seekg(mdatEntry.filePos, fileRead.beg);
         fileRead.read(buffer, mdatEntry.size);
-        fileWrite.write(buffer, mdatEntry.size);
+        fileWrite->write(buffer, mdatEntry.size);
     }
     if ( fileRead.is_open() ) fileRead.close();
     delete[] buffer;

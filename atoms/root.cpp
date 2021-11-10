@@ -69,9 +69,9 @@ std::string MP4::root::getKey()
     return key;
 }
 
-void MP4::root::write(std::ofstream &fileWrite)
+void MP4::root::write(std::shared_ptr<atomWriteFile> writeFile)
 {
-    for ( auto child : children_ ) child->write(fileWrite);
+    for ( auto child : children_ ) child->write(writeFile);
 }
 
 std::string MP4::root::key = "root";
