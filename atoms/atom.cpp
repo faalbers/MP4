@@ -165,6 +165,16 @@ void MP4::atom::printHierarchy(int pathWith, int valLevel)
         child->printHierarchy(pathWith, valLevel);
 }
 
+std::string MP4::atom::getTimeString(uint32_t time, uint32_t timeScale)
+{
+    auto mseconds = time / (timeScale/1000);
+    auto seconds = mseconds / 1000;
+    auto mmseconds = mseconds - (seconds * 1000);
+    std::string msecondsString = std::to_string(mmseconds);
+    msecondsString = std::string(3 - msecondsString.length(), '0') + msecondsString;
+    return (date::format("%T", std::chrono::seconds(seconds)) + "." + msecondsString);
+}
+
 std::string MP4::atom::getDateTimeString(uint32_t seconds)
 {
     auto newSeconds = std::chrono::sys_seconds(std::chrono::seconds(seconds) - std::chrono::seconds(OFFSET_1904_1970));

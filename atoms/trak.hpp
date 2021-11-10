@@ -29,6 +29,14 @@ public:
     trak(atomParse &parse);
     trak(std::shared_ptr<atomBuild> build);
 
+    typedef struct chunkType
+    {
+        uint32_t    samples;
+        uint32_t    firstSampleID;
+        uint32_t    sampleDescriptionID;
+        uint64_t    dataOffset;
+    } chunkType;
+
     // data retrieval
 
     uint32_t                    getID();
@@ -38,6 +46,7 @@ public:
     std::shared_ptr<trackType>  getTrack();
     size_t                      getSampleCount();
 
+    std::map<uint32_t, chunkType>   getChunks();
     size_t                      getChunkCount();
     std::map<uint32_t, uint64_t>    getChunkOffsets();
 
@@ -54,18 +63,6 @@ public:
     std::string getKey();
 
     static std::string  key;
-
-private:
-    typedef struct _chunkType
-    {
-        uint32_t    samples;
-        uint32_t    firstSampleID;
-        uint32_t    currentSampleID;
-        uint32_t    sampleDescriptionID;
-        uint64_t    dataOffset;
-    } _chunkType;
-
-    std::map<uint32_t, _chunkType>   _getChunks();
 
 };
 

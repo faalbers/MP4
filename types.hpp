@@ -17,6 +17,7 @@ typedef struct sampleType
     uint32_t    time;
     uint32_t    duration;
     bool        sync;
+    uint32_t    chunkID;
 } sampleType;
 
 typedef struct trackType

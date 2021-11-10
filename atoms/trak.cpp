@@ -189,9 +189,9 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         }
     }
 
-    // get chunks and set file positions for samples
+    // get chunks and set file positions and chunk ID's for samples
     int64_t filePos = 0;
-    for ( auto chunk : _getChunks() ) {
+    for ( auto chunk : getChunks() ) {
         if ( chunk.second.sampleDescriptionID > 1 )
             throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
         if (filePos > (int64_t) chunk.second.dataOffset )
@@ -200,6 +200,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         filePos = chunk.second.dataOffset;
         for ( auto sampleID = chunk.second.firstSampleID; sampleID <= lastChunkSampleID; sampleID++ ) {
             trackData->samples[sampleID].filePos = filePos;
+            trackData->samples[sampleID].chunkID = chunk.first;
             filePos += trackData->samples[sampleID].size;
         }
     }
@@ -229,9 +230,9 @@ size_t MP4::trak::getChunkCount()
     return 0;
 }
 
-std::map<uint32_t, MP4::trak::_chunkType> MP4::trak::_getChunks()
+std::map<uint32_t, MP4::trak::chunkType> MP4::trak::getChunks()
 {
-    std::map<uint32_t, _chunkType> chunks;
+    std::map<uint32_t, chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {
         uint32_t sampleID = 1;
         std::map<uint32_t, uint64_t> chunkOffsets;
@@ -252,10 +253,9 @@ std::map<uint32_t, MP4::trak::_chunkType> MP4::trak::_getChunks()
         uint32_t currentChunkID = stscTable.back().second[0];
 
         do {
-            _chunkType chunk;
+            chunkType chunk;
             chunk.samples = stscTable.back().second[1];
             chunk.firstSampleID = sampleID;
-            chunk.currentSampleID = sampleID;
             chunk.sampleDescriptionID = stscTable.back().second[2];
             chunk.dataOffset = chunkOffsets[currentChunkID];
             chunks[currentChunkID] = chunk;

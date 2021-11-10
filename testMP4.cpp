@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 
     //parserA.printHierarchy();
     parserA.printHierarchyData();
+    //parserA.printMdatMap();
 
     // create a processor
     MP4::Processor processor;
