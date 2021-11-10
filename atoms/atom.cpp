@@ -309,6 +309,7 @@ void MP4::atom::writeTail_(std::ofstream &fileWrite)
         size32 = XXH_swap32((uint32_t) 1);
         size64 = writeNextPos - writeHeaderSizePos_;
         size64 = XXH_swap64(size64);
+        fileWrite.seekp(writeHeaderSizePos_, fileWrite.beg);
         fileWrite.write((char *) &size32, sizeof(size32));
         fileWrite.seekp(4, fileWrite.cur);
         fileWrite.write((char *) &size64, sizeof(size64));
@@ -319,6 +320,14 @@ void MP4::atom::writeTail_(std::ofstream &fileWrite)
         fileWrite.write((char *) &size32, sizeof(size32));
     }
     fileWrite.seekp(writeNextPos, fileWrite.beg);
+}
+
+void MP4::atom::error_(std::string message)
+{
+    std::cout << "atom: "<< std::endl;
+    std::cout << "-> " << message << std::endl;
+    std::cout << "exit application ..." << std::endl;
+    exit(1);
 }
 
 std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)

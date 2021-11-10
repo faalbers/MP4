@@ -2,6 +2,7 @@
 #define MP4_MDAT_H
 #include <string>
 #include <memory>
+#include <vector>
 #include "atom.hpp"
 
 /*
@@ -23,10 +24,21 @@ public:
 
     std::string getKey();
 
+    void writeData(std::ofstream &fileWrite);
+
     static std::string  key;
     int64_t             sampleDataPos;
     int64_t             sampleDataSize;
 
+private:
+    typedef struct mdatWriteType_
+    {
+        std::string filePath;
+        uint64_t    filePos;
+        size_t      size;
+    } mdatWriteType_;
+
+    std::vector<mdatWriteType_> mdatWrite_;
 };
 
 }

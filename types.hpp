@@ -20,10 +20,19 @@ typedef struct sampleType
     uint32_t    chunkID;
 } sampleType;
 
+typedef struct chunkType
+{
+    uint32_t    samples;
+    uint32_t    firstSampleID;
+    uint32_t    sampleDescriptionID;
+    uint64_t    dataOffset;
+} chunkType;
+
 typedef struct trackType
 {
     // samples[ID] = sample
     std::map<uint32_t, sampleType>  samples;
+    std::map<uint32_t, chunkType>   createdChunks;
     uint32_t                creationTime;
     uint32_t                modificationTime;
     uint32_t                trackID;

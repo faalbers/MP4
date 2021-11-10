@@ -25,6 +25,7 @@
 #include <set>
 #include <vector>
 #include <string>
+#include "../types.hpp"
 
 MP4::trak::trak(atomParse &parse)
     : atom(parse)
@@ -230,7 +231,7 @@ size_t MP4::trak::getChunkCount()
     return 0;
 }
 
-std::map<uint32_t, MP4::trak::chunkType> MP4::trak::getChunks()
+std::map<uint32_t, MP4::chunkType> MP4::trak::getChunks()
 {
     std::map<uint32_t, chunkType> chunks;
     for ( auto stsc : getTypeAtoms<stsc>() ) {

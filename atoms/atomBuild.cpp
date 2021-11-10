@@ -57,6 +57,11 @@ uint32_t MP4::atomBuild::getNextTrackID()
     return nextTrackID_;
 }
 
+std::map<uint32_t, std::shared_ptr<MP4::trackType>> MP4::atomBuild::getTracks()
+{
+    return tracks_;
+}
+
 std::shared_ptr<MP4::trackType> MP4::atomBuild::getTrack(uint32_t trackID)
 {
     return tracks_[newTrackID_(trackID)];

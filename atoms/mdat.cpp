@@ -14,8 +14,39 @@ MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
     , sampleDataPos(0)
     , sampleDataSize(0)
 {
-    headerSize_ = 8;
+    headerSize_ = 16;
     path_ = parentPath_ + key;
+
+    // create time sorted samples data
+    std::map<uint32_t, std::vector< std::vector<uint32_t>>> mdatSamples;
+    auto tracks = build->getTracks();
+    for ( auto track : tracks) {
+        for ( auto sample : track.second->samples ) {
+            std::vector<uint32_t> mdatSample;
+            auto sampleTime = atom::timeScaleDuration(
+                sample.second.time,
+                track.second->mediaTimeScale, track.second->videoTimeScale);
+            mdatSample.push_back(track.first);
+            mdatSample.push_back(sample.first);
+            if ( mdatSamples.find(sample.second.time) == mdatSamples.end() ) {
+                std::vector< std::vector<uint32_t>> entry;
+                mdatSamples[sample.second.time] = entry;
+            }
+            mdatSamples[sample.second.time].push_back(mdatSample);
+        }
+    }
+
+    // save time sorted mdat write data
+    for ( auto mdatSample : mdatSamples ) {
+        for ( auto sample : mdatSample.second ) {
+            mdatWriteType_ writeEntry;
+            writeEntry.filePath = tracks[sample[0]]->samples[sample[1]].filePath;
+            writeEntry.filePos = tracks[sample[0]]->samples[sample[1]].filePos;
+            writeEntry.size = (size_t) tracks[sample[0]]->samples[sample[1]].size;
+            mdatWrite_.push_back(writeEntry); 
+        }
+    }
+
 }
 
 void MP4::mdat::printData(bool fullLists)
@@ -36,6 +67,30 @@ void MP4::mdat::printHierarchyData(bool fullLists)
 std::string MP4::mdat::getKey()
 {
     return key;
+}
+
+void MP4::mdat::writeData(std::ofstream &fileWrite)
+{
+    // find largest sample buffer size
+    size_t bufferSize = 0;
+    for ( auto mdatEntry : mdatWrite_ )
+        if ( mdatEntry.size > bufferSize ) bufferSize = mdatEntry.size;
+    auto buffer = new char[bufferSize];
+    std::string filePath = "";
+    std::ifstream fileRead;
+    for ( auto mdatEntry : mdatWrite_ ) {
+        if ( mdatEntry.filePath != filePath ) {
+            filePath = mdatEntry.filePath;
+            if ( fileRead.is_open() ) fileRead.close();
+            fileRead.open(filePath, std::ios::binary);
+            if ( fileRead.fail() ) error_("mdat: constructer can not read file: "+filePath);
+        }
+        fileRead.seekg(mdatEntry.filePos, fileRead.beg);
+        fileRead.read(buffer, mdatEntry.size);
+        fileWrite.write(buffer, mdatEntry.size);
+    }
+    if ( fileRead.is_open() ) fileRead.close();
+    delete[] buffer;
 }
 
 std::string MP4::mdat::key = "mdat";

@@ -25,6 +25,7 @@ public:
     uint32_t    getCreationTime();
     uint32_t    getModificationTime();
     uint32_t    getNextTrackID();
+    std::map<uint32_t, std::shared_ptr<trackType>> getTracks();
     std::shared_ptr<trackType> getTrack(uint32_t trackID = 0);
     uint32_t    getTrackDuration(uint32_t trackID = 0);
     uint32_t    getTrackCreationTime(uint32_t trackID = 0);

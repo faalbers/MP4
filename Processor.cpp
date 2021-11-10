@@ -17,6 +17,7 @@ uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t
 
 void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID)
 {
+    std::cout << "AddTrack: " << sourceTrackID << " -> " << targetTrackID << std::endl;
     auto parsedTrack = parser.getTrack(sourceTrackID);
 
     // find tracks with same data format
@@ -34,11 +35,27 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
         trackID = targetTrackID;
     else error_("addTrack: target trackID " + std::to_string(targetTrackID) + " already exists");
     
-    parsedTrack->trackID = trackID;
+    //parsedTrack->trackID = trackID;
     tracks_[trackID] = parsedTrack;
 
-    // handle timescale, duration and dates
-    // not correct yet
+    // handle videoTimescale, videoDuration and dates
+    // get highest videoTimeScale of 
+    videoTimeScale_ = 0;
+    for ( auto track : tracks_ )
+        if ( track.second->videoTimeScale > videoTimeScale_ )
+            videoTimeScale_ = track.second->videoTimeScale;
+
+    // get highest videoDuration based on maxTimeScale
+    videoDuration_ = 0;
+    for ( auto track : tracks_ ) {
+        auto videoDuration = atom::timeScaleDuration( track.second->videoDuration,
+            track.second->videoTimeScale, videoTimeScale_);
+        if ( videoDuration > videoDuration_ )
+            videoDuration_ = videoDuration;
+    }
+
+    std::cout << videoTimeScale_ << " " << videoDuration_ << std::endl;
+
     /*
     for ( auto track : tracks_ ) {
         // get largest track timescale for movie settings

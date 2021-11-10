@@ -92,6 +92,8 @@ protected:
     friend class uuid;
     friend class tkhd;
 
+    void                            error_(std::string message);
+
     static std::shared_ptr<atom>    makeAtom_(atomParse &parse);
     void                            setMoov_(moov *moveAtom);
     void                            setTrak_(trak *trakAtom);

@@ -1,8 +1,9 @@
 #include "Writer.hpp"
 #include <iostream>
+#include "atoms/atom.hpp"
+#include "atoms/atomWriteFile.hpp"
 #include <fstream>
 #include <filesystem>
-#include <atoms/atom.hpp>
 
 MP4::Writer::Writer(Parser &parser)
 {
@@ -35,6 +36,8 @@ std::string MP4::Writer::write(std::string fileName)
 
     std::ofstream fileWrite(filePath, std::ios::binary);
     if ( fileWrite.fail() ) error_("Can not write MP4 file: "+filePath);
+
+    //auto fileWrite = std::make_shared<atomWriteFile>(fileName);
 
     rootAtom_->write(fileWrite);
 

@@ -41,6 +41,11 @@ MP4::root::root(std::shared_ptr<atomBuild> build)
     child = std::make_shared<ftyp>(build);
     children_.push_back(child);
     
+    // build mdat
+    build->parentPath = "/";
+    child = std::make_shared<mdat>(build);
+    children_.push_back(child);
+    
     // build moov
     build->parentPath = "/";
     child = std::make_shared<moov>(build);

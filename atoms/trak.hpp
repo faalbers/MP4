@@ -29,14 +29,6 @@ public:
     trak(atomParse &parse);
     trak(std::shared_ptr<atomBuild> build);
 
-    typedef struct chunkType
-    {
-        uint32_t    samples;
-        uint32_t    firstSampleID;
-        uint32_t    sampleDescriptionID;
-        uint64_t    dataOffset;
-    } chunkType;
-
     // data retrieval
 
     uint32_t                    getID();
