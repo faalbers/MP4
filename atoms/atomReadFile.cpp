@@ -1,17 +1,17 @@
 #include "atomReadFile.hpp"
 
 #include <filesystem>
+#include <iostream>
 
 MP4::atomReadFile::atomReadFile(std::string fileName)
 {
     filePath_ = std::filesystem::absolute(std::filesystem::path(fileName)).string();
     fileStream_ = std::ifstream(filePath_, std::ios::binary);
-    if ( fileStream_.fail() )
-        throw std::runtime_error("atomReadFile: can not find mp4 file: "+filePath_);
+    if ( fileStream_.fail() ) error_("Construct can not read MP4 file: "+filePath_);
     fileStream_.seekg(0, fileStream_.end);
     fileSize_ = fileStream_.tellg();
     if ( fileSize_ < 8 )
-        throw std::runtime_error("atomReadFile: mp4 file has no proper data: "+filePath_);
+        error_("Construct MP4 file has no proper data: "+filePath_);
     fileStream_.seekg(0, fileStream_.beg);
 }
 
@@ -33,4 +33,12 @@ int64_t MP4::atomReadFile::getFileSize()
 std::ifstream *MP4::atomReadFile::getFileStream()
 {
     return &fileStream_;
+}
+
+void MP4::atomReadFile::error_(std::string message)
+{
+    std::cout << "atomReadFile: "<< std::endl;
+    std::cout << "-> " << message << std::endl;
+    std::cout << "exit application ..." << std::endl;
+    exit(1);
 }

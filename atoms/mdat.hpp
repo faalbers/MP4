@@ -36,6 +36,8 @@ private:
         std::string filePath;
         uint64_t    filePos;
         size_t      size;
+        uint32_t    trackID;
+        uint32_t    sampleID;
     } mdatWriteType_;
 
     std::vector<mdatWriteType_> mdatWrite_;

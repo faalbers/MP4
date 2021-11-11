@@ -3,7 +3,8 @@
 
 #include <string>
 #include <fstream>
-#include "../types.hpp"
+#include <map>
+#include <vector>
 
 namespace MP4
 {
@@ -16,6 +17,8 @@ public:
 
     std::string     getFilePath();
     std::ofstream   *getFileWrite();
+
+    std::map<uint32_t, std::vector<uint64_t>> mdatWriteInfo;
 
 private:
     void            error_(std::string message);

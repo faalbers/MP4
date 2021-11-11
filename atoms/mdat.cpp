@@ -43,6 +43,8 @@ MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
             writeEntry.filePath = tracks[sample[0]]->samples[sample[1]].filePath;
             writeEntry.filePos = tracks[sample[0]]->samples[sample[1]].filePos;
             writeEntry.size = (size_t) tracks[sample[0]]->samples[sample[1]].size;
+            writeEntry.trackID = sample[0];
+            writeEntry.sampleID = sample[1];
             mdatWrite_.push_back(writeEntry); 
         }
     }
@@ -88,6 +90,9 @@ void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
         }
         fileRead.seekg(mdatEntry.filePos, fileRead.beg);
         fileRead.read(buffer, mdatEntry.size);
+
+        // write and set mdatWriteInfo
+        writeFile->mdatWriteInfo[mdatEntry.trackID].push_back(fileWrite->tellp());
         fileWrite->write(buffer, mdatEntry.size);
     }
     if ( fileRead.is_open() ) fileRead.close();

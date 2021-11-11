@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     if (true) {
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
-        //processor.addTrack(parserA,4,3);
+        processor.addTrack(parserA,4,3);
 
         //MP4::Writer writer(parserA);
         MP4::Writer writer(processor);

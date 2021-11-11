@@ -3,7 +3,6 @@
 
 #include <string>
 #include <fstream>
-#include "../types.hpp"
 
 namespace MP4
 {
@@ -19,6 +18,8 @@ public:
     std::ifstream   *getFileStream();
 
 private:
+    void            error_(std::string message);
+
     std::string     filePath_;
     std::ifstream   fileStream_;
     int64_t         fileSize_;
