@@ -12,9 +12,6 @@ MP4::mdia::mdia(atomParse &parse)
 MP4::mdia::mdia(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
-
     std::shared_ptr<atom> child;
 
     build->parentPath = path_ + "/";

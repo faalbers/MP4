@@ -5,6 +5,7 @@
 
 MP4::Writer::Writer(Parser &parser)
 {
+    rootAtomParser_ = parser.getRootAtom();
 }
 
 MP4::Writer::Writer(Processor &processor)
@@ -35,6 +36,11 @@ std::string MP4::Writer::write(std::string fileName)
     rootAtom_->write(fileWrite);
 
     return fileWrite->getFilePath();
+}
+
+void MP4::Writer::copyTest(std::string fileName)
+{
+    // this is a test for now
 }
 
 void MP4::Writer::error_(std::string message)

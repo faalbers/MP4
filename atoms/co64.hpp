@@ -25,15 +25,21 @@ class co64 : public atom
 {
 public:
     co64(atomParse &parse);
+    co64(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 
+    void writeData(std::shared_ptr<atomWriteFile> writeFile);
+
     static std::string      key;
     uint32_t                defaultSampleSize;
     std::map<uint32_t, uint64_t>    co64Table;
+
+private:
+    uint32_t                writeTrackID_;
 };
 
 }

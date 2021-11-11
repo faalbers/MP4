@@ -1,6 +1,9 @@
 #include "stbl.hpp"
+#include "stsd.hpp"
 #include "stts.hpp"
+#include "stsc.hpp"
 #include "stsz.hpp"
+#include "co64.hpp"
 #include <iostream>
 
 MP4::stbl::stbl(atomParse &parse)
@@ -11,17 +14,26 @@ MP4::stbl::stbl(atomParse &parse)
 MP4::stbl::stbl(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
-
     std::shared_ptr<atom> child;
+
+    build->parentPath = path_ + "/";
+    child = std::make_shared<stsd>(build);
+    children_.push_back(child);
 
     build->parentPath = path_ + "/";
     child = std::make_shared<stts>(build);
     children_.push_back(child);
 
     build->parentPath = path_ + "/";
+    child = std::make_shared<stsc>(build);
+    children_.push_back(child);
+
+    build->parentPath = path_ + "/";
     child = std::make_shared<stsz>(build);
+    children_.push_back(child);
+
+    build->parentPath = path_ + "/";
+    child = std::make_shared<co64>(build);
     children_.push_back(child);
 
 }

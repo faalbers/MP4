@@ -35,9 +35,6 @@ MP4::trak::trak(atomParse &parse)
 MP4::trak::trak(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
-
     std::shared_ptr<atom> child;
     
     build->parentPath = path_ + "/";
@@ -95,8 +92,10 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     // get sample description
     for ( auto stsd : getTypeAtoms<stsd>() ) {
         if ( stsd->stsdTable.size() > 1 )
-            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
+            error_("MP4::trak::getSamples: don't know how to handle multiple sample descriptions");
         trackData->dataFormat = stsd->stsdTable[1].dataFormat;
+        trackData->dataReferenceIndex = stsd->stsdTable[1].dataReferenceIndex;
+        trackData->dataExtended = stsd->stsdTable[1].dataExtended;
     }
 
     // get trackID

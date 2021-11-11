@@ -15,7 +15,6 @@ MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
     , sampleDataSize(0)
 {
     headerSize_ = 16;
-    path_ = parentPath_ + key;
 
     // create time sorted samples data
     std::map<uint32_t, std::vector< std::vector<uint32_t>>> mdatSamples;

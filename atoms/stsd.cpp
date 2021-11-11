@@ -4,15 +4,6 @@
 MP4::stsd::stsd(atomParse &parse)
     : atom(parse)
 {
-    typedef struct entryDataBlock
-    {
-        uint32_t    size;
-        char        dataFormat[4];          // format type FourCC
-        uint8_t     reserved[6];            // reserved and set to zero
-        uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
-                                            // with samples that use this sample description. Data references are stored in data reference atoms
-    } entryDataBlock;
-
     // handle data 
     auto fileStream = parse.getFileStream();
 
@@ -37,11 +28,23 @@ MP4::stsd::stsd(atomParse &parse)
         char tail[200];
         if ( tailSize > 0 && tailSize <= 200 ) {
             fileStream->read((char *) tail, tailSize);
-            stsdTable[ID].extendedData = std::string(tail).substr(0,tailSize);
+            stsdTable[ID].dataExtended = std::string(tail).substr(0,tailSize);
         }
     
         ID++;
     } while ( ID <= stsdData.numberOfEntries );
+}
+
+MP4::stsd::stsd(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    // for now only handling one entry
+    auto track = build->getTrack();
+    entryType stsdEntry;
+    stsdEntry.dataFormat = track->dataFormat;
+    stsdEntry.dataReferenceIndex = track->dataReferenceIndex;
+    stsdEntry.dataExtended = track->dataExtended;
+    stsdTable[1] = stsdEntry;
 }
 
 void MP4::stsd::printData(bool fullLists)
@@ -53,7 +56,7 @@ void MP4::stsd::printData(bool fullLists)
     for ( auto entry : stsdTable ) {
         std::cout << dataIndent << "[" <<  entry.first << "] ( '" << entry.second.dataFormat
         << "', " << entry.second.dataReferenceIndex
-        << ", '" << entry.second.extendedData << "' )" << std::endl;
+        << ", '" << entry.second.dataExtended << "' )" << std::endl;
     }
 }
 
@@ -66,6 +69,37 @@ void MP4::stsd::printHierarchyData(bool fullLists)
 std::string MP4::stsd::getKey()
 {
     return key;
+}
+
+void MP4::stsd::writeData(std::shared_ptr<atomWriteFile> writeFile)
+{
+    auto fileWrite = writeFile->getFileWrite();
+
+    tableBlock stsdData;
+    
+    // default settings
+    stsdData.version.version = 0;
+    stsdData.version.flag[0] = 0;
+    stsdData.version.flag[1] = 0;
+    stsdData.version.flag[2] = 0;
+
+    // data settings
+    stsdData.numberOfEntries = XXH_swap32((uint32_t) stsdTable.size());
+
+    fileWrite->write((char *) &stsdData, sizeof(stsdData));
+
+    // write table
+    for ( auto entry : stsdTable ) {
+        entryDataBlock entryData;
+        for ( int i = 0; i < 6; i++ ) entryData.reserved[i] = 0;
+        memcpy(&entryData.dataFormat, entry.second.dataFormat.c_str(), 4);
+        entryData.dataReferenceIndex = XXH_swap16(entry.second.dataReferenceIndex);
+        auto size = (uint32_t) (sizeof(entryData) + entry.second.dataExtended.size());
+        entryData.size = XXH_swap32(size);
+        fileWrite->write((char *) &entryData, sizeof(entryData));
+        if ( entry.second.dataExtended.size() > 0 ) fileWrite->write((char *) entry.second.dataExtended.c_str(),
+                            (size_t) entry.second.dataExtended.size());
+    }
 }
 
 std::set<std::string> MP4::stsd::getDataFormats()

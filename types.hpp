@@ -37,6 +37,8 @@ typedef struct trackType
     uint32_t                modificationTime;
     uint32_t                trackID;
     std::string             dataFormat;
+    uint16_t                dataReferenceIndex;
+    std::string             dataExtended;
     uint32_t                videoTimeScale;
     uint32_t                videoDuration;
     uint32_t                trackDuration;

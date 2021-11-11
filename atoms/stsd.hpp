@@ -22,11 +22,14 @@ class stsd : public atom
 {
 public:
     stsd(atomParse &parse);
+    stsd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
+
+    void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
     std::set<std::string>   getDataFormats();
 
@@ -37,10 +40,20 @@ public:
         uint16_t    dataReferenceIndex; // index of the data reference to use to retrieve data associated
                                         // with samples that use this sample description.
                                         // Data references are stored in data reference atoms
-        std::string extendedData;
+        std::string dataExtended;
     } entryType;
     // stscTable[stscID] = sampleToChunkEntry
     std::map<uint32_t, entryType> stsdTable;
+
+private:
+    typedef struct entryDataBlock
+    {
+        uint32_t    size;
+        char        dataFormat[4];          // format type FourCC
+        uint8_t     reserved[6];            // reserved and set to zero
+        uint16_t    dataReferenceIndex;     // index of the data reference to use to retrieve data associated
+                                            // with samples that use this sample description. Data references are stored in data reference atoms
+    } entryDataBlock;
 
 };
 

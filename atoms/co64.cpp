@@ -23,6 +23,14 @@ MP4::co64::co64(atomParse &parse)
     } while ( index > 0);
 }
 
+MP4::co64::co64(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , writeTrackID_(build->currentTrackID())
+{
+    // setting current trackID for write
+    // no data to add. se write for dataOffsets
+}
+
 void MP4::co64::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -53,6 +61,42 @@ void MP4::co64::printHierarchyData(bool fullLists)
 std::string MP4::co64::getKey()
 {
     return key;
+}
+
+void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile)
+{
+    auto fileWrite = writeFile->getFileWrite();
+    tableBlock co64Data;
+
+    // default settings
+    co64Data.version.version = 0;
+    co64Data.version.flag[0] = 0;
+    co64Data.version.flag[1] = 0;
+    co64Data.version.flag[2] = 0;
+    
+    // data settings
+    //co64Data.numberOfEntries = XXH_swap32(writeFile->mdatWriteInfo);
+    co64Data.numberOfEntries = XXH_swap32( (uint32_t) writeFile->mdatWriteInfo[writeTrackID_].size());
+    std::cout << "TrackID: " << writeTrackID_ << " sampleCount: " << writeFile->mdatWriteInfo[writeTrackID_].size() << std::endl;
+
+    fileWrite->write((char *) &co64Data, sizeof(co64Data));
+
+    // write table
+    uint64_t val;
+    for ( auto dataOffset : writeFile->mdatWriteInfo[writeTrackID_] ) {
+        val = XXH_swap64(dataOffset);
+        fileWrite->write((char *) &val, sizeof(val));
+    }
+
+/*
+
+    // write table
+    uint32_t val;
+    for ( auto entry : stszTable ) {
+        val = XXH_swap32(entry.second);
+        fileWrite->write((char *) &val, sizeof(val));
+    }
+*/
 }
 
 std::string MP4::co64::key = "co64";

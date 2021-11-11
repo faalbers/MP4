@@ -217,6 +217,11 @@ std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(uint32_t trackID)
     return nullptr;
 }
 
+std::shared_ptr<MP4::root> MP4::Parser::getRootAtom()
+{
+    return rootAtom_;
+}
+
 void MP4::Parser::error_(std::string message)
 {
     std::cout << "Parser: " << filePath_ << std::endl;

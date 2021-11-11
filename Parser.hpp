@@ -26,6 +26,7 @@ public:
     std::set<uint32_t>      getComponentSubTypeTrackIDs(std::string componentSubType);
 
     std::shared_ptr<trackType>  getTrack(uint32_t trackID);
+    std::shared_ptr<root>       getRootAtom();
 
 private:
     void                    error_(std::string message);

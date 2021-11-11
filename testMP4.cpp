@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true) {
+    if (false) {
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
         processor.addTrack(parserA,4,3);

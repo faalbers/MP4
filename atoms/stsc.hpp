@@ -22,11 +22,14 @@ class stsc : public atom
 {
 public:
     stsc(atomParse &parse);
+    stsc(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
+
+    void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
     static std::string  key;
     // stscTable[stscID] = sampleToChunkEntry

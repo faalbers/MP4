@@ -9,9 +9,6 @@ MP4::tref::tref(atomParse &parse)
 MP4::tref::tref(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
-
 }
 
 

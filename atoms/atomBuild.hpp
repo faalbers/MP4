@@ -46,6 +46,9 @@ public:
     uint16_t    getOpColorR(uint32_t trackID = 0);
     uint16_t    getOpColorG(uint32_t trackID = 0);
     uint16_t    getOpColorB(uint32_t trackID = 0);
+    std::string getDataFormat(uint32_t trackID = 0);
+    uint16_t    getDataReferenceIndex(uint32_t trackID = 0);
+    std::string getDataExtended(uint32_t trackID = 0);
 
 private:
     void        error_(std::string message);

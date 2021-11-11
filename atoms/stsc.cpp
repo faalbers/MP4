@@ -28,6 +28,11 @@ MP4::stsc::stsc(atomParse &parse)
     } while ( index > 0);
 }
 
+MP4::stsc::stsc(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+}
+
 void MP4::stsc::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -70,6 +75,30 @@ void MP4::stsc::printHierarchyData(bool fullLists)
 std::string MP4::stsc::getKey()
 {
     return key;
+}
+
+void MP4::stsc::writeData(std::shared_ptr<atomWriteFile> writeFile)
+{
+    auto fileWrite = writeFile->getFileWrite();
+    tableBlock stscData;
+
+    // default settings
+    stscData.version.version = 0;
+    stscData.version.flag[0] = 0;
+    stscData.version.flag[1] = 0;
+    stscData.version.flag[2] = 0;
+
+
+    // forced to value, check later if this needs a copy of original track
+
+    stscData.numberOfEntries = XXH_swap32((uint32_t) 1);
+
+    fileWrite->write((char *) &stscData, sizeof(stscData));
+
+    uint32_t val = XXH_swap32((uint32_t) 1);
+    fileWrite->write((char *) &val, sizeof(val));
+    fileWrite->write((char *) &val, sizeof(val));
+    fileWrite->write((char *) &val, sizeof(val));
 }
 
 std::string MP4::stsc::key = "stsc";

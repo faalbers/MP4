@@ -12,9 +12,6 @@ MP4::minf::minf(atomParse &parse)
 MP4::minf::minf(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
-    headerSize_ = 8;
-    path_ = parentPath_ + key;
-
     std::shared_ptr<atom> child;
 
     if ( build->getComponentSubType() == "vide" ) {

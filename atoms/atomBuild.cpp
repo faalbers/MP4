@@ -162,6 +162,21 @@ uint16_t MP4::atomBuild::getOpColorB(uint32_t trackID)
     return tracks_[newTrackID_(trackID)]->opColorB;
 }
 
+std::string MP4::atomBuild::getDataFormat(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->dataFormat;
+}
+
+uint16_t MP4::atomBuild::getDataReferenceIndex(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->dataReferenceIndex;
+}
+
+std::string MP4::atomBuild::getDataExtended(uint32_t trackID)
+{
+    return tracks_[newTrackID_(trackID)]->dataExtended;
+}
+
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
 {
     if ( trackID == 0 ) trackID = currentTrackID_;
