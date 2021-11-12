@@ -72,8 +72,9 @@ std::string MP4::mdat::getKey()
 
 void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
-    // find largest sample buffer size
     auto fileWrite = writeFile->getFileWrite();
+    
+    // find largest sample buffer size
     size_t bufferSize = 0;
     for ( auto mdatEntry : mdatWrite_ )
         if ( mdatEntry.size > bufferSize ) bufferSize = mdatEntry.size;

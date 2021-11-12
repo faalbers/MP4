@@ -223,6 +223,12 @@ void MP4::atom::write(std::shared_ptr<atomWriteFile> writeFile)
     write_(writeFile);
 }
 
+void MP4::atom::copy(std::shared_ptr<atomCopyFile> copyFile)
+{
+    if ( copyFile->isAtomExcluded(path_)) return;
+    copy_(copyFile);
+}
+
 void MP4::atom::write_(std::shared_ptr<atomWriteFile> writeFile)
 {
     writeHeader(writeFile);
@@ -236,9 +242,27 @@ void MP4::atom::write_(std::shared_ptr<atomWriteFile> writeFile)
     writeTail(writeFile);
 }
 
+void MP4::atom::copy_(std::shared_ptr<atomCopyFile> copyFile)
+{
+    copyHeader(copyFile);
+
+    // decide how to handle data depending on children
+    if ( children_.size() == 0 )
+        copyData(copyFile);
+    else
+        copyChildren(copyFile);
+
+    copyTail(copyFile);
+}
+
 void MP4::atom::writeHeader(std::shared_ptr<atomWriteFile> writeFile)
 {
     writeHeader_(writeFile);
+}
+
+void MP4::atom::copyHeader(std::shared_ptr<atomCopyFile> copyFile)
+{
+    copyHeader_(copyFile);
 }
 
 void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile)
@@ -250,9 +274,23 @@ void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile)
     fileWrite->write((char *) &atomHeader, headerSize_);
 }
 
+void MP4::atom::copyHeader_(std::shared_ptr<atomCopyFile> copyFile)
+{
+    auto fileWrite = copyFile->getFileWrite();
+    writeHeaderSizePos_ = fileWrite->tellp();
+    headerBlock  atomHeader;
+    memcpy(&atomHeader.key, getKey().c_str(), 4);
+    fileWrite->write((char *) &atomHeader, headerSize_);
+}
+
 void MP4::atom::writeChildren(std::shared_ptr<atomWriteFile> writeFile)
 {
     writeChildren_(writeFile);
+}
+
+void MP4::atom::copyChildren(std::shared_ptr<atomCopyFile> copyFile)
+{
+    copyChildren_(copyFile);
 }
 
 void MP4::atom::writeChildren_(std::shared_ptr<atomWriteFile> writeFile)
@@ -260,18 +298,34 @@ void MP4::atom::writeChildren_(std::shared_ptr<atomWriteFile> writeFile)
     for ( auto child : children_ ) child->write(writeFile);
 }
 
+void MP4::atom::copyChildren_(std::shared_ptr<atomCopyFile> copyFile)
+{
+    for ( auto child : children_ ) child->copy(copyFile);
+}
+
 void MP4::atom::writeData(std::shared_ptr<atomWriteFile> writeFile)
 {
     writeData_(writeFile);
 }
 
+void MP4::atom::copyData(std::shared_ptr<atomCopyFile> copyFile)
+{
+    copyData_(copyFile);
+}
+
 void MP4::atom::writeData_(std::shared_ptr<atomWriteFile> writeFile)
 {
-    /*
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::writeData_ can not parse file: "+filePath_);
+}
+
+void MP4::atom::copyData_(std::shared_ptr<atomCopyFile> copyFile)
+{
+    auto fileWrite = copyFile->getFileWrite();
+
+    auto fileRead = std::ifstream(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) error_("copyData_ can not read MP4 file: "+filePath_);
+
     fileRead.seekg(fileDataPos_, fileRead.beg);
-    
+
     // write buffer blocks
     // this seems to be the most optimal block size
     size_t bufferSize = 1024*512;
@@ -292,6 +346,37 @@ void MP4::atom::writeData_(std::shared_ptr<atomWriteFile> writeFile)
     delete[] buffer;
 
     fileRead.close();
+
+    /*
+    auto fileRead = std::ifstream(filePath_, std::ios::binary);
+    if ( fileStream_.fail() ) error_("Construct can not read MP4 file: "+filePath_);
+    fileRead.close();
+    */
+    /*
+    std::ifstream fileRead(filePath_, std::ios::binary);
+    if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::createData_ can not parse file: "+filePath_);
+    fileRead.seekg(fileDataPos_, fileRead.beg);
+    
+    // write buffer blocks
+    // this seems to be the most optimal block size
+    size_t bufferSize = 1024*512;
+    auto buffer = new char[bufferSize];
+    auto bufferCount = (size_t) dataSize_ / bufferSize;
+
+    for ( size_t count = 0; count < bufferCount; count++ ) {
+        fileRead.read(buffer, bufferSize);
+        splunk.fileWrite->write(buffer, bufferSize);
+    }
+    delete[] buffer;
+
+    // write buffer rest
+    bufferSize = (size_t) dataSize_ % bufferSize;
+    buffer = new char[bufferSize];
+    fileRead.read(buffer, bufferSize);
+    splunk.fileWrite->write(buffer, bufferSize);
+    delete[] buffer;
+
+    fileRead.close();
     */
 }
 
@@ -300,10 +385,39 @@ void MP4::atom::writeTail(std::shared_ptr<atomWriteFile> writeFile)
     writeTail_(writeFile);
 }
 
+void MP4::atom::copyTail(std::shared_ptr<atomCopyFile> copyFile)
+{
+    copyTail_(copyFile);
+}
+
 void MP4::atom::writeTail_(std::shared_ptr<atomWriteFile> writeFile)
 {
     // after writing the atom's data we need to fix the atom size
     auto fileWrite = writeFile->getFileWrite();
+    auto writeNextPos = fileWrite->tellp();
+    uint32_t size32;
+    uint64_t size64;
+    if ( headerSize_ == 16 ) {
+        size32 = XXH_swap32((uint32_t) 1);
+        size64 = writeNextPos - writeHeaderSizePos_;
+        size64 = XXH_swap64(size64);
+        fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
+        fileWrite->write((char *) &size32, sizeof(size32));
+        fileWrite->seekp(4, fileWrite->cur);
+        fileWrite->write((char *) &size64, sizeof(size64));
+    } else if ( headerSize_ == 8 ) {
+        size32 = (uint32_t) (writeNextPos - writeHeaderSizePos_);
+        size32 = XXH_swap32(size32);
+        fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
+        fileWrite->write((char *) &size32, sizeof(size32));
+    }
+    fileWrite->seekp(writeNextPos, fileWrite->beg);
+}
+
+void MP4::atom::copyTail_(std::shared_ptr<atomCopyFile> copyFile)
+{
+    // after writing the atom's data we need to fix the atom size
+    auto fileWrite = copyFile->getFileWrite();
     auto writeNextPos = fileWrite->tellp();
     uint32_t size32;
     uint64_t size64;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "atoms/atom.hpp"
 #include "atoms/atomWriteFile.hpp"
+#include "atoms/atomCopyFile.hpp"
 
 MP4::Writer::Writer(Parser &parser)
 {
@@ -38,9 +39,25 @@ std::string MP4::Writer::write(std::string fileName)
     return fileWrite->getFilePath();
 }
 
-void MP4::Writer::copyTest(std::string fileName)
+std::string MP4::Writer::copyTest(std::string fileName)
 {
     // this is a test for now
+    auto fileWrite = std::make_shared<atomCopyFile>(fileName);
+
+    fileWrite->addExcludeTrack(2);
+    fileWrite->addExcludeTrack(3);
+    fileWrite->addExcludeTrack(4);
+
+    fileWrite->addExcludeAtom("/moov/udta");
+    fileWrite->addExcludeAtom("/moov/iods");
+    fileWrite->addExcludeAtom("/moov/trak/tref/tmcd");
+    fileWrite->addExcludeAtom("/moov/trak/edts/elst");
+    fileWrite->addExcludeAtom("/moov/trak/mdia/minf/dinf/dref");
+    fileWrite->addExcludeAtom("/moov/trak/mdia/minf/stbl/stss");
+
+    rootAtomParser_->copy(fileWrite);
+
+    return fileWrite->getFilePath();
 }
 
 void MP4::Writer::error_(std::string message)

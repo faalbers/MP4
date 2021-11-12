@@ -9,6 +9,7 @@
 #include "atomParse.hpp"
 #include "atomBuild.hpp"
 #include "atomWriteFile.hpp"
+#include "atomCopyFile.hpp"
 
 #if defined(__APPLE__)
 #include <libkern/OSByteOrder.h>
@@ -66,6 +67,11 @@ public:
     virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile);
 
+    virtual void copy(std::shared_ptr<atomCopyFile> copyFile);
+    virtual void copyHeader(std::shared_ptr<atomCopyFile> copyFile);
+    virtual void copyData(std::shared_ptr<atomCopyFile> copyFile);
+    virtual void copyChildren(std::shared_ptr<atomCopyFile> copyFile);
+    virtual void copyTail(std::shared_ptr<atomCopyFile> copyFile);
 
 protected:
     typedef struct headerBlock
@@ -107,6 +113,12 @@ protected:
     void                            writeData_(std::shared_ptr<atomWriteFile> writeFile);
     void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile);
     void                            writeTail_(std::shared_ptr<atomWriteFile> writeFile);
+    
+    void                            copy_(std::shared_ptr<atomCopyFile> copyFile);
+    void                            copyHeader_(std::shared_ptr<atomCopyFile> copyFile);
+    void                            copyData_(std::shared_ptr<atomCopyFile> copyFile);
+    void                            copyChildren_(std::shared_ptr<atomCopyFile> copyFile);
+    void                            copyTail_(std::shared_ptr<atomCopyFile> copyFile);
 
     std::string                         key_;
     bool                                headerSize64_;

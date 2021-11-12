@@ -36,6 +36,7 @@ public:
     std::string getKey();
 
     void write(std::shared_ptr<atomWriteFile> writeFile);
+    void copy(std::shared_ptr<atomCopyFile> copyFile);
 
     static std::string  key;
 
