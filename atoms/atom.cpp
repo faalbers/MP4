@@ -4,6 +4,7 @@
 #include "uuid.hpp"
 #include "udta.hpp"
 #include "free.hpp"
+#include "FIRM.hpp"
 #include "mdat.hpp"
 #include "moov.hpp"
 #include "mvhd.hpp"
@@ -346,38 +347,6 @@ void MP4::atom::copyData_(std::shared_ptr<atomCopyFile> copyFile)
     delete[] buffer;
 
     fileRead.close();
-
-    /*
-    auto fileRead = std::ifstream(filePath_, std::ios::binary);
-    if ( fileStream_.fail() ) error_("Construct can not read MP4 file: "+filePath_);
-    fileRead.close();
-    */
-    /*
-    std::ifstream fileRead(filePath_, std::ios::binary);
-    if ( fileRead.fail() ) throw std::runtime_error("MP4::atom::createData_ can not parse file: "+filePath_);
-    fileRead.seekg(fileDataPos_, fileRead.beg);
-    
-    // write buffer blocks
-    // this seems to be the most optimal block size
-    size_t bufferSize = 1024*512;
-    auto buffer = new char[bufferSize];
-    auto bufferCount = (size_t) dataSize_ / bufferSize;
-
-    for ( size_t count = 0; count < bufferCount; count++ ) {
-        fileRead.read(buffer, bufferSize);
-        splunk.fileWrite->write(buffer, bufferSize);
-    }
-    delete[] buffer;
-
-    // write buffer rest
-    bufferSize = (size_t) dataSize_ % bufferSize;
-    buffer = new char[bufferSize];
-    fileRead.read(buffer, bufferSize);
-    splunk.fileWrite->write(buffer, bufferSize);
-    delete[] buffer;
-
-    fileRead.close();
-    */
 }
 
 void MP4::atom::writeTail(std::shared_ptr<atomWriteFile> writeFile)
@@ -464,6 +433,7 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
     else if ( key == "uuid" ) newAtom = std::make_shared<uuid>(parse);
     else if ( key == "udta" ) newAtom = std::make_shared<udta>(parse);
     else if ( key == "free" ) newAtom = std::make_shared<free>(parse);
+    else if ( key == "FIRM" ) newAtom = std::make_shared<FIRM>(parse);
     else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(parse);
     else if ( key == "moov" ) newAtom = std::make_shared<moov>(parse);
     else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(parse);

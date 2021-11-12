@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     std::cout << "\nParse Time: " << ms_int.count() << "ms\n";
     std::cout << "**** TEST MP4 ****\n\n";
 
-    parserA.printHierarchy();
+    //parserA.printHierarchy();
     parserA.printHierarchyData();
     //parserA.printMdatMap();
 
@@ -53,10 +53,10 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true) {
+    if (false) {
         MP4::Processor processor;
         processor.addTrack(parserA,1,1);
-        //processor.addTrack(parserA,2,2);
+        processor.addTrack(parserA,2,2);
         //processor.addTrack(parserA,4,3);
 
         //MP4::Writer writer(parserA);

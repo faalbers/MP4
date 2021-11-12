@@ -6,6 +6,11 @@ MP4::udta::udta(atomParse &parse)
 {
 }
 
+MP4::udta::udta(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+}
+
 void MP4::udta::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

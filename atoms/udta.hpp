@@ -28,6 +28,7 @@ class udta : public atom
 {
 public:
     udta(atomParse &parse);
+    udta(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

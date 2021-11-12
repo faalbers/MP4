@@ -44,7 +44,7 @@ std::string MP4::Writer::copyTest(std::string fileName)
     // this is a test for now
     auto fileWrite = std::make_shared<atomCopyFile>(fileName);
 
-    fileWrite->addExcludeTrack(2);
+    //fileWrite->addExcludeTrack(2);
     fileWrite->addExcludeTrack(3);
     fileWrite->addExcludeTrack(4);
 
