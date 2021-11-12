@@ -23,14 +23,15 @@ MP4::stsd::stsd(atomParse &parse)
         stsdTable[ID] = stsdEntry;
         
         // not sure what is in the tail of the stsd entry
-        // visualize it with a string
-        auto tailSize = size - sizeof(sampleDescriptionBlock);
-        char tail[200];
-        if ( tailSize > 0 && tailSize <= 200 ) {
-            fileStream->read((char *) tail, tailSize);
-            stsdTable[ID].dataExtended = std::string(tail).substr(0,tailSize);
+        // this needs to be handled I'm sure. but just gonna handle it as a char block for now
+        auto tailSize = (size_t) size - sizeof(sampleDescriptionBlock);
+        if ( tailSize > 0 ) {
+            auto buffer = new char[tailSize];
+            fileStream->read((char *) buffer, tailSize);
+            stsdTable[ID].dataExtended = std::string(buffer,tailSize);
+            stsdTable[ID].dataExtended.size();
+            delete[] buffer;
         }
-    
         ID++;
     } while ( ID <= stsdData.numberOfEntries );
 }
@@ -52,11 +53,11 @@ void MP4::stsd::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Sample Description Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "[#] (data format, data reference index, extended data)\n";
+    std::cout << dataIndent << "[#] (data format, data reference index, extended data size)\n";
     for ( auto entry : stsdTable ) {
         std::cout << dataIndent << "[" <<  entry.first << "] ( '" << entry.second.dataFormat
         << "', " << entry.second.dataReferenceIndex
-        << ", '" << entry.second.dataExtended << "' )" << std::endl;
+        << ", " << entry.second.dataExtended.size() << " )" << std::endl;
     }
 }
 
@@ -97,8 +98,8 @@ void MP4::stsd::writeData(std::shared_ptr<atomWriteFile> writeFile)
         auto size = (uint32_t) (sizeof(entryData) + entry.second.dataExtended.size());
         entryData.size = XXH_swap32(size);
         fileWrite->write((char *) &entryData, sizeof(entryData));
-        if ( entry.second.dataExtended.size() > 0 ) fileWrite->write((char *) entry.second.dataExtended.c_str(),
-                            (size_t) entry.second.dataExtended.size());
+        if ( entry.second.dataExtended.size() > 0 )
+            fileWrite->write((char *) entry.second.dataExtended.c_str(), (size_t) entry.second.dataExtended.size());
     }
 }
 

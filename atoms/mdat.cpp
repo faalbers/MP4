@@ -47,7 +47,6 @@ MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
             mdatWrite_.push_back(writeEntry); 
         }
     }
-
 }
 
 void MP4::mdat::printData(bool fullLists)
@@ -79,6 +78,8 @@ void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
     for ( auto mdatEntry : mdatWrite_ )
         if ( mdatEntry.size > bufferSize ) bufferSize = mdatEntry.size;
     auto buffer = new char[bufferSize];
+
+    // interchange fileRead if needed
     std::string filePath = "";
     std::ifstream fileRead;
     for ( auto mdatEntry : mdatWrite_ ) {

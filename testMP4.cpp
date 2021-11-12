@@ -19,12 +19,9 @@ int main(int argc, char* argv[])
     std::cout << "\nParse Time: " << ms_int.count() << "ms\n";
     std::cout << "**** TEST MP4 ****\n\n";
 
-    //parserA.printHierarchy();
+    parserA.printHierarchy();
     parserA.printHierarchyData();
     //parserA.printMdatMap();
-
-    // create a processor
-    MP4::Processor processor;
 
     if (false) {
         std::cout << "dataFormats:\n" << std::endl;
@@ -56,10 +53,11 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (false) {
+    if (true) {
+        MP4::Processor processor;
         processor.addTrack(parserA,1,1);
-        processor.addTrack(parserA,2,2);
-        processor.addTrack(parserA,4,3);
+        //processor.addTrack(parserA,2,2);
+        //processor.addTrack(parserA,4,3);
 
         //MP4::Writer writer(parserA);
         MP4::Writer writer(processor);
@@ -72,6 +70,17 @@ int main(int argc, char* argv[])
         
     }
 
+    if (false) {
+        MP4::Writer writer(parserA);
+
+        auto filePath = writer.copyTest("copyResult.mp4");
+
+        std::cout << filePath << std::endl;
+
+        MP4::Parser parserOut(filePath);
+        parserOut.printHierarchy();
+        parserOut.printHierarchyData();
+    }
 /*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;
