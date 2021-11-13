@@ -27,11 +27,14 @@ class stss : public atom
 {
 public:
     stss(atomParse &parse);
+    stss(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
+
+    void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
     static std::string      key;
     std::map<uint32_t, uint32_t>    stssTable;

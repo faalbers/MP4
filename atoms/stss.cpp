@@ -21,6 +21,19 @@ MP4::stss::stss(atomParse &parse)
     } while ( index > 0);
 }
 
+MP4::stss::stss(std::shared_ptr<atomBuild> build)
+    : atom(build)
+{
+    auto track = build->getTrack();
+    uint32_t sttsID = 1;
+    for ( auto sample : track->samples ) {
+        if ( sample.second.sync ) {
+            stssTable[sttsID] = sample.first;
+            sttsID++;
+        }
+    }
+}
+
 void MP4::stss::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -51,6 +64,30 @@ void MP4::stss::printHierarchyData(bool fullLists)
 std::string MP4::stss::getKey()
 {
     return key;
+}
+
+void MP4::stss::writeData(std::shared_ptr<atomWriteFile> writeFile)
+{
+    auto fileWrite = writeFile->getFileWrite();
+    tableBlock stssData;
+
+    // default settings
+    stssData.version.version = 0;
+    stssData.version.flag[0] = 0;
+    stssData.version.flag[1] = 0;
+    stssData.version.flag[2] = 0;
+
+    // data settings
+    stssData.numberOfEntries = XXH_swap32((uint32_t) stssTable.size());
+
+    fileWrite->write((char *) &stssData, sizeof(stssData));
+
+    // write table
+    uint32_t val;
+    for ( auto entry : stssTable ) {
+        val = XXH_swap32(entry.second);
+        fileWrite->write((char *) &val, sizeof(val));
+    }
 }
 
 std::string MP4::stss::key = "stss";

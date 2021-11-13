@@ -186,6 +186,13 @@ std::string MP4::atomBuild::getUserData(std::string userDataKey)
     return userData;
 }
 
+bool MP4::atomBuild::samplesHaveSync()
+{
+    for ( auto sample : tracks_[currentTrackID()]->samples )
+        if ( sample.second.sync ) return true;
+    return false;
+}
+
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
 {
     if ( trackID == 0 ) trackID = currentTrackID_;

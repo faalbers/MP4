@@ -50,6 +50,7 @@ public:
     uint16_t    getDataReferenceIndex(uint32_t trackID = 0);
     std::string getDataExtended(uint32_t trackID = 0);
     std::string getUserData(std::string userDataKey);
+    bool        samplesHaveSync();
 
 private:
     void        error_(std::string message);
