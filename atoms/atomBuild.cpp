@@ -10,6 +10,7 @@ MP4::atomBuild::atomBuild(Processor &processor)
     , tracks_(processor.tracks_)
     , currentTrackID_(0)
     , nextTrackID_(processor.nextTrackID_)
+    , userData_(processor.userData_)
 {
 }
 
@@ -175,6 +176,14 @@ uint16_t MP4::atomBuild::getDataReferenceIndex(uint32_t trackID)
 std::string MP4::atomBuild::getDataExtended(uint32_t trackID)
 {
     return tracks_[newTrackID_(trackID)]->dataExtended;
+}
+
+std::string MP4::atomBuild::getUserData(std::string userDataKey)
+{
+    std::string userData = "";
+    if ( userData_.find(userDataKey) != userData_.end() )
+        userData = userData_[userDataKey];
+    return userData;
 }
 
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)

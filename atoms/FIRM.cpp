@@ -19,7 +19,7 @@ MP4::FIRM::FIRM(atomParse &parse)
 
 MP4::FIRM::FIRM(std::shared_ptr<atomBuild> build)
     : atom(build)
-    , userData("")
+    , userData(build->getUserData("FIRM"))
 {
 }
 
@@ -40,6 +40,11 @@ void MP4::FIRM::printHierarchyData(bool fullLists)
 std::string MP4::FIRM::getKey()
 {
     return key;
+}
+
+void MP4::FIRM::getUserData(std::map<std::string, std::string> &userData_)
+{
+    userData_["FIRM"] = userData;
 }
 
 void MP4::FIRM::writeData(std::shared_ptr<atomWriteFile> writeFile)

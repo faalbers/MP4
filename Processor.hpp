@@ -17,12 +17,14 @@ public:
     Processor();
 
     void    addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
+    void    addUserData(Parser &parser, std::string userDataKey = "");
 
 private:
     friend class    Writer;
     void            error_(std::string message);
 
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
+    std::map<std::string, std::string>              userData_;
     uint32_t                                        videoTimeScale_;
     uint32_t                                        videoDuration_;
     uint32_t                                        creationTime_;

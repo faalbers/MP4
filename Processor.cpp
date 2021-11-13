@@ -57,6 +57,17 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
     nextTrackID_ = (--tracks_.end())->first + 1;
 }
 
+void MP4::Processor::addUserData(Parser &parser, std::string userDataKey)
+{
+    std::map<std::string, std::string> userData;
+    parser.getUserData(userData);
+
+    for ( auto entry : userData ) {
+        if ( userDataKey == "" || entry.first == userDataKey )
+            userData_[entry.first] = entry.second;
+    }
+}
+
 void MP4::Processor::error_(std::string message)
 {
     std::cout << "MP4::Processor:" << std::endl;

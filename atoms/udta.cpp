@@ -1,4 +1,5 @@
 #include "udta.hpp"
+#include "FIRM.hpp"
 #include <iostream>
 
 MP4::udta::udta(atomParse &parse)
@@ -9,6 +10,13 @@ MP4::udta::udta(atomParse &parse)
 MP4::udta::udta(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
+    std::shared_ptr<atom> child;
+
+    if ( build->getUserData("FIRM") != "") {
+        build->parentPath = path_ + "/";
+        child = std::make_shared<FIRM>(build);
+        children_.push_back(child);
+    }
 }
 
 void MP4::udta::printData(bool fullLists)

@@ -26,6 +26,7 @@ public:
     std::set<uint32_t>      getComponentSubTypeTrackIDs(std::string componentSubType);
 
     std::shared_ptr<trackType>  getTrack(uint32_t trackID);
+    void                        getUserData(std::map<std::string, std::string> &userData);
     std::shared_ptr<root>       getRootAtom();
 
 private:

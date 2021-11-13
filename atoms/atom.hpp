@@ -57,6 +57,7 @@ public:
     static uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale);
 
     virtual std::string getKey();
+    virtual void getUserData(std::map<std::string, std::string> &userData);
 
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);

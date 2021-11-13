@@ -219,6 +219,11 @@ std::string MP4::atom::getKey()
     return key_;
 }
 
+void MP4::atom::getUserData(std::map<std::string, std::string> &userData)
+{
+    for ( auto child : children_ ) child->getUserData(userData);
+}
+
 void MP4::atom::write(std::shared_ptr<atomWriteFile> writeFile)
 {
     write_(writeFile);

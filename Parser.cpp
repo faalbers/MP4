@@ -5,6 +5,7 @@
 #include "atoms/trak.hpp"
 #include "atoms/stsd.hpp"
 #include "atoms/hdlr.hpp"
+#include "atoms/udta.hpp"
 #include <iostream>
 
 #include "atoms/stsc.hpp"
@@ -215,6 +216,13 @@ std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(uint32_t trackID)
     }
     error_("getTrack: Can not find track ID: "+std::to_string(trackID));
     return nullptr;
+}
+
+void MP4::Parser::getUserData(std::map<std::string, std::string> &userData)
+{
+    for ( auto udta : rootAtom_->getTypeAtoms<udta>() ) {
+        udta->getUserData(userData);
+    }
 }
 
 std::shared_ptr<MP4::root> MP4::Parser::getRootAtom()

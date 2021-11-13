@@ -49,6 +49,7 @@ public:
     std::string getDataFormat(uint32_t trackID = 0);
     uint16_t    getDataReferenceIndex(uint32_t trackID = 0);
     std::string getDataExtended(uint32_t trackID = 0);
+    std::string getUserData(std::string userDataKey);
 
 private:
     void        error_(std::string message);
@@ -56,6 +57,7 @@ private:
 
     uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
+    std::map<std::string, std::string>              userData_;    
     uint32_t                                        videoTimeScale_;
     uint32_t                                        videoDuration_;
     uint32_t                                        creationTime_;

@@ -53,13 +53,14 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (false) {
+    if (true) {
         MP4::Processor processor;
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
         //processor.addTrack(parserA,4,3);
 
-        //MP4::Writer writer(parserA);
+        processor.addUserData(parserA);
+
         MP4::Writer writer(processor);
 
         auto filePath = writer.write("writeResult.mp4");

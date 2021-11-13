@@ -13,3 +13,5 @@
 ![mp4 atom size](https://i.stack.imgur.com/mN9Ph.jpg)
 ![mp4 atom structures](https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/art/qtff_08.gif)
 
+NOTES:
+- data passing function should carry reference of data container
