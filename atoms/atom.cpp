@@ -5,6 +5,14 @@
 #include "udta.hpp"
 #include "free.hpp"
 #include "FIRM.hpp"
+#include "LENS.hpp"
+#include "CAME.hpp"
+#include "SETT.hpp"
+#include "MUID.hpp"
+#include "HMMT.hpp"
+#include "BCID.hpp"
+#include "GUMI.hpp"
+#include "GPMF.hpp"
 #include "mdat.hpp"
 #include "moov.hpp"
 #include "mvhd.hpp"
@@ -439,6 +447,14 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
     else if ( key == "udta" ) newAtom = std::make_shared<udta>(parse);
     else if ( key == "free" ) newAtom = std::make_shared<free>(parse);
     else if ( key == "FIRM" ) newAtom = std::make_shared<FIRM>(parse);
+    else if ( key == "LENS" ) newAtom = std::make_shared<LENS>(parse);
+    else if ( key == "CAME" ) newAtom = std::make_shared<CAME>(parse);
+    else if ( key == "SETT" ) newAtom = std::make_shared<SETT>(parse);
+    else if ( key == "MUID" ) newAtom = std::make_shared<MUID>(parse);
+    else if ( key == "HMMT" ) newAtom = std::make_shared<HMMT>(parse);
+    else if ( key == "BCID" ) newAtom = std::make_shared<BCID>(parse);
+    else if ( key == "GUMI" ) newAtom = std::make_shared<GUMI>(parse);
+    else if ( key == "GPMF" ) newAtom = std::make_shared<GPMF>(parse);
     else if ( key == "mdat" ) newAtom = std::make_shared<mdat>(parse);
     else if ( key == "moov" ) newAtom = std::make_shared<moov>(parse);
     else if ( key == "mvhd" ) newAtom = std::make_shared<mvhd>(parse);
