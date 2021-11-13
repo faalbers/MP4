@@ -58,8 +58,8 @@ int main(int argc, char* argv[])
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
         processor.addTrack(parserA,4,3);
-
         processor.addUserData(parserA);
+        //processor.flattenMediaDuration();
 
         MP4::Writer writer(processor);
 
