@@ -37,14 +37,13 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
     //parsedTrack->trackID = trackID;
     tracks_[trackID] = parsedTrack;
 
-    // handle videoTimescale, videoDuration and dates
-    // get highest videoTimeScale of 
+    // get highest videoTimescale
     videoTimeScale_ = 0;
     for ( auto track : tracks_ )
         if ( track.second->videoTimeScale > videoTimeScale_ )
             videoTimeScale_ = track.second->videoTimeScale;
 
-    // get highest videoDuration based on maxTimeScale
+    // get highest videoDuration based on videoTimeScale_
     videoDuration_ = 0;
     for ( auto track : tracks_ ) {
         auto videoDuration = atom::timeScaleDuration( track.second->videoDuration,
@@ -57,6 +56,15 @@ void MP4::Processor::addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t t
     nextTrackID_ = (--tracks_.end())->first + 1;
 }
 
+void MP4::Processor::addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID)
+{
+    for ( auto trackID : parser.getDataFormatTrackIDs(dataFormat) ) {
+        addTrack(parser, trackID, targetTrackID);
+        return;
+    }
+    error_("addTrack: could not find track with data format: "+dataFormat);
+}
+
 void MP4::Processor::addUserData(Parser &parser, std::string userDataKey)
 {
     std::map<std::string, std::string> userData;
@@ -65,6 +73,96 @@ void MP4::Processor::addUserData(Parser &parser, std::string userDataKey)
     for ( auto entry : userData ) {
         if ( userDataKey == "" || entry.first == userDataKey )
             userData_[entry.first] = entry.second;
+    }
+}
+
+void MP4::Processor::flattenTrackDurations()
+{
+    for ( auto track : tracks_ ) {
+        auto durationDiff64 =
+            (int64_t) track.second->videoDuration - (int64_t) track.second->trackDuration;
+        auto lastSampleID = (--track.second->samples.end())->first;
+        if ( durationDiff64 == 0 ) continue;
+        auto trackDurationDiff = (uint32_t) std::abs(durationDiff64);
+        auto mediaDurationDiff = atom::timeScaleDuration(trackDurationDiff,
+            track.second->videoTimeScale, track.second->mediaTimeScale);
+        if ( track.second->trackDuration < track.second->videoDuration ) {
+            track.second->samples[lastSampleID].duration += mediaDurationDiff;
+            track.second->samplesDuration += mediaDurationDiff;
+            track.second->mediaDuration += mediaDurationDiff;
+            track.second->trackDuration += trackDurationDiff;
+        } else {
+            if ( mediaDurationDiff > track.second->samples[lastSampleID].duration )
+                error_("flattenTrackDurations: can not reduce last sample duration");
+            track.second->samples[lastSampleID].duration -= mediaDurationDiff;
+            track.second->samplesDuration -= mediaDurationDiff;
+            track.second->mediaDuration -= mediaDurationDiff;
+            track.second->trackDuration -= trackDurationDiff;
+        }
+    }
+}
+
+void MP4::Processor::append(Parser &parser)
+{
+    flattenTrackDurations();
+    for ( auto track : tracks_ ) {
+        auto appendTrack = parser.getTrack(track.second->dataFormat);
+        if ( appendTrack == nullptr )
+            error_("append:  can not find track of data format '"+
+                track.second->dataFormat+"' for track: "+std::to_string(track.first));
+        if ( appendTrack->mediaTimeScale != track.second->mediaTimeScale )
+            error_("append:  different media time scale for track: "+std::to_string(track.first));
+        if ( appendTrack->height != track.second->height )
+            error_("append:  different height for track: "+std::to_string(track.first));
+        if ( appendTrack->width != track.second->width )
+            error_("append:  different width for track: "+std::to_string(track.first));
+
+        // append samples
+        auto sampleID = (--track.second->samples.end())->first + 1;
+        for ( auto sample : appendTrack->samples ) {
+            track.second->samples[sampleID] = sample.second;
+            track.second->samples[sampleID].time += track.second->mediaDuration;
+            sampleID++;
+        }
+        track.second->samplesDuration += appendTrack->samplesDuration;
+        track.second->mediaDuration += appendTrack->mediaDuration;
+        track.second->trackDuration += atom::timeScaleDuration(appendTrack->trackDuration,
+            appendTrack->videoTimeScale, track.second->videoTimeScale);
+        track.second->videoDuration += atom::timeScaleDuration(appendTrack->videoDuration,
+            appendTrack->videoTimeScale, track.second->videoTimeScale);
+    }
+
+    // get highest videoTimescale
+    videoTimeScale_ = 0;
+    for ( auto track : tracks_ )
+        if ( track.second->videoTimeScale > videoTimeScale_ )
+            videoTimeScale_ = track.second->videoTimeScale;
+
+    // get highest videoDuration based on videoTimeScale_
+    videoDuration_ = 0;
+    for ( auto track : tracks_ ) {
+        auto videoDuration = atom::timeScaleDuration( track.second->videoDuration,
+            track.second->videoTimeScale, videoTimeScale_);
+        if ( videoDuration > videoDuration_ )
+            videoDuration_ = videoDuration;
+    }
+}
+
+void MP4::Processor::test()
+{
+    std::cout << "\nVideo duration: " << atom::getTimeString(videoDuration_, videoTimeScale_) << std::endl;
+    for ( auto track : tracks_ ) {
+        auto lastSampleID = (--track.second->samples.end())->first;
+        std::cout << "[" << track.first << "]\n"
+            << "Video duration: "
+            << atom::getTimeString(track.second->videoDuration, track.second->videoTimeScale) << std::endl
+            << "Track duration: "
+            << atom::getTimeString(track.second->trackDuration, track.second->videoTimeScale) << std::endl
+            << "Media duration: "
+            << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale) << std::endl
+            << "Samples duration: "
+            << atom::getTimeString(track.second->samplesDuration, track.second->mediaTimeScale) << std::endl
+            << "last sample duration: " << track.second->samples[lastSampleID].duration << std::endl;
     }
 }
 

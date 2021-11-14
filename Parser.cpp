@@ -218,6 +218,16 @@ std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(uint32_t trackID)
     return nullptr;
 }
 
+std::shared_ptr<MP4::trackType> MP4::Parser::getTrack(std::string dataFormat)
+{
+    // this will not return multiple tracks with same dataformat yet
+    for ( auto trak : rootAtom_->getTypeAtoms<trak>() ) {
+        if ( trak->isDataFormat(dataFormat) ) return trak->getTrack();
+    }
+    error_("getTrack: Can not find track of data format: "+dataFormat);
+    return nullptr;
+}
+
 void MP4::Parser::getUserData(std::map<std::string, std::string> &userData)
 {
     for ( auto udta : rootAtom_->getTypeAtoms<udta>() ) {

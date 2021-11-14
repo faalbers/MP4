@@ -74,7 +74,6 @@ uint32_t MP4::trak::getMediaTimeScale()
 
 std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
 {
-    std::cout << "Get Track: " << getID() << std::endl;
     auto trackData = std::make_shared<trackType>();
     uint32_t sampleID;
     

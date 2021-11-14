@@ -37,7 +37,8 @@ void MP4::mdhd::printData(bool fullLists)
     std::cout << dataIndent << "creationTime    : " << getDateTimeString(creationTime) << std::endl;
     std::cout << dataIndent << "modificationTime: " << getDateTimeString(modificationTime) << std::endl;
     std::cout << dataIndent << "timeScale       : " << timeScale << std::endl;
-    std::cout << dataIndent << "duration        : " << duration << std::endl;
+    std::cout << dataIndent << "duration        : " << duration
+        << " (" << getTimeString(duration, timeScale) << ")\n";
     std::cout << dataIndent << "language        : " << language << std::endl;
     std::cout << dataIndent << "quality         : " << quality << std::endl;
 }

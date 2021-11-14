@@ -17,7 +17,11 @@ public:
     Processor();
 
     void    addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
+    void    addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID = 0);
     void    addUserData(Parser &parser, std::string userDataKey = "");
+    void    flattenTrackDurations();
+    void    append(Parser &parser);
+    void    test();
 
 private:
     friend class    Writer;

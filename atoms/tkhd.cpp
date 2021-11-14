@@ -1,4 +1,6 @@
 #include "tkhd.hpp"
+#include "moov.hpp"
+#include "mvhd.hpp"
 #include <iostream>
 
 MP4::tkhd::tkhd(atomParse &parse)
@@ -57,7 +59,10 @@ void MP4::tkhd::printData(bool fullLists)
     std::cout << dataIndent << "creationTime    : " << getDateTimeString(creationTime) << std::endl;
     std::cout << dataIndent << "modificationTime: " << getDateTimeString(modificationTime) << std::endl;
     std::cout << dataIndent << "trackID          : " << trackID << std::endl;
-    std::cout << dataIndent << "duration         : " << duration << std::endl;
+    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) {
+        std::cout << dataIndent << "duration         : " << duration
+            << " (" << getTimeString(duration, mvhd->timeScale) << ")\n";
+    }
     std::cout << dataIndent << "layer            : " << layer << std::endl;
     std::cout << dataIndent << "volume           : " << volume << std::endl;
     std::cout << dataIndent << "trackWidth       : " << trackWidth << std::endl;
