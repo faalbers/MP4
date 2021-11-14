@@ -18,6 +18,7 @@
 #include "moov.hpp"
 #include "mvhd.hpp"
 #include "vmhd.hpp"
+#include "ctts.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -73,7 +74,9 @@ uint32_t MP4::trak::getMediaTimeScale()
 
 std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
 {
+    std::cout << "Get Track: " << getID() << std::endl;
     auto trackData = std::make_shared<trackType>();
+    uint32_t sampleID;
     
     // get data references
     std::string filePath = "";
@@ -151,7 +154,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     }
 
     // greate samples from time-to-sample and set time and durations
-    uint32_t sampleID = 0;
+    sampleID = 0;
     sampleType sample;
     uint32_t time = 0;
     for ( auto stts : getTypeAtoms<stts>() ) {
@@ -164,6 +167,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
                 if ( syncSamples.find(sampleID) != syncSamples.end()) sample.sync = true;
                 sample.time = time;
                 sample.duration = entry.second[1];
+                sample.compositionOffset = 0;
                 trackData->samples[sampleID] = sample;
                 time += sample.duration;
                 index++;
@@ -202,6 +206,17 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
             trackData->samples[sampleID].filePos = filePos;
             trackData->samples[sampleID].chunkID = chunk.first;
             filePos += trackData->samples[sampleID].size;
+        }
+    }
+
+    // set composition offsets
+    sampleID = 1;
+    for ( auto ctts : getTypeAtoms<ctts>() ) {
+        for ( auto entry : ctts->cttsTable ) {
+            for ( uint32_t sampleCount = 0; sampleCount < entry.second[0]; sampleCount++ ) {
+                trackData->samples[sampleID].compositionOffset = entry.second[1];
+                sampleID++;
+            }
         }
     }
 

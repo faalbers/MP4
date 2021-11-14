@@ -51,6 +51,7 @@ public:
     std::string getDataExtended(uint32_t trackID = 0);
     std::string getUserData(std::string userDataKey);
     bool        samplesHaveSync();
+    bool        samplesHaveCompositionOffset();
 
 private:
     void        error_(std::string message);

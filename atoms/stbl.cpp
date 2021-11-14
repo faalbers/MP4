@@ -4,6 +4,7 @@
 #include "stsc.hpp"
 #include "stsz.hpp"
 #include "stss.hpp"
+#include "ctts.hpp"
 #include "co64.hpp"
 #include <iostream>
 
@@ -25,6 +26,18 @@ MP4::stbl::stbl(std::shared_ptr<atomBuild> build)
     child = std::make_shared<stts>(build);
     children_.push_back(child);
 
+    if ( build->samplesHaveSync()) {
+        build->parentPath = path_ + "/";
+        child = std::make_shared<stss>(build);
+        children_.push_back(child);
+    }
+
+    if ( build->samplesHaveCompositionOffset()) {
+        build->parentPath = path_ + "/";
+        child = std::make_shared<ctts>(build);
+        children_.push_back(child);
+    }
+
     build->parentPath = path_ + "/";
     child = std::make_shared<stsc>(build);
     children_.push_back(child);
@@ -37,11 +50,6 @@ MP4::stbl::stbl(std::shared_ptr<atomBuild> build)
     child = std::make_shared<co64>(build);
     children_.push_back(child);
 
-    if ( build->samplesHaveSync()) {
-        build->parentPath = path_ + "/";
-        child = std::make_shared<stss>(build);
-        children_.push_back(child);
-    }
 }
 
 void MP4::stbl::printData(bool fullLists)

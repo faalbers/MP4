@@ -48,12 +48,11 @@ std::string MP4::Writer::copyTest(std::string fileName)
     fileWrite->addExcludeTrack(3);
     fileWrite->addExcludeTrack(4);
 
-    fileWrite->addExcludeAtom("/moov/udta");
     fileWrite->addExcludeAtom("/moov/iods");
     fileWrite->addExcludeAtom("/moov/trak/tref/tmcd");
     fileWrite->addExcludeAtom("/moov/trak/edts/elst");
     fileWrite->addExcludeAtom("/moov/trak/mdia/minf/dinf/dref");
-    fileWrite->addExcludeAtom("/moov/trak/mdia/minf/stbl/stss");
+    //fileWrite->addExcludeAtom("/moov/trak/mdia/minf/stbl/stss");
 
     rootAtomParser_->copy(fileWrite);
 

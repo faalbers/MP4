@@ -44,6 +44,7 @@
 #include "stco.hpp"
 #include "co64.hpp"
 #include "stss.hpp"
+#include "ctts.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -486,6 +487,7 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
     else if ( key == "stco" ) newAtom = std::make_shared<stco>(parse);
     else if ( key == "co64" ) newAtom = std::make_shared<co64>(parse);
     else if ( key == "stss" ) newAtom = std::make_shared<stss>(parse);
+    else if ( key == "ctts" ) newAtom = std::make_shared<ctts>(parse);
     else newAtom = std::make_shared<atom>(parse);
 
     return newAtom;

@@ -18,6 +18,7 @@ typedef struct sampleType
     uint32_t    duration;
     bool        sync;
     uint32_t    chunkID;
+    uint32_t    compositionOffset;
 } sampleType;
 
 typedef struct chunkType

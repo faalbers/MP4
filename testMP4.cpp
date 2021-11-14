@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
         MP4::Processor processor;
         processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,2,2);
-        processor.addTrack(parserA,4,3);
+        //processor.addTrack(parserA,4,3);
         processor.addUserData(parserA);
         //processor.flattenMediaDuration();
 
