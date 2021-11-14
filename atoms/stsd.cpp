@@ -29,7 +29,6 @@ MP4::stsd::stsd(atomParse &parse)
             auto buffer = new char[tailSize];
             fileStream->read((char *) buffer, tailSize);
             stsdTable[ID].dataExtended = std::string(buffer,tailSize);
-            stsdTable[ID].dataExtended.size();
             delete[] buffer;
         }
         ID++;
