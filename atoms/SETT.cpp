@@ -29,7 +29,7 @@ void MP4::SETT::printData(bool fullLists)
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (SETT User Data Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "userDataSize: " << userData.size() << std::endl;
-    dataStringViz(userData, dataIndent);
+    //dataStringViz(userData, dataIndent);
 }
 
 void MP4::SETT::printHierarchyData(bool fullLists)
