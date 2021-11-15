@@ -191,6 +191,19 @@ std::string MP4::atom::getDateTimeString(uint32_t seconds)
     return date::format("%m/%d/%Y %T", newSeconds);
 }
 
+std::string MP4::atom::getZeroTerminatedString(std::string dataString, size_t maxLength)
+{
+    std::stringstream charss;
+    size_t length = 0;
+    for ( auto charByte : dataString ) {
+        if ( maxLength != 0 && length > maxLength ) break;
+        else if ( charByte == 0 ) break;
+        charss << charByte;
+        length++;
+    }
+    return charss.str();
+}
+
 uint32_t MP4::atom::getCurrentDateTime()
 {
     auto utcTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -204,6 +217,29 @@ uint32_t MP4::atom::timeScaleDuration(uint32_t duration, uint32_t sourceTimeScal
 {
     auto timeScaleMult = (double) targetTimeScale / sourceTimeScale;
     return (uint32_t) (timeScaleMult * (double) duration);
+}
+
+void MP4::atom::dataStringViz(std::string &dataString, std::string indent)
+{
+    int lineCount = 0;
+    std::stringstream charss;
+    charss << std::hex;
+    for ( auto charByte : dataString ) {
+        //std::cout << std::setfill('0') << std::setw(2) << std::hex << (unsigned int) charByte << std::endl;
+        auto intVal = (int) (uint8_t) charByte;
+        if (intVal >= 0x20 && intVal <= 0x7f ) {
+            charss << charByte << "  ";
+        } else {
+            charss << std::setfill('0') << std::setw(2) << intVal << " ";
+        }
+        lineCount++;
+        if ( lineCount == 8 ) {
+            std::cout << indent << charss.str() << std::endl;
+            charss.str("");
+            lineCount = 0;
+        }
+    }
+    std::cout << indent << charss.str() << std::endl;
 }
 
 void MP4::atom::printData(bool fullLists)

@@ -53,9 +53,12 @@ public:
     void printHierarchy(int pathWith = 35, int valLevel = 10);
     static std::string getTimeString(uint32_t time, uint32_t timeScale);
     static std::string getDateTimeString(uint32_t seconds);
+    static std::string getZeroTerminatedString(std::string dataString, size_t maxLength = 0);
     static uint32_t getCurrentDateTime();
     static uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale);
 
+    static void dataStringViz(std::string &dataString, std::string indent = "");
+    
     virtual std::string getKey();
     virtual void getUserData(std::map<std::string, std::string> &userData);
 

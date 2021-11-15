@@ -57,6 +57,7 @@ void MP4::stsd::printData(bool fullLists)
         std::cout << dataIndent << "[" <<  entry.first << "] ( '" << entry.second.dataFormat
         << "', " << entry.second.dataReferenceIndex
         << ", " << entry.second.dataExtended.size() << " )" << std::endl;
+        //dataStringViz(entry.second.dataExtended, dataIndent);
     }
 }
 

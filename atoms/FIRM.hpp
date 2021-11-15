@@ -30,6 +30,7 @@ public:
 
     static std::string          key;
     std::string                 userData;
+    std::string                 firmware;
 
 };
 

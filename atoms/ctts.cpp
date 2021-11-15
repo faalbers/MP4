@@ -56,7 +56,7 @@ void MP4::ctts::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
-    std::cout << path_ << " (Compositiob Offset Atom) ["<< headerSize_ << "]" << std::endl;
+    std::cout << path_ << " (Composition Offset Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "[#] (sampleCount , compositionOffset)\n";
     if ( fullLists || (!fullLists && cttsTable.size() <= 6) ) {
         for ( auto entry : cttsTable ) {
@@ -67,14 +67,14 @@ void MP4::ctts::printData(bool fullLists)
     } else {
         for ( uint32_t index = 1 ; index <= 3; index++ ) {
             std::cout << dataIndent
-            << "  [" << index << "] ( " << cttsTable[index][0] << ", " << cttsTable[index][1] << " )"
+            << "[" << index << "] ( " << cttsTable[index][0] << ", " << cttsTable[index][1] << " )"
             << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
         uint32_t tableSize = (uint32_t) cttsTable.size();
         for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
             std::cout << dataIndent
-            << "  [" << index << "] ( " << cttsTable[index][0] << ", " << cttsTable[index][1] << " )"
+            << "[" << index << "] ( " << cttsTable[index][0] << ", " << cttsTable[index][1] << " )"
             << std::endl;
         }
     }

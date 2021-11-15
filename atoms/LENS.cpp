@@ -14,7 +14,7 @@ MP4::LENS::LENS(atomParse &parse)
     fileStream->read((char *) buffer, bufferSize);
     userData = std::string(buffer,bufferSize);
     delete[] buffer;
-
+    lens = getZeroTerminatedString(userData, bufferSize);
 }
 
 MP4::LENS::LENS(std::shared_ptr<atomBuild> build)
@@ -28,7 +28,8 @@ void MP4::LENS::printData(bool fullLists)
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (LENS User Data Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "userDataSize: " << userData.size() << std::endl;
+    std::cout << dataIndent << "lens: " << lens << std::endl;
+    //dataStringViz(userData, dataIndent);
 }
 
 void MP4::LENS::printHierarchyData(bool fullLists)

@@ -29,6 +29,8 @@ void MP4::GPMF::printData(bool fullLists)
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (GPMF User Data Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "userDataSize: " << userData.size() << std::endl;
+    std::cout << dataIndent << "seems to be a GPMF stream ..." << std::endl;
+    //dataStringViz(userData, dataIndent);
 }
 
 void MP4::GPMF::printHierarchyData(bool fullLists)
