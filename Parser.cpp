@@ -235,6 +235,16 @@ void MP4::Parser::getUserData(std::map<std::string, std::string> &userData)
     }
 }
 
+std::string MP4::Parser::getUserData(std::string userDataKey)
+{
+    std::map<std::string, std::string> userDataMap;
+    getUserData(userDataMap);
+    for ( auto entry : userDataMap) {
+        if ( entry.first == userDataKey ) return entry.second;
+    }
+    return "";
+}
+
 std::shared_ptr<MP4::root> MP4::Parser::getRootAtom()
 {
     return rootAtom_;

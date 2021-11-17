@@ -28,6 +28,7 @@ public:
     std::shared_ptr<trackType>  getTrack(uint32_t trackID);
     std::shared_ptr<trackType>  getTrack(std::string dataFormat);
     void                        getUserData(std::map<std::string, std::string> &userData);
+    std::string                 getUserData(std::string userDataKey);
     std::shared_ptr<root>       getRootAtom();
 
 private:
