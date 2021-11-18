@@ -178,11 +178,11 @@ std::string MP4::atomBuild::getDataExtended(uint32_t trackID)
     return tracks_[newTrackID_(trackID)]->dataExtended;
 }
 
-std::string MP4::atomBuild::getUserData(std::string userDataKey)
+std::string MP4::atomBuild::getUserData(std::string userDataKey) const
 {
     std::string userData = "";
     if ( userData_.find(userDataKey) != userData_.end() )
-        userData = userData_[userDataKey];
+        userData = userData_.at(userDataKey);
     return userData;
 }
 

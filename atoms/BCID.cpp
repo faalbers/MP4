@@ -44,7 +44,7 @@ std::string MP4::BCID::getKey()
     return key;
 }
 
-void MP4::BCID::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::BCID::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["BCID"] = userData;
 }

@@ -43,7 +43,7 @@ std::string MP4::MUID::getKey()
     return key;
 }
 
-void MP4::MUID::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::MUID::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["MUID"] = userData;
 }

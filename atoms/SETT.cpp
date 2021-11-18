@@ -43,7 +43,7 @@ std::string MP4::SETT::getKey()
     return key;
 }
 
-void MP4::SETT::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::SETT::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["SETT"] = userData;
 }

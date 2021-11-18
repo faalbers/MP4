@@ -44,7 +44,7 @@ std::string MP4::HMMT::getKey()
     return key;
 }
 
-void MP4::HMMT::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::HMMT::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["HMMT"] = userData;
 }
