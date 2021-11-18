@@ -65,7 +65,7 @@ MP4::atom::atom()
 {
 }
 
-MP4::atom::atom(atomParse &parse)
+MP4::atom::atom(atomParse& parse)
     : filePath_(parse.getFilePath())
     , parentPath_(parse.parentPath)
     , moovAtom_(nullptr)
@@ -86,7 +86,7 @@ MP4::atom::atom(atomParse &parse)
     // read the header
     // get atom size and data position
     headerBlock dataBlock;
-    fileStream->read((char *) &dataBlock, 8);
+    fileStream->read((char*) &dataBlock, 8);
     size_ = (int64_t) XXH_swap32(dataBlock.size32);     // big to little endian
     headerSize64_ = false;
     headerSize_ = 8;
@@ -94,7 +94,7 @@ MP4::atom::atom(atomParse &parse)
         headerSize64_ = true;
         headerSize_ = 16;
         fileStream->seekg(filePos_, fileStream->beg);
-        fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+        fileStream->read((char*) &dataBlock, sizeof(dataBlock));
         size_ = XXH_swap64(dataBlock.size64);
     }
     fileDataPos_ = filePos_ + headerSize_;
@@ -140,13 +140,13 @@ MP4::atom::atom(std::shared_ptr<atomBuild> build)
     path_ = parentPath_ + getKey();
 }
 
-void MP4::atom::setMoov_(moov *moovAtom)
+void MP4::atom::setMoov_(moov* moovAtom)
 {
     moovAtom_ = moovAtom;
     for (auto child : children_ ) child->setMoov_(moovAtom);
 }
 
-void MP4::atom::setTrak_(trak *trakAtom)
+void MP4::atom::setTrak_(trak* trakAtom)
 {
     trakAtom_ = trakAtom;
     for (auto child : children_ ) child->setTrak_(trakAtom);
@@ -219,7 +219,7 @@ uint32_t MP4::atom::timeScaleDuration(uint32_t duration, uint32_t sourceTimeScal
     return (uint32_t) (timeScaleMult * (double) duration);
 }
 
-void MP4::atom::dataStringViz(std::string &dataString, std::string indent)
+void MP4::atom::dataStringViz(std::string& dataString, std::string indent)
 {
     int lineCount = 0;
     std::stringstream charss;
@@ -264,7 +264,7 @@ std::string MP4::atom::getKey()
     return key_;
 }
 
-void MP4::atom::getUserData(std::map<std::string, std::string> &userData)
+void MP4::atom::getUserData(std::map<std::string, std::string>& userData)
 {
     for ( auto child : children_ ) child->getUserData(userData);
 }
@@ -322,7 +322,7 @@ void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile)
     writeHeaderSizePos_ = fileWrite->tellp();
     headerBlock  atomHeader;
     memcpy(&atomHeader.key, getKey().c_str(), 4);
-    fileWrite->write((char *) &atomHeader, headerSize_);
+    fileWrite->write((char*) &atomHeader, headerSize_);
 }
 
 void MP4::atom::copyHeader_(std::shared_ptr<atomCopyFile> copyFile)
@@ -331,7 +331,7 @@ void MP4::atom::copyHeader_(std::shared_ptr<atomCopyFile> copyFile)
     writeHeaderSizePos_ = fileWrite->tellp();
     headerBlock  atomHeader;
     memcpy(&atomHeader.key, getKey().c_str(), 4);
-    fileWrite->write((char *) &atomHeader, headerSize_);
+    fileWrite->write((char*) &atomHeader, headerSize_);
 }
 
 void MP4::atom::writeChildren(std::shared_ptr<atomWriteFile> writeFile)
@@ -421,14 +421,14 @@ void MP4::atom::writeTail_(std::shared_ptr<atomWriteFile> writeFile)
         size64 = writeNextPos - writeHeaderSizePos_;
         size64 = XXH_swap64(size64);
         fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
-        fileWrite->write((char *) &size32, sizeof(size32));
+        fileWrite->write((char*) &size32, sizeof(size32));
         fileWrite->seekp(4, fileWrite->cur);
-        fileWrite->write((char *) &size64, sizeof(size64));
+        fileWrite->write((char*) &size64, sizeof(size64));
     } else if ( headerSize_ == 8 ) {
         size32 = (uint32_t) (writeNextPos - writeHeaderSizePos_);
         size32 = XXH_swap32(size32);
         fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
-        fileWrite->write((char *) &size32, sizeof(size32));
+        fileWrite->write((char*) &size32, sizeof(size32));
     }
     fileWrite->seekp(writeNextPos, fileWrite->beg);
 }
@@ -445,14 +445,14 @@ void MP4::atom::copyTail_(std::shared_ptr<atomCopyFile> copyFile)
         size64 = writeNextPos - writeHeaderSizePos_;
         size64 = XXH_swap64(size64);
         fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
-        fileWrite->write((char *) &size32, sizeof(size32));
+        fileWrite->write((char*) &size32, sizeof(size32));
         fileWrite->seekp(4, fileWrite->cur);
-        fileWrite->write((char *) &size64, sizeof(size64));
+        fileWrite->write((char*) &size64, sizeof(size64));
     } else if ( headerSize_ == 8 ) {
         size32 = (uint32_t) (writeNextPos - writeHeaderSizePos_);
         size32 = XXH_swap32(size32);
         fileWrite->seekp(writeHeaderSizePos_, fileWrite->beg);
-        fileWrite->write((char *) &size32, sizeof(size32));
+        fileWrite->write((char*) &size32, sizeof(size32));
     }
     fileWrite->seekp(writeNextPos, fileWrite->beg);
 }
@@ -465,7 +465,7 @@ void MP4::atom::error_(std::string message)
     exit(1);
 }
 
-std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
+std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse& parse)
 {
     std::shared_ptr<atom> newAtom;
 
@@ -474,7 +474,7 @@ std::shared_ptr<MP4::atom> MP4::atom::makeAtom_(atomParse &parse)
     char charKey[4];
     auto filePos = fileStream->tellg();
     fileStream->seekg(4, fileStream->cur);
-    fileStream->read((char *) &charKey, sizeof(charKey));
+    fileStream->read((char*) &charKey, sizeof(charKey));
     fileStream->seekg(filePos, fileStream->beg);
 
     std::string key = std::string(charKey).substr(0,4);
@@ -543,11 +543,11 @@ bool MP4::atom::isContainer_(std::ifstream *fileStream, int64_t dataSize)
     headerBlock dataBlock;
     int64_t size, totalSize = 0;
     do {
-        fileStream->read((char *) &dataBlock, 8);
+        fileStream->read((char*) &dataBlock, 8);
         size = (int64_t) XXH_swap32(dataBlock.size32);     // big to little endian
         if ( size == 1 ) {
             fileStream->seekg(nextPos, fileStream->beg);
-            fileStream->read((char *) &dataBlock, sizeof(dataBlock));
+            fileStream->read((char*) &dataBlock, sizeof(dataBlock));
             size = XXH_swap64(dataBlock.size64);
         }
 
@@ -567,7 +567,7 @@ bool MP4::atom::isContainer_(std::ifstream *fileStream, int64_t dataSize)
     return result;
 }
 
-void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found)
+void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found)
 {
     for ( auto child : children_ ) {
         if ( child->key_ == findKey ) found.push_back(child);

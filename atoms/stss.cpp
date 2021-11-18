@@ -1,20 +1,20 @@
 #include "stss.hpp"
 #include <iostream>
 
-MP4::stss::stss(atomParse &parse)
+MP4::stss::stss(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     tableBlock stssData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &stssData, sizeof(stssData));
+    fileStream->read((char*) &stssData, sizeof(stssData));
     stssData.numberOfEntries = XXH_swap32(stssData.numberOfEntries);
     auto index = stssData.numberOfEntries;
     uint32_t sampleID;
     uint32_t ID = 1;
     do {
-        fileStream->read((char *) &sampleID, sizeof(sampleID));
+        fileStream->read((char*) &sampleID, sizeof(sampleID));
         stssTable[ID] = XXH_swap32(sampleID);
         index--;
         ID++;
@@ -80,13 +80,13 @@ void MP4::stss::writeData(std::shared_ptr<atomWriteFile> writeFile)
     // data settings
     stssData.numberOfEntries = XXH_swap32((uint32_t) stssTable.size());
 
-    fileWrite->write((char *) &stssData, sizeof(stssData));
+    fileWrite->write((char*) &stssData, sizeof(stssData));
 
     // write table
     uint32_t val;
     for ( auto entry : stssTable ) {
         val = XXH_swap32(entry.second);
-        fileWrite->write((char *) &val, sizeof(val));
+        fileWrite->write((char*) &val, sizeof(val));
     }
 }
 

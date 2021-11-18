@@ -17,14 +17,14 @@ namespace MP4
 class BCID : public atom
 {
 public:
-    BCID(atomParse &parse);
+    BCID(atomParse& parse);
     BCID(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
-    void getUserData(std::map<std::string, std::string> &userData_);
+    void getUserData(std::map<std::string, std::string>& userData_);
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 

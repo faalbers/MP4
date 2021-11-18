@@ -17,7 +17,7 @@ namespace MP4
 class url_ : public atom
 {
 public:
-    url_(atomParse &parse);
+    url_(atomParse& parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

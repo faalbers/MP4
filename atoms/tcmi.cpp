@@ -1,7 +1,7 @@
 #include "tcmi.hpp"
 #include <iostream>
 
-MP4::tcmi::tcmi(atomParse &parse)
+MP4::tcmi::tcmi(atomParse& parse)
     : atom(parse)
     , fontName("")
 {
@@ -25,7 +25,7 @@ MP4::tcmi::tcmi(atomParse &parse)
     fileStream->seekg(fileDataPos_, fileStream->beg);
 
     dataBlock tcmiData;
-    fileStream->read((char *) &tcmiData, sizeof(tcmiData));
+    fileStream->read((char*) &tcmiData, sizeof(tcmiData));
     textFont = XXH_swap16(tcmiData.textFont);
     textFace = XXH_swap16(tcmiData.textFace);
     textSize = XXH_swap16(tcmiData.textSize);
@@ -38,9 +38,9 @@ MP4::tcmi::tcmi(atomParse &parse)
 
     if ( (fileNextPos_ - fileStream->tellg()) > 0 ) {
         uint8_t pascalLength;
-        fileStream->read((char *) &pascalLength, sizeof(pascalLength));
+        fileStream->read((char*) &pascalLength, sizeof(pascalLength));
         auto bufferSize = (size_t) pascalLength;
-        char *buffer = new char[bufferSize];
+        char* buffer = new char[bufferSize];
         fileStream->read(buffer, bufferSize);
         delete[] buffer;
         fontName = std::string(buffer).substr(0, bufferSize);

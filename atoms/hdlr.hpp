@@ -22,7 +22,7 @@ namespace MP4
 class hdlr : public atom
 {
 public:
-    hdlr(atomParse &parse);
+    hdlr(atomParse& parse);
     hdlr(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

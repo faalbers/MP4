@@ -3,14 +3,14 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::ftyp::ftyp(atomParse &parse)
+MP4::ftyp::ftyp(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
     dataBlock ftypData;
-    fileStream->read((char *) &ftypData, sizeof(ftypData));
+    fileStream->read((char*) &ftypData, sizeof(ftypData));
     
     majorBrand = std::string(ftypData.majorBrand).substr(0,4);
     version = XXH_swap32(ftypData.version);
@@ -26,7 +26,7 @@ MP4::ftyp::ftyp(atomParse &parse)
     char type[4];
     auto types = (fileNextPos_ - fileStream->tellg()) / 4;
     while ( types > 0 ) {
-        fileStream->read((char *) &type, sizeof(type));
+        fileStream->read((char*) &type, sizeof(type));
         compatibleBrands.push_back(std::string(type).substr(0,4));;
         types--;
     }
@@ -75,9 +75,9 @@ void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile)
     dataBlock ftypData;
     memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     ftypData.version = XXH_swap32(version);
-    fileWrite->write((char *) &ftypData, sizeof(ftypData));
+    fileWrite->write((char*) &ftypData, sizeof(ftypData));
     for ( auto brand : compatibleBrands ) {
-        fileWrite->write((char *) brand.c_str(), 4);
+        fileWrite->write((char*) brand.c_str(), 4);
     }
 }
 

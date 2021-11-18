@@ -36,7 +36,7 @@ namespace MP4
 class ctts : public atom
 {
 public:
-    ctts(atomParse &parse);
+    ctts(atomParse& parse);
     ctts(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

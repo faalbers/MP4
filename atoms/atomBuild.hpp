@@ -15,7 +15,7 @@ class Processor;
 class atomBuild
 {
 public:
-    atomBuild(Processor &processor);
+    atomBuild(Processor& processor);
 
     std::string parentPath;
     bool        nextTrack();

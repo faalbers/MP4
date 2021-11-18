@@ -1,7 +1,7 @@
 #include "ctts.hpp"
 #include <iostream>
 
-MP4::ctts::ctts(atomParse &parse)
+MP4::ctts::ctts(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,16 +9,16 @@ MP4::ctts::ctts(atomParse &parse)
 
     tableBlock cttsData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &cttsData, sizeof(cttsData));
+    fileStream->read((char*) &cttsData, sizeof(cttsData));
     cttsData.numberOfEntries = XXH_swap32(cttsData.numberOfEntries);
     auto index = cttsData.numberOfEntries;
     uint32_t ID = 1;
     do {
         std::vector<uint32_t> cttsEntry;
         uint32_t val;
-        fileStream->read((char *) &val, sizeof(val));
+        fileStream->read((char*) &val, sizeof(val));
         cttsEntry.push_back(XXH_swap32(val));
-        fileStream->read((char *) &val, sizeof(val));
+        fileStream->read((char*) &val, sizeof(val));
     cttsEntry.push_back(XXH_swap32(val));
         cttsTable[ID] = cttsEntry;
         index--;
@@ -107,15 +107,15 @@ void MP4::ctts::writeData(std::shared_ptr<atomWriteFile> writeFile)
 
     cttsData.numberOfEntries = XXH_swap32((uint32_t) cttsTable.size());
 
-    fileWrite->write((char *) &cttsData, sizeof(cttsData));
+    fileWrite->write((char*) &cttsData, sizeof(cttsData));
 
     // write table
     uint32_t val;
     for ( auto entry : cttsTable ) {
         val = XXH_swap32(entry.second[0]);
-        fileWrite->write((char *) &val, sizeof(val));
+        fileWrite->write((char*) &val, sizeof(val));
         val = XXH_swap32(entry.second[1]);
-        fileWrite->write((char *) &val, sizeof(val));
+        fileWrite->write((char*) &val, sizeof(val));
     }
 
 }

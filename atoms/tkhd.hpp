@@ -16,7 +16,7 @@ namespace MP4
 class tkhd : public atom
 {
 public:
-    tkhd(atomParse &parse);
+    tkhd(atomParse& parse);
     tkhd(std::shared_ptr<atomBuild> build);
     
     void printData(bool fullLists = false);

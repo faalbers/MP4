@@ -1,7 +1,7 @@
 #include "stsd.hpp"
 #include <iostream>
 
-MP4::stsd::stsd(atomParse &parse)
+MP4::stsd::stsd(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,13 +9,13 @@ MP4::stsd::stsd(atomParse &parse)
 
     tableBlock stsdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &stsdData, sizeof(stsdData));
+    fileStream->read((char*) &stsdData, sizeof(stsdData));
     stsdData.numberOfEntries = XXH_swap32(stsdData.numberOfEntries);
     uint32_t ID = 1;
     entryDataBlock sampleDescriptionBlock;
     do {
         entryType stsdEntry;
-        fileStream->read((char *) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
+        fileStream->read((char*) &sampleDescriptionBlock, sizeof(sampleDescriptionBlock));
         auto size = XXH_swap32(sampleDescriptionBlock.size);
         stsdEntry.dataFormat = std::string(sampleDescriptionBlock.dataFormat).substr(0,4);
         stsdEntry.dataReferenceIndex = XXH_swap16(sampleDescriptionBlock.dataReferenceIndex);
@@ -27,7 +27,7 @@ MP4::stsd::stsd(atomParse &parse)
         auto tailSize = (size_t) size - sizeof(sampleDescriptionBlock);
         if ( tailSize > 0 ) {
             auto buffer = new char[tailSize];
-            fileStream->read((char *) buffer, tailSize);
+            fileStream->read((char*) buffer, tailSize);
             stsdTable[ID].dataExtended = std::string(buffer,tailSize);
             delete[] buffer;
         }
@@ -87,7 +87,7 @@ void MP4::stsd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     // data settings
     stsdData.numberOfEntries = XXH_swap32((uint32_t) stsdTable.size());
 
-    fileWrite->write((char *) &stsdData, sizeof(stsdData));
+    fileWrite->write((char*) &stsdData, sizeof(stsdData));
 
     // write table
     for ( auto entry : stsdTable ) {
@@ -97,9 +97,9 @@ void MP4::stsd::writeData(std::shared_ptr<atomWriteFile> writeFile)
         entryData.dataReferenceIndex = XXH_swap16(entry.second.dataReferenceIndex);
         auto size = (uint32_t) (sizeof(entryData) + entry.second.dataExtended.size());
         entryData.size = XXH_swap32(size);
-        fileWrite->write((char *) &entryData, sizeof(entryData));
+        fileWrite->write((char*) &entryData, sizeof(entryData));
         if ( entry.second.dataExtended.size() > 0 )
-            fileWrite->write((char *) entry.second.dataExtended.c_str(), (size_t) entry.second.dataExtended.size());
+            fileWrite->write((char*) entry.second.dataExtended.c_str(), (size_t) entry.second.dataExtended.size());
     }
 }
 

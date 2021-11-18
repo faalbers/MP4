@@ -21,7 +21,7 @@ namespace MP4
 class stsd : public atom
 {
 public:
-    stsd(atomParse &parse);
+    stsd(atomParse& parse);
     stsd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

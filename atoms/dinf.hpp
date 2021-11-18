@@ -17,7 +17,7 @@ namespace MP4
 class dinf : public atom
 {
 public:
-    dinf(atomParse &parse);
+    dinf(atomParse& parse);
     dinf(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

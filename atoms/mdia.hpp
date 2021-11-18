@@ -27,7 +27,7 @@ namespace MP4
 class mdia : public atom
 {
 public:
-    mdia(atomParse &parse);
+    mdia(atomParse& parse);
     mdia(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

@@ -16,7 +16,7 @@ namespace MP4
 class mdat : public atom
 {
 public:
-    mdat(atomParse &parse);
+    mdat(atomParse& parse);
     mdat(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

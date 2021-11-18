@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-MP4::root::root(atomParse &parse)
+MP4::root::root(atomParse& parse)
 {
     auto fileStream = parse.getFileStream();
     filePath_ = parse.getFilePath();

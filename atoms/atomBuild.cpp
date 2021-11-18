@@ -2,7 +2,7 @@
 #include "../Processor.hpp"
 #include <iostream>
 
-MP4::atomBuild::atomBuild(Processor &processor)
+MP4::atomBuild::atomBuild(Processor& processor)
     : videoTimeScale_(processor.videoTimeScale_)
     , videoDuration_(processor.videoDuration_)
     , creationTime_(processor.creationTime_)

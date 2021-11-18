@@ -1,7 +1,7 @@
 #include "tmcd.hpp"
 #include <iostream>
 
-MP4::tmcd::tmcd(atomParse &parse)
+MP4::tmcd::tmcd(atomParse& parse)
     : atom(parse)
     , isTrackReference(false)
 {
@@ -17,7 +17,7 @@ MP4::tmcd::tmcd(atomParse &parse)
     if ( isTrackReference ) {
         uint32_t trackID;
         do {
-            fileStream->read((char *) &trackID, sizeof(trackID));
+            fileStream->read((char*) &trackID, sizeof(trackID));
             trackIDs.push_back(XXH_swap32(trackID));
         } while ( fileStream->tellg() < fileNextPos_ );
     } else {

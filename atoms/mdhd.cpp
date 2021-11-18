@@ -1,14 +1,14 @@
 #include "mdhd.hpp"
 #include <iostream>
 
-MP4::mdhd::mdhd(atomParse &parse)
+MP4::mdhd::mdhd(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     dataBlock mdhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &mdhdData, sizeof(mdhdData));
+    fileStream->read((char*) &mdhdData, sizeof(mdhdData));
     creationTime = XXH_swap32(mdhdData.creationTime);
     modificationTime = XXH_swap32(mdhdData.modificationTime);
     timeScale = XXH_swap32(mdhdData.timeScale);
@@ -73,7 +73,7 @@ void MP4::mdhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     mdhdData.language = XXH_swap16(language);
     mdhdData.quality = XXH_swap16(quality);
 
-    fileWrite->write((char *) &mdhdData, sizeof(mdhdData));
+    fileWrite->write((char*) &mdhdData, sizeof(mdhdData));
 
 }
 

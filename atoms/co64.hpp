@@ -24,7 +24,7 @@ namespace MP4
 class co64 : public atom
 {
 public:
-    co64(atomParse &parse);
+    co64(atomParse& parse);
     co64(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

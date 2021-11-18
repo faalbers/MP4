@@ -16,7 +16,7 @@ namespace MP4
 class gpmd : public atom
 {
 public:
-    gpmd(atomParse &parse);
+    gpmd(atomParse& parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

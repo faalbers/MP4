@@ -1,7 +1,7 @@
 #include "smhd.hpp"
 #include <iostream>
 
-MP4::smhd::smhd(atomParse &parse)
+MP4::smhd::smhd(atomParse& parse)
     : atom(parse)
 {
     typedef struct dataBlock
@@ -15,7 +15,7 @@ MP4::smhd::smhd(atomParse &parse)
 
     dataBlock smhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &smhdData, sizeof(smhdData));
+    fileStream->read((char*) &smhdData, sizeof(smhdData));
     balance = (float)XXH_swap16(smhdData.balance) / (float)(1 << 8);
 }
 

@@ -1,7 +1,7 @@
 #include "hdlr.hpp"
 #include <iostream>
 
-MP4::hdlr::hdlr(atomParse &parse)
+MP4::hdlr::hdlr(atomParse& parse)
     : atom(parse)
 {
     // get data
@@ -9,14 +9,14 @@ MP4::hdlr::hdlr(atomParse &parse)
 
     dataBlock hdlrData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &hdlrData, sizeof(hdlrData));
+    fileStream->read((char*) &hdlrData, sizeof(hdlrData));
     componentType = std::string(hdlrData.componentType).substr(0,4);
     componentSubType = std::string(hdlrData.componentSubType).substr(0,4);
     // get sized name string
     uint8_t stringCount;
-    fileStream->read((char *) &stringCount, sizeof(stringCount));
+    fileStream->read((char*) &stringCount, sizeof(stringCount));
     char name[200];
-    fileStream->read((char *) name, stringCount);
+    fileStream->read((char*) name, stringCount);
     componentName = std::string(name).substr(0, stringCount);
 }
 
@@ -69,12 +69,12 @@ void MP4::hdlr::writeData(std::shared_ptr<atomWriteFile> writeFile)
     memcpy(&hdlrData.componentType, componentType.c_str(), 4);
     memcpy(&hdlrData.componentSubType, componentSubType.c_str(), 4);
 
-    fileWrite->write((char *) &hdlrData, sizeof(hdlrData));
+    fileWrite->write((char*) &hdlrData, sizeof(hdlrData));
 
     // add component name to tail end
     uint8_t nameSize = (uint8_t) componentName.size();
-    fileWrite->write((char *) &nameSize, sizeof(nameSize));
-    fileWrite->write((char *) componentName.c_str(), (size_t) nameSize);
+    fileWrite->write((char*) &nameSize, sizeof(nameSize));
+    fileWrite->write((char*) componentName.c_str(), (size_t) nameSize);
 }
 
 std::string MP4::hdlr::key = "hdlr";

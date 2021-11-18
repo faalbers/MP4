@@ -17,14 +17,14 @@ namespace MP4
 class SETT : public atom
 {
 public:
-    SETT(atomParse &parse);
+    SETT(atomParse& parse);
     SETT(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
-    void getUserData(std::map<std::string, std::string> &userData_);
+    void getUserData(std::map<std::string, std::string>& userData_);
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 

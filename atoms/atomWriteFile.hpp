@@ -16,7 +16,7 @@ public:
     ~atomWriteFile();
 
     std::string     getFilePath();
-    std::ofstream   *getFileWrite();
+    std::ofstream*  getFileWrite();
 
     std::map<uint32_t, std::vector<uint64_t>> mdatWriteInfo;
 

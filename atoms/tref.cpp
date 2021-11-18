@@ -1,7 +1,7 @@
 #include "tref.hpp"
 #include <iostream>
 
-MP4::tref::tref(atomParse &parse)
+MP4::tref::tref(atomParse& parse)
     : atom(parse)
 {
 }

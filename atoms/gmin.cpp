@@ -1,7 +1,7 @@
 #include "gmin.hpp"
 #include <iostream>
 
-MP4::gmin::gmin(atomParse &parse)
+MP4::gmin::gmin(atomParse& parse)
     : atom(parse)
 {
     typedef struct dataBlock
@@ -19,7 +19,7 @@ MP4::gmin::gmin(atomParse &parse)
 
     dataBlock gminData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &gminData, sizeof(gminData));
+    fileStream->read((char*) &gminData, sizeof(gminData));
     graphicMode = XXH_swap16(gminData.graphicsMode);
     opColorR = XXH_swap16(gminData.opColorR);
     opColorG = XXH_swap16(gminData.opColorG);

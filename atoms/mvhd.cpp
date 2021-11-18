@@ -1,14 +1,14 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::mvhd::mvhd(atomParse &parse)
+MP4::mvhd::mvhd(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     dataBlock mvhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &mvhdData, sizeof(mvhdData));
+    fileStream->read((char*) &mvhdData, sizeof(mvhdData));
     creationTime = XXH_swap32(mvhdData.creationTime);
     modificationTime = XXH_swap32(mvhdData.modificationTime);
     timeScale = XXH_swap32(mvhdData.timeScale);
@@ -122,10 +122,10 @@ void MP4::mvhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     //ftypData.version = XXH_swap32(version);
     
-    fileWrite->write((char *) &mvhdData, sizeof(mvhdData));
+    fileWrite->write((char*) &mvhdData, sizeof(mvhdData));
     /*
     for ( auto brand : compatibleBrands ) {
-        fileWrite->write((char *) brand.c_str(), 4);
+        fileWrite->write((char*) brand.c_str(), 4);
     }
     */
 }

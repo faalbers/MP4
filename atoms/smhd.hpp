@@ -15,7 +15,7 @@ namespace MP4
 class smhd : public atom
 {
 public:
-    smhd(atomParse &parse);
+    smhd(atomParse& parse);
 
     void printData(bool fullLists = false);
     void printHierarchyData(bool fullLists = false);

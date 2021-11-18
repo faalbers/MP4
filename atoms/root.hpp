@@ -27,7 +27,7 @@ namespace MP4
 class root : public atom
 {
 public:
-    root(atomParse &parse);
+    root(atomParse& parse);
     root(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

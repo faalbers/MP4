@@ -21,7 +21,7 @@ namespace MP4
 class stsc : public atom
 {
 public:
-    stsc(atomParse &parse);
+    stsc(atomParse& parse);
     stsc(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

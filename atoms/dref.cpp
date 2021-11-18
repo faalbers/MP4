@@ -1,7 +1,7 @@
 #include "dref.hpp"
 #include <iostream>
 
-MP4::dref::dref(atomParse &parse)
+MP4::dref::dref(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,7 +9,7 @@ MP4::dref::dref(atomParse &parse)
 
     tableBlock drefData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &drefData, sizeof(drefData));
+    fileStream->read((char*) &drefData, sizeof(drefData));
 
     drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
     uint32_t ID = 1;

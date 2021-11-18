@@ -4,7 +4,7 @@
 #include "stbl.hpp"
 #include <iostream>
 
-MP4::minf::minf(atomParse &parse)
+MP4::minf::minf(atomParse& parse)
     : atom(parse)
 {
 }

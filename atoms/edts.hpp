@@ -17,7 +17,7 @@ namespace MP4
 class edts : public atom
 {
 public:
-    edts(atomParse &parse);
+    edts(atomParse& parse);
     edts(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

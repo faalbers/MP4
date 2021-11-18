@@ -3,7 +3,7 @@
 #include "mvhd.hpp"
 #include <iostream>
 
-MP4::tkhd::tkhd(atomParse &parse)
+MP4::tkhd::tkhd(atomParse& parse)
     : atom(parse)
 {
     // get data
@@ -11,7 +11,7 @@ MP4::tkhd::tkhd(atomParse &parse)
 
     dataBlock tkhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &tkhdData, sizeof(tkhdData));
+    fileStream->read((char*) &tkhdData, sizeof(tkhdData));
     
     creationTime = XXH_swap32(tkhdData.creationTime);
     modificationTime = XXH_swap32(tkhdData.modificationTime);
@@ -120,10 +120,10 @@ void MP4::tkhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     //memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     //ftypData.version = XXH_swap32(version);
     
-    fileWrite->write((char *) &tkhdData, sizeof(tkhdData));
+    fileWrite->write((char*) &tkhdData, sizeof(tkhdData));
     /*
     for ( auto brand : compatibleBrands ) {
-        fileWrite->write((char *) brand.c_str(), 4);
+        fileWrite->write((char*) brand.c_str(), 4);
     }
     */
 }

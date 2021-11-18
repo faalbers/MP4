@@ -17,7 +17,7 @@ namespace MP4
 class mvhd : public atom
 {
 public:
-    mvhd(atomParse &parse);
+    mvhd(atomParse& parse);
     mvhd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

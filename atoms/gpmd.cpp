@@ -1,13 +1,13 @@
 #include "gpmd.hpp"
 #include <iostream>
 
-MP4::gpmd::gpmd(atomParse &parse)
+MP4::gpmd::gpmd(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &version, sizeof(version));
+    fileStream->read((char*) &version, sizeof(version));
     version = XXH_swap32(version);
 }
 

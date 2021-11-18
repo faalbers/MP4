@@ -47,7 +47,7 @@ namespace MP4
 class stbl : public atom
 {
 public:
-    stbl(atomParse &parse);
+    stbl(atomParse& parse);
     stbl(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

@@ -15,7 +15,7 @@ public:
     ~atomCopyFile();
 
     std::string     getFilePath();
-    std::ofstream   *getFileWrite();
+    std::ofstream*  getFileWrite();
 
     void            addExcludeAtom(std::string atomPath);
     void            addFullCopyAtom(std::string atomPath);

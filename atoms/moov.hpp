@@ -34,7 +34,7 @@ namespace MP4
 class moov : public atom
 {
 public:
-    moov(atomParse &parse);
+    moov(atomParse& parse);
     moov(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

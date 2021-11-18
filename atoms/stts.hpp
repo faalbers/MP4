@@ -32,7 +32,7 @@ namespace MP4
 class stts : public atom
 {
 public:
-    stts(atomParse &parse);
+    stts(atomParse& parse);
     stts(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

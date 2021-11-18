@@ -10,7 +10,7 @@
 #include "GPMF.hpp"
 #include <iostream>
 
-MP4::udta::udta(atomParse &parse)
+MP4::udta::udta(atomParse& parse)
     : atom(parse)
 {
 }

@@ -1,7 +1,7 @@
 #include "co64.hpp"
 #include <iostream>
 
-MP4::co64::co64(atomParse &parse)
+MP4::co64::co64(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,13 +9,13 @@ MP4::co64::co64(atomParse &parse)
 
     tableBlock co64Data;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &co64Data, sizeof(co64Data));
+    fileStream->read((char*) &co64Data, sizeof(co64Data));
     co64Data.numberOfEntries = XXH_swap32(co64Data.numberOfEntries);
     auto index = co64Data.numberOfEntries;
     uint64_t chunkOffset;
     uint32_t ID = 1;
     do {
-        fileStream->read((char *) &chunkOffset, sizeof(chunkOffset));
+        fileStream->read((char*) &chunkOffset, sizeof(chunkOffset));
         chunkOffset = XXH_swap64(chunkOffset);
         co64Table[ID] = chunkOffset;
         index--;
@@ -78,13 +78,13 @@ void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile)
     //co64Data.numberOfEntries = XXH_swap32(writeFile->mdatWriteInfo);
     co64Data.numberOfEntries = XXH_swap32( (uint32_t) writeFile->mdatWriteInfo[writeTrackID_].size());
 
-    fileWrite->write((char *) &co64Data, sizeof(co64Data));
+    fileWrite->write((char*) &co64Data, sizeof(co64Data));
 
     // write table
     uint64_t val;
     for ( auto dataOffset : writeFile->mdatWriteInfo[writeTrackID_] ) {
         val = XXH_swap64(dataOffset);
-        fileWrite->write((char *) &val, sizeof(val));
+        fileWrite->write((char*) &val, sizeof(val));
     }
 }
 

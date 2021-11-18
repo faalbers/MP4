@@ -1,14 +1,14 @@
 #include "stsz.hpp"
 #include <iostream>
 
-MP4::stsz::stsz(atomParse &parse)
+MP4::stsz::stsz(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     tableBlock stszData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &stszData, sizeof(stszData));
+    fileStream->read((char*) &stszData, sizeof(stszData));
     defaultSampleSize = XXH_swap32(stszData.defaultSampleSize);
     if ( defaultSampleSize == 0 ) {
         stszData.numberOfEntries = XXH_swap32(stszData.numberOfEntries);
@@ -16,7 +16,7 @@ MP4::stsz::stsz(atomParse &parse)
         uint32_t defaultSampleSizeTemp;
         uint32_t ID = 1;
         do {
-            fileStream->read((char *) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
+            fileStream->read((char*) &defaultSampleSizeTemp, sizeof(defaultSampleSizeTemp));
             stszTable[ID] = XXH_swap32(defaultSampleSizeTemp);
             index--;
             ID++;
@@ -91,13 +91,13 @@ void MP4::stsz::writeData(std::shared_ptr<atomWriteFile> writeFile)
     stszData.defaultSampleSize = XXH_swap32(defaultSampleSize);
     stszData.numberOfEntries = XXH_swap32((uint32_t) stszTable.size());
 
-    fileWrite->write((char *) &stszData, sizeof(stszData));
+    fileWrite->write((char*) &stszData, sizeof(stszData));
 
     // write table
     uint32_t val;
     for ( auto entry : stszTable ) {
         val = XXH_swap32(entry.second);
-        fileWrite->write((char *) &val, sizeof(val));
+        fileWrite->write((char*) &val, sizeof(val));
     }
 }
 

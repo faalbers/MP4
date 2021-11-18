@@ -20,7 +20,7 @@ namespace MP4
 class stsz : public atom
 {
 public:
-    stsz(atomParse &parse);
+    stsz(atomParse& parse);
     stsz(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

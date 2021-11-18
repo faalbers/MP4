@@ -1,7 +1,7 @@
 #include "stco.hpp"
 #include <iostream>
 
-MP4::stco::stco(atomParse &parse)
+MP4::stco::stco(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,13 +9,13 @@ MP4::stco::stco(atomParse &parse)
 
     tableBlock stcoData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &stcoData, sizeof(stcoData));
+    fileStream->read((char*) &stcoData, sizeof(stcoData));
     stcoData.numberOfEntries = XXH_swap32(stcoData.numberOfEntries);
     auto index = stcoData.numberOfEntries;
     uint32_t chunkOffset;
     uint32_t ID = 1;
     do {
-        fileStream->read((char *) &chunkOffset, sizeof(chunkOffset));
+        fileStream->read((char*) &chunkOffset, sizeof(chunkOffset));
         chunkOffset = XXH_swap32(chunkOffset);
         stcoTable[ID] = (uint64_t) chunkOffset;
         index--;

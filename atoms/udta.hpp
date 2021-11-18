@@ -27,7 +27,7 @@ namespace MP4
 class udta : public atom
 {
 public:
-    udta(atomParse &parse);
+    udta(atomParse& parse);
     udta(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

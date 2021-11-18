@@ -1,14 +1,14 @@
 #include "uuid.hpp"
 #include <iostream>
 
-MP4::uuid::uuid(atomParse &parse)
+MP4::uuid::uuid(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     fileStream->seekg(fileDataPos_, fileStream->beg);
     char nameBlock[4];
-    fileStream->read((char *) nameBlock, 4);
+    fileStream->read((char*) nameBlock, 4);
 
     name = std::string(nameBlock).substr(0,4);
 

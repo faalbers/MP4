@@ -1,7 +1,7 @@
 #include "alis.hpp"
 #include <iostream>
 
-MP4::alis::alis(atomParse &parse)
+MP4::alis::alis(atomParse& parse)
     : atom(parse)
     , dataInSameFile(false)
 {
@@ -9,7 +9,7 @@ MP4::alis::alis(atomParse &parse)
 
     versionBlock drefType;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &drefType, sizeof(drefType));
+    fileStream->read((char*) &drefType, sizeof(drefType));
     if ( drefType.flag[2] == 1) dataInSameFile = true;
     if ( !dataInSameFile )
         throw std::runtime_error("alis data reference should be in same file");

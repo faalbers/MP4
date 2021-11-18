@@ -32,7 +32,7 @@ namespace MP4
 class ftyp : public atom
 {
 public:
-    ftyp(atomParse &parse);
+    ftyp(atomParse& parse);
     ftyp(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);

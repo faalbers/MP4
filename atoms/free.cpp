@@ -1,7 +1,7 @@
 #include "free.hpp"
 #include <iostream>
 
-MP4::free::free(atomParse &parse)
+MP4::free::free(atomParse& parse)
     : atom(parse)
 {
     freeSize = fileNextPos_ - fileDataPos_;

@@ -1,14 +1,14 @@
 #include "vmhd.hpp"
 #include <iostream>
 
-MP4::vmhd::vmhd(atomParse &parse)
+MP4::vmhd::vmhd(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
 
     dataBlock vmhdData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &vmhdData, sizeof(vmhdData));
+    fileStream->read((char*) &vmhdData, sizeof(vmhdData));
 /*
     std::cout << (int) vmhdData.version.version
         << " " << (int) vmhdData.version.flag[0]
@@ -69,7 +69,7 @@ void MP4::vmhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     vmhdData.opColorG = XXH_swap16(opColorG);
     vmhdData.opColorB = XXH_swap16(opColorB);
 
-    fileWrite->write((char *) &vmhdData, sizeof(vmhdData));
+    fileWrite->write((char*) &vmhdData, sizeof(vmhdData));
 }
 
 std::string MP4::vmhd::getKey()

@@ -1,7 +1,7 @@
 #include "stsc.hpp"
 #include <iostream>
 
-MP4::stsc::stsc(atomParse &parse)
+MP4::stsc::stsc(atomParse& parse)
     : atom(parse)
 {
     // handle data 
@@ -9,18 +9,18 @@ MP4::stsc::stsc(atomParse &parse)
 
     tableBlock stscData;
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) &stscData, sizeof(stscData));
+    fileStream->read((char*) &stscData, sizeof(stscData));
     stscData.numberOfEntries = XXH_swap32(stscData.numberOfEntries);
     auto index = stscData.numberOfEntries;
     uint32_t ID = 1;
     do {
         std::vector<uint32_t> stscEntry;
         uint32_t val;
-        fileStream->read((char *) &val, sizeof(val));
+        fileStream->read((char*) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
-        fileStream->read((char *) &val, sizeof(val));
+        fileStream->read((char*) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
-        fileStream->read((char *) &val, sizeof(val));
+        fileStream->read((char*) &val, sizeof(val));
         stscEntry.push_back(XXH_swap32(val));
         stscTable[ID] = stscEntry;
         index--;
@@ -93,12 +93,12 @@ void MP4::stsc::writeData(std::shared_ptr<atomWriteFile> writeFile)
 
     stscData.numberOfEntries = XXH_swap32((uint32_t) 1);
 
-    fileWrite->write((char *) &stscData, sizeof(stscData));
+    fileWrite->write((char*) &stscData, sizeof(stscData));
 
     uint32_t val = XXH_swap32((uint32_t) 1);
-    fileWrite->write((char *) &val, sizeof(val));
-    fileWrite->write((char *) &val, sizeof(val));
-    fileWrite->write((char *) &val, sizeof(val));
+    fileWrite->write((char*) &val, sizeof(val));
+    fileWrite->write((char*) &val, sizeof(val));
+    fileWrite->write((char*) &val, sizeof(val));
 }
 
 std::string MP4::stsc::key = "stsc";

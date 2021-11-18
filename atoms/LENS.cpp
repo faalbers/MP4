@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-MP4::LENS::LENS(atomParse &parse)
+MP4::LENS::LENS(atomParse& parse)
     : atom(parse)
 {
     auto fileStream = parse.getFileStream();
@@ -11,7 +11,7 @@ MP4::LENS::LENS(atomParse &parse)
     auto bufferSize = (size_t) dataSize_;
     auto buffer = new char[bufferSize];
     fileStream->seekg(fileDataPos_, fileStream->beg);
-    fileStream->read((char *) buffer, bufferSize);
+    fileStream->read((char*) buffer, bufferSize);
     userData = std::string(buffer,bufferSize);
     delete[] buffer;
     lens = getZeroTerminatedString(userData, bufferSize);
@@ -43,7 +43,7 @@ std::string MP4::LENS::getKey()
     return key;
 }
 
-void MP4::LENS::getUserData(std::map<std::string, std::string> &userData_)
+void MP4::LENS::getUserData(std::map<std::string, std::string>& userData_)
 {
     userData_["LENS"] = userData;
 }
@@ -53,7 +53,7 @@ void MP4::LENS::writeData(std::shared_ptr<atomWriteFile> writeFile)
     auto fileWrite = writeFile->getFileWrite();
     
     if ( userData.size() > 0 )
-        fileWrite->write((char *) userData.c_str(), (size_t) userData.size());
+        fileWrite->write((char*) userData.c_str(), (size_t) userData.size());
 }
 
 std::string MP4::LENS::key = "LENS";

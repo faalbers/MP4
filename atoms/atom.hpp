@@ -36,13 +36,13 @@ class atom
 {
 public:
     atom();
-    atom(atomParse &parse);
+    atom(atomParse& parse);
     atom(std::shared_ptr<atomBuild> build);
     
     template<typename T>
-    std::vector<T *>     getTypeAtoms()
+    std::vector<T*>     getTypeAtoms()
     {
-        std::vector<T *> foundTypeAtoms;
+        std::vector<T*> foundTypeAtoms;
         std::vector<std::shared_ptr<atom>> found;
         if ( T::key == key_ ) foundTypeAtoms.push_back((T *) this);
         getChildAtoms_(T::key, found);
@@ -57,10 +57,10 @@ public:
     static uint32_t getCurrentDateTime();
     static uint32_t timeScaleDuration(uint32_t duration, uint32_t sourceTimeScale, uint32_t targetTimeScale);
 
-    static void dataStringViz(std::string &dataString, std::string indent = "");
+    static void dataStringViz(std::string& dataString, std::string indent = "");
     
     virtual std::string getKey();
-    virtual void getUserData(std::map<std::string, std::string> &userData);
+    virtual void getUserData(std::map<std::string, std::string>& userData);
 
     virtual void printData(bool fullLists = false);
     virtual void printHierarchyData(bool fullLists = false);
@@ -105,11 +105,11 @@ protected:
 
     void                            error_(std::string message);
 
-    static std::shared_ptr<atom>    makeAtom_(atomParse &parse);
-    void                            setMoov_(moov *moveAtom);
-    void                            setTrak_(trak *trakAtom);
+    static std::shared_ptr<atom>    makeAtom_(atomParse& parse);
+    void                            setMoov_(moov* moveAtom);
+    void                            setTrak_(trak* trakAtom);
     static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);
-    void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>> &found);
+    void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found);
     int                             nestLevel_(int level);
     
     void                            write_(std::shared_ptr<atomWriteFile> writeFile);
@@ -134,8 +134,8 @@ protected:
     int64_t                             filePos_, fileDataPos_, fileNextPos_;
     int64_t                             dataSize_;
     std::vector<std::shared_ptr<atom>>  children_;
-    moov                                *moovAtom_;
-    trak                                *trakAtom_;
+    moov*                               moovAtom_;
+    trak*                               trakAtom_;
     int64_t                             writeHeaderSizePos_;
     bool                                writeHeaderSize64_;
     std::shared_ptr<atomBuild>          build_;

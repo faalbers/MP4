@@ -15,7 +15,7 @@ namespace MP4
 class vmhd : public atom
 {
 public:
-    vmhd(atomParse &parse);
+    vmhd(atomParse& parse);
     vmhd(std::shared_ptr<atomBuild> build);
 
 
