@@ -33,7 +33,7 @@ MP4::stsc::stsc(std::shared_ptr<atomBuild> build)
 {
 }
 
-void MP4::stsc::printData(bool fullLists)
+void MP4::stsc::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -49,24 +49,24 @@ void MP4::stsc::printData(bool fullLists)
     } else {
         for ( uint32_t index = 1 ; index <= 3; index++ ) {
             std::cout << dataIndent
-            << "  [" << index << "] ( " << stscTable[index][0]
-            << ", " << stscTable[index][1]
-            << ", " << stscTable[index][2] << " )"
+            << "  [" << index << "] ( " << stscTable.at(index)[0]
+            << ", " << stscTable.at(index)[1]
+            << ", " << stscTable.at(index)[2] << " )"
             << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
         uint32_t tableSize = (uint32_t) stscTable.size();
         for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
             std::cout << dataIndent
-            << "  [" << index << "] ( " << stscTable[index][0]
-            << ", " << stscTable[index][1]
-            << ", " << stscTable[index][2] << " )"
+            << "  [" << index << "] ( " << stscTable.at(index)[0]
+            << ", " << stscTable.at(index)[1]
+            << ", " << stscTable.at(index)[2] << " )"
             << std::endl;
         }
     }
 }
 
-void MP4::stsc::printHierarchyData(bool fullLists)
+void MP4::stsc::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

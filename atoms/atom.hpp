@@ -11,6 +11,7 @@
 #include "atomWriteFile.hpp"
 #include "atomCopyFile.hpp"
 
+// make swap method multi platform
 #if defined(__APPLE__)
 #include <libkern/OSByteOrder.h>
 #define XXH_swap16 OSSwapInt16
@@ -50,7 +51,7 @@ public:
         return foundTypeAtoms;
     }
 
-    void printHierarchy(int pathWith = 35, int valLevel = 10);
+    void printHierarchy(int pathWith = 35, int valLevel = 10) const;
     static std::string getTimeString(uint32_t time, uint32_t timeScale);
     static std::string getDateTimeString(uint32_t seconds);
     static std::string getZeroTerminatedString(std::string dataString, size_t maxLength = 0);
@@ -59,11 +60,11 @@ public:
 
     static void dataStringViz(std::string& dataString, std::string indent = "");
     
-    virtual std::string getKey();
-    virtual void getUserData(std::map<std::string, std::string>& userData);
+    virtual std::string getKey() const;
+    virtual void getUserData(std::map<std::string, std::string>& userData) const;
 
-    virtual void printData(bool fullLists = false);
-    virtual void printHierarchyData(bool fullLists = false);
+    virtual void printData(bool fullLists = false) const;
+    virtual void printHierarchyData(bool fullLists = false) const;
 
     virtual void write(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile);

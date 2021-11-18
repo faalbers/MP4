@@ -163,7 +163,7 @@ int MP4::atom::nestLevel_(int level)
     return maxChildLevel;
 }
 
-void MP4::atom::printHierarchy(int pathWith, int valLevel)
+void MP4::atom::printHierarchy(int pathWith, int valLevel) const
 {
     std::cout << std::setw(pathWith) << std::left << path_;
     std::cout << "  |- " <<  std::setw(valLevel) << std::right << filePos_
@@ -242,7 +242,7 @@ void MP4::atom::dataStringViz(std::string& dataString, std::string indent)
     std::cout << indent << charss.str() << std::endl;
 }
 
-void MP4::atom::printData(bool fullLists)
+void MP4::atom::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -253,18 +253,18 @@ void MP4::atom::printData(bool fullLists)
         std::cout << dataIndent << "No data defined ..." << std::endl;
 }
 
-void MP4::atom::printHierarchyData(bool fullLists)
+void MP4::atom::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::string MP4::atom::getKey()
+std::string MP4::atom::getKey() const
 {
     return key_;
 }
 
-void MP4::atom::getUserData(std::map<std::string, std::string>& userData)
+void MP4::atom::getUserData(std::map<std::string, std::string>& userData) const
 {
     for ( auto child : children_ ) child->getUserData(userData);
 }

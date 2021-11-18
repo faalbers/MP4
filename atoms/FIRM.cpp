@@ -23,7 +23,7 @@ MP4::FIRM::FIRM(std::shared_ptr<atomBuild> build)
 {
 }
 
-void MP4::FIRM::printData(bool fullLists)
+void MP4::FIRM::printData(bool fullLists) const
 {    
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -32,7 +32,7 @@ void MP4::FIRM::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::FIRM::printHierarchyData(bool fullLists)
+void MP4::FIRM::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

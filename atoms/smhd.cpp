@@ -19,7 +19,7 @@ MP4::smhd::smhd(atomParse& parse)
     balance = (float)XXH_swap16(smhdData.balance) / (float)(1 << 8);
 }
 
-void MP4::smhd::printData(bool fullLists)
+void MP4::smhd::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -28,7 +28,7 @@ void MP4::smhd::printData(bool fullLists)
 
 }
 
-void MP4::smhd::printHierarchyData(bool fullLists)
+void MP4::smhd::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

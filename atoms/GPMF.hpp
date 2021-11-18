@@ -20,8 +20,8 @@ public:
     GPMF(atomParse& parse);
     GPMF(std::shared_ptr<atomBuild> build);
 
-    void printData(bool fullLists = false);
-    void printHierarchyData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
+    void printHierarchyData(bool fullLists = false) const;
 
     std::string getKey();
     void getUserData(std::map<std::string, std::string>& userData_);
