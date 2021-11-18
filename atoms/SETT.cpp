@@ -23,7 +23,7 @@ MP4::SETT::SETT(std::shared_ptr<atomBuild> build)
 {
 }
 
-void MP4::SETT::printData(bool fullLists)
+void MP4::SETT::printData(bool fullLists) const
 {    
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -32,7 +32,7 @@ void MP4::SETT::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::SETT::printHierarchyData(bool fullLists)
+void MP4::SETT::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
@@ -43,7 +43,7 @@ std::string MP4::SETT::getKey()
     return key;
 }
 
-void MP4::SETT::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::SETT::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["SETT"] = userData;
 }

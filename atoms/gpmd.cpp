@@ -11,7 +11,7 @@ MP4::gpmd::gpmd(atomParse& parse)
     version = XXH_swap32(version);
 }
 
-void MP4::gpmd::printData(bool fullLists)
+void MP4::gpmd::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -19,7 +19,7 @@ void MP4::gpmd::printData(bool fullLists)
     std::cout << dataIndent << "version : " << version << std::endl;
 }
 
-void MP4::gpmd::printHierarchyData(bool fullLists)
+void MP4::gpmd::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

@@ -49,8 +49,8 @@ public:
     bool isComponentSubType(std::string type);
     bool isDataFormat(std::string dataFormat);
 
-    void printData(bool fullLists = false);
-    void printHierarchyData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
+    void printHierarchyData(bool fullLists = false) const;
 
     std::string getKey();
 

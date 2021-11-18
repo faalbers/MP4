@@ -34,7 +34,7 @@ MP4::stss::stss(std::shared_ptr<atomBuild> build)
     }
 }
 
-void MP4::stss::printData(bool fullLists)
+void MP4::stss::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -45,17 +45,17 @@ void MP4::stss::printData(bool fullLists)
             std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second << " )" << std::endl;
     } else {
         for ( uint32_t index = 1 ; index <= 3; index++ ) {
-            std::cout << dataIndent << "[" << index << "] ( " << stssTable[index] << " )" << std::endl;
+            std::cout << dataIndent << "[" << index << "] ( " << stssTable.at(index) << " )" << std::endl;
         }
         std::cout << dataIndent << "     ...\n";
         uint32_t tableSize = (uint32_t) stssTable.size();
         for ( uint32_t index = tableSize-2 ; index <= tableSize; index++ ) {
-            std::cout << dataIndent << "[" << index << "] ( " << stssTable[index] << " )" << std::endl;
+            std::cout << dataIndent << "[" << index << "] ( " << stssTable.at(index) << " )" << std::endl;
         }
     }
 }
 
-void MP4::stss::printHierarchyData(bool fullLists)
+void MP4::stss::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
