@@ -51,7 +51,7 @@ MP4::tkhd::tkhd(std::shared_ptr<atomBuild> build)
 {
 }
 
-void MP4::tkhd::printData(bool fullLists) const
+void MP4::tkhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -73,7 +73,7 @@ void MP4::tkhd::printData(bool fullLists) const
     std::cout << dataIndent << matrix[2][0] << " " << matrix[2][1] << " " << matrix[2][2] << " " << std::endl;
 }
 
-void MP4::tkhd::printHierarchyData(bool fullLists) const
+void MP4::tkhd::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

@@ -34,7 +34,7 @@ MP4::stss::stss(std::shared_ptr<atomBuild> build)
     }
 }
 
-void MP4::stss::printData(bool fullLists) const
+void MP4::stss::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -55,7 +55,7 @@ void MP4::stss::printData(bool fullLists) const
     }
 }
 
-void MP4::stss::printHierarchyData(bool fullLists) const
+void MP4::stss::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

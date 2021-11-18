@@ -57,7 +57,7 @@ MP4::stts::stts(std::shared_ptr<atomBuild> build)
     sttsTable[ID] = sttsEntry;
 }
 
-void MP4::stts::printData(bool fullLists) const
+void MP4::stts::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -67,7 +67,7 @@ void MP4::stts::printData(bool fullLists) const
         std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second[0] << ", " << entry.second[1] << " )" << std::endl;
 }
 
-void MP4::stts::printHierarchyData(bool fullLists) const
+void MP4::stts::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

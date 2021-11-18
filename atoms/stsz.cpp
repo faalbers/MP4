@@ -43,7 +43,7 @@ MP4::stsz::stsz(std::shared_ptr<atomBuild> build)
     for ( auto sample : track->samples ) stszTable[sample.first] = sample.second.size;
 }
 
-void MP4::stsz::printData(bool fullLists) const
+void MP4::stsz::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -65,7 +65,7 @@ void MP4::stsz::printData(bool fullLists) const
     }
 }
 
-void MP4::stsz::printHierarchyData(bool fullLists) const
+void MP4::stsz::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

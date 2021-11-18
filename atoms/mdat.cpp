@@ -49,7 +49,7 @@ MP4::mdat::mdat(std::shared_ptr<atomBuild> build)
     }
 }
 
-void MP4::mdat::printData(bool fullLists) const
+void MP4::mdat::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -58,7 +58,7 @@ void MP4::mdat::printData(bool fullLists) const
     std::cout << dataIndent << "Size of sample data in bytes: " << sampleDataSize << std::endl;
 }
 
-void MP4::mdat::printHierarchyData(bool fullLists) const
+void MP4::mdat::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
@@ -87,7 +87,7 @@ void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
             filePath = mdatEntry.filePath;
             if ( fileRead.is_open() ) fileRead.close();
             fileRead.open(filePath, std::ios::binary);
-            if ( fileRead.fail() ) error_("mdat: constructer can not read file: "+filePath);
+            if ( fileRead.fail() ) error_("mdat:ructer can not read file: "+filePath);
         }
         fileRead.seekg(mdatEntry.filePos, fileRead.beg);
         fileRead.read(buffer, mdatEntry.size);

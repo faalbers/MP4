@@ -49,7 +49,7 @@ public:
     std::string getDataFormat(uint32_t trackID = 0);
     uint16_t    getDataReferenceIndex(uint32_t trackID = 0);
     std::string getDataExtended(uint32_t trackID = 0);
-    std::string getUserData(std::string userDataKey) const;
+    std::string getUserData(std::string userDataKey);
     bool        samplesHaveSync();
     bool        samplesHaveCompositionOffset();
 

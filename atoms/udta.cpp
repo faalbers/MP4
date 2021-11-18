@@ -76,7 +76,7 @@ MP4::udta::udta(std::shared_ptr<atomBuild> build)
     
 }
 
-void MP4::udta::printData(bool fullLists) const
+void MP4::udta::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -84,7 +84,7 @@ void MP4::udta::printData(bool fullLists) const
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::udta::printHierarchyData(bool fullLists) const
+void MP4::udta::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

@@ -15,7 +15,7 @@ MP4::url_::url_(atomParse& parse)
         throw std::runtime_error("url_ data reference should be in same file");
 }
 
-void MP4::url_::printData(bool fullLists) const
+void MP4::url_::printData(bool fullLists)
 {
     std::cout << "'url ' ) ["<< headerSize_ << "]";
     if (dataInSameFile)
@@ -23,7 +23,7 @@ void MP4::url_::printData(bool fullLists) const
     std::cout << std::endl;
 }
 
-void MP4::url_::printHierarchyData(bool fullLists) const
+void MP4::url_::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

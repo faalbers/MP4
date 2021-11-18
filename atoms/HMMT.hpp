@@ -20,11 +20,11 @@ public:
     HMMT(atomParse& parse);
     HMMT(std::shared_ptr<atomBuild> build);
 
-    void printData(bool fullLists = false) const;
-    void printHierarchyData(bool fullLists = false) const;
+    void printData(bool fullLists = false);
+    void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
-    void getUserData(std::map<std::string, std::string>& userData_) const;
+    void getUserData(std::map<std::string, std::string>& userData_);
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 

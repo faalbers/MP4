@@ -15,7 +15,7 @@ MP4::alis::alis(atomParse& parse)
         throw std::runtime_error("alis data reference should be in same file");
 }
 
-void MP4::alis::printData(bool fullLists) const
+void MP4::alis::printData(bool fullLists)
 {
     std::cout << "'alis' )";
     if (dataInSameFile)
@@ -23,7 +23,7 @@ void MP4::alis::printData(bool fullLists) const
     std::cout << std::endl;
 }
 
-void MP4::alis::printHierarchyData(bool fullLists) const
+void MP4::alis::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

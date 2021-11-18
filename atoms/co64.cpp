@@ -31,7 +31,7 @@ MP4::co64::co64(std::shared_ptr<atomBuild> build)
     // no data to add. se write for dataOffsets
 }
 
-void MP4::co64::printData(bool fullLists) const
+void MP4::co64::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -52,7 +52,7 @@ void MP4::co64::printData(bool fullLists) const
     }
 }
 
-void MP4::co64::printHierarchyData(bool fullLists) const
+void MP4::co64::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

@@ -27,7 +27,7 @@ MP4::gmin::gmin(atomParse& parse)
     balance = (float)XXH_swap16(gminData.balance) / (float)(1 << 8);
 }
 
-void MP4::gmin::printData(bool fullLists) const
+void MP4::gmin::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -41,7 +41,7 @@ void MP4::gmin::printData(bool fullLists) const
     std::cout << dataIndent << "balance    : " << balance << std::endl;
 }
 
-void MP4::gmin::printHierarchyData(bool fullLists) const
+void MP4::gmin::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

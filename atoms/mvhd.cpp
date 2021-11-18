@@ -42,7 +42,7 @@ MP4::mvhd::mvhd(std::shared_ptr<atomBuild> build)
 {
 }
 
-void MP4::mvhd::printData(bool fullLists) const
+void MP4::mvhd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -61,7 +61,7 @@ void MP4::mvhd::printData(bool fullLists) const
     std::cout << dataIndent << "nextTrackID    : " << nextTrackID << std::endl;
 }
 
-void MP4::mvhd::printHierarchyData(bool fullLists) const
+void MP4::mvhd::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

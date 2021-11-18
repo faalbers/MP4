@@ -20,7 +20,7 @@ MP4::dref::dref(atomParse& parse)
     } while ( ID <= drefData.numberOfEntries );
 }
 
-void MP4::dref::printData(bool fullLists) const
+void MP4::dref::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -32,7 +32,7 @@ void MP4::dref::printData(bool fullLists) const
     }
 }
 
-void MP4::dref::printHierarchyData(bool fullLists) const
+void MP4::dref::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

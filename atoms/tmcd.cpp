@@ -25,7 +25,7 @@ MP4::tmcd::tmcd(atomParse& parse)
 
 }
 
-void MP4::tmcd::printData(bool fullLists) const
+void MP4::tmcd::printData(bool fullLists)
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -43,7 +43,7 @@ void MP4::tmcd::printData(bool fullLists) const
     }
 }
 
-void MP4::tmcd::printHierarchyData(bool fullLists) const
+void MP4::tmcd::printHierarchyData(bool fullLists)
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
