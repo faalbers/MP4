@@ -325,12 +325,6 @@ void MP4::trak::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::trak::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::trak::getKey()
 {
     return key;

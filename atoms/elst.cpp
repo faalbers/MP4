@@ -47,12 +47,6 @@ void MP4::elst::printData(bool fullLists)
     }
 }
 
-void MP4::elst::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::elst::getKey()
 {
     return key;

@@ -23,12 +23,6 @@ void MP4::url_::printData(bool fullLists)
     std::cout << std::endl;
 }
 
-void MP4::url_::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::url_::getKey()
 {
     return key;

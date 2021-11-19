@@ -52,12 +52,6 @@ void MP4::co64::printData(bool fullLists)
     }
 }
 
-void MP4::co64::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::co64::getKey()
 {
     return key;

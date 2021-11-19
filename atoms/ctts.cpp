@@ -80,12 +80,6 @@ void MP4::ctts::printData(bool fullLists)
     }
 }
 
-void MP4::ctts::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::ctts::getKey()
 {
     return key;

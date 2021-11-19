@@ -43,12 +43,6 @@ void MP4::mdhd::printData(bool fullLists)
     std::cout << dataIndent << "quality         : " << quality << std::endl;
 }
 
-void MP4::mdhd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::mdhd::getKey()
 {
     return key;

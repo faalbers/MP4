@@ -36,12 +36,6 @@ void MP4::mdia::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::mdia::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::mdia::getKey()
 {
     return key;

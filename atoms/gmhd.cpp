@@ -14,12 +14,6 @@ void MP4::gmhd::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::gmhd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::gmhd::getKey()
 {
     return key;

@@ -20,7 +20,6 @@ public:
     tkhd(std::shared_ptr<atomBuild> build);
     
     void printData(bool fullLists = false);
-    void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
 

@@ -32,12 +32,6 @@ void MP4::CAME::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::CAME::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::CAME::getKey()
 {
     return key;

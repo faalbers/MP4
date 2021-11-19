@@ -38,12 +38,6 @@ void MP4::hdlr::printData(bool fullLists)
     std::cout << dataIndent << "componentName   : " << componentName << std::endl;
 }
 
-void MP4::hdlr::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::hdlr::getKey()
 {
     return key;

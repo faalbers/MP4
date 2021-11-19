@@ -58,12 +58,6 @@ void MP4::mdat::printData(bool fullLists)
     std::cout << dataIndent << "Size of sample data in bytes: " << sampleDataSize << std::endl;
 }
 
-void MP4::mdat::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::mdat::getKey()
 {
     return key;

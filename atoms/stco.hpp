@@ -27,7 +27,6 @@ public:
     stco(atomParse& parse);
 
     void printData(bool fullLists = false);
-    void printHierarchyData(bool fullLists = false);
     
     std::string getKey();
 

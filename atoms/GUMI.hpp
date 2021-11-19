@@ -21,7 +21,6 @@ public:
     GUMI(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false);
-    void printHierarchyData(bool fullLists = false);
 
     std::string getKey();
     void getUserData(std::map<std::string, std::string>& userData_);

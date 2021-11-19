@@ -20,12 +20,6 @@ void MP4::tref::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-void MP4::tref::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::tref::getKey()
 {
     return key;

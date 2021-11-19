@@ -22,12 +22,6 @@ void MP4::uuid::printData(bool fullLists)
     std::cout << dataIndent << "name :" << name << std::endl;
 }
 
-void MP4::uuid::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::uuid::getKey()
 {
     return key;

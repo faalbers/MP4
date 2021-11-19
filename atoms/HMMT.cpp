@@ -33,12 +33,6 @@ void MP4::HMMT::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::HMMT::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::HMMT::getKey()
 {
     return key;

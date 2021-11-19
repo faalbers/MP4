@@ -32,12 +32,6 @@ void MP4::FIRM::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::FIRM::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::FIRM::getKey()
 {
     return key;

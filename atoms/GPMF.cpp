@@ -33,12 +33,6 @@ void MP4::GPMF::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::GPMF::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::GPMF::getKey()
 {
     return key;

@@ -67,12 +67,6 @@ void MP4::stts::printData(bool fullLists)
         std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second[0] << ", " << entry.second[1] << " )" << std::endl;
 }
 
-void MP4::stts::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::stts::getKey()
 {
     return key;

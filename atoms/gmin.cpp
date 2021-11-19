@@ -41,12 +41,6 @@ void MP4::gmin::printData(bool fullLists)
     std::cout << dataIndent << "balance    : " << balance << std::endl;
 }
 
-void MP4::gmin::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::gmin::getKey()
 {
     return key;

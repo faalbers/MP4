@@ -44,12 +44,6 @@ void MP4::stco::printData(bool fullLists)
     }
 }
 
-void MP4::stco::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::stco::getKey()
 {
     return key;

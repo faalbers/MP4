@@ -73,12 +73,6 @@ void MP4::tkhd::printData(bool fullLists)
     std::cout << dataIndent << matrix[2][0] << " " << matrix[2][1] << " " << matrix[2][2] << " " << std::endl;
 }
 
-void MP4::tkhd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::tkhd::getKey()
 {
     return key;

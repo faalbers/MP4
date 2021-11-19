@@ -32,12 +32,6 @@ void MP4::MUID::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::MUID::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::MUID::getKey()
 {
     return key;

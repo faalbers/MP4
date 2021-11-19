@@ -15,12 +15,6 @@ void MP4::free::printData(bool fullLists)
     std::cout << dataIndent << "freeSize  : " << freeSize << std::endl;
 }
 
-void MP4::free::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::free::getKey()
 {
     return key;

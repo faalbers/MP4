@@ -58,12 +58,6 @@ void MP4::root::printData(bool fullLists)
     std::cout << "file size: " << size_ << std::endl << std::endl;
 }
 
-void MP4::root::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::root::getKey()
 {
     return key;

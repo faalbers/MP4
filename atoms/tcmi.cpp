@@ -68,12 +68,6 @@ void MP4::tcmi::printData(bool fullLists)
     std::cout << std::dec;
 }
 
-void MP4::tcmi::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::tcmi::getKey()
 {
     return key;

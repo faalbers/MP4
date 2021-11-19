@@ -33,12 +33,6 @@ void MP4::BCID::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-void MP4::BCID::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::BCID::getKey()
 {
     return key;

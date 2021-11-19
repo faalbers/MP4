@@ -61,12 +61,6 @@ void MP4::mvhd::printData(bool fullLists)
     std::cout << dataIndent << "nextTrackID    : " << nextTrackID << std::endl;
 }
 
-void MP4::mvhd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::mvhd::getKey()
 {
     return key;

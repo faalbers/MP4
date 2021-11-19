@@ -28,12 +28,6 @@ void MP4::smhd::printData(bool fullLists)
 
 }
 
-void MP4::smhd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::smhd::getKey()
 {
     return key;

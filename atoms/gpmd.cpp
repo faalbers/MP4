@@ -19,12 +19,6 @@ void MP4::gpmd::printData(bool fullLists)
     std::cout << dataIndent << "version : " << version << std::endl;
 }
 
-void MP4::gpmd::printHierarchyData(bool fullLists)
-{
-    printData(fullLists);
-    for ( auto child : children_ ) child->printHierarchyData(fullLists);
-}
-
 std::string MP4::gpmd::getKey()
 {
     return key;
