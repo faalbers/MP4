@@ -18,7 +18,7 @@ class elst : public atom
 public:
     elst(atomParse& parse);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

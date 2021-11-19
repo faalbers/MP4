@@ -23,7 +23,7 @@ MP4::stco::stco(atomParse& parse)
     } while ( index > 0);
 }
 
-void MP4::stco::printData(bool fullLists)
+void MP4::stco::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

@@ -57,7 +57,7 @@ MP4::stts::stts(std::shared_ptr<atomBuild> build)
     sttsTable[ID] = sttsEntry;
 }
 
-void MP4::stts::printData(bool fullLists)
+void MP4::stts::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

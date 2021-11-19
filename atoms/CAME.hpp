@@ -20,7 +20,7 @@ public:
     CAME(atomParse& parse);
     CAME(std::shared_ptr<atomBuild> build);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
     void getUserData(std::map<std::string, std::string>& userData_);

@@ -32,7 +32,7 @@ MP4::elst::elst(atomParse& parse)
     } while ( index > 0);
 }
 
-void MP4::elst::printData(bool fullLists)
+void MP4::elst::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

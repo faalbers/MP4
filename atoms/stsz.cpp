@@ -43,7 +43,7 @@ MP4::stsz::stsz(std::shared_ptr<atomBuild> build)
     for ( auto sample : track->samples ) stszTable[sample.first] = sample.second.size;
 }
 
-void MP4::stsz::printData(bool fullLists)
+void MP4::stsz::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

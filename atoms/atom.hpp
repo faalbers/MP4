@@ -63,8 +63,8 @@ public:
     virtual std::string getKey() const;
     virtual void getUserData(std::map<std::string, std::string>& userData);
 
-    virtual void printData(bool fullLists = false);
-    virtual void printHierarchyData(bool fullLists = false);
+    virtual void printData(bool fullLists = false) const;
+    virtual void printHierarchyData(bool fullLists = false) const;
 
     virtual void write(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile);

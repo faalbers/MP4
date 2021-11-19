@@ -17,7 +17,7 @@ class gmhd : public atom
 public:
     gmhd(atomParse& parse);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

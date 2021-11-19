@@ -24,7 +24,7 @@ public:
     stsc(atomParse& parse);
     stsc(std::shared_ptr<atomBuild> build);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

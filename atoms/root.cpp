@@ -52,7 +52,7 @@ MP4::root::root(std::shared_ptr<atomBuild> build)
     children_.push_back(child);
 }
 
-void MP4::root::printData(bool fullLists)
+void MP4::root::printData(bool fullLists) const
 {
     std::cout << "MP4 file : " << filePath_ << std::endl;
     std::cout << "file size: " << size_ << std::endl << std::endl;

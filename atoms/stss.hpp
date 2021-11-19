@@ -29,7 +29,7 @@ public:
     stss(atomParse& parse);
     stss(std::shared_ptr<atomBuild> build);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

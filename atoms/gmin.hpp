@@ -18,7 +18,7 @@ class gmin : public atom
 public:
     gmin(atomParse& parse);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

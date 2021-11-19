@@ -18,7 +18,7 @@ class gpmd : public atom
 public:
     gpmd(atomParse& parse);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 

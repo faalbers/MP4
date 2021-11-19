@@ -242,7 +242,7 @@ void MP4::atom::dataStringViz(std::string& dataString, std::string indent)
     std::cout << indent << charss.str() << std::endl;
 }
 
-void MP4::atom::printData(bool fullLists)
+void MP4::atom::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
@@ -253,7 +253,7 @@ void MP4::atom::printData(bool fullLists)
         std::cout << dataIndent << "No data defined ..." << std::endl;
 }
 
-void MP4::atom::printHierarchyData(bool fullLists)
+void MP4::atom::printHierarchyData(bool fullLists) const
 {
     printData(fullLists);
     for ( auto child : children_ ) child->printHierarchyData(fullLists);

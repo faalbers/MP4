@@ -29,7 +29,7 @@ MP4::minf::minf(std::shared_ptr<atomBuild> build)
     children_.push_back(child);
 }
 
-void MP4::minf::printData(bool fullLists)
+void MP4::minf::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

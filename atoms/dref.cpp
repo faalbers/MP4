@@ -20,7 +20,7 @@ MP4::dref::dref(atomParse& parse)
     } while ( ID <= drefData.numberOfEntries );
 }
 
-void MP4::dref::printData(bool fullLists)
+void MP4::dref::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');

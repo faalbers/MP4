@@ -49,7 +49,7 @@ public:
     bool isComponentSubType(std::string type);
     bool isDataFormat(std::string dataFormat);
 
-    void printData(bool fullLists = false);
+    void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 
