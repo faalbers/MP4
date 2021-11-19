@@ -32,7 +32,7 @@ void MP4::CAME::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::CAME::getKey()
+std::string MP4::CAME::getKey() const
 {
     return key;
 }

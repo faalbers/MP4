@@ -73,7 +73,7 @@ void MP4::tkhd::printData(bool fullLists)
     std::cout << dataIndent << matrix[2][0] << " " << matrix[2][1] << " " << matrix[2][2] << " " << std::endl;
 }
 
-std::string MP4::tkhd::getKey()
+std::string MP4::tkhd::getKey() const
 {
     return key;
 }

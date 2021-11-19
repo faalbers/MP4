@@ -32,7 +32,7 @@ void MP4::SETT::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::SETT::getKey()
+std::string MP4::SETT::getKey() const
 {
     return key;
 }

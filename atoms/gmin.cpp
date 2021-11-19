@@ -41,7 +41,7 @@ void MP4::gmin::printData(bool fullLists)
     std::cout << dataIndent << "balance    : " << balance << std::endl;
 }
 
-std::string MP4::gmin::getKey()
+std::string MP4::gmin::getKey() const
 {
     return key;
 }

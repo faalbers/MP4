@@ -23,7 +23,7 @@ void MP4::alis::printData(bool fullLists)
     std::cout << std::endl;
 }
 
-std::string MP4::alis::getKey()
+std::string MP4::alis::getKey() const
 {
     return key;
 }

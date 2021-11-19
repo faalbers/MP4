@@ -19,7 +19,7 @@ void MP4::edts::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::edts::getKey()
+std::string MP4::edts::getKey() const
 {
     return key;
 }

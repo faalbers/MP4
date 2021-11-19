@@ -19,7 +19,7 @@ void MP4::gpmd::printData(bool fullLists)
     std::cout << dataIndent << "version : " << version << std::endl;
 }
 
-std::string MP4::gpmd::getKey()
+std::string MP4::gpmd::getKey() const
 {
     return key;
 }

@@ -23,7 +23,7 @@ void MP4::url_::printData(bool fullLists)
     std::cout << std::endl;
 }
 
-std::string MP4::url_::getKey()
+std::string MP4::url_::getKey() const
 {
     return key;
 }

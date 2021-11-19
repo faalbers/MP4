@@ -29,7 +29,7 @@ public:
 
     void printData(bool fullLists = false);
 
-    std::string getKey();
+    std::string getKey() const;
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 

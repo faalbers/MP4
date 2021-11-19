@@ -60,7 +60,7 @@ public:
 
     static void dataStringViz(std::string& dataString, std::string indent = "");
     
-    virtual std::string getKey();
+    virtual std::string getKey() const;
     virtual void getUserData(std::map<std::string, std::string>& userData);
 
     virtual void printData(bool fullLists = false);

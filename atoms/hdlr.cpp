@@ -38,7 +38,7 @@ void MP4::hdlr::printData(bool fullLists)
     std::cout << dataIndent << "componentName   : " << componentName << std::endl;
 }
 
-std::string MP4::hdlr::getKey()
+std::string MP4::hdlr::getKey() const
 {
     return key;
 }

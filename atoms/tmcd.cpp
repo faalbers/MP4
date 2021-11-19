@@ -43,7 +43,7 @@ void MP4::tmcd::printData(bool fullLists)
     }
 }
 
-std::string MP4::tmcd::getKey()
+std::string MP4::tmcd::getKey() const
 {
     return key;
 }

@@ -61,7 +61,7 @@ void MP4::mvhd::printData(bool fullLists)
     std::cout << dataIndent << "nextTrackID    : " << nextTrackID << std::endl;
 }
 
-std::string MP4::mvhd::getKey()
+std::string MP4::mvhd::getKey() const
 {
     return key;
 }

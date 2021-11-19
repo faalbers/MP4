@@ -32,7 +32,7 @@ void MP4::dref::printData(bool fullLists)
     }
 }
 
-std::string MP4::dref::getKey()
+std::string MP4::dref::getKey() const
 {
     return key;
 }

@@ -58,7 +58,7 @@ void MP4::mdat::printData(bool fullLists)
     std::cout << dataIndent << "Size of sample data in bytes: " << sampleDataSize << std::endl;
 }
 
-std::string MP4::mdat::getKey()
+std::string MP4::mdat::getKey() const
 {
     return key;
 }

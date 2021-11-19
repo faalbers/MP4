@@ -20,7 +20,7 @@ void MP4::tref::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::tref::getKey()
+std::string MP4::tref::getKey() const
 {
     return key;
 }

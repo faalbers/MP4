@@ -33,7 +33,7 @@ void MP4::HMMT::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::HMMT::getKey()
+std::string MP4::HMMT::getKey() const
 {
     return key;
 }

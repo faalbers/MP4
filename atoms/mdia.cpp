@@ -36,7 +36,7 @@ void MP4::mdia::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::mdia::getKey()
+std::string MP4::mdia::getKey() const
 {
     return key;
 }

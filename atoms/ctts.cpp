@@ -80,7 +80,7 @@ void MP4::ctts::printData(bool fullLists)
     }
 }
 
-std::string MP4::ctts::getKey()
+std::string MP4::ctts::getKey() const
 {
     return key;
 }

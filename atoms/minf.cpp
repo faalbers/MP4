@@ -37,7 +37,7 @@ void MP4::minf::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::minf::getKey()
+std::string MP4::minf::getKey() const
 {
     return key;
 }

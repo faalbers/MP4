@@ -84,7 +84,7 @@ void MP4::udta::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::udta::getKey()
+std::string MP4::udta::getKey() const
 {
     return key;
 }

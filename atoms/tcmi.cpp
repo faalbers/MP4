@@ -68,7 +68,7 @@ void MP4::tcmi::printData(bool fullLists)
     std::cout << std::dec;
 }
 
-std::string MP4::tcmi::getKey()
+std::string MP4::tcmi::getKey() const
 {
     return key;
 }

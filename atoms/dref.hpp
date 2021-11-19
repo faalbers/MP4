@@ -21,7 +21,7 @@ public:
 
     void printData(bool fullLists = false);
     
-    std::string getKey();
+    std::string getKey() const;
 
     static const std::string                    key;
     std::map<uint32_t, std::shared_ptr<atom>>   dataReferences;

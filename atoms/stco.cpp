@@ -44,7 +44,7 @@ void MP4::stco::printData(bool fullLists)
     }
 }
 
-std::string MP4::stco::getKey()
+std::string MP4::stco::getKey() const
 {
     return key;
 }

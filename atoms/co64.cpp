@@ -52,7 +52,7 @@ void MP4::co64::printData(bool fullLists)
     }
 }
 
-std::string MP4::co64::getKey()
+std::string MP4::co64::getKey() const
 {
     return key;
 }

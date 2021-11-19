@@ -33,7 +33,7 @@ void MP4::GPMF::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::GPMF::getKey()
+std::string MP4::GPMF::getKey() const
 {
     return key;
 }

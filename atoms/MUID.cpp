@@ -32,7 +32,7 @@ void MP4::MUID::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::MUID::getKey()
+std::string MP4::MUID::getKey() const
 {
     return key;
 }

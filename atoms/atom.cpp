@@ -259,7 +259,7 @@ void MP4::atom::printHierarchyData(bool fullLists)
     for ( auto child : children_ ) child->printHierarchyData(fullLists);
 }
 
-std::string MP4::atom::getKey()
+std::string MP4::atom::getKey() const
 {
     return key_;
 }

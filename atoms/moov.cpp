@@ -40,7 +40,7 @@ void MP4::moov::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::moov::getKey()
+std::string MP4::moov::getKey() const
 {
     return key;
 }

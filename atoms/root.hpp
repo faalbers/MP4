@@ -32,7 +32,7 @@ public:
 
     void printData(bool fullLists = false);
 
-    std::string getKey();
+    std::string getKey() const;
 
     void write(std::shared_ptr<atomWriteFile> writeFile);
     void copy(std::shared_ptr<atomCopyFile> copyFile);

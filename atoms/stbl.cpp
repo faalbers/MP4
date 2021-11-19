@@ -60,7 +60,7 @@ void MP4::stbl::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::stbl::getKey()
+std::string MP4::stbl::getKey() const
 {
     return key;
 }

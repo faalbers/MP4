@@ -43,7 +43,7 @@ void MP4::mdhd::printData(bool fullLists)
     std::cout << dataIndent << "quality         : " << quality << std::endl;
 }
 
-std::string MP4::mdhd::getKey()
+std::string MP4::mdhd::getKey() const
 {
     return key;
 }

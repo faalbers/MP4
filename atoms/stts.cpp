@@ -67,7 +67,7 @@ void MP4::stts::printData(bool fullLists)
         std::cout << dataIndent << "[" << entry.first << "] ( " << entry.second[0] << ", " << entry.second[1] << " )" << std::endl;
 }
 
-std::string MP4::stts::getKey()
+std::string MP4::stts::getKey() const
 {
     return key;
 }

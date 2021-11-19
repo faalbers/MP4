@@ -65,7 +65,7 @@ void MP4::stsz::printData(bool fullLists)
     }
 }
 
-std::string MP4::stsz::getKey()
+std::string MP4::stsz::getKey() const
 {
     return key;
 }

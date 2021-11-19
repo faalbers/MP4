@@ -58,7 +58,7 @@ void MP4::root::printData(bool fullLists)
     std::cout << "file size: " << size_ << std::endl << std::endl;
 }
 
-std::string MP4::root::getKey()
+std::string MP4::root::getKey() const
 {
     return key;
 }

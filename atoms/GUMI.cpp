@@ -32,7 +32,7 @@ void MP4::GUMI::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::GUMI::getKey()
+std::string MP4::GUMI::getKey() const
 {
     return key;
 }

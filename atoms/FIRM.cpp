@@ -32,7 +32,7 @@ void MP4::FIRM::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::FIRM::getKey()
+std::string MP4::FIRM::getKey() const
 {
     return key;
 }

@@ -19,7 +19,7 @@ void MP4::dinf::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::dinf::getKey()
+std::string MP4::dinf::getKey() const
 {
     return key;
 }

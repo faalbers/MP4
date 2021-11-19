@@ -33,7 +33,7 @@ void MP4::BCID::printData(bool fullLists)
     //dataStringViz(userData, dataIndent);
 }
 
-std::string MP4::BCID::getKey()
+std::string MP4::BCID::getKey() const
 {
     return key;
 }

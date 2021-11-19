@@ -14,7 +14,7 @@ void MP4::gmhd::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::gmhd::getKey()
+std::string MP4::gmhd::getKey() const
 {
     return key;
 }

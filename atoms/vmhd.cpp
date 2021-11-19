@@ -66,7 +66,7 @@ void MP4::vmhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     fileWrite->write((char*) &vmhdData, sizeof(vmhdData));
 }
 
-std::string MP4::vmhd::getKey()
+std::string MP4::vmhd::getKey() const
 {
     return key;
 }

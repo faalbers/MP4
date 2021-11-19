@@ -47,7 +47,7 @@ void MP4::elst::printData(bool fullLists)
     }
 }
 
-std::string MP4::elst::getKey()
+std::string MP4::elst::getKey() const
 {
     return key;
 }

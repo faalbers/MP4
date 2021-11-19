@@ -15,7 +15,7 @@ void MP4::free::printData(bool fullLists)
     std::cout << dataIndent << "freeSize  : " << freeSize << std::endl;
 }
 
-std::string MP4::free::getKey()
+std::string MP4::free::getKey() const
 {
     return key;
 }

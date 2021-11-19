@@ -35,7 +35,7 @@ public:
 
     void printData(bool fullLists = false);
 
-    std::string getKey();
+    std::string getKey() const;
 
     static const std::string    key;
 };

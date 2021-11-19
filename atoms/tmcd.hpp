@@ -30,7 +30,7 @@ public:
 
     void printData(bool fullLists = false);
 
-    std::string getKey();
+    std::string getKey() const;
 
     static const std::string    key;
     // data if it's a timecode track reference

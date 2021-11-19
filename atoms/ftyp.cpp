@@ -58,7 +58,7 @@ void MP4::ftyp::printData(bool fullLists)
 
 }
 
-std::string MP4::ftyp::getKey()
+std::string MP4::ftyp::getKey() const
 {
     return key;
 }

@@ -22,7 +22,7 @@ void MP4::uuid::printData(bool fullLists)
     std::cout << dataIndent << "name :" << name << std::endl;
 }
 
-std::string MP4::uuid::getKey()
+std::string MP4::uuid::getKey() const
 {
     return key;
 }

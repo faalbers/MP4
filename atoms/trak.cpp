@@ -325,7 +325,7 @@ void MP4::trak::printData(bool fullLists)
     std::cout << dataIndent << "This is a container Atom ..." << std::endl;
 }
 
-std::string MP4::trak::getKey()
+std::string MP4::trak::getKey() const
 {
     return key;
 }

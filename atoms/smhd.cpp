@@ -28,7 +28,7 @@ void MP4::smhd::printData(bool fullLists)
 
 }
 
-std::string MP4::smhd::getKey()
+std::string MP4::smhd::getKey() const
 {
     return key;
 }
