@@ -336,4 +336,4 @@ void MP4::trak::copy(std::shared_ptr<atomCopyFile> copyFile)
     copy_(copyFile);
 }
 
-std::string MP4::trak::key = "trak";
+const std::string MP4::trak::key = "trak";

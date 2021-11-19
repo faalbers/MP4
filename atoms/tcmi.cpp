@@ -73,5 +73,5 @@ std::string MP4::tcmi::getKey()
     return key;
 }
 
-std::string MP4::tcmi::key = "tcmi";
+const std::string MP4::tcmi::key = "tcmi";
 

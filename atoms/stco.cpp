@@ -49,4 +49,4 @@ std::string MP4::stco::getKey()
     return key;
 }
 
-std::string MP4::stco::key = "stco";
+const std::string MP4::stco::key = "stco";

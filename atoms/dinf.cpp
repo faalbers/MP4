@@ -24,5 +24,5 @@ std::string MP4::dinf::getKey()
     return key;
 }
 
-std::string MP4::dinf::key = "dinf";
+const std::string MP4::dinf::key = "dinf";
 

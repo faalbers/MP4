@@ -27,5 +27,5 @@ std::string MP4::uuid::getKey()
     return key;
 }
 
-std::string MP4::uuid::key = "uuid";
+const std::string MP4::uuid::key = "uuid";
 

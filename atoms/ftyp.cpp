@@ -75,5 +75,5 @@ void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile)
     }
 }
 
-std::string MP4::ftyp::key = "ftyp";
+const std::string MP4::ftyp::key = "ftyp";
 

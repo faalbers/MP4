@@ -19,5 +19,5 @@ std::string MP4::gmhd::getKey()
     return key;
 }
 
-std::string MP4::gmhd::key = "gmhd";
+const std::string MP4::gmhd::key = "gmhd";
 

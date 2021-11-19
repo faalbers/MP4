@@ -46,5 +46,5 @@ std::string MP4::gmin::getKey()
     return key;
 }
 
-std::string MP4::gmin::key = "gmin";
+const std::string MP4::gmin::key = "gmin";
 

@@ -28,5 +28,5 @@ std::string MP4::alis::getKey()
     return key;
 }
 
-std::string MP4::alis::key = "alis";
+const std::string MP4::alis::key = "alis";
 

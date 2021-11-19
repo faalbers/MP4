@@ -23,7 +23,7 @@ public:
 
     std::string getKey();
 
-    static std::string  key;
+    static const std::string  key;
     uint16_t            textFont;
     uint16_t            textFace;
     uint16_t            textSize;

@@ -73,5 +73,5 @@ void MP4::root::copy(std::shared_ptr<atomCopyFile> copyFile)
     for ( auto child : children_ ) child->copy(copyFile);
 }
 
-std::string MP4::root::key = "root";
+const std::string MP4::root::key = "root";
 

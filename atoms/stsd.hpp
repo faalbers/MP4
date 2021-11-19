@@ -32,7 +32,7 @@ public:
 
     std::set<std::string>   getDataFormats();
 
-    static std::string  key;
+    static const std::string  key;
     typedef struct entryType
     {
         std::string dataFormat;         // format type FourCC

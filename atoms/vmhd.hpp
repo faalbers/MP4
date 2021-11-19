@@ -25,7 +25,7 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static std::string  key;
+    static const std::string  key;
     uint16_t            graphicsMode;
     uint16_t            opColorR;
     uint16_t            opColorG;

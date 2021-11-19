@@ -20,5 +20,5 @@ std::string MP4::free::getKey()
     return key;
 }
 
-std::string MP4::free::key = "free";
+const std::string MP4::free::key = "free";
 

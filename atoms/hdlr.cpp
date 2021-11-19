@@ -71,5 +71,5 @@ void MP4::hdlr::writeData(std::shared_ptr<atomWriteFile> writeFile)
     fileWrite->write((char*) componentName.c_str(), (size_t) nameSize);
 }
 
-std::string MP4::hdlr::key = "hdlr";
+const std::string MP4::hdlr::key = "hdlr";
 

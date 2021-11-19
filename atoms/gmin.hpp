@@ -22,7 +22,7 @@ public:
 
     std::string getKey();
 
-    static std::string  key;
+    static const std::string  key;
     uint16_t            graphicMode;
     uint16_t            opColorR;
     uint16_t            opColorG;

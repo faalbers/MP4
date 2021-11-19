@@ -42,5 +42,5 @@ std::string MP4::minf::getKey()
     return key;
 }
 
-std::string MP4::minf::key = "minf";
+const std::string MP4::minf::key = "minf";
 

@@ -84,5 +84,5 @@ void MP4::stss::writeData(std::shared_ptr<atomWriteFile> writeFile)
     }
 }
 
-std::string MP4::stss::key = "stss";
+const std::string MP4::stss::key = "stss";
 

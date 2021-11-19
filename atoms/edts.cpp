@@ -24,5 +24,5 @@ std::string MP4::edts::getKey()
     return key;
 }
 
-std::string MP4::edts::key = "edts";
+const std::string MP4::edts::key = "edts";
 

@@ -24,5 +24,5 @@ std::string MP4::gpmd::getKey()
     return key;
 }
 
-std::string MP4::gpmd::key = "gpmd";
+const std::string MP4::gpmd::key = "gpmd";
 

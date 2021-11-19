@@ -30,7 +30,7 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static std::string  key;
+    static const std::string  key;
     // stscTable[stscID] = sampleToChunkEntry
     std::map<uint32_t, std::vector<uint32_t>>  stscTable; // (first chunk , samples per chunk, sample description ID)
 };

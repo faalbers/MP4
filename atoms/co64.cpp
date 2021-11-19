@@ -82,5 +82,5 @@ void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile)
     }
 }
 
-std::string MP4::co64::key = "co64";
+const std::string MP4::co64::key = "co64";
 

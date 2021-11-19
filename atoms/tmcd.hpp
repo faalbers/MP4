@@ -32,7 +32,7 @@ public:
 
     std::string getKey();
 
-    static std::string      key;
+    static const std::string      key;
 
     // data if it's a timecode track reference
     bool                    isTrackReference;

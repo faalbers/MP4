@@ -48,5 +48,5 @@ std::string MP4::tmcd::getKey()
     return key;
 }
 
-std::string MP4::tmcd::key = "tmcd";
+const std::string MP4::tmcd::key = "tmcd";
 

@@ -71,5 +71,5 @@ std::string MP4::vmhd::getKey()
     return key;
 }
 
-std::string MP4::vmhd::key = "vmhd";
+const std::string MP4::vmhd::key = "vmhd";
 

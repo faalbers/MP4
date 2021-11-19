@@ -104,5 +104,5 @@ std::set<std::string> MP4::stsd::getDataFormats()
     return dataFormats;
 }
 
-std::string MP4::stsd::key = "stsd";
+const std::string MP4::stsd::key = "stsd";
 

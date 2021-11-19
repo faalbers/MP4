@@ -28,5 +28,5 @@ std::string MP4::url_::getKey()
     return key;
 }
 
-std::string MP4::url_::key = "url ";
+const std::string MP4::url_::key = "url ";
 

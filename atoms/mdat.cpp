@@ -94,5 +94,5 @@ void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
     delete[] buffer;
 }
 
-std::string MP4::mdat::key = "mdat";
+const std::string MP4::mdat::key = "mdat";
 

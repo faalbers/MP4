@@ -41,7 +41,7 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static std::string          key;
+    static const std::string          key;
     std::string                 majorBrand;
     uint32_t                    version;
     std::string                 versionString;

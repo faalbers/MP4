@@ -30,7 +30,7 @@ public:
     
     std::string getKey();
 
-    static std::string      key;
+    static const std::string      key;
     uint32_t                defaultSampleSize;
     // stcoTable[chunkID] = chunkOffset
     std::map<uint32_t, uint64_t>    stcoTable;

@@ -50,5 +50,5 @@ void MP4::FIRM::writeData(std::shared_ptr<atomWriteFile> writeFile)
         fileWrite->write((char*) userData.c_str(), (size_t) userData.size());
 }
 
-std::string MP4::FIRM::key = "FIRM";
+const std::string MP4::FIRM::key = "FIRM";
 

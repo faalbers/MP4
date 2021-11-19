@@ -25,5 +25,5 @@ std::string MP4::tref::getKey()
     return key;
 }
 
-std::string MP4::tref::key = "tref";
+const std::string MP4::tref::key = "tref";
 

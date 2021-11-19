@@ -122,5 +122,5 @@ void MP4::tkhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     */
 }
 
-std::string MP4::tkhd::key = "tkhd";
+const std::string MP4::tkhd::key = "tkhd";
 

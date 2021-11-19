@@ -65,5 +65,5 @@ std::string MP4::stbl::getKey()
     return key;
 }
 
-std::string MP4::stbl::key = "stbl";
+const std::string MP4::stbl::key = "stbl";
 

@@ -89,5 +89,5 @@ std::string MP4::udta::getKey()
     return key;
 }
 
-std::string MP4::udta::key = "udta";
+const std::string MP4::udta::key = "udta";
 

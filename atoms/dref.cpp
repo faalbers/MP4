@@ -37,5 +37,5 @@ std::string MP4::dref::getKey()
     return key;
 }
 
-std::string MP4::dref::key = "dref";
+const std::string MP4::dref::key = "dref";
 

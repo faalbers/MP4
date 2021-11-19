@@ -33,5 +33,5 @@ std::string MP4::smhd::getKey()
     return key;
 }
 
-std::string MP4::smhd::key = "smhd";
+const std::string MP4::smhd::key = "smhd";
 

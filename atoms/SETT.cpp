@@ -50,5 +50,5 @@ void MP4::SETT::writeData(std::shared_ptr<atomWriteFile> writeFile)
         fileWrite->write((char*) userData.c_str(), (size_t) userData.size());
 }
 
-std::string MP4::SETT::key = "SETT";
+const std::string MP4::SETT::key = "SETT";
 

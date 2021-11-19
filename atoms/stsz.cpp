@@ -95,5 +95,5 @@ void MP4::stsz::writeData(std::shared_ptr<atomWriteFile> writeFile)
     }
 }
 
-std::string MP4::stsz::key = "stsz";
+const std::string MP4::stsz::key = "stsz";
 

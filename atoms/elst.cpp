@@ -52,5 +52,5 @@ std::string MP4::elst::getKey()
     return key;
 }
 
-std::string MP4::elst::key = "elst";
+const std::string MP4::elst::key = "elst";
 

@@ -45,5 +45,5 @@ std::string MP4::moov::getKey()
     return key;
 }
 
-std::string MP4::moov::key = "moov";
+const std::string MP4::moov::key = "moov";
 

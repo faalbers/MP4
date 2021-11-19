@@ -124,5 +124,5 @@ void MP4::mvhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
     */
 }
 
-std::string MP4::mvhd::key = "mvhd";
+const std::string MP4::mvhd::key = "mvhd";
 

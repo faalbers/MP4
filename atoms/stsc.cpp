@@ -95,5 +95,5 @@ void MP4::stsc::writeData(std::shared_ptr<atomWriteFile> writeFile)
     fileWrite->write((char*) &val, sizeof(val));
 }
 
-std::string MP4::stsc::key = "stsc";
+const std::string MP4::stsc::key = "stsc";
 

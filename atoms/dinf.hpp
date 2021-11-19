@@ -24,7 +24,7 @@ public:
 
     std::string getKey();
 
-    static std::string  key;
+    static const std::string  key;
 };
 
 }

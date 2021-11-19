@@ -25,7 +25,7 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static std::string  key;
+    static const std::string  key;
     uint32_t            creationTime;
     uint32_t            modificationTime;
     uint32_t            timeScale;  // time units per second

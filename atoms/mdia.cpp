@@ -41,5 +41,5 @@ std::string MP4::mdia::getKey()
     return key;
 }
 
-std::string MP4::mdia::key = "mdia";
+const std::string MP4::mdia::key = "mdia";
 
