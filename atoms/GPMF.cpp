@@ -38,7 +38,7 @@ std::string MP4::GPMF::getKey() const
     return key;
 }
 
-void MP4::GPMF::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::GPMF::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["GPMF"] = userData;
 }

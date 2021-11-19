@@ -37,7 +37,7 @@ std::string MP4::LENS::getKey() const
     return key;
 }
 
-void MP4::LENS::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::LENS::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["LENS"] = userData;
 }

@@ -264,7 +264,7 @@ std::string MP4::atom::getKey() const
     return key_;
 }
 
-void MP4::atom::getUserData(std::map<std::string, std::string>& userData)
+void MP4::atom::getUserData(std::map<std::string, std::string>& userData) const
 {
     for ( auto child : children_ ) child->getUserData(userData);
 }

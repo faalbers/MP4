@@ -37,7 +37,7 @@ std::string MP4::GUMI::getKey() const
     return key;
 }
 
-void MP4::GUMI::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::GUMI::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["GUMI"] = userData;
 }

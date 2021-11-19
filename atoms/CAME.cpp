@@ -37,7 +37,7 @@ std::string MP4::CAME::getKey() const
     return key;
 }
 
-void MP4::CAME::getUserData(std::map<std::string, std::string>& userData_)
+void MP4::CAME::getUserData(std::map<std::string, std::string>& userData_) const
 {
     userData_["CAME"] = userData;
 }
