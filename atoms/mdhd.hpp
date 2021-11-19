@@ -25,13 +25,13 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
-    uint32_t            creationTime;
-    uint32_t            modificationTime;
-    uint32_t            timeScale;  // time units per second
-    uint32_t            duration;   // amount of timeScale units
-    uint16_t            language;
-    uint16_t            quality;
+    static const std::string    key;
+    uint32_t                    creationTime;
+    uint32_t                    modificationTime;
+    uint32_t                    timeScale;  // time units per second
+    uint32_t                    duration;   // amount of timeScale units
+    uint16_t                    language;
+    uint16_t                    quality;
 
 private:
     typedef struct dataBlock

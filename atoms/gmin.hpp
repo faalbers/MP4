@@ -22,12 +22,12 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    uint16_t            graphicMode;
-    uint16_t            opColorR;
-    uint16_t            opColorG;
-    uint16_t            opColorB;
-    float               balance;
+    static const std::string    key;
+    uint16_t                    graphicMode;
+    uint16_t                    opColorR;
+    uint16_t                    opColorG;
+    uint16_t                    opColorB;
+    float                       balance;
 };
 
 }

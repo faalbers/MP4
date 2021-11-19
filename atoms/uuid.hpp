@@ -19,8 +19,8 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    std::string         name;
+    static const std::string            key;
+    std::string                         name;
     std::vector<std::shared_ptr<atom>>  uuidChildren;
 
 };

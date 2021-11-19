@@ -25,9 +25,9 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
-    int64_t             sampleDataPos;
-    int64_t             sampleDataSize;
+    static const std::string    key;
+    int64_t                     sampleDataPos;
+    int64_t                     sampleDataSize;
 
 private:
     typedef struct mdatWriteType_

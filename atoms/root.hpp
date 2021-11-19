@@ -37,7 +37,7 @@ public:
     void write(std::shared_ptr<atomWriteFile> writeFile);
     void copy(std::shared_ptr<atomCopyFile> copyFile);
 
-    static const std::string  key;
+    static const std::string    key;
 
     friend class root_create;
 };

@@ -22,8 +22,8 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    uint32_t            version;
+    static const std::string    key;
+    uint32_t                    version;
 
 };
 

@@ -33,12 +33,12 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string      key;
-    uint32_t                defaultSampleSize;
+    static const std::string        key;
+    uint32_t                        defaultSampleSize;
     std::map<uint32_t, uint64_t>    co64Table;
 
 private:
-    uint32_t                writeTrackID_;
+    uint32_t                        writeTrackID_;
 };
 
 }

@@ -21,8 +21,8 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    int64_t             freeSize;
+    static const std::string    key;
+    int64_t                     freeSize;
 };
 
 }

@@ -31,10 +31,10 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string      key;
-    std::string             componentType;
-    std::string             componentSubType;
-    std::string             componentName;
+    static const std::string    key;
+    std::string                 componentType;
+    std::string                 componentSubType;
+    std::string                 componentName;
 
 private:
     typedef struct dataBlock

@@ -25,16 +25,16 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
-    uint32_t            creationTime;
-    uint32_t            modificationTime;
-    uint32_t            trackID;
-    uint32_t            duration;
-    uint16_t            layer;
-    uint16_t            alternateGroupID;
-    float               volume;
-    float               trackWidth;
-    float               trackHeight;
+    static const std::string        key;
+    uint32_t                        creationTime;
+    uint32_t                        modificationTime;
+    uint32_t                        trackID;
+    uint32_t                        duration;
+    uint16_t                        layer;
+    uint16_t                        alternateGroupID;
+    float                           volume;
+    float                           trackWidth;
+    float                           trackHeight;
     std::vector<std::vector<float>> matrix;
 
 private:

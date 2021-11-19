@@ -32,11 +32,10 @@ public:
 
     std::string getKey();
 
-    static const std::string      key;
-
+    static const std::string    key;
     // data if it's a timecode track reference
-    bool                    isTrackReference;
-    std::vector<uint32_t>   trackIDs;
+    bool                        isTrackReference;
+    std::vector<uint32_t>       trackIDs;
     // if it's not a track reference atom , it is a container
 };
 

@@ -25,11 +25,11 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
-    uint16_t            graphicsMode;
-    uint16_t            opColorR;
-    uint16_t            opColorG;
-    uint16_t            opColorB;
+    static const std::string    key;
+    uint16_t                    graphicsMode;
+    uint16_t                    opColorR;
+    uint16_t                    opColorG;
+    uint16_t                    opColorB;
 
 private:
     typedef struct dataBlock

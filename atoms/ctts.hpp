@@ -45,9 +45,9 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
+    static const std::string                    key;
     // cttsTable[cttsID] = decode-to-presentation time
-    std::map<uint32_t, std::vector<uint32_t>>  cttsTable; // (sampleCount , compositionOffset)
+    std::map<uint32_t, std::vector<uint32_t>>   cttsTable; // (sampleCount , compositionOffset)
 };
 
 }

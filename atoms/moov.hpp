@@ -41,7 +41,7 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
+    static const std::string    key;
 };
 
 }

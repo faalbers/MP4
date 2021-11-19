@@ -26,15 +26,15 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string  key;
-    uint32_t            creationTime;
-    uint32_t            modificationTime;
-    uint32_t            timeScale;      // time units per second
-    uint32_t            duration;       // amount of timeScale units
-    float               preferredRate;
-    float               preferredVolume;
+    static const std::string        key;
+    uint32_t                        creationTime;
+    uint32_t                        modificationTime;
+    uint32_t                        timeScale;      // time units per second
+    uint32_t                        duration;       // amount of timeScale units
+    float                           preferredRate;
+    float                           preferredVolume;
     std::vector<std::vector<float>> matrix;
-    uint32_t            nextTrackID;
+    uint32_t                        nextTrackID;
 
 private:
     typedef struct dataBlock

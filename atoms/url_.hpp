@@ -23,8 +23,8 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    bool                dataInSameFile;
+    static const std::string    key;
+    bool                        dataInSameFile;
 };
 
 }

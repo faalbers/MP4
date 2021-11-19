@@ -21,8 +21,8 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    float               balance;
+    static const std::string    key;
+    float                       balance;
 };
 
 }

@@ -23,17 +23,17 @@ public:
 
     std::string getKey();
 
-    static const std::string  key;
-    uint16_t            textFont;
-    uint16_t            textFace;
-    uint16_t            textSize;
-    uint16_t            textColorR;
-    uint16_t            textColorG;
-    uint16_t            textColorB;
-    uint16_t            backgroundColorR;
-    uint16_t            backgroundColorG;
-    uint16_t            backgroundColorB;
-    std::string         fontName;
+    static const std::string    key;
+    uint16_t                    textFont;
+    uint16_t                    textFace;
+    uint16_t                    textSize;
+    uint16_t                    textColorR;
+    uint16_t                    textColorG;
+    uint16_t                    textColorB;
+    uint16_t                    backgroundColorR;
+    uint16_t                    backgroundColorG;
+    uint16_t                    backgroundColorB;
+    std::string                 fontName;
 };
 
 }

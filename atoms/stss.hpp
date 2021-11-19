@@ -35,7 +35,7 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile);
 
-    static const std::string      key;
+    static const std::string        key;
     std::map<uint32_t, uint32_t>    stssTable;
 };
 
