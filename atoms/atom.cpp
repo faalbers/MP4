@@ -163,7 +163,7 @@ int MP4::atom::nestLevel_(int level)
     return maxChildLevel;
 }
 
-void MP4::atom::printHierarchy(int pathWith, int valLevel)
+void MP4::atom::printHierarchy(int pathWith, int valLevel) const
 {
     std::cout << std::setw(pathWith) << std::left << path_;
     std::cout << "  |- " <<  std::setw(valLevel) << std::right << filePos_

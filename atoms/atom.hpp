@@ -51,7 +51,7 @@ public:
         return foundTypeAtoms;
     }
 
-    void printHierarchy(int pathWith = 35, int valLevel = 10);
+    void printHierarchy(int pathWith = 35, int valLevel = 10) const;
     static std::string getTimeString(uint32_t time, uint32_t timeScale);
     static std::string getDateTimeString(uint32_t seconds);
     static std::string getZeroTerminatedString(std::string dataString, size_t maxLength = 0);
