@@ -567,7 +567,7 @@ bool MP4::atom::isContainer_(std::ifstream *fileStream, int64_t dataSize)
     return result;
 }
 
-void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found)
+void MP4::atom::getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found) const
 {
     for ( auto child : children_ ) {
         if ( child->key_ == findKey ) found.push_back(child);

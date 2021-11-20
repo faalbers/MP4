@@ -41,7 +41,7 @@ public:
     atom(std::shared_ptr<atomBuild> build);
     
     template<typename T>
-    std::vector<T*>     getTypeAtoms()
+    std::vector<T*>     getTypeAtoms() const
     {
         std::vector<T*> foundTypeAtoms;
         std::vector<std::shared_ptr<atom>> found;
@@ -110,7 +110,7 @@ protected:
     void                            setMoov_(moov* moveAtom);
     void                            setTrak_(trak* trakAtom);
     static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);
-    void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found);
+    void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found) const;
     int                             nestLevel_(int level);
     
     void                            write_(std::shared_ptr<atomWriteFile> writeFile) const;
