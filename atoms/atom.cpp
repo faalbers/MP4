@@ -306,7 +306,7 @@ void MP4::atom::copy_(std::shared_ptr<atomCopyFile> copyFile)
     copyTail(copyFile);
 }
 
-void MP4::atom::writeHeader(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeHeader(std::shared_ptr<atomWriteFile> writeFile) const
 {
     writeHeader_(writeFile);
 }
@@ -316,7 +316,7 @@ void MP4::atom::copyHeader(std::shared_ptr<atomCopyFile> copyFile)
     copyHeader_(copyFile);
 }
 
-void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     writeHeaderSizePos_ = fileWrite->tellp();
@@ -344,7 +344,7 @@ void MP4::atom::copyChildren(std::shared_ptr<atomCopyFile> copyFile)
     copyChildren_(copyFile);
 }
 
-void MP4::atom::writeChildren_(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeChildren_(std::shared_ptr<atomWriteFile> writeFile) const
 {
     for ( auto child : children_ ) child->write(writeFile);
 }
@@ -364,7 +364,7 @@ void MP4::atom::copyData(std::shared_ptr<atomCopyFile> copyFile)
     copyData_(copyFile);
 }
 
-void MP4::atom::writeData_(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeData_(std::shared_ptr<atomWriteFile> writeFile) const
 {
 }
 
@@ -409,7 +409,7 @@ void MP4::atom::copyTail(std::shared_ptr<atomCopyFile> copyFile)
     copyTail_(copyFile);
 }
 
-void MP4::atom::writeTail_(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeTail_(std::shared_ptr<atomWriteFile> writeFile) const
 {
     // after writing the atom's data we need to fix the atom size
     auto fileWrite = writeFile->getFileWrite();

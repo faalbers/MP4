@@ -67,7 +67,7 @@ public:
     virtual void printHierarchyData(bool fullLists = false) const;
 
     virtual void write(std::shared_ptr<atomWriteFile> writeFile);
-    virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile) const;
     virtual void writeData(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile);
@@ -114,10 +114,10 @@ protected:
     int                             nestLevel_(int level);
     
     void                            write_(std::shared_ptr<atomWriteFile> writeFile);
-    void                            writeHeader_(std::shared_ptr<atomWriteFile> writeFile);
-    void                            writeData_(std::shared_ptr<atomWriteFile> writeFile);
-    void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile);
-    void                            writeTail_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            writeHeader_(std::shared_ptr<atomWriteFile> writeFile) const;
+    void                            writeData_(std::shared_ptr<atomWriteFile> writeFile) const;
+    void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile) const;
+    void                            writeTail_(std::shared_ptr<atomWriteFile> writeFile) const;
     
     void                            copy_(std::shared_ptr<atomCopyFile> copyFile);
     void                            copyHeader_(std::shared_ptr<atomCopyFile> copyFile);
@@ -137,7 +137,7 @@ protected:
     std::vector<std::shared_ptr<atom>>  children_;
     moov*                               moovAtom_;
     trak*                               trakAtom_;
-    int64_t                             writeHeaderSizePos_;
+    mutable int64_t                     writeHeaderSizePos_;
     bool                                writeHeaderSize64_;
     std::shared_ptr<atomBuild>          build_;
 };
