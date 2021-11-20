@@ -63,7 +63,7 @@ std::string MP4::mdat::getKey() const
     return key;
 }
 
-void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

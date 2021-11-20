@@ -42,7 +42,7 @@ void MP4::GUMI::getUserData(std::map<std::string, std::string>& userData_) const
     userData_["GUMI"] = userData;
 }
 
-void MP4::GUMI::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::GUMI::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

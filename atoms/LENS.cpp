@@ -42,7 +42,7 @@ void MP4::LENS::getUserData(std::map<std::string, std::string>& userData_) const
     userData_["LENS"] = userData;
 }
 
-void MP4::LENS::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::LENS::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

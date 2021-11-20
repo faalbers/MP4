@@ -78,7 +78,7 @@ std::string MP4::tkhd::getKey() const
     return key;
 }
 
-void MP4::tkhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::tkhd::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     dataBlock tkhdData;

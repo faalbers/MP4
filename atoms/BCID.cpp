@@ -43,7 +43,7 @@ void MP4::BCID::getUserData(std::map<std::string, std::string>& userData_) const
     userData_["BCID"] = userData;
 }
 
-void MP4::BCID::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::BCID::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

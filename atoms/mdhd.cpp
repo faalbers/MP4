@@ -48,7 +48,7 @@ std::string MP4::mdhd::getKey() const
     return key;
 }
 
-void MP4::mdhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::mdhd::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     dataBlock mdhdData;

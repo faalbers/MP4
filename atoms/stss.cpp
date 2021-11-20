@@ -60,7 +60,7 @@ std::string MP4::stss::getKey() const
     return key;
 }
 
-void MP4::stss::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::stss::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     tableBlock stssData;

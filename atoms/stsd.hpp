@@ -28,7 +28,7 @@ public:
 
     std::string getKey() const;
 
-    void writeData(std::shared_ptr<atomWriteFile> writeFile);
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
     std::set<std::string>   getDataFormats();
 

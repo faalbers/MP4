@@ -43,7 +43,7 @@ void MP4::GPMF::getUserData(std::map<std::string, std::string>& userData_) const
     userData_["GPMF"] = userData;
 }
 
-void MP4::GPMF::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::GPMF::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

@@ -44,7 +44,7 @@ void MP4::vmhd::printData(bool fullLists) const
     std::cout << std::dec;
 }
 
-void MP4::vmhd::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::vmhd::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     dataBlock vmhdData;

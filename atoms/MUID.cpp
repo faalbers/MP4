@@ -42,7 +42,7 @@ void MP4::MUID::getUserData(std::map<std::string, std::string>& userData_) const
     userData_["MUID"] = userData;
 }
 
-void MP4::MUID::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::MUID::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     

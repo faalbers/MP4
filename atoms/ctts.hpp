@@ -43,7 +43,7 @@ public:
 
     std::string getKey() const;
 
-    void writeData(std::shared_ptr<atomWriteFile> writeFile);
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
     static const std::string                    key;
     // cttsTable[cttsID] = decode-to-presentation time

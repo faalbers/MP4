@@ -354,7 +354,7 @@ void MP4::atom::copyChildren_(std::shared_ptr<atomCopyFile> copyFile)
     for ( auto child : children_ ) child->copy(copyFile);
 }
 
-void MP4::atom::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     writeData_(writeFile);
 }
@@ -457,7 +457,7 @@ void MP4::atom::copyTail_(std::shared_ptr<atomCopyFile> copyFile)
     fileWrite->seekp(writeNextPos, fileWrite->beg);
 }
 
-void MP4::atom::error_(std::string message)
+void MP4::atom::error_(std::string message) const
 {
     std::cout << "atom: "<< std::endl;
     std::cout << "-> " << message << std::endl;

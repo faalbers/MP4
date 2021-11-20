@@ -57,7 +57,7 @@ std::string MP4::co64::getKey() const
     return key;
 }
 
-void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     tableBlock co64Data;

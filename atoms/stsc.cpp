@@ -71,7 +71,7 @@ std::string MP4::stsc::getKey() const
     return key;
 }
 
-void MP4::stsc::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::stsc::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     tableBlock stscData;

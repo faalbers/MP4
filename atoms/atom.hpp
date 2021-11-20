@@ -68,7 +68,7 @@ public:
 
     virtual void write(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile) const;
-    virtual void writeData(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
     virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile);
     virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile);
 
@@ -104,7 +104,7 @@ protected:
     friend class uuid;
     friend class tkhd;
 
-    void                            error_(std::string message);
+    void                            error_(std::string message) const;
 
     static std::shared_ptr<atom>    makeAtom_(atomParse& parse);
     void                            setMoov_(moov* moveAtom);

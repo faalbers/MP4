@@ -63,7 +63,7 @@ std::string MP4::ftyp::getKey() const
     return key;
 }
 
-void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     dataBlock ftypData;

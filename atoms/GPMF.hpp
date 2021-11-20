@@ -25,7 +25,7 @@ public:
     std::string getKey() const;
     void getUserData(std::map<std::string, std::string>& userData_) const;
 
-    void writeData(std::shared_ptr<atomWriteFile> writeFile);
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
     static const std::string    key;
     std::string                 userData;
