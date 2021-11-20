@@ -152,7 +152,7 @@ void MP4::atom::setTrak_(trak* trakAtom)
     for (auto child : children_ ) child->setTrak_(trakAtom);
 }
 
-int MP4::atom::nestLevel_(int level)
+int MP4::atom::nestLevel_(int level) const
 {
     level++;
     int childLevel, maxChildLevel = level;

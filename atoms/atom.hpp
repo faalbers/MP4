@@ -111,7 +111,7 @@ protected:
     void                            setTrak_(trak* trakAtom);
     static bool                     isContainer_(std::ifstream *fileStream, int64_t dataSize);
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found) const;
-    int                             nestLevel_(int level);
+    int                             nestLevel_(int level) const;
     
     void                            write_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeHeader_(std::shared_ptr<atomWriteFile> writeFile) const;
