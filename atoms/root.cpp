@@ -63,7 +63,7 @@ std::string MP4::root::getKey() const
     return key;
 }
 
-void MP4::root::write(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::root::write(std::shared_ptr<atomWriteFile> writeFile) const
 {
     for ( auto child : children_ ) child->write(writeFile);
 }

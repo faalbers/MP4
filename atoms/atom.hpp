@@ -66,11 +66,11 @@ public:
     virtual void printData(bool fullLists = false) const;
     virtual void printHierarchyData(bool fullLists = false) const;
 
-    virtual void write(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void write(std::shared_ptr<atomWriteFile> writeFile) const;
     virtual void writeHeader(std::shared_ptr<atomWriteFile> writeFile) const;
     virtual void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
-    virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile);
-    virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile);
+    virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile) const;
+    virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile) const;
 
     virtual void copy(std::shared_ptr<atomCopyFile> copyFile);
     virtual void copyHeader(std::shared_ptr<atomCopyFile> copyFile);
@@ -113,7 +113,7 @@ protected:
     void                            getChildAtoms_(std::string findKey, std::vector<std::shared_ptr<atom>>& found);
     int                             nestLevel_(int level);
     
-    void                            write_(std::shared_ptr<atomWriteFile> writeFile);
+    void                            write_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeHeader_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeData_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile) const;

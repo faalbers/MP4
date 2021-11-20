@@ -269,7 +269,7 @@ void MP4::atom::getUserData(std::map<std::string, std::string>& userData) const
     for ( auto child : children_ ) child->getUserData(userData);
 }
 
-void MP4::atom::write(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::write(std::shared_ptr<atomWriteFile> writeFile) const
 {
     write_(writeFile);
 }
@@ -280,7 +280,7 @@ void MP4::atom::copy(std::shared_ptr<atomCopyFile> copyFile)
     copy_(copyFile);
 }
 
-void MP4::atom::write_(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::write_(std::shared_ptr<atomWriteFile> writeFile) const
 {
     writeHeader(writeFile);
 
@@ -334,7 +334,7 @@ void MP4::atom::copyHeader_(std::shared_ptr<atomCopyFile> copyFile)
     fileWrite->write((char*) &atomHeader, headerSize_);
 }
 
-void MP4::atom::writeChildren(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeChildren(std::shared_ptr<atomWriteFile> writeFile) const
 {
     writeChildren_(writeFile);
 }
@@ -399,7 +399,7 @@ void MP4::atom::copyData_(std::shared_ptr<atomCopyFile> copyFile)
     fileRead.close();
 }
 
-void MP4::atom::writeTail(std::shared_ptr<atomWriteFile> writeFile)
+void MP4::atom::writeTail(std::shared_ptr<atomWriteFile> writeFile) const
 {
     writeTail_(writeFile);
 }

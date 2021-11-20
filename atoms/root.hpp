@@ -34,7 +34,7 @@ public:
 
     std::string getKey() const;
 
-    void write(std::shared_ptr<atomWriteFile> writeFile);
+    void write(std::shared_ptr<atomWriteFile> writeFile) const;
     void copy(std::shared_ptr<atomCopyFile> copyFile);
 
     static const std::string    key;
