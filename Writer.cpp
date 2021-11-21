@@ -59,7 +59,7 @@ std::string MP4::Writer::copyTest(std::string fileName)
     return fileWrite->getFilePath();
 }
 
-void MP4::Writer::error_(std::string message)
+void MP4::Writer::error_(std::string message) const
 {
     std::cout << "Writer:" << std::endl;
     std::cout << "-> " << message << std::endl;

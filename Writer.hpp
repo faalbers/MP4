@@ -19,7 +19,7 @@ public:
     std::string copyTest(std::string fileName);
     
 private:
-    void    error_(std::string message);
+    void    error_(std::string message) const;
 
     std::shared_ptr<root>   rootAtom_;
     std::shared_ptr<root>   rootAtomParser_;

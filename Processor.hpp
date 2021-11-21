@@ -25,7 +25,7 @@ public:
 
 private:
     friend class    Writer;
-    void            error_(std::string message);
+    void            error_(std::string message) const;
 
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
     std::map<std::string, std::string>              userData_;

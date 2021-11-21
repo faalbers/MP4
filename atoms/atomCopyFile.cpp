@@ -50,7 +50,7 @@ bool MP4::atomCopyFile::isAtomExcluded(std::string atomPath)
     return (excludeAtoms_.find(atomPath) != excludeAtoms_.end());
 }
 
-void MP4::atomCopyFile::error_(std::string message)
+void MP4::atomCopyFile::error_(std::string message) const
 {
     std::cout << "atomCopyFile: "<< std::endl;
     std::cout << "-> " << message << std::endl;

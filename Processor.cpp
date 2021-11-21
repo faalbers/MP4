@@ -166,7 +166,7 @@ void MP4::Processor::test()
     }
 }
 
-void MP4::Processor::error_(std::string message)
+void MP4::Processor::error_(std::string message) const
 {
     std::cout << "MP4::Processor:" << std::endl;
     std::cout << "-> " << message << std::endl;

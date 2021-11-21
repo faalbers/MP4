@@ -15,7 +15,7 @@ MP4::atomWriteFile::~atomWriteFile()
     fileStream_.close();
 }
 
-std::string MP4::atomWriteFile::getFilePath()
+std::string MP4::atomWriteFile::getFilePath() const
 {
     return filePath_;
 }
@@ -25,7 +25,7 @@ std::ofstream *MP4::atomWriteFile::getFileWrite()
     return &fileStream_;
 }
 
-void MP4::atomWriteFile::error_(std::string message)
+void MP4::atomWriteFile::error_(std::string message) const
 {
     std::cout << "atomWriteFile: "<< std::endl;
     std::cout << "-> " << message << std::endl;

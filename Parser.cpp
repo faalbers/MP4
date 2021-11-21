@@ -250,7 +250,7 @@ std::shared_ptr<MP4::root> MP4::Parser::getRootAtom()
     return rootAtom_;
 }
 
-void MP4::Parser::error_(std::string message)
+void MP4::Parser::error_(std::string message) const
 {
     std::cout << "Parser: " << filePath_ << std::endl;
     std::cout << "-> " << message << std::endl;

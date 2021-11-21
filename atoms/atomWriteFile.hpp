@@ -15,13 +15,13 @@ public:
     atomWriteFile(std::string fileName);
     ~atomWriteFile();
 
-    std::string     getFilePath();
+    std::string     getFilePath() const;
     std::ofstream*  getFileWrite();
 
     std::map<uint32_t, std::vector<uint64_t>> mdatWriteInfo;
 
 private:
-    void            error_(std::string message);
+    void            error_(std::string message) const;
 
     std::string     filePath_;
     std::ofstream   fileStream_;

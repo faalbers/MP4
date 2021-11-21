@@ -32,7 +32,7 @@ public:
     std::shared_ptr<root>       getRootAtom();
 
 private:
-    void                    error_(std::string message);
+    void                    error_(std::string message) const;
 
     std::string             filePath_;
     int64_t                 fileSize_;

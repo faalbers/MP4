@@ -25,7 +25,7 @@ public:
     bool            isAtomExcluded(std::string atomPath);
 
 private:
-    void            error_(std::string message);
+    void            error_(std::string message) const;
 
     std::string             filePath_;
     std::ofstream           fileStream_;
