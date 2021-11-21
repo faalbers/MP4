@@ -9,7 +9,6 @@
 #include "atomParse.hpp"
 #include "atomBuild.hpp"
 #include "atomWriteFile.hpp"
-#include "atomCopyFile.hpp"
 
 // make swap method multi platform
 #if defined(__APPLE__)
@@ -72,12 +71,6 @@ public:
     virtual void writeChildren(std::shared_ptr<atomWriteFile> writeFile) const;
     virtual void writeTail(std::shared_ptr<atomWriteFile> writeFile) const;
 
-    virtual void copy(std::shared_ptr<atomCopyFile> copyFile);
-    virtual void copyHeader(std::shared_ptr<atomCopyFile> copyFile);
-    virtual void copyData(std::shared_ptr<atomCopyFile> copyFile);
-    virtual void copyChildren(std::shared_ptr<atomCopyFile> copyFile);
-    virtual void copyTail(std::shared_ptr<atomCopyFile> copyFile);
-
 protected:
     typedef struct headerBlock
     {
@@ -118,12 +111,6 @@ protected:
     void                            writeData_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeChildren_(std::shared_ptr<atomWriteFile> writeFile) const;
     void                            writeTail_(std::shared_ptr<atomWriteFile> writeFile) const;
-    
-    void                            copy_(std::shared_ptr<atomCopyFile> copyFile);
-    void                            copyHeader_(std::shared_ptr<atomCopyFile> copyFile);
-    void                            copyData_(std::shared_ptr<atomCopyFile> copyFile);
-    void                            copyChildren_(std::shared_ptr<atomCopyFile> copyFile);
-    void                            copyTail_(std::shared_ptr<atomCopyFile> copyFile);
 
     std::string                         key_;
     bool                                headerSize64_;

@@ -68,10 +68,5 @@ void MP4::root::write(std::shared_ptr<atomWriteFile> writeFile) const
     for ( auto child : children_ ) child->write(writeFile);
 }
 
-void MP4::root::copy(std::shared_ptr<atomCopyFile> copyFile)
-{
-    for ( auto child : children_ ) child->copy(copyFile);
-}
-
 const std::string MP4::root::key = "root";
 

@@ -76,18 +76,6 @@ int main(int argc, char* argv[])
         parserOut.printHierarchyData();
         
     }
-
-    if (false) {
-        MP4::Writer writer(parserA);
-
-        auto filePath = writer.copyTest("copyResult.mp4");
-
-        std::cout << filePath << std::endl;
-
-        MP4::Parser parserOut(filePath);
-        parserOut.printHierarchy();
-        parserOut.printHierarchyData();
-    }
 /*
     if (false) {
         std::map<uint32_t, std::map<uint32_t, uint32_t>> tracksData;

@@ -329,10 +329,4 @@ std::string MP4::trak::getKey() const
     return key;
 }
 
-void MP4::trak::copy(std::shared_ptr<atomCopyFile> copyFile)
-{
-    if ( copyFile->isTrackExcluded(getID())) return;
-    copy_(copyFile);
-}
-
 const std::string MP4::trak::key = "trak";

@@ -53,8 +53,6 @@ public:
 
     std::string getKey() const;
 
-    void copy(std::shared_ptr<atomCopyFile> copyFile);
-
     static const std::string    key;
 
 };

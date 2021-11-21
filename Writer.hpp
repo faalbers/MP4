@@ -16,7 +16,6 @@ public:
     Writer(Processor &processor);
 
     std::string write(std::string fileName) const;
-    std::string copyTest(std::string fileName);
     
 private:
     void    error_(std::string message) const;
