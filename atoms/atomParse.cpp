@@ -1,9 +1,19 @@
 #include "atomParse.hpp"
 
 MP4::atomParse::atomParse(std::string fileName)
-    : parentPath("/")
+    : parentPath_("/")
 {
     readFile_ = std::make_shared<atomReadFile>(fileName);
+}
+
+void MP4::atomParse::setParentPath(std::string parentPath)
+{
+    parentPath_ = parentPath;
+}
+
+std::string MP4::atomParse::getParentPath() const
+{
+    return parentPath_;
 }
 
 std::string MP4::atomParse::getFilePath() const

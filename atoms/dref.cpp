@@ -13,7 +13,7 @@ MP4::dref::dref(atomParse& parse)
 
     drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
     uint32_t ID = 1;
-    parse.parentPath += "dref/";
+    parse.setParentPath(parse.getParentPath() + "dref/");
     do {
         dataReferences[ID] = makeAtom_(parse);
         ID++;

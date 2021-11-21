@@ -18,7 +18,7 @@ MP4::root::root(atomParse& parse)
 
     int64_t childNextPos;
     do {
-        parse.parentPath = "/";
+        parse.setParentPath("/");
         auto child = atom::makeAtom_(parse);
         childNextPos = child->fileNextPos_;
         fileStream->seekg(childNextPos, fileStream->beg);

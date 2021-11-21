@@ -67,7 +67,7 @@ MP4::atom::atom()
 
 MP4::atom::atom(atomParse& parse)
     : filePath_(parse.getFilePath())
-    , parentPath_(parse.parentPath)
+    , parentPath_(parse.getParentPath())
     , moovAtom_(nullptr)
     , trakAtom_(nullptr)
     , build_(nullptr)
@@ -116,7 +116,7 @@ MP4::atom::atom(atomParse& parse)
     if ( !container ) return;
     int64_t childNextPos;
     do {
-        parse.parentPath = path_+"/";
+        parse.setParentPath(path_+"/");
         auto child = makeAtom_(parse);
         childNextPos = child->fileNextPos_;
         fileStream->seekg(childNextPos, fileStream->beg);
