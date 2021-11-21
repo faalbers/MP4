@@ -86,8 +86,8 @@ void MP4::mdat::writeData(std::shared_ptr<atomWriteFile> writeFile) const
         fileRead.seekg(mdatEntry.filePos, fileRead.beg);
         fileRead.read(buffer, mdatEntry.size);
 
-        // write and set mdatWriteInfo
-        writeFile->mdatWriteInfo[mdatEntry.trackID].push_back(fileWrite->tellp());
+        // write and set trackChunkOffsets
+        writeFile->addTrakChunkOffset(mdatEntry.trackID, fileWrite->tellp());
         fileWrite->write(buffer, mdatEntry.size);
     }
     if ( fileRead.is_open() ) fileRead.close();

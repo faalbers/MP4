@@ -69,15 +69,15 @@ void MP4::co64::writeData(std::shared_ptr<atomWriteFile> writeFile) const
     co64Data.version.flag[2] = 0;
     
     // data settings
-    //co64Data.numberOfEntries = XXH_swap32(writeFile->mdatWriteInfo);
-    co64Data.numberOfEntries = XXH_swap32( (uint32_t) writeFile->mdatWriteInfo[writeTrackID_].size());
+    auto chunkOffsets = writeFile->getTrakChunkOffsets(writeTrackID_);
+    co64Data.numberOfEntries = XXH_swap32( (uint32_t) chunkOffsets.size());
 
     fileWrite->write((char*) &co64Data, sizeof(co64Data));
 
     // write table
     uint64_t val;
-    for ( auto dataOffset : writeFile->mdatWriteInfo[writeTrackID_] ) {
-        val = XXH_swap64(dataOffset);
+    for ( auto chunkOffset : chunkOffsets ) {
+        val = XXH_swap64(chunkOffset);
         fileWrite->write((char*) &val, sizeof(val));
     }
 }

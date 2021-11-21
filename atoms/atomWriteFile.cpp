@@ -25,6 +25,16 @@ std::ofstream *MP4::atomWriteFile::getFileWrite()
     return &fileStream_;
 }
 
+void MP4::atomWriteFile::addTrakChunkOffset(uint32_t trackID, uint64_t chunkOffset)
+{
+    trackChunkOffsets_[trackID].push_back(chunkOffset);
+}
+
+std::vector<uint64_t> MP4::atomWriteFile::getTrakChunkOffsets(uint32_t trackID) const
+{
+    return trackChunkOffsets_.at(trackID);
+}
+
 void MP4::atomWriteFile::error_(std::string message) const
 {
     std::cout << "atomWriteFile: "<< std::endl;
