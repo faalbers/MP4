@@ -15,15 +15,15 @@ class Parser
 public:
     Parser(std::string fileName);
 
-    void    printHierarchy();
-    void    printHierarchyData(bool fullLists = false);
-    void    printMdatMap();
+    void                        printHierarchy() const;
+    void                        printHierarchyData(bool fullLists = false) const;
+    void                        printMdatMap();
 
-    std::set<std::string>   getDataFormats();
-    std::set<std::string>   getComponentTypes();
-    std::set<std::string>   getComponentSubTypes();
-    std::set<uint32_t>      getDataFormatTrackIDs(std::string dataFormat);
-    std::set<uint32_t>      getComponentSubTypeTrackIDs(std::string componentSubType);
+    std::set<std::string>       getDataFormats();
+    std::set<std::string>       getComponentTypes();
+    std::set<std::string>       getComponentSubTypes();
+    std::set<uint32_t>          getDataFormatTrackIDs(std::string dataFormat);
+    std::set<uint32_t>          getComponentSubTypeTrackIDs(std::string componentSubType);
 
     std::shared_ptr<trackType>  getTrack(uint32_t trackID);
     std::shared_ptr<trackType>  getTrack(std::string dataFormat);
@@ -32,11 +32,11 @@ public:
     std::shared_ptr<root>       getRootAtom();
 
 private:
-    void                    error_(std::string message) const;
+    void                        error_(std::string message) const;
 
-    std::string             filePath_;
-    int64_t                 fileSize_;
-    std::shared_ptr<root>   rootAtom_;
+    std::string                 filePath_;
+    int64_t                     fileSize_;
+    std::shared_ptr<root>       rootAtom_;
 };
 
 }

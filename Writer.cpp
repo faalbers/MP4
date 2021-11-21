@@ -30,7 +30,7 @@ MP4::Writer::Writer(Processor &processor)
 
 }
 
-std::string MP4::Writer::write(std::string fileName)
+std::string MP4::Writer::write(std::string fileName) const
 {
     auto fileWrite = std::make_shared<atomWriteFile>(fileName);
 

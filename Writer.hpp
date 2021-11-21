@@ -15,7 +15,7 @@ public:
     Writer(Parser &parser);
     Writer(Processor &processor);
 
-    std::string write(std::string fileName);
+    std::string write(std::string fileName) const;
     std::string copyTest(std::string fileName);
     
 private:

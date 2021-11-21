@@ -21,7 +21,7 @@ MP4::Parser::Parser(std::string fileName)
     }
 }
 
-void MP4::Parser::printHierarchy()
+void MP4::Parser::printHierarchy() const
 {
     int pathWith = rootAtom_->nestLevel_(0) * 5;
     int valWith = 10;
@@ -40,7 +40,7 @@ void MP4::Parser::printHierarchy()
     std::cout << std::endl;
 }
 
-void MP4::Parser::printHierarchyData(bool fullLists)
+void MP4::Parser::printHierarchyData(bool fullLists) const
 {
     //std::cout << std::string(26, '-') << " MOVIE  " << std::string(26, '-') << std::endl;
     std::cout << std::endl;
