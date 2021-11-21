@@ -13,12 +13,12 @@ public:
     atomReadFile(std::string fileName);
     ~atomReadFile();
 
-    std::string     getFilePath();
-    int64_t         getFileSize();
+    std::string     getFilePath() const;
+    int64_t         getFileSize() const;
     std::ifstream*  getFileStream();
 
 private:
-    void            error_(std::string message);
+    void            error_(std::string message) const;
 
     std::string     filePath_;
     std::ifstream   fileStream_;

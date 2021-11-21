@@ -20,12 +20,12 @@ MP4::atomReadFile::~atomReadFile()
     fileStream_.close();
 }
 
-std::string MP4::atomReadFile::getFilePath()
+std::string MP4::atomReadFile::getFilePath() const
 {
     return filePath_;
 }
 
-int64_t MP4::atomReadFile::getFileSize()
+int64_t MP4::atomReadFile::getFileSize() const
 {
     return fileSize_;
 }
@@ -35,7 +35,7 @@ std::ifstream* MP4::atomReadFile::getFileStream()
     return &fileStream_;
 }
 
-void MP4::atomReadFile::error_(std::string message)
+void MP4::atomReadFile::error_(std::string message) const
 {
     std::cout << "atomReadFile: "<< std::endl;
     std::cout << "-> " << message << std::endl;
