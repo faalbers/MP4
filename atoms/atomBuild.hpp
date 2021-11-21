@@ -78,7 +78,7 @@ public:
     uint32_t    getCreationTime() const;
     uint32_t    getModificationTime() const;
     uint32_t    getNextTrackID() const;
-    std::map<uint32_t, std::shared_ptr<trackType>>
+    const std::map<uint32_t, std::shared_ptr<trackType>>&
                 getTracks() const;
     std::shared_ptr<trackType>
                 getTrack(uint32_t trackID = 0) const;
@@ -89,7 +89,7 @@ public:
     float       getTrackVolume(uint32_t trackID = 0) const;
     float       getTrackWidth(uint32_t trackID = 0) const;
     float       getTrackHeight(uint32_t trackID = 0) const;
-    std::vector<std::vector<float>>
+    const std::vector<std::vector<float>>&
                 getTrackMatrix(uint32_t trackID = 0) const;
     uint32_t    getMediaTimeScale(uint32_t trackID = 0) const;
     uint32_t    getMediaDuration(uint32_t trackID = 0) const;

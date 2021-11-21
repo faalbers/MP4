@@ -68,7 +68,7 @@ uint32_t MP4::atomBuild::getNextTrackID() const
     return nextTrackID_;
 }
 
-std::map<uint32_t, std::shared_ptr<MP4::trackType>> MP4::atomBuild::getTracks() const
+const std::map<uint32_t, std::shared_ptr<MP4::trackType>>& MP4::atomBuild::getTracks() const
 {
     return tracks_;
 }
@@ -113,7 +113,7 @@ float MP4::atomBuild::getTrackHeight(uint32_t trackID) const
     return tracks_.at(newTrackID_(trackID))->height;
 }
 
-std::vector<std::vector<float>> MP4::atomBuild::getTrackMatrix(uint32_t trackID) const
+const std::vector<std::vector<float>>& MP4::atomBuild::getTrackMatrix(uint32_t trackID) const
 {
     return tracks_.at(newTrackID_(trackID))->matrix;
 }

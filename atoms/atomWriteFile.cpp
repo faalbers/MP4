@@ -30,7 +30,7 @@ void MP4::atomWriteFile::addTrakChunkOffset(uint32_t trackID, uint64_t chunkOffs
     trackChunkOffsets_[trackID].push_back(chunkOffset);
 }
 
-std::vector<uint64_t> MP4::atomWriteFile::getTrakChunkOffsets(uint32_t trackID) const
+const std::vector<uint64_t>& MP4::atomWriteFile::getTrakChunkOffsets(uint32_t trackID) const
 {
     return trackChunkOffsets_.at(trackID);
 }

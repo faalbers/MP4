@@ -15,10 +15,10 @@ public:
     atomWriteFile(std::string fileName);
     ~atomWriteFile();
 
-    std::string             getFilePath() const;
-    std::ofstream*          getFileWrite();
-    void                    addTrakChunkOffset(uint32_t trackID, uint64_t chunkOffset);
-    std::vector<uint64_t>   getTrakChunkOffsets(uint32_t trackID) const;
+    std::string                     getFilePath() const;
+    std::ofstream*                  getFileWrite();
+    void                            addTrakChunkOffset(uint32_t trackID, uint64_t chunkOffset);
+    const std::vector<uint64_t>&    getTrakChunkOffsets(uint32_t trackID) const;
 
 private:
     void            error_(std::string message) const;
