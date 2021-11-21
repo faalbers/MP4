@@ -39,7 +39,7 @@ MP4::tkhd::tkhd(atomParse& parse)
 
 MP4::tkhd::tkhd(std::shared_ptr<atomBuild> build)
     : atom(build)
-    , trackID(build->currentTrackID())
+    , trackID(build->getCurrentTrackID())
     , duration(build->getTrackDuration())
     , creationTime(build->getTrackCreationTime())
     , modificationTime(build->getTrackModificationTime())

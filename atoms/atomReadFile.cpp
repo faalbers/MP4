@@ -30,7 +30,7 @@ int64_t MP4::atomReadFile::getFileSize()
     return fileSize_;
 }
 
-std::ifstream *MP4::atomReadFile::getFileStream()
+std::ifstream* MP4::atomReadFile::getFileStream()
 {
     return &fileStream_;
 }

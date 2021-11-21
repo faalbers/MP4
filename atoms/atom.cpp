@@ -126,7 +126,7 @@ MP4::atom::atom(atomParse& parse)
 }
 
 MP4::atom::atom(std::shared_ptr<atomBuild> build)
-    : parentPath_(build->parentPath)
+    : parentPath_(build->getParentPath())
     , filePath_("")
     , filePos_(0)
     , fileDataPos_(0)

@@ -14,15 +14,15 @@ MP4::mdia::mdia(std::shared_ptr<atomBuild> build)
 {
     std::shared_ptr<atom> child;
 
-    build->parentPath = path_ + "/";
+    build->setParentPath(path_ + "/");
     child = std::make_shared<mdhd>(build);
     children_.push_back(child);
 
-    build->parentPath = path_ + "/";
+    build->setParentPath(path_ + "/");
     child = std::make_shared<hdlr>(build);
     children_.push_back(child);
 
-    build->parentPath = path_ + "/";
+    build->setParentPath(path_ + "/");
     child = std::make_shared<minf>(build);
     children_.push_back(child);
 

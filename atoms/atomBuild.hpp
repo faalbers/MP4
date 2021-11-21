@@ -69,9 +69,10 @@ class atomBuild
 public:
     atomBuild(Processor& processor);
 
-    std::string parentPath;
-    bool        nextTrack();
-    uint32_t    currentTrackID() const;
+    void        setParentPath(std::string parentPath);
+    bool        setNextTrack();
+    std::string getParentPath() const;
+    uint32_t    getCurrentTrackID() const;
     uint32_t    getVideoTimeScale() const;
     uint32_t    getVideoDuration() const;
     uint32_t    getCreationTime() const;
@@ -112,6 +113,7 @@ private:
     void        error_(std::string message) const;
     uint32_t    newTrackID_(uint32_t trackID) const;
 
+    std::string                                     parentPath_;
     uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
     std::map<std::string, std::string>              userData_;    

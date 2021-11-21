@@ -13,8 +13,8 @@ class atomParse
 public:
     atomParse(std::string fileName);
 
-    std::string     getFilePath();
-    int64_t         getFileSize();
+    std::string     getFilePath() const;
+    int64_t         getFileSize() const;
     std::ifstream*  getFileStream();
 
     std::string parentPath;

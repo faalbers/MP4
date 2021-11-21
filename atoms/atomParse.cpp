@@ -6,13 +6,13 @@ MP4::atomParse::atomParse(std::string fileName)
     readFile_ = std::make_shared<atomReadFile>(fileName);
 }
 
-std::string MP4::atomParse::getFilePath()
+std::string MP4::atomParse::getFilePath() const
 {
     if ( readFile_ != nullptr ) return readFile_->getFilePath();
     return "";
 }
 
-int64_t MP4::atomParse::getFileSize()
+int64_t MP4::atomParse::getFileSize() const
 {
     if ( readFile_ != nullptr ) return readFile_->getFileSize();
     return 0;

@@ -14,7 +14,12 @@ MP4::atomBuild::atomBuild(Processor& processor)
 {
 }
 
-bool MP4::atomBuild::nextTrack()
+void MP4::atomBuild::setParentPath(std::string parentPath)
+{
+    parentPath_ = parentPath;
+}
+
+bool MP4::atomBuild::setNextTrack()
 {
     bool getNext = false;
     if ( currentTrackID_ == 0 ) getNext = true;
@@ -28,7 +33,12 @@ bool MP4::atomBuild::nextTrack()
     return false;
 }
 
-uint32_t MP4::atomBuild::currentTrackID() const
+std::string MP4::atomBuild::getParentPath() const
+{
+    return parentPath_;
+}
+
+uint32_t MP4::atomBuild::getCurrentTrackID() const
 {
     return currentTrackID_;
 }
@@ -188,14 +198,14 @@ std::string MP4::atomBuild::getUserData(std::string userDataKey) const
 
 bool MP4::atomBuild::samplesHaveSync() const
 {
-    for ( auto sample : tracks_.at(currentTrackID())->samples )
+    for ( auto sample : tracks_.at(getCurrentTrackID())->samples )
         if ( sample.second.sync ) return true;
     return false;
 }
 
 bool MP4::atomBuild::samplesHaveCompositionOffset() const
 {
-    for ( auto sample : tracks_.at(currentTrackID())->samples )
+    for ( auto sample : tracks_.at(getCurrentTrackID())->samples )
         if ( sample.second.compositionOffset > 0 ) return true;
     return false;
 }

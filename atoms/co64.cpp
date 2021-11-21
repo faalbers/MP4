@@ -25,7 +25,7 @@ MP4::co64::co64(atomParse& parse)
 
 MP4::co64::co64(std::shared_ptr<atomBuild> build)
     : atom(build)
-    , writeTrackID_(build->currentTrackID())
+    , writeTrackID_(build->getCurrentTrackID())
 {
     // setting current trackID for write
     // no data to add. se write for dataOffsets

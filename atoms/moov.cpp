@@ -17,16 +17,16 @@ MP4::moov::moov(std::shared_ptr<atomBuild> build)
 {
     std::shared_ptr<atom> child;
 
-    build->parentPath = path_ + "/";
+    build->setParentPath(path_ + "/");
     child = std::make_shared<mvhd>(build);
     children_.push_back(child);
     
-    build->parentPath = path_ + "/";
+    build->setParentPath(path_ + "/");
     child = std::make_shared<udta>(build);
     children_.push_back(child);
     
-    while ( build->nextTrack() ) {
-        build->parentPath = path_ + "/";
+    while ( build->setNextTrack() ) {
+        build->setParentPath(path_ + "/");
         child = std::make_shared<trak>(build);
         children_.push_back(child);
     }
