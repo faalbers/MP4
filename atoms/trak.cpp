@@ -26,7 +26,6 @@
 #include <set>
 #include <vector>
 #include <string>
-#include "../types.hpp"
 
 MP4::trak::trak(atomParse& parse)
     : atom(parse)

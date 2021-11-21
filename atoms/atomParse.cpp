@@ -18,7 +18,7 @@ int64_t MP4::atomParse::getFileSize()
     return 0;
 }
 
-std::ifstream *MP4::atomParse::getFileStream()
+std::ifstream* MP4::atomParse::getFileStream()
 {
     if ( readFile_ != nullptr ) return readFile_->getFileStream();
     return nullptr;

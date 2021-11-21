@@ -15,7 +15,7 @@ public:
 
     std::string     getFilePath();
     int64_t         getFileSize();
-    std::ifstream   *getFileStream();
+    std::ifstream*  getFileStream();
 
     std::string parentPath;
 

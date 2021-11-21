@@ -1,7 +1,7 @@
 #ifndef MP4_PROCESSOR_H
 #define MP4_PROCESSOR_H
 
-#include "types.hpp"
+#include "atoms/atomBuild.hpp"
 #include "Parser.hpp"
 #include <string>
 #include <map>
