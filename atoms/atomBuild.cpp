@@ -28,157 +28,157 @@ bool MP4::atomBuild::nextTrack()
     return false;
 }
 
-uint32_t MP4::atomBuild::currentTrackID()
+uint32_t MP4::atomBuild::currentTrackID() const
 {
     return currentTrackID_;
 }
 
-uint32_t MP4::atomBuild::getVideoTimeScale()
+uint32_t MP4::atomBuild::getVideoTimeScale() const
 {
     return videoTimeScale_;
 }
 
-uint32_t MP4::atomBuild::getVideoDuration()
+uint32_t MP4::atomBuild::getVideoDuration() const
 {
     return videoDuration_;
 }
 
-uint32_t MP4::atomBuild::getCreationTime()
+uint32_t MP4::atomBuild::getCreationTime() const
 {
     return creationTime_;
 }
 
-uint32_t MP4::atomBuild::getModificationTime()
+uint32_t MP4::atomBuild::getModificationTime() const
 {
     return modificationTime_;
 }
 
-uint32_t MP4::atomBuild::getNextTrackID()
+uint32_t MP4::atomBuild::getNextTrackID() const
 {
     return nextTrackID_;
 }
 
-std::map<uint32_t, std::shared_ptr<MP4::trackType>> MP4::atomBuild::getTracks()
+std::map<uint32_t, std::shared_ptr<MP4::trackType>> MP4::atomBuild::getTracks() const
 {
     return tracks_;
 }
 
-std::shared_ptr<MP4::trackType> MP4::atomBuild::getTrack(uint32_t trackID)
+std::shared_ptr<MP4::trackType> MP4::atomBuild::getTrack(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)];
+    return tracks_.at(newTrackID_(trackID));
 }
 
-uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID)
+uint32_t MP4::atomBuild::getTrackDuration(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->trackDuration;
+    return tracks_.at(newTrackID_(trackID))->trackDuration;
 }
 
-uint32_t MP4::atomBuild::getTrackCreationTime(uint32_t trackID)
+uint32_t MP4::atomBuild::getTrackCreationTime(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->creationTime;
+    return tracks_.at(newTrackID_(trackID))->creationTime;
 }
 
-uint32_t MP4::atomBuild::getTrackModificationTime(uint32_t trackID)
+uint32_t MP4::atomBuild::getTrackModificationTime(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->modificationTime;
+    return tracks_.at(newTrackID_(trackID))->modificationTime;
 }
 
-uint32_t MP4::atomBuild::getTrackLayer(uint32_t trackID)
+uint32_t MP4::atomBuild::getTrackLayer(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->layer;
+    return tracks_.at(newTrackID_(trackID))->layer;
 }
 
-float MP4::atomBuild::getTrackVolume(uint32_t trackID)
+float MP4::atomBuild::getTrackVolume(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->volume;
+    return tracks_.at(newTrackID_(trackID))->volume;
 }
 
-float MP4::atomBuild::getTrackWidth(uint32_t trackID)
+float MP4::atomBuild::getTrackWidth(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->width;
+    return tracks_.at(newTrackID_(trackID))->width;
 }
 
-float MP4::atomBuild::getTrackHeight(uint32_t trackID)
+float MP4::atomBuild::getTrackHeight(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->height;
+    return tracks_.at(newTrackID_(trackID))->height;
 }
 
-std::vector<std::vector<float>> MP4::atomBuild::getTrackMatrix(uint32_t trackID)
+std::vector<std::vector<float>> MP4::atomBuild::getTrackMatrix(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->matrix;
+    return tracks_.at(newTrackID_(trackID))->matrix;
 }
 
-uint32_t MP4::atomBuild::getMediaTimeScale(uint32_t trackID)
+uint32_t MP4::atomBuild::getMediaTimeScale(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->mediaTimeScale;
+    return tracks_.at(newTrackID_(trackID))->mediaTimeScale;
 }
 
-uint32_t MP4::atomBuild::getMediaDuration(uint32_t trackID)
+uint32_t MP4::atomBuild::getMediaDuration(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->mediaDuration;
+    return tracks_.at(newTrackID_(trackID))->mediaDuration;
 }
 
-uint16_t MP4::atomBuild::getMediaLanguage(uint32_t trackID)
+uint16_t MP4::atomBuild::getMediaLanguage(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->mediaLanguage;
+    return tracks_.at(newTrackID_(trackID))->mediaLanguage;
 }
 
-uint16_t MP4::atomBuild::getMediaQuality(uint32_t trackID)
+uint16_t MP4::atomBuild::getMediaQuality(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->mediaQuality;
+    return tracks_.at(newTrackID_(trackID))->mediaQuality;
 }
 
-std::string MP4::atomBuild::getComponentType(uint32_t trackID)
+std::string MP4::atomBuild::getComponentType(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->componentType;
+    return tracks_.at(newTrackID_(trackID))->componentType;
 }
 
-std::string MP4::atomBuild::getComponentSubType(uint32_t trackID)
+std::string MP4::atomBuild::getComponentSubType(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->componentSubType;
+    return tracks_.at(newTrackID_(trackID))->componentSubType;
 }
 
-std::string MP4::atomBuild::getComponentName(uint32_t trackID)
+std::string MP4::atomBuild::getComponentName(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->componentName;
+    return tracks_.at(newTrackID_(trackID))->componentName;
 }
 
-uint16_t MP4::atomBuild::getGraphicsMode(uint32_t trackID)
+uint16_t MP4::atomBuild::getGraphicsMode(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->graphicsMode;
+    return tracks_.at(newTrackID_(trackID))->graphicsMode;
 }
 
-uint16_t MP4::atomBuild::getOpColorR(uint32_t trackID)
+uint16_t MP4::atomBuild::getOpColorR(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->opColorR;
+    return tracks_.at(newTrackID_(trackID))->opColorR;
 }
 
-uint16_t MP4::atomBuild::getOpColorG(uint32_t trackID)
+uint16_t MP4::atomBuild::getOpColorG(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->opColorG;
+    return tracks_.at(newTrackID_(trackID))->opColorG;
 }
 
-uint16_t MP4::atomBuild::getOpColorB(uint32_t trackID)
+uint16_t MP4::atomBuild::getOpColorB(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->opColorB;
+    return tracks_.at(newTrackID_(trackID))->opColorB;
 }
 
-std::string MP4::atomBuild::getDataFormat(uint32_t trackID)
+std::string MP4::atomBuild::getDataFormat(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->dataFormat;
+    return tracks_.at(newTrackID_(trackID))->dataFormat;
 }
 
-uint16_t MP4::atomBuild::getDataReferenceIndex(uint32_t trackID)
+uint16_t MP4::atomBuild::getDataReferenceIndex(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->dataReferenceIndex;
+    return tracks_.at(newTrackID_(trackID))->dataReferenceIndex;
 }
 
-std::string MP4::atomBuild::getDataExtended(uint32_t trackID)
+std::string MP4::atomBuild::getDataExtended(uint32_t trackID) const
 {
-    return tracks_[newTrackID_(trackID)]->dataExtended;
+    return tracks_.at(newTrackID_(trackID))->dataExtended;
 }
 
-std::string MP4::atomBuild::getUserData(std::string userDataKey)
+std::string MP4::atomBuild::getUserData(std::string userDataKey) const
 {
     std::string userData = "";
     if ( userData_.find(userDataKey) != userData_.end() )
@@ -186,21 +186,21 @@ std::string MP4::atomBuild::getUserData(std::string userDataKey)
     return userData;
 }
 
-bool MP4::atomBuild::samplesHaveSync()
+bool MP4::atomBuild::samplesHaveSync() const
 {
-    for ( auto sample : tracks_[currentTrackID()]->samples )
+    for ( auto sample : tracks_.at(currentTrackID())->samples )
         if ( sample.second.sync ) return true;
     return false;
 }
 
-bool MP4::atomBuild::samplesHaveCompositionOffset()
+bool MP4::atomBuild::samplesHaveCompositionOffset() const
 {
-    for ( auto sample : tracks_[currentTrackID()]->samples )
+    for ( auto sample : tracks_.at(currentTrackID())->samples )
         if ( sample.second.compositionOffset > 0 ) return true;
     return false;
 }
 
-uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
+uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID) const
 {
     if ( trackID == 0 ) trackID = currentTrackID_;
     if ( tracks_.find(trackID) == tracks_.end() )
@@ -208,7 +208,7 @@ uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID)
     return trackID;
 }
 
-void MP4::atomBuild::error_(std::string message)
+void MP4::atomBuild::error_(std::string message) const
 {
     std::cout << "MP4::atomBuild:" << std::endl;
     std::cout << "-> " << message << std::endl;

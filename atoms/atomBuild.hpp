@@ -19,43 +19,46 @@ public:
 
     std::string parentPath;
     bool        nextTrack();
-    uint32_t    currentTrackID();
-    uint32_t    getVideoTimeScale();
-    uint32_t    getVideoDuration();
-    uint32_t    getCreationTime();
-    uint32_t    getModificationTime();
-    uint32_t    getNextTrackID();
-    std::map<uint32_t, std::shared_ptr<trackType>> getTracks();
-    std::shared_ptr<trackType> getTrack(uint32_t trackID = 0);
-    uint32_t    getTrackDuration(uint32_t trackID = 0);
-    uint32_t    getTrackCreationTime(uint32_t trackID = 0);
-    uint32_t    getTrackModificationTime(uint32_t trackID = 0);
-    uint32_t    getTrackLayer(uint32_t trackID = 0);
-    float       getTrackVolume(uint32_t trackID = 0);
-    float       getTrackWidth(uint32_t trackID = 0);
-    float       getTrackHeight(uint32_t trackID = 0);
-    std::vector<std::vector<float>> getTrackMatrix(uint32_t trackID = 0);
-    uint32_t    getMediaTimeScale(uint32_t trackID = 0);
-    uint32_t    getMediaDuration(uint32_t trackID = 0);
-    uint16_t    getMediaLanguage(uint32_t trackID = 0);
-    uint16_t    getMediaQuality(uint32_t trackID = 0);
-    std::string getComponentType(uint32_t trackID = 0);
-    std::string getComponentSubType(uint32_t trackID = 0);
-    std::string getComponentName(uint32_t trackID = 0);
-    uint16_t    getGraphicsMode(uint32_t trackID = 0);
-    uint16_t    getOpColorR(uint32_t trackID = 0);
-    uint16_t    getOpColorG(uint32_t trackID = 0);
-    uint16_t    getOpColorB(uint32_t trackID = 0);
-    std::string getDataFormat(uint32_t trackID = 0);
-    uint16_t    getDataReferenceIndex(uint32_t trackID = 0);
-    std::string getDataExtended(uint32_t trackID = 0);
-    std::string getUserData(std::string userDataKey);
-    bool        samplesHaveSync();
-    bool        samplesHaveCompositionOffset();
+    uint32_t    currentTrackID() const;
+    uint32_t    getVideoTimeScale() const;
+    uint32_t    getVideoDuration() const;
+    uint32_t    getCreationTime() const;
+    uint32_t    getModificationTime() const;
+    uint32_t    getNextTrackID() const;
+    std::map<uint32_t, std::shared_ptr<trackType>>
+                getTracks() const;
+    std::shared_ptr<trackType>
+                getTrack(uint32_t trackID = 0) const;
+    uint32_t    getTrackDuration(uint32_t trackID = 0) const;
+    uint32_t    getTrackCreationTime(uint32_t trackID = 0) const;
+    uint32_t    getTrackModificationTime(uint32_t trackID = 0) const;
+    uint32_t    getTrackLayer(uint32_t trackID = 0) const;
+    float       getTrackVolume(uint32_t trackID = 0) const;
+    float       getTrackWidth(uint32_t trackID = 0) const;
+    float       getTrackHeight(uint32_t trackID = 0) const;
+    std::vector<std::vector<float>>
+                getTrackMatrix(uint32_t trackID = 0) const;
+    uint32_t    getMediaTimeScale(uint32_t trackID = 0) const;
+    uint32_t    getMediaDuration(uint32_t trackID = 0) const;
+    uint16_t    getMediaLanguage(uint32_t trackID = 0) const;
+    uint16_t    getMediaQuality(uint32_t trackID = 0) const;
+    std::string getComponentType(uint32_t trackID = 0) const;
+    std::string getComponentSubType(uint32_t trackID = 0) const;
+    std::string getComponentName(uint32_t trackID = 0) const;
+    uint16_t    getGraphicsMode(uint32_t trackID = 0) const;
+    uint16_t    getOpColorR(uint32_t trackID = 0) const;
+    uint16_t    getOpColorG(uint32_t trackID = 0) const;
+    uint16_t    getOpColorB(uint32_t trackID = 0) const;
+    std::string getDataFormat(uint32_t trackID = 0) const;
+    uint16_t    getDataReferenceIndex(uint32_t trackID = 0) const;
+    std::string getDataExtended(uint32_t trackID = 0) const;
+    std::string getUserData(std::string userDataKey) const;
+    bool        samplesHaveSync() const;
+    bool        samplesHaveCompositionOffset() const;
 
 private:
-    void        error_(std::string message);
-    uint32_t    newTrackID_(uint32_t trackID);
+    void        error_(std::string message) const;
+    uint32_t    newTrackID_(uint32_t trackID) const;
 
     uint32_t                                        currentTrackID_;
     std::map<uint32_t, std::shared_ptr<trackType>>  tracks_;
