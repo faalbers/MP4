@@ -59,12 +59,13 @@ int main(int argc, char* argv[])
         MP4::Processor processor;
         //processor.addTrack(parserA,1,1);
         processor.addTrack(parserA,"hvc1",1);
+        // Need to add componentSubType also !
         //processor.addTrack(parserA,2,2);
-        processor.addTrack(parserA,"mp4a",2);
+        //processor.addTrack(parserA,"mp4a",2);
         //processor.addTrack(parserA,4,3);
-        processor.addTrack(parserA,"gpmd",3);
-        processor.append(parserB);
-        processor.addUserData(parserA);
+        //processor.addTrack(parserA,"gpmd",3);
+        //processor.append(parserB);
+        //processor.addUserData(parserA);
         //processor.test();
 
         MP4::Writer writer(processor);
