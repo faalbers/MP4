@@ -97,12 +97,22 @@ std::vector<uint32_t> MP4::Processor::addTrack(Parser &parser, uint32_t sourceTr
     return addedTrackIDs;
 }
 
-std::vector<uint32_t> MP4::Processor::addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID)
+std::vector<uint32_t> MP4::Processor::addDataFormatTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID)
 {
     for ( auto trackID : parser.getDataFormatTrackIDs(dataFormat) ) {
         return addTrack(parser, trackID, targetTrackID);
     }
     error_("addTrack: could not find track with data format: "+dataFormat);
+    std::vector<uint32_t> addedTrackIDs;
+    return addedTrackIDs;
+}
+
+std::vector<uint32_t> MP4::Processor::addComponentSubTypeTrack(Parser &parser, std::string componentSubType, uint32_t targetTrackID)
+{
+    for ( auto trackID : parser.getComponentSubTypeTrackIDs(componentSubType) ) {
+        return addTrack(parser, trackID, targetTrackID);
+    }
+    error_("addTrack: could not find track with component subtype: "+componentSubType);
     std::vector<uint32_t> addedTrackIDs;
     return addedTrackIDs;
 }
@@ -187,24 +197,6 @@ void MP4::Processor::append(Parser &parser)
             track.second->videoTimeScale, videoTimeScale_);
         if ( videoDuration > videoDuration_ )
             videoDuration_ = videoDuration;
-    }
-}
-
-void MP4::Processor::test()
-{
-    std::cout << "\nVideo duration: " << atom::getTimeString(videoDuration_, videoTimeScale_) << std::endl;
-    for ( auto track : tracks_ ) {
-        auto lastSampleID = (--track.second->samples.end())->first;
-        std::cout << "[" << track.first << "]\n"
-            << "Video duration: "
-            << atom::getTimeString(track.second->videoDuration, track.second->videoTimeScale) << std::endl
-            << "Track duration: "
-            << atom::getTimeString(track.second->trackDuration, track.second->videoTimeScale) << std::endl
-            << "Media duration: "
-            << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale) << std::endl
-            << "Samples duration: "
-            << atom::getTimeString(track.second->samplesDuration, track.second->mediaTimeScale) << std::endl
-            << "last sample duration: " << track.second->samples[lastSampleID].duration << std::endl;
     }
 }
 

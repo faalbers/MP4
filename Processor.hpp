@@ -21,11 +21,12 @@ public:
     std::vector<uint32_t>
                 addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
     std::vector<uint32_t>
-                addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID = 0);
+                addDataFormatTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID = 0);
+    std::vector<uint32_t>
+                addComponentSubTypeTrack(Parser &parser, std::string componentSubType, uint32_t targetTrackID = 0);
     void        addUserData(Parser &parser, std::string userDataKey = "");
     void        flattenTrackDurations();
     void        append(Parser &parser);
-    void        test();
     void        info();
 
 private:

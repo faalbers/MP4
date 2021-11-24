@@ -58,11 +58,14 @@ int main(int argc, char* argv[])
     if (true) {
         MP4::Processor processor;
 
-        auto trackIDs = processor.addTrack(parserA,1,1);
-        trackIDs = processor.addTrack(parserA,2,2);
-        trackIDs = processor.addTrack(parserA,"gpmd");
-
-        processor.info();
+        //auto trackIDs = processor.addTrack(parserA,1,1);
+        //trackIDs = processor.addTrack(parserA,2,2);
+        //trackIDs = processor.addTrack(parserA,"gpmd");
+        
+        auto trackIDs = processor.addComponentSubTypeTrack(parserA,"vide",1);
+        trackIDs = processor.addComponentSubTypeTrack(parserA,"soun",2);
+        //trackIDs = processor.addTrack(parserA,2,2);
+        trackIDs = processor.addDataFormatTrack(parserA,"gpmd");
         
         //processor.addTrack(parserA,1,1);
         //processor.addTrack(parserA,"hvc1",1);
@@ -74,7 +77,8 @@ int main(int argc, char* argv[])
         
         processor.append(parserB);
         processor.addUserData(parserA);
-        //processor.test();
+
+        processor.info();
 
         MP4::Writer writer(processor);
 
