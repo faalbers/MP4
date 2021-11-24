@@ -59,17 +59,8 @@ int main(int argc, char* argv[])
         MP4::Processor processor;
 
         auto trackIDs = processor.addTrack(parserA,1,1);
-        std::cout << "Added Tracks:" << std::endl;
-        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
-        std::cout << std::endl;
         trackIDs = processor.addTrack(parserA,2,2);
-        std::cout << "Added Tracks:" << std::endl;
-        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
-        std::cout << std::endl;
         trackIDs = processor.addTrack(parserA,"gpmd");
-        std::cout << "Added Tracks:" << std::endl;
-        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
-        std::cout << std::endl;
 
         processor.info();
         
@@ -80,6 +71,7 @@ int main(int argc, char* argv[])
         //processor.addTrack(parserA,"mp4a",2);
         //processor.addTrack(parserA,4,3);
         //processor.addTrack(parserA,"gpmd",3);
+        
         processor.append(parserB);
         processor.addUserData(parserA);
         //processor.test();
