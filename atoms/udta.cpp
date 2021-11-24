@@ -21,55 +21,55 @@ MP4::udta::udta(std::shared_ptr<atomBuild> build)
     std::shared_ptr<atom> child;
 
     if ( build->getUserData("FIRM") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<FIRM>(build);
         children_.push_back(child);
     }
 
     if ( build->getUserData("LENS") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<LENS>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("CAME") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<CAME>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("SETT") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<SETT>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("MUID") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<MUID>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("HMMT") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<HMMT>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("BCID") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<BCID>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("GUMI") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<GUMI>(build);
         children_.push_back(child);
     }
     
     if ( build->getUserData("GPMF") != "") {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<GPMF>(build);
         children_.push_back(child);
     }

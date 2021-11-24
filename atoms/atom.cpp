@@ -137,7 +137,6 @@ MP4::atom::atom(std::shared_ptr<atomBuild> build)
     , trakAtom_(nullptr)
     , build_(build)
 {
-    path_ = parentPath_ + getKey();
 }
 
 void MP4::atom::setMoov_(moov* moovAtom)

@@ -10,6 +10,13 @@ MP4::tref::tref(atomParse& parse)
 MP4::tref::tref(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
+    std::shared_ptr<atom> child;
+
+    if ( build->getReferenceTrackIDs("tmcd").size() > 0 ) {
+        build->setParentPath(parentPath_ + getKey() + "/");
+        child = std::make_shared<tmcd>(build);
+        children_.push_back(child);
+    }
 }
 
 void MP4::tref::printData(bool fullLists) const

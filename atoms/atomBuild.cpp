@@ -210,6 +210,14 @@ bool MP4::atomBuild::samplesHaveCompositionOffset() const
     return false;
 }
 
+std::vector<uint32_t> MP4::atomBuild::getReferenceTrackIDs(std::string referenceType, uint32_t trackID) const
+{
+    std::vector<uint32_t> refTrackIDs;
+    for ( auto referenceTrackID : tracks_.at(newTrackID_(trackID))->referenceTrackIDs )
+        if ( referenceTrackID.second == referenceType ) refTrackIDs.push_back(referenceTrackID.first);
+    return refTrackIDs;
+}
+
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID) const
 {
     if ( trackID == 0 ) trackID = currentTrackID_;

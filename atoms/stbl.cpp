@@ -18,35 +18,35 @@ MP4::stbl::stbl(std::shared_ptr<atomBuild> build)
 {
     std::shared_ptr<atom> child;
 
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<stsd>(build);
     children_.push_back(child);
 
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<stts>(build);
     children_.push_back(child);
 
     if ( build->samplesHaveSync()) {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<stss>(build);
         children_.push_back(child);
     }
 
     if ( build->samplesHaveCompositionOffset()) {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<ctts>(build);
         children_.push_back(child);
     }
 
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<stsc>(build);
     children_.push_back(child);
 
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<stsz>(build);
     children_.push_back(child);
 
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<co64>(build);
     children_.push_back(child);
 

@@ -115,6 +115,8 @@ public:
     std::string getUserData(std::string userDataKey) const;
     bool        samplesHaveSync() const;
     bool        samplesHaveCompositionOffset() const;
+    std::vector<uint32_t>
+                getReferenceTrackIDs(std::string referenceType, uint32_t trackID = 0) const;
 
 private:
     void        error_(std::string message) const;

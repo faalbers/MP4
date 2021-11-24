@@ -27,10 +27,13 @@ class tmcd : public atom
 {
 public:
     tmcd(atomParse& parse);
+    tmcd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false) const;
 
     std::string getKey() const;
+
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
     static const std::string    key;
     // data if it's a timecode track reference

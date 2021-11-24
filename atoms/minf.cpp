@@ -15,16 +15,16 @@ MP4::minf::minf(std::shared_ptr<atomBuild> build)
     std::shared_ptr<atom> child;
 
     if ( build->getComponentSubType() == "vide" ) {
-        build->setParentPath(path_ + "/");
+        build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<vmhd>(build);
         children_.push_back(child);
     }
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<dinf>(build);
     children_.push_back(child);
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<stbl>(build);
     children_.push_back(child);
 }

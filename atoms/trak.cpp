@@ -37,19 +37,19 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
 {
     std::shared_ptr<atom> child;
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<tkhd>(build);
     children_.push_back(child);
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<tref>(build);
     children_.push_back(child);
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<edts>(build);
     children_.push_back(child);
     
-    build->setParentPath(path_ + "/");
+    build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<mdia>(build);
     children_.push_back(child);
 }

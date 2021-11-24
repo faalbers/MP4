@@ -20,9 +20,18 @@ MP4::tmcd::tmcd(atomParse& parse)
             fileStream->read((char*) &trackID, sizeof(trackID));
             trackIDs.push_back(XXH_swap32(trackID));
         } while ( fileStream->tellg() < fileNextPos_ );
-    } else {
     }
 
+}
+
+MP4::tmcd::tmcd(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , isTrackReference(false)
+{
+    if (parentPath_.find("/tref") != std::string::npos) {
+        isTrackReference = true;
+        trackIDs = build->getReferenceTrackIDs("tmcd");
+    }
 }
 
 void MP4::tmcd::printData(bool fullLists) const
@@ -46,6 +55,15 @@ void MP4::tmcd::printData(bool fullLists) const
 std::string MP4::tmcd::getKey() const
 {
     return key;
+}
+
+void MP4::tmcd::writeData(std::shared_ptr<atomWriteFile> writeFile) const
+{
+    auto fileWrite = writeFile->getFileWrite();
+    for ( auto trackID : trackIDs ) {
+        trackID = XXH_swap32(trackID);
+        fileWrite->write((char*) &trackID, sizeof(trackID));
+    }
 }
 
 const std::string MP4::tmcd::key = "tmcd";
