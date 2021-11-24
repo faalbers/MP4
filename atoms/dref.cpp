@@ -11,13 +11,18 @@ MP4::dref::dref(atomParse& parse)
     fileStream->seekg(fileDataPos_, fileStream->beg);
     fileStream->read((char*) &drefData, sizeof(drefData));
 
-    drefData.numberOfEntries = XXH_swap32(drefData.numberOfEntries);
+    dataReferenceCount = XXH_swap32(drefData.numberOfEntries);
     uint32_t ID = 1;
-    parse.setParentPath(parse.getParentPath() + "dref/");
+
+    int64_t childNextPos;
     do {
-        dataReferences[ID] = makeAtom_(parse);
+        parse.setParentPath(path_+"/");
+        auto child = makeAtom_(parse);
+        childNextPos = child->fileNextPos_;
+        fileStream->seekg(childNextPos, fileStream->beg);
+        children_.push_back(child);
         ID++;
-    } while ( ID <= drefData.numberOfEntries );
+    } while ( ID <= dataReferenceCount );
 }
 
 void MP4::dref::printData(bool fullLists) const
@@ -25,11 +30,7 @@ void MP4::dref::printData(bool fullLists) const
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Data Reference Atom) ["<< headerSize_ << "]" << std::endl;
-    std::cout << dataIndent << "[#] ( Data Reference Type Atom )\n";
-    for ( auto entry : dataReferences ) {
-        std::cout << dataIndent << "[" << entry.first << "] ( ";
-        entry.second->printData();
-    }
+    std::cout << dataIndent << "number of entries: " << dataReferenceCount << std::endl;
 }
 
 std::string MP4::dref::getKey() const

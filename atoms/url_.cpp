@@ -17,10 +17,10 @@ MP4::url_::url_(atomParse& parse)
 
 void MP4::url_::printData(bool fullLists) const
 {
-    std::cout << "'url ' ) ["<< headerSize_ << "]";
-    if (dataInSameFile)
-        std::cout << " ( Data is in same file )";
-    std::cout << std::endl;
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
+    std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
+    std::cout << path_ << " (Data Reference type 'url ' Atom) ["<< headerSize_ << "]" << std::endl;
+    std::cout << dataIndent << "dataInSameFile: " << dataInSameFile << std::endl;
 }
 
 std::string MP4::url_::getKey() const

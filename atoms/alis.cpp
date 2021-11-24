@@ -17,10 +17,10 @@ MP4::alis::alis(atomParse& parse)
 
 void MP4::alis::printData(bool fullLists) const
 {
-    std::cout << "'alis' )";
-    if (dataInSameFile)
-        std::cout << " ( Data is in same file )";
-    std::cout << std::endl;
+    auto levelCount = std::count(path_.begin(), path_.end(), '/');
+    std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
+    std::cout << path_ << " (Data Reference type 'alis' Atom) ["<< headerSize_ << "]" << std::endl;
+    std::cout << dataIndent << "dataInSameFile: " << dataInSameFile << std::endl;
 }
 
 std::string MP4::alis::getKey() const

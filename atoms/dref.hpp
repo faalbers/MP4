@@ -23,8 +23,8 @@ public:
     
     std::string getKey() const;
 
-    static const std::string                    key;
-    std::map<uint32_t, std::shared_ptr<atom>>   dataReferences;
+    static const std::string    key;
+    uint32_t                    dataReferenceCount;
 };
 
 }
