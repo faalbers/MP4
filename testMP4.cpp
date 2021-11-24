@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     std::cout << "**** PARSE MP4 ****\n\n";
 
     MP4::Parser parserA(argv[1]);
-    MP4::Parser parserB(argv[2]);
+    //MP4::Parser parserB(argv[2]);
 
     auto testStart = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(testStart - createStart);
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     //parserA.printHierarchy();
     parserA.printHierarchyData();
     //parserA.printMdatMap();
-    parserB.printHierarchyData();
+    //parserB.printHierarchyData();
 
     if (false) {
         std::cout << "dataFormats:\n" << std::endl;
@@ -57,8 +57,24 @@ int main(int argc, char* argv[])
 
     if (true) {
         MP4::Processor processor;
+
+        auto trackIDs = processor.addTrack(parserA,1);
+        std::cout << "Added Tracks:" << std::endl;
+        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
+        std::cout << std::endl;
+        trackIDs = processor.addTrack(parserA,2);
+        std::cout << "Added Tracks:" << std::endl;
+        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
+        std::cout << std::endl;
+        trackIDs = processor.addTrack(parserA,"gpmd");
+        std::cout << "Added Tracks:" << std::endl;
+        for ( auto trackID : trackIDs ) std::cout << " " << trackID;
+        std::cout << std::endl;
+
+        processor.info();
+        
         //processor.addTrack(parserA,1,1);
-        processor.addTrack(parserA,"hvc1",1);
+        //processor.addTrack(parserA,"hvc1",1);
         // Need to add componentSubType also !
         //processor.addTrack(parserA,2,2);
         //processor.addTrack(parserA,"mp4a",2);

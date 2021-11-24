@@ -36,7 +36,13 @@ typedef struct trackType
     std::map<uint32_t, chunkType>   createdChunks;
     uint32_t                creationTime;
     uint32_t                modificationTime;
-    uint32_t                trackID;
+    bool                    enforcedTrackID;
+    std::map<std::string, uint32_t>
+                            sourceTrackIDs;
+    std::map<std::string, std::map<uint32_t, std::string>>
+                            sourceRefTrackIDs;
+    std::map<uint32_t, std::string>
+                            referenceTrackIDs;
     std::string             dataFormat;
     uint16_t                dataReferenceIndex;
     std::string             dataExtended;
@@ -50,7 +56,8 @@ typedef struct trackType
     float                   volume;
     float                   width;
     float                   height;
-    std::vector<std::vector<float>> matrix;
+    std::vector<std::vector<float>>
+                            matrix;
     uint16_t                mediaLanguage;
     uint16_t                mediaQuality;
     std::string             componentType;

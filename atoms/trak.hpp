@@ -31,18 +31,18 @@ public:
 
     // data retrieval
 
-    uint32_t                    getID();
+    uint32_t                        getID();
 
-    uint32_t                    getMediaTimeScale(); // float in seconds
+    uint32_t                        getMediaTimeScale(); // float in seconds
 
-    std::shared_ptr<trackType>  getTrack();
-    size_t                      getSampleCount();
+    std::shared_ptr<trackType>      getTrack();
+    size_t                          getSampleCount();
 
     std::map<uint32_t, chunkType>   getChunks();
-    size_t                      getChunkCount();
+    size_t                          getChunkCount();
     std::map<uint32_t, uint64_t>    getChunkOffsets();
 
-    bool isDataInSameFile();
+    bool                            isDataInSameFile();
 
     // track checkers
     bool isComponentType(std::string type);

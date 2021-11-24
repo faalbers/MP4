@@ -76,6 +76,9 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     auto trackData = std::make_shared<trackType>();
     uint32_t sampleID;
     
+    // set default forcedd track ID to false
+    trackData->enforcedTrackID = false;
+
     // get data references
     std::string filePath = "";
     for ( auto dref : getTypeAtoms<dref>() ) {
@@ -99,8 +102,8 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
         trackData->dataExtended = stsd->stsdTable[1].dataExtended;
     }
 
-    // get trackID
-    trackData->trackID = getID();
+    // get source trackID
+    trackData->sourceTrackIDs[filePath] = getID();
 
     // get tkhd data
     for ( auto tkhd : getTypeAtoms<tkhd>() ) {
@@ -143,6 +146,13 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) {
         trackData->videoTimeScale = mvhd->timeScale;
         trackData->videoDuration = mvhd->duration;
+    }
+
+    // get referenced trackID's
+    for ( auto tref : getTypeAtoms<tref>() ) {
+        auto referenceTrackIDs = tref->getReferenceTrackIDs();
+        if ( referenceTrackIDs.size() > 0 )
+            trackData->sourceRefTrackIDs[filePath] = referenceTrackIDs;
     }
 
     // get sync samples

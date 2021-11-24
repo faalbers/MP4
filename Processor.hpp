@@ -16,12 +16,17 @@ public:
     friend class atomBuild;
     Processor();
 
-    void    addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
-    void    addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID = 0);
-    void    addUserData(Parser &parser, std::string userDataKey = "");
-    void    flattenTrackDurations();
-    void    append(Parser &parser);
-    void    test();
+    uint32_t    getNextAvailableTrackID();
+    bool        moveUpTrackID(uint32_t trackID);
+    std::vector<uint32_t>
+                addTrack(Parser &parser, uint32_t sourceTrackID, uint32_t targetTrackID = 0);
+    std::vector<uint32_t>
+                addTrack(Parser &parser, std::string dataFormat, uint32_t targetTrackID = 0);
+    void        addUserData(Parser &parser, std::string userDataKey = "");
+    void        flattenTrackDurations();
+    void        append(Parser &parser);
+    void        test();
+    void        info();
 
 private:
     friend class    Writer;

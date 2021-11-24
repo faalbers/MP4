@@ -1,4 +1,5 @@
 #include "tref.hpp"
+#include "tmcd.hpp"
 #include <iostream>
 
 MP4::tref::tref(atomParse& parse)
@@ -11,7 +12,6 @@ MP4::tref::tref(std::shared_ptr<atomBuild> build)
 {
 }
 
-
 void MP4::tref::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
@@ -23,6 +23,18 @@ void MP4::tref::printData(bool fullLists) const
 std::string MP4::tref::getKey() const
 {
     return key;
+}
+
+std::map<uint32_t, std::string> MP4::tref::getReferenceTrackIDs() const
+{
+    std::map<uint32_t, std::string> refTrackIDs;
+    for ( auto child : children_ ) {
+        if ( child->getKey() == "tmcd" ) {
+            for ( auto refTrackID : ((tmcd*) child.get())->trackIDs )
+                refTrackIDs[refTrackID] = "tmcd";
+        } else error_("getReferenceTrackIDs: referenced track type not recognized: "+child->getKey());
+    }
+    return refTrackIDs;
 }
 
 const std::string MP4::tref::key = "tref";

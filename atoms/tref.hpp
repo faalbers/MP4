@@ -35,7 +35,8 @@ public:
 
     void printData(bool fullLists = false) const;
 
-    std::string getKey() const;
+    std::string                     getKey() const;
+    std::map<uint32_t, std::string> getReferenceTrackIDs() const;
 
     static const std::string    key;
 };

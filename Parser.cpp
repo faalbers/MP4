@@ -163,6 +163,11 @@ void MP4::Parser::printMdatMap()
 
 }
 
+std::string MP4::Parser::getFilePath() const
+{
+    return filePath_;
+}
+
 std::set<std::string> MP4::Parser::getDataFormats()
 {
     std::set<std::string> dataFormats;

@@ -19,6 +19,7 @@ public:
     void                        printHierarchyData(bool fullLists = false) const;
     void                        printMdatMap();
 
+    std::string                 getFilePath() const;
     std::set<std::string>       getDataFormats();
     std::set<std::string>       getComponentTypes();
     std::set<std::string>       getComponentSubTypes();
