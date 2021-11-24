@@ -27,14 +27,12 @@ bool MP4::Processor::moveUpTrackID(uint32_t trackID)
 
     // update track references
     std::cout << "moveUpTrackID: update track references\n";
-    /*
     for ( auto track : tracks_ ) {
-        for ( int i = 0; i < track.second->referenceTrackIDs.size(); i++ ) {
-            if ( track.second->referenceTrackIDs[i] == trackID)
-                track.second->referenceTrackIDs[i] = nextTrackID;
+        if ( track.second->referenceTrackIDs.find(trackID) != track.second->referenceTrackIDs.end() ) {
+            track.second->referenceTrackIDs[nextTrackID] = track.second->referenceTrackIDs[trackID];
+            track.second->referenceTrackIDs.erase(trackID);
         }
     }
-    */
 
     return true;
 }
@@ -84,7 +82,7 @@ std::vector<uint32_t> MP4::Processor::addTrack(Parser &parser, uint32_t sourceTr
     std::cout << "\tdata format       : " << tracks_[trackID]->dataFormat << std::endl;
 
     // check if we need to add a referenced track
-    if ( tracks_[trackID]->sourceRefTrackIDs[parsedFilePath].size() > 0) {
+    if (tracks_[trackID]->sourceRefTrackIDs.find(parsedFilePath) != tracks_[trackID]->sourceRefTrackIDs.end()) {
         std::cout << "In track with format " << tracks_[trackID]->dataFormat << " I found referenced tracks:\n";
         for ( auto sourceRefTrackID : tracks_[trackID]->sourceRefTrackIDs[parsedFilePath] ) {
             for ( auto track : tracks_ ) {
@@ -104,14 +102,13 @@ std::vector<uint32_t> MP4::Processor::addTrack(Parser &parser, uint32_t sourceTr
             std::cout << "\tadding track " << sourceRefTrackID.first
                 << " of path " << parsedFilePath
                 << " in track " << trackID << std::endl;
-            auto refTrackID = addTrack(parser, sourceRefTrackID.first);
-            tracks_[trackID]->referenceTrackIDs[refTrackID[0]] = sourceRefTrackID.second;
-            std::cout << "added referenced trak " << refTrackID[0] << " " << sourceRefTrackID.second << std::endl;
-            addedTrackIDs.insert(addedTrackIDs.end(), refTrackID.begin(), refTrackID.end());
+            auto refTrackIDs = addTrack(parser, sourceRefTrackID.first);
+            tracks_[trackID]->referenceTrackIDs[refTrackIDs[0]] = sourceRefTrackID.second;
+            std::cout << "added referenced trak " << refTrackIDs[0] << " " << sourceRefTrackID.second << std::endl;
+            addedTrackIDs.insert(addedTrackIDs.end(), refTrackIDs.begin(), refTrackIDs.end());
             return addedTrackIDs;
         }
     }
-
 /*
     // check if we need to add a referenced track
     auto addedTrackID = trackID;

@@ -58,11 +58,11 @@ int main(int argc, char* argv[])
     if (true) {
         MP4::Processor processor;
 
-        auto trackIDs = processor.addTrack(parserA,1);
+        auto trackIDs = processor.addTrack(parserA,1,1);
         std::cout << "Added Tracks:" << std::endl;
         for ( auto trackID : trackIDs ) std::cout << " " << trackID;
         std::cout << std::endl;
-        trackIDs = processor.addTrack(parserA,2);
+        trackIDs = processor.addTrack(parserA,2,2);
         std::cout << "Added Tracks:" << std::endl;
         for ( auto trackID : trackIDs ) std::cout << " " << trackID;
         std::cout << std::endl;
