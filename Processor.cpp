@@ -4,8 +4,8 @@
 MP4::Processor::Processor()
     : videoTimeScale_(0)
     , videoDuration_(0)
-    , creationTime_(0)
-    , modificationTime_(0)
+    , creationTime_(atom::getCurrentDateTime())
+    , modificationTime_(atom::getCurrentDateTime())
 {
 }
 
@@ -202,12 +202,26 @@ void MP4::Processor::append(Parser &parser)
 
 void MP4::Processor::info()
 {
+    std::cout << "\nCurrent Processor Information:";
+    std::cout << "\n------------------------------\n";
+    std::cout << "\tvideo duration   : "
+        << atom::getTimeString(videoDuration_, videoTimeScale_) << std::endl;
+    std::cout << "\tcreation time    : " << atom::getDateTimeString(creationTime_) << std::endl;
+    std::cout << "Track Information:\n";
+    std::cout << "------------------\n";
     for ( auto track : tracks_) {
         std::cout << "Track: " << track.first;
         if ( track.second->enforcedTrackID ) std::cout << " (enforced track ID)";
         std::cout << std::endl;
-        std::cout << "\tcomponentSubType: " << track.second->componentSubType << std::endl;
-        std::cout << "\tdataFormat      : " << track.second->dataFormat << std::endl;
+        std::cout << "\tcomponentSubType : " << track.second->componentSubType << std::endl;
+        std::cout << "\tdataFormat       : " << track.second->dataFormat << std::endl;
+        std::cout << "\tmedia duration   : "
+            << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale) << std::endl;
+        if ( track.second->componentSubType == "vide") {
+            std::cout << "\tvideo width      : " << track.second->width << std::endl;
+            std::cout << "\tvideo height     : " << track.second->height << std::endl;
+        }
+        std::cout << "\tcreation time    : " << atom::getDateTimeString(track.second->creationTime) << std::endl;
         if ( track.second->sourceTrackIDs.size() > 0 ) {
             std::cout << "\tsource tracks:\n";
             for ( auto sourceTrackID : track.second->sourceTrackIDs )
@@ -230,6 +244,9 @@ void MP4::Processor::info()
             }
         }
     }
+    std::cout << "User Data Information:\n";
+    std::cout << "----------------------\n";
+    for ( auto userData : userData_ ) std::cout << "\t- " << userData.first << std::endl;
 }
 
 void MP4::Processor::error_(std::string message) const
