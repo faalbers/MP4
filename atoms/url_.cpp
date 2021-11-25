@@ -21,7 +21,6 @@ MP4::url_::url_(std::shared_ptr<atomBuild> build)
     for ( auto dataReference : build->getDataReferences() ) {
         if ( dataReference.second.type == "url " ) { 
             dataInSameFile = dataReference.second.dataInSameFile;
-            std::cout << "dataInSameFile: " << dataInSameFile << std::endl;
             return;
         }
     }
