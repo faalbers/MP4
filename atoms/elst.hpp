@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include "atom.hpp"
+#include "../dataTypes.hpp"
 
 /*
 EDIT LIST ATOM
@@ -22,13 +23,6 @@ class elst : public atom
         uint32_t    mediaRate;
     } entryDataBlock;
 
-    typedef struct entryType
-    {
-        uint32_t    trackDuration;
-        uint32_t    mediaStartTime;
-        float       mediaRate;
-    } entryType;
-
 public:
     elst(atomParse& parse);
 
@@ -37,7 +31,7 @@ public:
     std::string getKey() const;
 
     static const std::string    key;
-    std::vector<entryType> elstTable;
+    std::map<uint32_t, editListEntryType> elstTable;
 
 private:
     

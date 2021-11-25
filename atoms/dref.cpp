@@ -65,11 +65,11 @@ bool MP4::dref::isDataInSameFile(uint16_t referenceIndex) const
     return getDataReferences()[referenceIndex].dataInSameFile;
 }
 
-std::map<uint16_t, MP4::dataReferenceEntry> MP4::dref::getDataReferences() const
+std::map<uint16_t, MP4::dataReferenceEntryType> MP4::dref::getDataReferences() const
 {
-    std::map<uint16_t, dataReferenceEntry> dataReferences;
+    std::map<uint16_t, dataReferenceEntryType> dataReferences;
     uint16_t referenceIndex = 1;
-    dataReferenceEntry drefEntry;
+    dataReferenceEntryType drefEntry;
     for ( auto referenceAtom : children_ ) {
         drefEntry.type = referenceAtom->getKey();
         if ( drefEntry.type == "alis" )

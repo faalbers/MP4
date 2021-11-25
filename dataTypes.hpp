@@ -28,17 +28,28 @@ typedef struct chunkType
     uint64_t    dataOffset;
 } chunkType;
 
-typedef struct dataReferenceEntry
+typedef struct dataReferenceEntryType
 {
     std::string type;
     bool        dataInSameFile;
-} dataReferenceEntry;
+} dataReferenceEntryType;
+
+typedef struct editListEntryType
+    {
+        uint32_t    trackDuration;
+        uint32_t    mediaStartTime;
+        float       mediaRate;
+    } editListEntryType;
 
 typedef struct trackType
 {
     // samples[ID] = sample
-    std::map<uint32_t, sampleType>  samples;
-    std::map<uint32_t, chunkType>   createdChunks;
+    std::map<uint32_t, sampleType>
+                            samples;
+    std::map<uint32_t, chunkType>
+                            createdChunks;
+    std::map<uint32_t, editListEntryType>
+                            editList;
     uint32_t                creationTime;
     uint32_t                modificationTime;
     bool                    enforcedTrackID;
@@ -50,7 +61,7 @@ typedef struct trackType
                             referenceTrackIDs;
     std::string             dataFormat;
     uint16_t                dataReferenceIndex;
-    std::map<uint16_t, dataReferenceEntry>
+    std::map<uint16_t, dataReferenceEntryType>
                             dataReferences;
     std::string             dataExtended;
     uint32_t                videoTimeScale;

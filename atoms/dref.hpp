@@ -29,7 +29,7 @@ public:
     void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
     bool    isDataInSameFile(uint16_t referenceIndex) const;
-    std::map<uint16_t, dataReferenceEntry> 
+    std::map<uint16_t, dataReferenceEntryType> 
             getDataReferences() const;
 
     static const std::string    key;

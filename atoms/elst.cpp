@@ -13,18 +13,18 @@ MP4::elst::elst(atomParse& parse)
     fileStream->seekg(fileDataPos_, fileStream->beg);
     fileStream->read((char*) &elstData, sizeof(elstData));
     elstData.numberOfEntries = XXH_swap32(elstData.numberOfEntries);
-    auto index = elstData.numberOfEntries;
     entryDataBlock elstEntryBlock;
+    uint32_t entryID = 1;
     do {
-        entryType elstEntry;
+        editListEntryType elstEntry;
         fileStream->read((char*) &elstEntryBlock, sizeof(elstEntryBlock));
         elstEntry.trackDuration = XXH_swap32(elstEntryBlock.trackDuration);
         elstEntry.mediaStartTime = XXH_swap32(elstEntryBlock.mediaStartTime);
         elstEntryBlock.mediaRate = XXH_swap32(elstEntryBlock.mediaRate);
         elstEntry.mediaRate = (float)elstEntryBlock.mediaRate / (float)(1 << 16);
-        elstTable.push_back(elstEntry);
-        index--;
-    } while ( index > 0);
+        elstTable[entryID] = elstEntry;
+        entryID++;
+    } while ( entryID <= elstData.numberOfEntries );
 }
 
 void MP4::elst::printData(bool fullLists) const
@@ -37,12 +37,12 @@ void MP4::elst::printData(bool fullLists) const
     uint32_t movieTimeScale;
     for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) movieTimeScale = mvhd->timeScale;
     for ( auto entry : elstTable ) {
-        std::cout << dataIndent << "[" << index << "]"
-            << " ( " << entry.trackDuration
-            << " (" << getTimeString(entry.trackDuration,  movieTimeScale)
-            << "), " << entry.mediaStartTime
-            << " (" << getTimeString(entry.mediaStartTime,  movieTimeScale)
-            << "), " << entry.mediaRate
+        std::cout << dataIndent << "[" << entry.first << "]"
+            << " ( " << entry.second.trackDuration
+            << " (" << getTimeString(entry.second.trackDuration,  movieTimeScale)
+            << "), " << entry.second.mediaStartTime
+            << " (" << getTimeString(entry.second.mediaStartTime,  movieTimeScale)
+            << "), " << entry.second.mediaRate
             << " )" << std::endl;
         index++;
     }
