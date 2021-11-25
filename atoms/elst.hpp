@@ -15,6 +15,20 @@ namespace MP4
 
 class elst : public atom
 {
+    typedef struct entryDataBlock
+    {
+        uint32_t    trackDuration;
+        uint32_t    mediaStartTime;
+        uint32_t    mediaRate;
+    } entryDataBlock;
+
+    typedef struct entryType
+    {
+        uint32_t    trackDuration;
+        uint32_t    mediaStartTime;
+        float       mediaRate;
+    } entryType;
+
 public:
     elst(atomParse& parse);
 
@@ -23,14 +37,10 @@ public:
     std::string getKey() const;
 
     static const std::string    key;
-    typedef struct entryType
-    {
-        uint32_t    duration;
-        uint32_t    mediaTime;
-        float       mediaRate;
-    } entryType;
     std::vector<entryType> elstTable;
 
+private:
+    
 };
 
 }

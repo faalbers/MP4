@@ -1,16 +1,11 @@
 #include "elst.hpp"
+#include "moov.hpp"
+#include "mvhd.hpp"
 #include <iostream>
 
 MP4::elst::elst(atomParse& parse)
     : atom(parse)
 {
-    typedef struct entryDataBlock
-    {
-        uint32_t    duration;
-        uint32_t    mediaTime;
-        uint32_t    mediaRate;
-    } entryDataBlock;
-
     // handle data 
     auto fileStream = parse.getFileStream();
 
@@ -23,8 +18,8 @@ MP4::elst::elst(atomParse& parse)
     do {
         entryType elstEntry;
         fileStream->read((char*) &elstEntryBlock, sizeof(elstEntryBlock));
-        elstEntry.duration = XXH_swap32(elstEntryBlock.duration);
-        elstEntry.mediaTime = XXH_swap32(elstEntryBlock.mediaTime);
+        elstEntry.trackDuration = XXH_swap32(elstEntryBlock.trackDuration);
+        elstEntry.mediaStartTime = XXH_swap32(elstEntryBlock.mediaStartTime);
         elstEntryBlock.mediaRate = XXH_swap32(elstEntryBlock.mediaRate);
         elstEntry.mediaRate = (float)elstEntryBlock.mediaRate / (float)(1 << 16);
         elstTable.push_back(elstEntry);
@@ -37,12 +32,18 @@ void MP4::elst::printData(bool fullLists) const
     auto levelCount = std::count(path_.begin(), path_.end(), '/');
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Edit List Atom) ["<< headerSize_ << "]" << std::endl;
+    std::cout << dataIndent << "[#] (trackDuration , mediaStartTime, mediaRate)\n";
     int index = 1;
+    uint32_t movieTimeScale;
+    for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) movieTimeScale = mvhd->timeScale;
     for ( auto entry : elstTable ) {
-        std::cout << dataIndent << "Entry [" << index << "]" << std::endl;
-        std::cout << dataIndent << "  duration : " << entry.duration << std::endl;
-        std::cout << dataIndent << "  mediaTime: " << entry.mediaTime << std::endl;
-        std::cout << dataIndent << "  mediaRate: " << entry.mediaRate << std::endl;
+        std::cout << dataIndent << "[" << index << "]"
+            << " ( " << entry.trackDuration
+            << " (" << getTimeString(entry.trackDuration,  movieTimeScale)
+            << "), " << entry.mediaStartTime
+            << " (" << getTimeString(entry.mediaStartTime,  movieTimeScale)
+            << "), " << entry.mediaRate
+            << " )" << std::endl;
         index++;
     }
 }
