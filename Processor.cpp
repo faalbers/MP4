@@ -213,15 +213,16 @@ void MP4::Processor::info()
         std::cout << "Track: " << track.first;
         if ( track.second->enforcedTrackID ) std::cout << " (enforced track ID)";
         std::cout << std::endl;
-        std::cout << "\tcomponentSubType : " << track.second->componentSubType << std::endl;
-        std::cout << "\tdataFormat       : " << track.second->dataFormat << std::endl;
-        std::cout << "\tmedia duration   : "
+        std::cout << "\tcomponentSubType  : " << track.second->componentSubType << std::endl;
+        std::cout << "\tdataFormat        : " << track.second->dataFormat << std::endl;
+        std::cout << "\tdataReferenceIndex: " << track.second->dataReferenceIndex << std::endl;
+        std::cout << "\tmedia duration    : "
             << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale) << std::endl;
         if ( track.second->componentSubType == "vide") {
-            std::cout << "\tvideo width      : " << track.second->width << std::endl;
-            std::cout << "\tvideo height     : " << track.second->height << std::endl;
+            std::cout << "\tvideo width       : " << track.second->width << std::endl;
+            std::cout << "\tvideo height      : " << track.second->height << std::endl;
         }
-        std::cout << "\tcreation time    : " << atom::getDateTimeString(track.second->creationTime) << std::endl;
+        std::cout << "\tcreation time     : " << atom::getDateTimeString(track.second->creationTime) << std::endl;
         if ( track.second->sourceTrackIDs.size() > 0 ) {
             std::cout << "\tsource tracks:\n";
             for ( auto sourceTrackID : track.second->sourceTrackIDs )
@@ -243,10 +244,22 @@ void MP4::Processor::info()
                         << "' in file " << sourceRefTrackIDs.first << std::endl;
             }
         }
+        if ( track.second->dataReferences.size() > 0 ) {
+            std::cout << "\tdata references:\n";
+            for ( auto dataReference : track.second->dataReferences ) {
+                std::cout << "\t\t[" << dataReference.first << "]"
+                    << " type = '" << dataReference.second.type << "'";
+                if ( dataReference.second.dataInSameFile )
+                    std::cout << " and data resides in same file\n";
+                else std::cout << " and data resides in other file\n";
+            }
+        }
     }
-    std::cout << "User Data Information:\n";
-    std::cout << "----------------------\n";
-    for ( auto userData : userData_ ) std::cout << "\t- " << userData.first << std::endl;
+    if ( userData_.size() > 0 ) {
+        std::cout << "User Data Information:\n";
+        std::cout << "----------------------\n";
+        for ( auto userData : userData_ ) std::cout << "\t- " << userData.first << std::endl;
+    }
 }
 
 void MP4::Processor::error_(std::string message) const
