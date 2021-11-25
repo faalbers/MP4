@@ -104,5 +104,14 @@ std::set<std::string> MP4::stsd::getDataFormats()
     return dataFormats;
 }
 
+std::map<std::string, uint16_t> MP4::stsd::getReferenceIndices()
+{
+    std::map<std::string, uint16_t> refIndices;
+    for ( auto entry : stsdTable ) {
+        refIndices[entry.second.dataFormat] = entry.second.dataReferenceIndex;
+    }
+    return refIndices;
+}
+
 const std::string MP4::stsd::key = "stsd";
 

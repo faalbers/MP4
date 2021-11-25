@@ -18,10 +18,19 @@ class dref : public atom
 {
 public:
     dref(atomParse& parse);
+    dref(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false) const;
     
     std::string getKey() const;
+
+    void write(std::shared_ptr<atomWriteFile> writeFile) const;
+
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
+
+    bool    isDataInSameFile(uint16_t referenceIndex) const;
+    std::map<uint16_t, dataReferenceEntry> 
+            getDataReferences() const;
 
     static const std::string    key;
     uint32_t                    dataReferenceCount;

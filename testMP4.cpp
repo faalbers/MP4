@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
         auto trackIDs = processor.addComponentSubTypeTrack(parserA,"vide",1);
         trackIDs = processor.addComponentSubTypeTrack(parserA,"soun",2);
         //trackIDs = processor.addTrack(parserA,2,2);
-        //trackIDs = processor.addDataFormatTrack(parserA,"gpmd");
+        trackIDs = processor.addDataFormatTrack(parserA,"gpmd");
         
         //processor.addTrack(parserA,1,1);
         //processor.addTrack(parserA,"hvc1",1);

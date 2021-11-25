@@ -30,7 +30,8 @@ public:
 
     void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
 
-    std::set<std::string>   getDataFormats();
+    std::set<std::string>           getDataFormats();
+    std::map<std::string, uint16_t> getReferenceIndices();
 
     static const std::string    key;
     typedef struct entryType

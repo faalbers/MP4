@@ -188,6 +188,11 @@ std::string MP4::atomBuild::getDataExtended(uint32_t trackID) const
     return tracks_.at(newTrackID_(trackID))->dataExtended;
 }
 
+std::map<uint16_t, MP4::dataReferenceEntry> MP4::atomBuild::getDataReferences(uint32_t trackID) const
+{
+    return tracks_.at(newTrackID_(trackID))->dataReferences;
+}
+
 std::string MP4::atomBuild::getUserData(std::string userDataKey) const
 {
     std::string userData = "";

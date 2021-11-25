@@ -57,10 +57,11 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
 uint32_t MP4::trak::getID()
 {
     for ( auto tkhd : getTypeAtoms<tkhd>() ) {
-        if ( tkhd == nullptr ) throw std::runtime_error("MP4: Track has no tkhd !");
+        if ( tkhd == nullptr ) error_("trak::getID: Track has no tkhd !");
         return tkhd->trackID;
     }
-    throw std::runtime_error("MP4: Track has no tkhd !");
+    error_("trak::getID: Track has no tkhd !");
+    return 0;
 }
 
 uint32_t MP4::trak::getMediaTimeScale()
@@ -68,7 +69,8 @@ uint32_t MP4::trak::getMediaTimeScale()
     for ( auto mdhd : getTypeAtoms<mdhd>() ) {
         return mdhd->timeScale;
     }
-    throw std::runtime_error("MP4: Track has no time scale !");
+    error_("trak::getMediaTimeScale: Track has no time scale !");
+    return 0;
 }
 
 std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
@@ -79,31 +81,26 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     // set default forcedd track ID to false
     trackData->enforcedTrackID = false;
 
-    // get data references
-    std::string filePath = "";
-    for ( auto dref : getTypeAtoms<dref>() ) {
-        if ( dref->dataReferences.size() > 1 )
-            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple data references");
-        if ( dref->dataReferences[1]->getKey() =="url " && ((url_ *) dref->dataReferences[1].get())->dataInSameFile )
-            filePath = filePath_;
-        else if ( dref->dataReferences[1]->getKey() =="alis" && ((alis *) dref->dataReferences[1].get())->dataInSameFile )
-            filePath = filePath_;
-        else {
-            throw std::runtime_error("MP4::getSamples: Can't handle reference of type: "+dref->dataReferences[1]->getKey());
-        }
-    }
-
+    // can't handled data in referenced files
+    if ( !isDataInSameFile() )
+        error_("trak::getTrack: don't know how to handle referenced file");
+    
     // get sample description
     for ( auto stsd : getTypeAtoms<stsd>() ) {
         if ( stsd->stsdTable.size() > 1 )
-            error_("MP4::trak::getSamples: don't know how to handle multiple sample descriptions");
+            error_("trak::getTrack: don't know how to handle multiple sample descriptions");
         trackData->dataFormat = stsd->stsdTable[1].dataFormat;
         trackData->dataReferenceIndex = stsd->stsdTable[1].dataReferenceIndex;
         trackData->dataExtended = stsd->stsdTable[1].dataExtended;
     }
 
+    // get data references
+    for ( auto dref : getTypeAtoms<dref>() ) {
+        trackData->dataReferences = dref->getDataReferences();
+    }
+
     // get source trackID
-    trackData->sourceTrackIDs[filePath] = getID();
+    trackData->sourceTrackIDs[filePath_] = getID();
 
     // get tkhd data
     for ( auto tkhd : getTypeAtoms<tkhd>() ) {
@@ -152,7 +149,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     for ( auto tref : getTypeAtoms<tref>() ) {
         auto referenceTrackIDs = tref->getReferenceTrackIDs();
         if ( referenceTrackIDs.size() > 0 )
-            trackData->sourceRefTrackIDs[filePath] = referenceTrackIDs;
+            trackData->sourceRefTrackIDs[filePath_] = referenceTrackIDs;
     }
 
     // get sync samples
@@ -170,7 +167,7 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
             uint32_t index = 0;
             do {
                 sampleID++;
-                sample.filePath = filePath;
+                sample.filePath = filePath_;
                 sample.sync = false;
                 if ( syncSamples.find(sampleID) != syncSamples.end()) sample.sync = true;
                 sample.time = time;
@@ -205,9 +202,9 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     int64_t filePos = 0;
     for ( auto chunk : getChunks() ) {
         if ( chunk.second.sampleDescriptionID > 1 )
-            throw std::runtime_error("MP4::getSamples: don't know how to handle multiple sample descriptions");
+            error_("trak::getTrack: don't know how to handle multiple sample descriptions");
         if (filePos > (int64_t) chunk.second.dataOffset )
-            throw std::runtime_error("MP4::getSamples: wrong file position on samples");
+            error_("trak::getTrack: wrong file position on samples");
         auto lastChunkSampleID = chunk.second.firstSampleID + chunk.second.samples - 1;
         filePos = chunk.second.dataOffset;
         for ( auto sampleID = chunk.second.firstSampleID; sampleID <= lastChunkSampleID; sampleID++ ) {
@@ -232,11 +229,11 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
 }
 
 bool MP4::trak::isDataInSameFile() {
-    for ( auto dref : getTypeAtoms<dref>() ) {
-        for ( auto dataReference : dref->dataReferences ) {
-            if ( dataReference.second->getKey() == "url " ) return ((url_ *) dataReference.second.get())->dataInSameFile;
-            else if ( dataReference.second->getKey() == "alis" ) return ((alis *) dataReference.second.get())->dataInSameFile;
-            else throw std::runtime_error("MP4::trak::isDataInSameFile Can't find data reference");
+    for ( auto stsd : getTypeAtoms<stsd>() ) {
+        for ( auto refIndex : stsd->getReferenceIndices() ) {
+            for ( auto dref : getTypeAtoms<dref>() ) {
+                return dref->isDataInSameFile(refIndex.second);
+            }
         }
     }
     return false;
@@ -266,7 +263,7 @@ std::map<uint32_t, MP4::chunkType> MP4::trak::getChunks()
             chunkOffsets = co64->co64Table;
         }
         if ( chunkOffsets.size() == 0 )
-            throw std::runtime_error("MP4::trak: No chunk offsets found !");
+            error_("trak::getChunks: No chunk offsets found !");
         auto stscTableMap = stsc->stscTable;
 
         // reverse vectors so we can pop first elements from back
@@ -301,7 +298,9 @@ std::map<uint32_t, uint64_t> MP4::trak::getChunkOffsets()
     for ( auto co64 : getTypeAtoms<co64>() ) {
         return co64->co64Table;
     }
-    throw std::runtime_error("MP4: no Chunks found in track !");
+    error_("trak::getChunkOffsets: no Chunks found in track !");
+    std::map<uint32_t, uint64_t> empty;
+    return empty;
 }
 
 bool MP4::trak::isComponentType(std::string type)
