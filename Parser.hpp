@@ -1,10 +1,10 @@
 #ifndef MP4_PARSER_H
 #define MP4_PARSER_H
 
-#include "atoms/atomBuild.hpp"
 #include <string>
 #include <set>
 #include <memory>
+#include "dataTypes.hpp"
 #include "atoms/root.hpp"
 
 namespace MP4
