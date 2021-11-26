@@ -85,6 +85,7 @@ typedef struct trackType
     uint16_t                opColorR;
     uint16_t                opColorG;
     uint16_t                opColorB;
+    float                   balance;
 } trackType;
 
 }

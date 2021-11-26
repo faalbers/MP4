@@ -47,6 +47,7 @@ public:
     uint16_t    getOpColorR(uint32_t trackID = 0) const;
     uint16_t    getOpColorG(uint32_t trackID = 0) const;
     uint16_t    getOpColorB(uint32_t trackID = 0) const;
+    float       getBalance(uint32_t trackID = 0) const;
     std::string getDataFormat(uint32_t trackID = 0) const;
     uint16_t    getDataReferenceIndex(uint32_t trackID = 0) const;
     std::string getDataExtended(uint32_t trackID = 0) const;
@@ -59,6 +60,7 @@ public:
     bool        samplesHaveCompositionOffset() const;
     std::vector<uint32_t>
                 getReferenceTrackIDs(std::string referenceType, uint32_t trackID = 0) const;
+    bool        hasReferenceTrack(uint32_t trackID = 0) const;
 
 private:
     void        error_(std::string message) const;

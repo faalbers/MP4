@@ -1,5 +1,6 @@
 #include "minf.hpp"
 #include "vmhd.hpp"
+#include "smhd.hpp"
 #include "dinf.hpp"
 #include "stbl.hpp"
 #include <iostream>
@@ -17,6 +18,12 @@ MP4::minf::minf(std::shared_ptr<atomBuild> build)
     if ( build->getComponentSubType() == "vide" ) {
         build->setParentPath(parentPath_ + getKey() + "/");
         child = std::make_shared<vmhd>(build);
+        children_.push_back(child);
+    }
+
+    if ( build->getComponentSubType() == "soun" ) {
+        build->setParentPath(parentPath_ + getKey() + "/");
+        child = std::make_shared<smhd>(build);
         children_.push_back(child);
     }
     

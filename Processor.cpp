@@ -274,6 +274,9 @@ void MP4::Processor::info()
             std::cout << "\tvideo width       : " << track.second->width << std::endl;
             std::cout << "\tvideo height      : " << track.second->height << std::endl;
         }
+        if ( track.second->componentSubType == "soun") {
+            std::cout << "\tsound balance     : " << track.second->balance << std::endl;
+        }
         std::cout << "\tcreation time     : " << atom::getDateTimeString(track.second->creationTime) << std::endl;
         if ( track.second->sourceTrackIDs.size() > 0 ) {
             std::cout << "\tsource tracks:\n";

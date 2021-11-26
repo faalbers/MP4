@@ -19,6 +19,7 @@
 #include "moov.hpp"
 #include "mvhd.hpp"
 #include "vmhd.hpp"
+#include "smhd.hpp"
 #include "ctts.hpp"
 
 #include <iostream>
@@ -41,10 +42,12 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
     build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<tkhd>(build);
     children_.push_back(child);
-    
-    build->setParentPath(parentPath_ + getKey() + "/");
-    child = std::make_shared<tref>(build);
-    children_.push_back(child);
+
+    if ( build->hasReferenceTrack() ) {
+        build->setParentPath(parentPath_ + getKey() + "/");
+        child = std::make_shared<tref>(build);
+        children_.push_back(child);
+    }
 
     if ( build->getEditList().size() > 0 ) {
         build->setParentPath(parentPath_ + getKey() + "/");
@@ -144,6 +147,13 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
             trackData->opColorR = vmhd->opColorR;
             trackData->opColorG = vmhd->opColorG;
             trackData->opColorB = vmhd->opColorB;
+        }
+    }
+
+    // get smhd if it's a 'soun' track
+    if ( trackData->componentSubType == "soun") {
+        for ( auto smhd : getTypeAtoms<smhd>() ) {
+            trackData->balance = smhd->balance;
         }
     }
 

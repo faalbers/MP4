@@ -173,6 +173,11 @@ uint16_t MP4::atomBuild::getOpColorB(uint32_t trackID) const
     return tracks_.at(newTrackID_(trackID))->opColorB;
 }
 
+float MP4::atomBuild::getBalance(uint32_t trackID) const
+{
+    return tracks_.at(newTrackID_(trackID))->balance;
+}
+
 std::string MP4::atomBuild::getDataFormat(uint32_t trackID) const
 {
     return tracks_.at(newTrackID_(trackID))->dataFormat;
@@ -226,6 +231,12 @@ std::vector<uint32_t> MP4::atomBuild::getReferenceTrackIDs(std::string reference
     for ( auto referenceTrackID : tracks_.at(newTrackID_(trackID))->referenceTrackIDs )
         if ( referenceTrackID.second == referenceType ) refTrackIDs.push_back(referenceTrackID.first);
     return refTrackIDs;
+}
+
+bool MP4::atomBuild::hasReferenceTrack(uint32_t trackID) const
+{
+    if ( tracks_.at(newTrackID_(trackID))->referenceTrackIDs.size() ) return true;
+    return false;
 }
 
 uint32_t MP4::atomBuild::newTrackID_(uint32_t trackID) const
