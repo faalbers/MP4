@@ -131,25 +131,52 @@ void MP4::Processor::addUserData(Parser &parser, std::string userDataKey)
 void MP4::Processor::flattenTrackDurations()
 {
     for ( auto track : tracks_ ) {
+        // find difference between track and full video duration
+        // move on if there is no difference
         auto durationDiff64 =
             (int64_t) track.second->videoDuration - (int64_t) track.second->trackDuration;
-        auto lastSampleID = (--track.second->samples.end())->first;
         if ( durationDiff64 == 0 ) continue;
+
+        // get absolute track duration difference and translate it to media duration
         auto trackDurationDiff = (uint32_t) std::abs(durationDiff64);
         auto mediaDurationDiff = atom::timeScaleDuration(trackDurationDiff,
             track.second->videoTimeScale, track.second->mediaTimeScale);
+
+        // find last sample
+        auto lastSampleID = (uint32_t) (--track.second->samples.end())->first;
+        uint32_t lastEditListID = 0;
+        if ( track.second->editList.size() > 0 )
+            lastEditListID = (uint32_t) (--track.second->editList.end())->first;
         if ( track.second->trackDuration < track.second->videoDuration ) {
+            std::cout << "add duration\n";
+            // add media duration difference on last sample
             track.second->samples[lastSampleID].duration += mediaDurationDiff;
+            // apply to totals
             track.second->samplesDuration += mediaDurationDiff;
             track.second->mediaDuration += mediaDurationDiff;
+            // apply to track duration
             track.second->trackDuration += trackDurationDiff;
+            // apply to elst duration
+            if ( lastEditListID != 0 )
+                track.second->editList[lastEditListID].trackDuration += mediaDurationDiff;
         } else {
+            std::cout << "reduce duration\n";
+            // reduce media duration difference on last sample
+            // make sure reduction is not greater then last sample duration
             if ( mediaDurationDiff > track.second->samples[lastSampleID].duration )
                 error_("flattenTrackDurations: can not reduce last sample duration");
             track.second->samples[lastSampleID].duration -= mediaDurationDiff;
+            // apply to totals
             track.second->samplesDuration -= mediaDurationDiff;
             track.second->mediaDuration -= mediaDurationDiff;
+            // apply to track duration
             track.second->trackDuration -= trackDurationDiff;
+            // apply to elst duration
+            if ( lastEditListID != 0 ) {
+                if ( mediaDurationDiff > track.second->editList[lastEditListID].trackDuration )
+                    error_("flattenTrackDurations: can not reduce last edit list duration");
+                track.second->editList[lastEditListID].trackDuration -= mediaDurationDiff;
+            }
         }
     }
 }
@@ -158,6 +185,7 @@ void MP4::Processor::append(Parser &parser)
 {
     flattenTrackDurations();
     for ( auto track : tracks_ ) {
+        // find track with same data format, timescale and size
         auto appendTrack = parser.getTrack(track.second->dataFormat);
         if ( appendTrack == nullptr )
             error_("append:  can not find track of data format '"+
@@ -182,6 +210,29 @@ void MP4::Processor::append(Parser &parser)
             appendTrack->videoTimeScale, track.second->videoTimeScale);
         track.second->videoDuration += atom::timeScaleDuration(appendTrack->videoDuration,
             appendTrack->videoTimeScale, track.second->videoTimeScale);
+        
+        // append edit list
+        editListEntryType editListEntry;
+        if ( track.second->editList.size() > 0 ) {
+            auto lastEditID = (--track.second->editList.end())->first;
+            auto lastMediaRate = track.second->editList[lastEditID].mediaRate;
+            auto lastTrackDuration = track.second->editList[lastEditID].trackDuration;
+            auto lastMediaStartTime = track.second->editList[lastEditID].mediaStartTime;
+            for ( auto edit : appendTrack->editList ) {
+                if ( edit.second.mediaRate == lastMediaRate ) {
+                    track.second->editList[lastEditID].trackDuration += edit.second.trackDuration;
+                } else {
+                    editListEntry.mediaRate = edit.second.mediaRate;
+                    editListEntry.trackDuration = edit.second.trackDuration;
+                    editListEntry.mediaStartTime = lastMediaStartTime + lastTrackDuration + edit.second.mediaStartTime;
+                    lastEditID++;
+                    lastMediaRate = editListEntry.mediaRate;
+                    lastTrackDuration = edit.second.trackDuration;
+                    lastMediaStartTime = editListEntry.mediaStartTime;
+                    track.second->editList[lastEditID] = editListEntry;
+                }
+            }
+        }
     }
 
     // get highest videoTimescale
@@ -204,8 +255,8 @@ void MP4::Processor::info()
 {
     std::cout << "\nCurrent Processor Information:";
     std::cout << "\n------------------------------\n";
-    std::cout << "\tvideo duration   : "
-        << atom::getTimeString(videoDuration_, videoTimeScale_) << std::endl;
+    std::cout << "\tvideo duration   : " << videoDuration_ << " ("
+        << atom::getTimeString(videoDuration_, videoTimeScale_) << ")" << std::endl;
     std::cout << "\tcreation time    : " << atom::getDateTimeString(creationTime_) << std::endl;
     std::cout << "Track Information:\n";
     std::cout << "------------------\n";
@@ -216,8 +267,9 @@ void MP4::Processor::info()
         std::cout << "\tcomponentSubType  : " << track.second->componentSubType << std::endl;
         std::cout << "\tdataFormat        : " << track.second->dataFormat << std::endl;
         std::cout << "\tdataReferenceIndex: " << track.second->dataReferenceIndex << std::endl;
-        std::cout << "\tmedia duration    : "
-            << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale) << std::endl;
+        std::cout << "\tmedia duration    : " << track.second->mediaDuration << " ("
+            << atom::getTimeString(track.second->mediaDuration, track.second->mediaTimeScale)
+            << ")" << std::endl;
         if ( track.second->componentSubType == "vide") {
             std::cout << "\tvideo width       : " << track.second->width << std::endl;
             std::cout << "\tvideo height      : " << track.second->height << std::endl;
