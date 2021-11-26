@@ -1,4 +1,5 @@
 #include "edts.hpp"
+#include "elst.hpp"
 #include <iostream>
 
 MP4::edts::edts(atomParse& parse)
@@ -9,6 +10,11 @@ MP4::edts::edts(atomParse& parse)
 MP4::edts::edts(std::shared_ptr<atomBuild> build)
     : atom(build)
 {
+    std::shared_ptr<atom> child;
+
+    build->setParentPath(parentPath_ + getKey() + "/");
+    child = std::make_shared<elst>(build);
+    children_.push_back(child);
 }
 
 void MP4::edts::printData(bool fullLists) const

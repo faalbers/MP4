@@ -3,6 +3,7 @@
 #include "mdia.hpp"
 #include "tref.hpp"
 #include "edts.hpp"
+#include "elst.hpp"
 #include "mdhd.hpp"
 #include "hdlr.hpp"
 #include "dref.hpp"
@@ -44,10 +45,12 @@ MP4::trak::trak(std::shared_ptr<atomBuild> build)
     build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<tref>(build);
     children_.push_back(child);
-    
-    build->setParentPath(parentPath_ + getKey() + "/");
-    child = std::make_shared<edts>(build);
-    children_.push_back(child);
+
+    if ( build->getEditList().size() > 0 ) {
+        build->setParentPath(parentPath_ + getKey() + "/");
+        child = std::make_shared<edts>(build);
+        children_.push_back(child);
+    }
     
     build->setParentPath(parentPath_ + getKey() + "/");
     child = std::make_shared<mdia>(build);
@@ -97,6 +100,11 @@ std::shared_ptr<MP4::trackType> MP4::trak::getTrack()
     // get data references
     for ( auto dref : getTypeAtoms<dref>() ) {
         trackData->dataReferences = dref->getDataReferences();
+    }
+
+    // get edit list
+    for ( auto elst : getTypeAtoms<elst>() ) {
+        trackData->editList = elst->elstTable;
     }
 
     // get source trackID

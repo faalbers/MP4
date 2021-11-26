@@ -52,6 +52,8 @@ public:
     std::string getDataExtended(uint32_t trackID = 0) const;
     std::map<uint16_t, dataReferenceEntryType>
                 getDataReferences(uint32_t trackID = 0) const;
+    std::map<uint32_t, editListEntryType>
+                getEditList(uint32_t trackID = 0) const;
     std::string getUserData(std::string userDataKey) const;
     bool        samplesHaveSync() const;
     bool        samplesHaveCompositionOffset() const;

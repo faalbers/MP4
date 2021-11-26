@@ -27,6 +27,12 @@ MP4::elst::elst(atomParse& parse)
     } while ( entryID <= elstData.numberOfEntries );
 }
 
+MP4::elst::elst(std::shared_ptr<atomBuild> build)
+    : atom(build)
+    , elstTable(build->getEditList())
+{
+}
+
 void MP4::elst::printData(bool fullLists) const
 {
     auto levelCount = std::count(path_.begin(), path_.end(), '/');

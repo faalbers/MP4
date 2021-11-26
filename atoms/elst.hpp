@@ -25,6 +25,7 @@ class elst : public atom
 
 public:
     elst(atomParse& parse);
+    elst(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false) const;
 

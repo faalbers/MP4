@@ -193,6 +193,11 @@ std::map<uint16_t, MP4::dataReferenceEntryType> MP4::atomBuild::getDataReference
     return tracks_.at(newTrackID_(trackID))->dataReferences;
 }
 
+std::map<uint32_t, MP4::editListEntryType> MP4::atomBuild::getEditList(uint32_t trackID) const
+{
+    return tracks_.at(newTrackID_(trackID))->editList;
+}
+
 std::string MP4::atomBuild::getUserData(std::string userDataKey) const
 {
     std::string userData = "";
