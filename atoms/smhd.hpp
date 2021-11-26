@@ -16,13 +16,24 @@ class smhd : public atom
 {
 public:
     smhd(atomParse& parse);
+    smhd(std::shared_ptr<atomBuild> build);
 
     void printData(bool fullLists = false) const;
 
     std::string getKey() const;
 
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
+
     static const std::string    key;
     float                       balance;
+
+private:
+    typedef struct dataBlock
+    {
+        versionBlock    version;
+        uint16_t        balance;
+        uint16_t        reserved;
+    } dataBlock;
 };
 
 }
