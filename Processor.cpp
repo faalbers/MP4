@@ -148,7 +148,6 @@ void MP4::Processor::flattenTrackDurations()
         if ( track.second->editList.size() > 0 )
             lastEditListID = (uint32_t) (--track.second->editList.end())->first;
         if ( track.second->trackDuration < track.second->videoDuration ) {
-            std::cout << "add duration\n";
             // add media duration difference on last sample
             track.second->samples[lastSampleID].duration += mediaDurationDiff;
             // apply to totals

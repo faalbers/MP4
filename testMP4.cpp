@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     std::cout << "**** TEST MP4 ****\n\n";
 
     //parserA.printHierarchy();
-    parserA.printHierarchyData();
+    //parserA.printHierarchyData();
     //parserA.printMdatMap();
     //parserB.printHierarchyData();
 
