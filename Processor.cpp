@@ -246,12 +246,25 @@ void MP4::Processor::info()
         }
         if ( track.second->dataReferences.size() > 0 ) {
             std::cout << "\tdata references:\n";
+            std::cout << "\t\t[#] ( type , dataInSameFile )\n";
             for ( auto dataReference : track.second->dataReferences ) {
                 std::cout << "\t\t[" << dataReference.first << "]"
-                    << " type = '" << dataReference.second.type << "'";
-                if ( dataReference.second.dataInSameFile )
-                    std::cout << " and data resides in same file\n";
-                else std::cout << " and data resides in other file\n";
+                    << " ( " << dataReference.second.type
+                    << ", " << dataReference.second.dataInSameFile
+                    << " )" << std::endl;
+            }
+        }
+        if ( track.second->editList.size() > 0 ) {
+            std::cout << "\tedit list:\n";
+            std::cout << "\t\t[#] ( trackDuration , mediaStartTime, mediaRate )\n";
+            for ( auto entry : track.second->editList ) {
+                std::cout << "\t\t[" << entry.first << "]"
+                    << " ( " << entry.second.trackDuration
+                    << " (" << atom::getTimeString(entry.second.trackDuration,  videoTimeScale_)
+                    << "), " << entry.second.mediaStartTime
+                    << " (" << atom::getTimeString(entry.second.mediaStartTime, videoTimeScale_)
+                    << "), " << entry.second.mediaRate
+                    << " )" << std::endl;
             }
         }
     }

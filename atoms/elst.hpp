@@ -31,6 +31,8 @@ public:
 
     std::string getKey() const;
 
+    void writeData(std::shared_ptr<atomWriteFile> writeFile) const;
+
     static const std::string    key;
     std::map<uint32_t, editListEntryType> elstTable;
 

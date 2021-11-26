@@ -39,7 +39,6 @@ void MP4::elst::printData(bool fullLists) const
     std::string dataIndent = std::string((levelCount-1)*5+1, ' ');
     std::cout << path_ << " (Edit List Atom) ["<< headerSize_ << "]" << std::endl;
     std::cout << dataIndent << "[#] (trackDuration , mediaStartTime, mediaRate)\n";
-    int index = 1;
     uint32_t movieTimeScale;
     for ( auto mvhd : moovAtom_->getTypeAtoms<mvhd>() ) movieTimeScale = mvhd->timeScale;
     for ( auto entry : elstTable ) {
@@ -50,13 +49,39 @@ void MP4::elst::printData(bool fullLists) const
             << " (" << getTimeString(entry.second.mediaStartTime,  movieTimeScale)
             << "), " << entry.second.mediaRate
             << " )" << std::endl;
-        index++;
     }
 }
 
 std::string MP4::elst::getKey() const
 {
     return key;
+}
+
+void MP4::elst::writeData(std::shared_ptr<atomWriteFile> writeFile) const
+{
+    auto fileWrite = writeFile->getFileWrite();
+
+    tableBlock elstData;
+    
+    // default settings
+    elstData.version.version = 0;
+    elstData.version.flag[0] = 0;
+    elstData.version.flag[1] = 0;
+    elstData.version.flag[2] = 0;
+
+    // data settings
+    elstData.numberOfEntries = XXH_swap32((uint32_t) elstTable.size());
+
+    fileWrite->write((char*) &elstData, sizeof(elstData));
+
+    // write table
+    for ( auto entry : elstTable ) {
+        entryDataBlock entryData;
+        entryData.trackDuration = XXH_swap32(entry.second.trackDuration);
+        entryData.mediaStartTime = XXH_swap32(entry.second.mediaStartTime);
+        entryData.mediaRate = XXH_swap32((uint32_t) (entry.second.mediaRate * (float)(1 << 16)));
+        fileWrite->write((char*) &entryData, sizeof(entryData));
+    }
 }
 
 const std::string MP4::elst::key = "elst";
