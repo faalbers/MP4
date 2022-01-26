@@ -49,6 +49,7 @@
 #include <iostream>
 #include <iomanip>
 #include "../date.hpp"
+#include <cstring>
 
 MP4::atom::atom()
     : key_("atom")
@@ -296,7 +297,7 @@ void MP4::atom::writeHeader_(std::shared_ptr<atomWriteFile> writeFile) const
     auto fileWrite = writeFile->getFileWrite();
     writeHeaderSizePos_ = fileWrite->tellp();
     headerBlock  atomHeader;
-    memcpy(&atomHeader.key, getKey().c_str(), 4);
+    std::memcpy(&atomHeader.key, getKey().c_str(), 4);
     fileWrite->write((char*) &atomHeader, headerSize_);
 }
 

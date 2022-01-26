@@ -1,5 +1,6 @@
 #include "stsd.hpp"
 #include <iostream>
+#include <cstring>
 
 MP4::stsd::stsd(atomParse& parse)
     : atom(parse)
@@ -87,7 +88,7 @@ void MP4::stsd::writeData(std::shared_ptr<atomWriteFile> writeFile) const
     for ( auto entry : stsdTable ) {
         entryDataBlock entryData;
         for ( int i = 0; i < 6; i++ ) entryData.reserved[i] = 0;
-        memcpy(&entryData.dataFormat, entry.second.dataFormat.c_str(), 4);
+        std::memcpy(&entryData.dataFormat, entry.second.dataFormat.c_str(), 4);
         entryData.dataReferenceIndex = XXH_swap16(entry.second.dataReferenceIndex);
         auto size = (uint32_t) (sizeof(entryData) + entry.second.dataExtended.size());
         entryData.size = XXH_swap32(size);

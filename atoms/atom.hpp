@@ -21,6 +21,11 @@
 #define XXH_swap16 _byteswap_ushort
 #define XXH_swap32 _byteswap_ulong
 #define XXH_swap64 _byteswap_uint64
+#elif defined(__linux__)
+#include <byteswap.h>
+#define XXH_swap16 bswap_16
+#define XXH_swap32 bswap_32
+#define XXH_swap64 bswap_64
 #endif
 
 #define OFFSET_1904_1970 2082844800

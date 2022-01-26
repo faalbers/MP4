@@ -1,5 +1,6 @@
 #include "hdlr.hpp"
 #include <iostream>
+#include <cstring>
 
 MP4::hdlr::hdlr(atomParse& parse)
     : atom(parse)
@@ -60,8 +61,8 @@ void MP4::hdlr::writeData(std::shared_ptr<atomWriteFile> writeFile) const
     hdlrData.componentFlagsMask = 0;
 
     // data settings
-    memcpy(&hdlrData.componentType, componentType.c_str(), 4);
-    memcpy(&hdlrData.componentSubType, componentSubType.c_str(), 4);
+    std::memcpy(&hdlrData.componentType, componentType.c_str(), 4);
+    std::memcpy(&hdlrData.componentSubType, componentSubType.c_str(), 4);
 
     fileWrite->write((char*) &hdlrData, sizeof(hdlrData));
 

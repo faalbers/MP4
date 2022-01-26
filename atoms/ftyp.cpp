@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <cstring>
 
 MP4::ftyp::ftyp(atomParse& parse)
     : atom(parse)
@@ -67,7 +68,7 @@ void MP4::ftyp::writeData(std::shared_ptr<atomWriteFile> writeFile) const
 {
     auto fileWrite = writeFile->getFileWrite();
     dataBlock ftypData;
-    memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
+    std::memcpy(&ftypData.majorBrand, majorBrand.c_str(), 4);
     ftypData.version = XXH_swap32(version);
     fileWrite->write((char*) &ftypData, sizeof(ftypData));
     for ( auto brand : compatibleBrands ) {
