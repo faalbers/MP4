@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     std::cout << "**** PARSE MP4 ****\n\n";
 
     MP4::Parser parserA(argv[1]);
-    MP4::Parser parserB(argv[2]);
+    //MP4::Parser parserB(argv[2]);
 
     auto testStart = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(testStart - createStart);
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     std::cout << "**** TEST MP4 ****\n\n";
 
     //parserA.printHierarchy();
-    //parserA.printHierarchyData();
+    parserA.printHierarchyData();
     //parserA.printMdatMap();
     //parserB.printHierarchyData();
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if (true) {
+    if (false) {
         MP4::Processor processor;
 
         //auto trackIDs = processor.addTrack(parserA,1,1);
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
         //processor.addTrack(parserA,4,3);
         //processor.addTrack(parserA,"gpmd",3);
 
-        processor.append(parserB);
+        //processor.append(parserB);
         processor.addUserData(parserA);
 
         processor.info();
